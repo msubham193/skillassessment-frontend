@@ -1,11 +1,13 @@
 import React from 'react'
-import { Button } from './components(shadcn)/ui/button'
+import AdminDashboard from './Pages/Admin/AdminDashboard'
+import { Route, Routes } from 'react-router-dom'
 
 const App = () => {
   return (
     <div >
-      Jay shree RAM
-      <Button>Click me</Button>
+    <Routes>
+    <Route path='/admin/dasbord' exact element={<AdminDashboard/>}/>
+    </Routes>
     </div>
   )
 }

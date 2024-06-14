@@ -1,0 +1,6 @@
+.react-date-picker__wrapper {
+    display: flex !important;
+    flex-grow: 1 !important;
+    flex-shrink: 0 !important;
+    border: none !important;
+}

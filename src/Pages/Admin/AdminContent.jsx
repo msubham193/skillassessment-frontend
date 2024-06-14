@@ -5,7 +5,7 @@ const AdminContent = () => {
   return (
     <div className=' p-7'>
     {/* top Bar */}
-<TopBar/>
+     <TopBar/>
     {/* Content */}
       content
     </div>

@@ -5,9 +5,11 @@ import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import { Button } from '@/components(shadcn)/ui/button';
-
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 const CreateBatch = () => {
-  const [batchInputs, setBatchInputs] = useState({ batchName: '', startDate: new Date(), endDate: new Date() });
+  const navigate=useNavigate()
+  const [batchInputs, setBatchInputs] = useState({ name: '', startDate: null, endDate: null });
 
   const handleDateChange = (date, name) => {
     setBatchInputs({ ...batchInputs, [name]: date });
@@ -20,22 +22,30 @@ const CreateBatch = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const response = await fetch('YOUR_BACKEND_URL/batch', {
+      const response = await fetch('http://localhost:8000/api/v1/batch/create', {
         method: 'POST',
         headers: {
+          'x-access-token': localStorage.getItem('token'),
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(batchInputs),
+        body: JSON.stringify({
+          name: batchInputs.name,
+          startDate: batchInputs.startDate ? batchInputs.startDate.toISOString() : null,
+          endDate: batchInputs.endDate ? batchInputs.endDate.toISOString() : null,
+        }),
       });
-
+      
       if (response.ok) {
         const data = await response.json();
-        console.log('Batch created successfully:', data);
-
+        console.log(data.data)
+        toast(`${data.data.name} Batch is Created Sucessfully `)
+        navigate('/trainingPartner/dashboard')
       } else {
-        console.error('Failed to create batch');
+        const errorData = await response.json();
+        toast("Failed to create batch")
+        console.error('Failed to create batch:', errorData);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -49,9 +59,9 @@ const CreateBatch = () => {
           <Label htmlFor="batchName">Batch Name</Label>
           <Input
             id="batchName"
-            name="batchName"
+            name="name"
             type="text"
-            value={batchInputs.batchName}
+            value={batchInputs.name}
             onChange={handleInputChange}
           />
 

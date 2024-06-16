@@ -40,8 +40,9 @@ const Signin = () => {
       const data = await response.json();
       setTpStatus(data.applicationStatus);
       localStorage.setItem("token", data.data.token);
+      localStorage.setItem("trainingPartnerId",data.data.data._id)
       toast.success(`Welcome back!`);
-      console.log(data.data.data.applicationStatus)
+      console.log(data.data.data._id)
       if (data.data.data.applicationStatus === "Sucess") {
         navigate("/trainingPartner/dashboard");
       } else {

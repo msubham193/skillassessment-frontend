@@ -4,83 +4,103 @@ import { Link } from "react-router-dom";
 import { Input } from "../../../components(shadcn)/ui/input";
 import { Label } from "../../../components(shadcn)/ui/label";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 const AddTeacher = () => {
+  const navigate=useNavigate();
   const TeacherLabels = [
-    "NAME",
-    "PHONE NO",
-    "EMAIL ID",
-    "EDUCATIONAL QUALIFICATION 1",
-    "EDUCATIONAL QUALIFICATION 2",
-    "EDUCATIONAL QUALIFICATION 3",
-    "EDUCATIONAL QUALIFICATION 4",
-    "ANY CERTIFICATION COURSE",
-    "RELEVANT INDUSTRY EXPERIENCE",
-    "PAN-NO",
-    "AADHAR NO",
-    "DIST",
-    "STATE",
-    "PINCODE",
-    "CERTIFIED-IN-(COURSE-NAME)",
-    "COURSE CODE",
-    "SECTOR",
+    "name",
+    "phoneNumber",
+    "email",
+    "educationQualification_1",
+    "educationQualification_2",
+    "educationQualification_3",
+    "educationQualification_4",
+    "certification_course",
+    "relevant_industryExperience",
+    "other_expreience",
+    "PAN_CARD_NO",
+    "AADHAR_NO",
+    "state",
+    "city",
+    "district",
+    "pincode",
+    "certifiedIn",
+    "coursecode",
+    "sector",
+    "profilePic",
+    "PRN_NO"
   ];
 
-  const [teacherInputs, setTeacherInputs] = useState({});
+  const [teacherInputs, setTeacherInputs] = useState(
+    TeacherLabels.reduce((acc, label) => {
+      acc[label] = "";
+      return acc;
+    }, {})
+  );
 
-  const handleChange = (label, value) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setTeacherInputs((prevState) => ({
       ...prevState,
-      [label]: value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/teachers", {
+      const response = await fetch("http://localhost:8000/api/v1/trainer", {
         method: "POST",
         headers: {
+          "x-access-token": localStorage.getItem('token'),
           "Content-Type": "application/json",
         },
         body: JSON.stringify(teacherInputs),
       });
-
+     
       if (response.ok) {
-        toast("Teacher added Successfully");
-        setTeacherInputs({}); 
-        
+        navigate('/trainingPartner/dashboard')
+        toast.success("Teacher added successfully");
+        setTeacherInputs(
+          TeacherLabels.reduce((acc, label) => {
+            acc[label] = "";
+            return acc;
+          }, {})
+        );
       } else {
-        toast("Failed to add teacher");
+        toast.error("Failed to add teacher");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast("Failed to add teacher");
+      toast.error("Failed to add teacher");
     }
   };
+
   return (
-    <div className=" flex justify-center p-8 ">
-    <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md ">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-semibold">Add Teacher</h1>
-        <Link className="text-blue-600" to="/teachers">
-          Add existing Teacher
-        </Link>
+    <div className="flex justify-center p-8">
+      <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-semibold">Add Teacher</h1>
+          <Link className="text-blue-600" to="/teachers">
+            Add existing Teacher
+          </Link>
+        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
+          {TeacherLabels.map((label, index) => (
+            <div key={index} className="flex flex-col gap-2">
+              <Label htmlFor={label}>{label}</Label>
+              <Input
+                type="text"
+                name={label}
+                id={label}
+                onChange={handleChange}
+                value={teacherInputs[label]}
+              />
+            </div>
+          ))}
+          <Button type="submit">Add Teacher</Button>
+        </form>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
-        {TeacherLabels.map((Tlabel, index) => (
-          <div key={index} className="flex flex-col gap-2">
-            <Label>{Tlabel}</Label>
-            <Input
-              type="text"
-              onChange={(e) => handleChange(Tlabel, e.target.value)}
-              value={teacherInputs[Tlabel] || ""}
-            />
-          </div>
-        ))}
-        <Button type="submit">Add Teacher</Button>
-      </form>
-    </div>
     </div>
   );
 };

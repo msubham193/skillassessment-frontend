@@ -2,19 +2,19 @@ import { Button } from '@/components(shadcn)/ui/button';
 import TopBar from '@/Components/Traning Partner/TopBar';
 import React, { useEffect, useState } from 'react';
 import { Eye } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 
 const Content = () => {
+  const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
   const trainingPartnerId = localStorage.getItem('trainingPartnerId');
-  console.log(trainingPartnerId)
+
   useEffect(() => {
     const fetchBatches = async () => {
       try {
         const response = await fetch(`http://localhost:8000/api/v1/batch/tp/${trainingPartnerId}`, {
           method: "GET",
         });
-        
         
         if (response.ok) {
           const data = await response.json();
@@ -27,8 +27,10 @@ const Content = () => {
       }
     };
 
-    fetchBatches();
-  }, []);
+    if (trainingPartnerId) {
+      fetchBatches();
+    }
+  }, [trainingPartnerId]); // Only re-run the effect if trainingPartnerId changes
 
   return (
     <div className="w-full">
@@ -39,28 +41,17 @@ const Content = () => {
 
       {/* Content Part */}
       <div className="p-4 bg-slate-400 h-full gap-2">
-        <div className="bg-white p-4 rounded-md shadow-md">
-          <div className="flex justify-between items-center mb-2">
-            <div>BatchName</div>
-            <Eye />
-          </div>
-          <div className="flex flex-row gap-2 justify-center">
-            <Button className="text-xs">addTeacher</Button>
-            <Button className="text-xs">addStudent</Button>
-          </div>
-        </div>
-        
         {/* Display fetched batch data */}
         <div className="mt-4">
           {allBatch.length > 0 ? (
             allBatch.map((batch) => (
-              <div key={batch._id} className="bg-white p-4 rounded-md shadow-md mb-2">
+              <div key={batch._id} className="bg-white p-4 rounded-md shadow-md mb-2 hover:bg-slate-100">
                 <div className="flex justify-between items-center">
                   <div>{batch.name}</div>
                   <Eye />
                 </div>
-                <div className="flex flex-row gap-2 justify-center mt-2">
-                  <Button className="text-xs">addTeacher</Button>
+                <div className="flex flex-row gap-2 justify-center md:justify-end mt-2">
+                  <Button className="text-xs" onClick={() => navigate("/trainingPartner/dashboard/CreateBatch/addteacher")}>addTeacher</Button>
                   <Button className="text-xs">addStudent</Button>
                 </div>
               </div>
@@ -75,6 +66,7 @@ const Content = () => {
 };
 
 export default Content;
+
 
 
 

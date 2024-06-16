@@ -42,7 +42,7 @@ const Signin = () => {
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("trainingPartnerId",data.data.data._id)
       toast.success(`Welcome back!`);
-      console.log(data.data.data._id)
+      console.log(data.data.token)
       if (data.data.data.applicationStatus === "Sucess") {
         navigate("/trainingPartner/dashboard");
       } else {

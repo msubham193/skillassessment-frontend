@@ -16,10 +16,10 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-2 pb-10 pt-24">
+    <div className=" relative min-w-[80px] border-r px-2 pb-10 pt-12">
  {
     !mobileWidth &&(
-        <div className="absolute right-[-20px] top-5">
+        <div className="absolute right-[-20px] top-2">
         <Button onClick={toogelSideBar} className={"rounded-full p-2"} variant="secondary">
         {
           isCollapsed ?<ChevronRight/>:<ChevronLeft/>
@@ -32,16 +32,25 @@ const SideNav = () => {
         isCollapsed={mobileWidth?true: isCollapsed}
         links={[
           {
-            title: "DashBoard",
+            title: "Home",
             label: "",
             icon: LayoutDashboard,
             variant: "default",
+            href:"/admin/dasbord"
           },
           {
-            title: "Notifications",
+            title: "Training Partner",
             label: "",
             icon: BellDot,
             variant: "ghost",
+            href:"/admin/dasbord/TreaningPartner"
+          },
+          {
+            title: "Assessment Agency",
+            label: "",
+            icon: BellDot,
+            variant: "ghost",
+            href:"/admin/dasbord/AssessmentAgency"
           },
         ]}
       />

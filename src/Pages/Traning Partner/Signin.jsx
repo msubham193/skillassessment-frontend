@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import "./coustom.css";
-import { Label } from "@/components(shadcn)/ui/label";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useRecoilState } from "recoil";
+import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 
 const Signin = () => {
   const navigate = useNavigate();
   const [registeredOfficeEmail, setRegisteredOfficeEmail] = useState("");
   const [password, setPassword] = useState("");
   const [tpStatus, setTpStatus] = useState("");
+  const [responseData, setResponseData] = useRecoilState(tpDataAtoms);
 
   const handleEmailChange = (e) => {
     setRegisteredOfficeEmail(e.target.value);
@@ -39,16 +41,17 @@ const Signin = () => {
 
       const data = await response.json();
       setTpStatus(data.applicationStatus);
+      console.log(data.data.data)
+      setResponseData(data.data.data);
       localStorage.setItem("token", data.data.token);
-      localStorage.setItem("trainingPartnerId",data.data.data._id)
-      toast.success(`Welcome back!`);
-      console.log(data.data.token)
-      if (data.data.data.applicationStatus === "Sucess") {
+      localStorage.setItem("trainingPartnerId", data.data.data._id);
+      toast.success(data.message);
+
+      if (data.data.data.applicationStatus === "Success") {
         navigate("/trainingPartner/dashboard");
       } else {
         navigate("/statusFail");
       }
-     
     } catch (error) {
       console.log(error);
       toast.error("Please provide valid credentials");

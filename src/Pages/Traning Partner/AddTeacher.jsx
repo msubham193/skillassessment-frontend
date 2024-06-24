@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { Button } from "../../../components(shadcn)/ui/button";
+import { Button} from "@/components(shadcn)/ui/button";
+import { Input} from "@/components(shadcn)/ui/input";
+import { Label } from "@/components(shadcn)/ui/label";
 import { Link } from "react-router-dom";
-import { Input } from "../../../components(shadcn)/ui/input";
-import { Label } from "../../../components(shadcn)/ui/label";
+import { useParams } from "react-router-dom";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const AddTeacher = () => {
-  const navigate=useNavigate();
+  const { id: batchId } = useParams();
+  const navigate = useNavigate();
+
   const TeacherLabels = [
     "name",
     "phoneNumber",
@@ -49,26 +53,23 @@ const AddTeacher = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/api/v1/trainer", {
+      const response = await fetch(`http://localhost:8000/api/v1/batch/addtrainer/${batchId}`, {
         method: "POST",
         headers: {
-          "x-access-token": localStorage.getItem('token'),
           "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem('token'),
         },
         body: JSON.stringify(teacherInputs),
       });
-     
+
+      const data = await response.json(); // Parse the response data
       if (response.ok) {
-        navigate('/trainingPartner/dashboard')
+        console.log("Teacher added successfully:", data);
         toast.success("Teacher added successfully");
-        setTeacherInputs(
-          TeacherLabels.reduce((acc, label) => {
-            acc[label] = "";
-            return acc;
-          }, {})
-        );
+        navigate('/trainingPartner/dashboard');
       } else {
-        toast.error("Failed to add teacher");
+        console.error("Failed to add teacher:", data);
+        toast.error(data.message || "Failed to add teacher");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -81,7 +82,7 @@ const AddTeacher = () => {
       <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-semibold">Add Teacher</h1>
-          <Link className="text-blue-600" to="/teachers">
+          <Link className="text-blue-600" to="/trainingPartner/dashboard/Teachers">
             Add existing Teacher
           </Link>
         </div>

@@ -7,9 +7,12 @@ import 'react-calendar/dist/Calendar.css';
 import { Button } from '@/components(shadcn)/ui/button';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { batchDataAtoms } from '@/Components/Traning Partner/Atoms/batchatom';
 const CreateBatch = () => {
   const navigate=useNavigate()
   const [batchInputs, setBatchInputs] = useState({ name: '', startDate: null, endDate: null });
+  const setBatchData = useSetRecoilState(batchDataAtoms);
 
   const handleDateChange = (date, name) => {
     setBatchInputs({ ...batchInputs, [name]: date });
@@ -39,7 +42,7 @@ const CreateBatch = () => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log(data.data)
+        setBatchData(data.data)
         toast(`${data.data.name} Batch is Created Sucessfully `)
         navigate('/trainingPartner/dashboard')
       } else {

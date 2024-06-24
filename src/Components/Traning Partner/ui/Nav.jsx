@@ -10,7 +10,7 @@ import {
 } from "../../../components(shadcn)/ui/tooltip";
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
-import AddTeacher from './AddTeacher';
+import AddTeacher from '../../../Pages/Traning Partner/AddTeacher';
 
 export function Nav({ links, isCollapsed }) {
   const [variant, setVariant] = useState('ghost');

@@ -12,69 +12,32 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const inputLabels = [
-    "password",
-    "username",
-    "organizationName",
-    "organizationCategory",
-    "centerId",
-    "tpCode",
-    "scheme",
-    "affiliation",
-    "dateOfIncorporation",
-    "registeredOfficeAddress",
-    "registeredOfficeDistrict",
-    "registeredOfficeCity",
-    "registeredOfficeState",
-    "registeredOfficePin",
-    "registeredOfficeTelephone",
-    "registeredOfficeMobile",
-    "registeredOfficeFax",
-    "registeredOfficeEmail",
-    "registeredOfficeGst",
-    "regionalStateOfficeAddress",
-    "regionalStateOfficeDistrict",
-    "regionalStateOfficeCity",
-    "regionalStateOfficeState",
-    "regionalStateOfficePin",
-    "regionalStateOfficeTelephone",
-    "regionalStateOfficeMobile",
-    "regionalStateOfficeFax",
-    "regionalStateOfficeEmail",
-    "regionalStateOfficeGst",
-    "website",
-    "pan",
-    "prnNo",
-    "headOwnerName",
-    "headOwnerDob",
-    "headOwnerCity",
-    "headOwnerResidenceAddress",
-    "headOwnerPermanentAddress",
-    "headOwnerMobile",
-    "headOwnerAlternateMobile",
-    "headOwnerEmail",
-    "headOwnerQualification",
-    "headOwnerWorkExperience",
-    "headOwnerPanNo",
-    "headOwnerAadharNo",
-    "headOwnerPromoter1",
-    "headOwnerPromoter2",
-    "headOwnerPromoter3",
-    "projectContactPersonName",
-    "projectContactPersonDesignation",
-    "projectContactPersonCity",
-    "projectContactPersonMobile",
-    "projectContactPersonAlternateMobile",
+    "password", "username", "organizationName", "organizationCategory",
+    "centerId", "tpCode", "scheme", "affiliation", "dateOfIncorporation",
+    "registeredOfficeAddress", "registeredOfficeDistrict",
+    "registeredOfficeCity", "registeredOfficeState", "registeredOfficePin",
+    "registeredOfficeTelephone", "registeredOfficeMobile",
+    "registeredOfficeFax", "registeredOfficeEmail", "registeredOfficeGst",
+    "regionalStateOfficeAddress", "regionalStateOfficeDistrict",
+    "regionalStateOfficeCity", "regionalStateOfficeState",
+    "regionalStateOfficePin", "regionalStateOfficeTelephone",
+    "regionalStateOfficeMobile", "regionalStateOfficeFax",
+    "regionalStateOfficeEmail", "regionalStateOfficeGst", "website", "pan",
+    "prnNo", "headOwnerName", "headOwnerDob", "headOwnerCity",
+    "headOwnerResidenceAddress", "headOwnerPermanentAddress",
+    "headOwnerMobile", "headOwnerAlternateMobile", "headOwnerEmail",
+    "headOwnerQualification", "headOwnerWorkExperience", "headOwnerPanNo",
+    "headOwnerAadharNo", "headOwnerPromoter1", "headOwnerPromoter2",
+    "headOwnerPromoter3", "projectContactPersonName",
+    "projectContactPersonDesignation", "projectContactPersonCity",
+    "projectContactPersonMobile", "projectContactPersonAlternateMobile",
     "projectContactPersonResidenceAddress",
-    "projectContactPersonPermanentAddress",
-    "projectContactPersonEmail",
-    "projectContactPersonAlternateEmail",
-    "paymentStatus",
-    "status",
-    "timestamp"
+    "projectContactPersonPermanentAddress", "projectContactPersonEmail",
+    "projectContactPersonAlternateEmail", "paymentStatus", "status", "timestamp"
   ];
-  
-const navigate=useNavigate()
-  const TimeLabel = ["Date of Incorporation", "Head Owner DOB", "Timestamp"];
+
+  const navigate = useNavigate();
+  const TimeLabel = ["dateOfIncorporation", "headOwnerDob", "timestamp"];
 
   const [currentPage, setCurrentPage] = useState(0);
   const [inputs, setInputs] = useState({});
@@ -83,12 +46,9 @@ const navigate=useNavigate()
   const totalPages = Math.ceil(inputLabels.length / inputsPerPage);
   const [onSubmit, setOnSubmit] = useState(false);
 
+
   useEffect(() => {
-    if (currentPage === totalPages - 1) {
-      setOnSubmit(true);
-    } else {
-      setOnSubmit(false);
-    }
+    setOnSubmit(currentPage === totalPages - 1);
   }, [currentPage, totalPages]);
 
   const currentInputs = inputLabels.slice(
@@ -132,12 +92,9 @@ const navigate=useNavigate()
   }, []);
 
   const handleSubmit = async () => {
-    console.log(inputs)
     try {
-      const jsondata=JSON.stringify(inputs);
-      console.log("jsondata here")
-      console.log(jsondata)
-  
+      const jsondata = JSON.stringify(inputs);
+
       const response = await fetch("http://localhost:8000/api/v1/tp", {
         method: "POST",
         headers: {
@@ -145,27 +102,21 @@ const navigate=useNavigate()
         },
         body: jsondata,
       });
-  
-      // Log the response for debugging
-      console.log(response);
-  
+
+      const data = await response.json();
       if (response.ok) {
         toast.success("Form submitted successfully!");
         setInputs({});
-       navigate('/trainingPartner/signin')
+        navigate('/trainingPartner/signin');
       } else {
-        const errorData = await response.json();
-        console.log(errorData);  // Log the error data
-        throw new Error(errorData.message || "Failed to submit form");
+        console.log(data);
+        throw new Error(data.message || "Failed to submit form");
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while submitting the form");
     }
   };
-  
-
-
 
   return (
     <div className="bg-slate-100 min-h-screen p-10 flex flex-col justify-between">
@@ -269,15 +220,13 @@ const navigate=useNavigate()
           </div>
         )}
       </div>
-      <div className="flex justify-between mt-4 p-2">
+      <div className="flex justify-between mt-4">
         <Button onClick={handlePreviousPage} disabled={currentPage === 0}>
           Previous
         </Button>
-        {onSubmit ? (
-          <Button onClick={handleSubmit}>Submit</Button>
-        ) : (
-          <Button onClick={handleNextPage}>Next</Button>
-        )}
+        <Button onClick={handleNextPage}>
+          {currentPage === totalPages - 1 ? "Submit" : "Next"}
+        </Button>
       </div>
     </div>
   );

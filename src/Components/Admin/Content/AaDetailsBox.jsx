@@ -16,11 +16,10 @@ import {
 import { Button } from "@/components(shadcn)/ui/button";
 import { server } from '@/main';
 import axios from 'axios';
-
-import Loder from './ui/Loder';
 import { useRecoilValue } from 'recoil';
 import { authenticationState } from '@/Pages/Admin/Atoms/atoms';
 import { toast } from 'react-toastify';
+import Loder from '../ui/Loder';
 const AaDetailsBox = ({ id }) => {
   const[referesh,setReferesh]=useState(false)
   const[data,setData]=useState({})

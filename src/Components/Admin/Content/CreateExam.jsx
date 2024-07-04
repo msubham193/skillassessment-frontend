@@ -1,0 +1,195 @@
+import { Button } from "@/components(shadcn)/ui/button";
+import { Input } from "@/components(shadcn)/ui/input";
+import { Label } from "@/components(shadcn)/ui/label";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Calendar } from "@/components(shadcn)/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components(shadcn)/ui/popover";
+import { format } from "date-fns";
+import ShowAccessmentAgency from "./ShowAccessmentAgency";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@/components(shadcn)/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components(shadcn)/ui/dialog";
+import axios from "axios";
+import { server } from "@/main";
+import { useRecoilValue } from "recoil";
+import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
+import { toast } from "react-toastify";
+
+const CreateExam = ({ children, abn_id, course }) => {
+  const [name, setName] = useState("");
+  const [sectorName, setSectorName] = useState("");
+  const [batch, setBatch] = useState("");
+  const [assesmentAgency, setAssesmentAgency] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [showButton, setShowButton] = useState(false);
+  const authState = useRecoilValue(authenticationState);
+
+  useEffect(() => {
+    setBatch(abn_id);
+    setName(course);
+  }, [abn_id, course]);
+
+  const handleDateSelect = (selectedDate) => {
+    setDate(selectedDate);
+  };
+  //function for create batch........
+  const createExam = async (e) => {
+    e.preventDefault();
+    setShowButton(true);
+    const token = authState.token;
+    if (!token) {
+      console.log("Admin not found");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${server}/exam/create`,
+        { name, date, batch, assesmentAgency },
+        {
+          headers: {
+            "x-access-token": token,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setAssesmentAgency("");
+      setDate(new Date());
+      toast.success(response.data.message, {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
+    }
+  };
+
+  return (
+    <div>
+      <Dialog>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogContent className=" bg-gray-100 w-[621px]">
+          <DialogHeader>
+            <DialogTitle>Assign agency</DialogTitle>
+            <DialogDescription>
+              Assign this course to a accessment agency.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={createExam}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-left">
+                  BATCH ID
+                </Label>
+                <Input id="batch" className="col-span-4" value={batch} />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-left w-56">
+                TRANING PARTNER ID
+                </Label>
+                <Input id="tp_id" className="col-span-4" value={batch} />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-left w-40">
+                    COURCE NAME
+                  </Label>
+                  <Input id="curse" className="col-span-4" value={name} />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-left w-40">
+                    SECTOR NAME
+                  </Label>
+                  <Input id="sector" className="col-span-4" value={sectorName} />
+                </div>
+              </div>
+              {/* for manual input */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Assessment Agency ID</Label>
+                <div className="flex">
+                  <Input
+                    type="text"
+                    id="batch"
+                    onChange={(e) => setAssesmentAgency(e.target.value)}
+                    placeholder="Enter the id of assessment agency or select"
+                    value={assesmentAgency}
+                  />
+                  <Select>
+                    <SelectTrigger className="w-[75px]">
+                      <SelectValue placeholder="Show" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black">
+                      <ShowAccessmentAgency
+                        setAssesmentAgency={setAssesmentAgency}
+                      />
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Accessment Date</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={handleDateSelect}
+                      className="rounded-md border"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+          </form>
+          <DialogFooter>
+            <Button disabled={showButton} onClick={createExam} type="submit">
+              {showButton ? "Loading...." : "Assign Batch"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default CreateExam;

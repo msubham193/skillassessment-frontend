@@ -1,34 +1,48 @@
 import React, { useEffect, useState } from 'react'
-import { DataTable } from './ui/notiification/DataTable';
 import { cn } from '@/lib/utils';
 import axios from 'axios';
 import { server } from '@/main';
+import { DataTable } from '../ui/notiification/DataTable';
+import { useLocation } from 'react-router-dom';
 
 //in this component fetech all the request of AA  that are present in the database as notification data...
 const AaNotificationBoxContent = () => {
-  const[assessmentAgency,setAssessmentAgency]=useState([]);
-  const[referesh,setReferesh]=useState(false);
-  const[loding,setLoding]=useState(false)
+  const [assessmentAgency, setAssessmentAgency] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${server}/aa`, { withCredentials: true });
+      setLoading(false);
+      const newData = response.data.data.reverse();
+      if (initialLoad) {
+        setInitialLoad(false)
+        setAssessmentAgency(newData);
+      } else if (newData.length > assessmentAgency.length) {
+        setAssessmentAgency(newData);
+        
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('Error fetching data:', error);
+    }
+  };
 
   useEffect(() => {
-    try {
-      setLoding(true);
-      axios.get(`${server}/aa`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        // const result=response.data.data;
-        // console.log(result.reverse())
-        setLoding(false);
-        setAssessmentAgency(response.data.data.reverse());
-        setReferesh(prev=>!prev);
-      })
-    } catch (error) {
-      setLoding(false);
-      console.log(error);
-    }
-  }, [])
+    fetchData(); 
+
+    const pollingInterval = setInterval(() => {
+      fetchData();
+    }, 30*60*1000); // 30 minutes in milliseconds
+
+    return () => clearInterval(pollingInterval);
+  }, []);
+
   // console.log(assessmentAgency);
+  const location = useLocation();
+  const path=location.pathname;
  
   return (
     <>
@@ -46,7 +60,7 @@ const AaNotificationBoxContent = () => {
         </div>
       </div>
       {/* Data table for the notification */}
-      <DataTable columns={columns} data={assessmentAgency} isLoding={loding}/>
+      <DataTable  path={path} columns={columns} data={assessmentAgency} isLoding={loading}/>
     </div>
   </>
   )
@@ -55,6 +69,10 @@ const AaNotificationBoxContent = () => {
 export default AaNotificationBoxContent
 
  const columns = [
+    {
+      accessorKey: '_id',
+      header: 'ID ',
+    },
     {
       accessorKey: 'agencyName',
       header: 'Organization Name',

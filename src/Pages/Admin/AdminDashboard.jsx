@@ -1,8 +1,7 @@
 import React from 'react'
-import AdminContent from '../../Components/Admin/AdminContent'
-import SideNav from '@/Components/Admin/SideNav'
-import TopBar from '@/Components/Admin/TopBar'
-import { useLocation } from 'react-router-dom';
+import AdminContent from '../../Components/Admin/Content/AdminContent'
+import TopBar from '@/Components/Admin/Content/TopBar';
+import SideNav from '@/Components/Admin/Content/SideNav';
 const AdminDashboard = ({children}) => {
  
   return (

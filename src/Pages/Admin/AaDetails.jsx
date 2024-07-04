@@ -1,6 +1,6 @@
-import AaDetailsBox from "@/Components/Admin/AaDetailsBox";
-import SideNav from "@/Components/Admin/SideNav";
-import TopBar from "@/Components/Admin/TopBar";
+import AaDetailsBox from "@/Components/Admin/Content/AaDetailsBox";
+import SideNav from "@/Components/Admin/Content/SideNav";
+import TopBar from "@/Components/Admin/Content/TopBar";
 import React from "react";
 import { useParams } from "react-router-dom";
 //in this component fetch by id of a poticular rewuest of the aa from the aanotifaction

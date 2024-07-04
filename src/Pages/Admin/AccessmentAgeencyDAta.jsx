@@ -1,7 +1,7 @@
-import SideNav from '@/Components/Admin/SideNav'
-import TopBar from '@/Components/Admin/TopBar'
+import SideNav from '@/Components/Admin/Content/SideNav'
+import TopBar from '@/Components/Admin/Content/TopBar'
 import React from 'react'
-import AaNotificationBoxContent from '@/Components/Admin/AaNotificationBoxContent'
+import AaNotificationBoxContent from '@/Components/Admin/Content/AaNotificationBoxContent'
 
 const AaNotification = ({children}) => {
   return (

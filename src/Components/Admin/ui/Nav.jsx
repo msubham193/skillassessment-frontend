@@ -97,7 +97,7 @@ export function Nav({ links, isCollapsed }) {
                 {"CreateAdmin"}
               </Button>
             </AddAdmin>
-          )}
+          )}          
         </nav>
       </div>
     </TooltipProvider>

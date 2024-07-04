@@ -18,14 +18,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components(shadcn)/ui/table";
-import TableToolBar from "./TableToolBar";
-import TablePagination from "./TablePagination";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loder from "../Loder";
+import TableToolBar from "../notiification/TableToolBar";
+import TablePagination from "../notiification/TablePagination";
 
-export function DataTable({ columns,path, data,isLoding,filter1}) {
+export function HomeTable({ columns, data,isLoding}) {
+  const location = useLocation();
+  const path=location.pathname;
   // console.log(data);
+
   const navigate = useNavigate();
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -54,7 +57,6 @@ export function DataTable({ columns,path, data,isLoding,filter1}) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
   // console.log(table.getRowModel().rows[0].original.id);
-  // console.log(data._id);
   if(isLoding){
     return(
      <Loder/>
@@ -63,7 +65,7 @@ export function DataTable({ columns,path, data,isLoding,filter1}) {
 
   return (
     <div className="space-y-4">
-      <TableToolBar table={table} filter1={filter1}  />
+      <TableToolBar table={table} />
       <div className="rounded-md border overflow-x-auto">
         <Table className="min-w-full divide-y divide-gray-200">
           <TableHeader className="bg-gray-50">
@@ -91,11 +93,6 @@ export function DataTable({ columns,path, data,isLoding,filter1}) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() =>
-                    navigate(
-                      `${path}/${row.original._id}`
-                    )
-                  }
                   className="bg-white even:bg-gray-50"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -128,3 +125,7 @@ export function DataTable({ columns,path, data,isLoding,filter1}) {
     </div>
   );
 }
+
+export default HomeTable
+
+

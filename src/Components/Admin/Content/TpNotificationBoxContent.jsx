@@ -52,6 +52,7 @@ const TpNotificationBoxContent = () => {
       registeredOfficeState: "",
     });
   };
+  // state, sector, course, trainingOrganization
 
   const location = useLocation();
   const path = location.pathname;

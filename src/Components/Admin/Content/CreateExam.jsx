@@ -33,19 +33,20 @@ import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 
-const CreateExam = ({ children, abn_id, course }) => {
-  const [name, setName] = useState("");
-  const [sectorName, setSectorName] = useState("");
-  const [batch, setBatch] = useState("");
-  const [assesmentAgency, setAssesmentAgency] = useState("");
+const CreateExam = ({ children, abn_id, course,tp_id }) => {
+  const [courseName, setCourseName] = useState("");
+  const [trainingPartnerId, setTrainingPartnerId] = useState("");
+  const [batchId, setBatchId] = useState("");
+  const [assesmentAgencyId, setAssesmentAgencyId] = useState("");
   const [date, setDate] = useState(new Date());
   const [showButton, setShowButton] = useState(false);
   const authState = useRecoilValue(authenticationState);
 
   useEffect(() => {
-    setBatch(abn_id);
-    setName(course);
-  }, [abn_id, course]);
+    setBatchId(abn_id);
+    setCourseName(course);
+    setTrainingPartnerId(tp_id)
+  }, [abn_id, course,tp_id]);
 
   const handleDateSelect = (selectedDate) => {
     setDate(selectedDate);
@@ -62,7 +63,7 @@ const CreateExam = ({ children, abn_id, course }) => {
     try {
       const response = await axios.post(
         `${server}/exam/create`,
-        { name, date, batch, assesmentAgency },
+        { courseName,date,batchId,assesmentAgencyId,trainingPartnerId },
         {
           headers: {
             "x-access-token": token,
@@ -71,7 +72,7 @@ const CreateExam = ({ children, abn_id, course }) => {
           withCredentials: true,
         }
       );
-      setAssesmentAgency("");
+      setAssesmentAgencyId("");
       setDate(new Date());
       toast.success(response.data.message, {
         position: "top-center",
@@ -109,26 +110,20 @@ const CreateExam = ({ children, abn_id, course }) => {
                 <Label htmlFor="name" className="text-left">
                   BATCH ID
                 </Label>
-                <Input id="batch" className="col-span-4" value={batch} />
+                <Input id="batch" className="col-span-4" value={batchId} />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-left w-56">
                 TRANING PARTNER ID
                 </Label>
-                <Input id="tp_id" className="col-span-4" value={batch} />
+                <Input id="tp_id" className="col-span-4" value={trainingPartnerId} />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-left w-40">
                     COURCE NAME
                   </Label>
-                  <Input id="curse" className="col-span-4" value={name} />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-left w-40">
-                    SECTOR NAME
-                  </Label>
-                  <Input id="sector" className="col-span-4" value={sectorName} />
+                  <Input id="curse" className="col-span-4" value={courseName} />
                 </div>
               </div>
               {/* for manual input */}
@@ -138,9 +133,9 @@ const CreateExam = ({ children, abn_id, course }) => {
                   <Input
                     type="text"
                     id="batch"
-                    onChange={(e) => setAssesmentAgency(e.target.value)}
+                    onChange={(e) => setAssesmentAgencyId(e.target.value)}
                     placeholder="Enter the id of assessment agency or select"
-                    value={assesmentAgency}
+                    value={assesmentAgencyId}
                   />
                   <Select>
                     <SelectTrigger className="w-[75px]">
@@ -148,7 +143,7 @@ const CreateExam = ({ children, abn_id, course }) => {
                     </SelectTrigger>
                     <SelectContent className="bg-black">
                       <ShowAccessmentAgency
-                        setAssesmentAgency={setAssesmentAgency}
+                        setAssesmentAgency={setAssesmentAgencyId}
                       />
                     </SelectContent>
                   </Select>

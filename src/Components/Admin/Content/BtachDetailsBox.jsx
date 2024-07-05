@@ -10,7 +10,7 @@ const BtachDetailsBox = ({ id }) => {
   const [loding, setLoding] = useState(false);
   //function for  fetch battch data by id.
   useEffect(() => {
-    try {
+    try { 
       setLoding(true);
       axios
         .get(`${server}/batch/${id}`, {
@@ -39,24 +39,44 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?._id}</p>
           </div>
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Batch Name*</h3>
-            <p className="text-lg ">{data?.name}</p>
+            <h3 className="text-lg font-medium mb-2">Batch ABN ID*</h3>
+            <p className="text-lg ">{data?.ABN_Number}</p>
           </div>
           <div className="p-3">
             <h3 className="text-lg font-medium mb-2">Created By*</h3>
-            <p className="text-lg ">{data?.createdBy?.organizationName}</p>
+            <p className="text-lg ">{data?.trainingOrganization}</p>
           </div>
           <div className="p-3">
             <h3 className="text-lg font-medium mb-2">No of Student*</h3>
-            <p className="text-lg ">{data?.students?.length}</p>
+            <p className="text-lg text-blue-700 ">{data?.students?.length}</p>
           </div>
           <div className="p-3">
             <h3 className="text-lg font-medium mb-2">No of Traners*</h3>
-            <p className="text-lg ">{data?.trainers?.length}</p>
+            <p className="text-lg text-blue-700">{data?.trainers?.length}</p>
           </div>
           <div className="p-3">
             <h3 className="text-lg font-medium mb-2">Date of Examination*</h3>
             <p className="text-lg ">{data?.examDate}</p>
+          </div>
+          <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">End Date of Batch*</h3>
+            <p className="text-lg ">{data?.endDate}</p>
+          </div>
+          <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under Course*</h3>
+            <p className="text-lg ">{data?.courseName}</p>
+          </div>
+          <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under Scheme*</h3>
+            <p className="text-lg ">{data?.scheme}</p>
+          </div>
+          <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under Sector*</h3>
+            <p className="text-lg ">{data?.sectorName}</p>
+          </div>
+          <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under State*</h3>
+            <p className="text-lg ">{data?.state}</p>
           </div>
           <div className="p-3">
             <h3 className="text-lg font-medium mb-2">Status*</h3>
@@ -64,7 +84,7 @@ const BtachDetailsBox = ({ id }) => {
           </div>
         </div>
         {/* Buttion For assin a batch */}
-       <CreateExam abn_id={data?._id} course={"demoCourse"}>
+       <CreateExam abn_id={data?._id} course={data?.courseName} tp_id={data?.trainingOrganizationId}>
               <Button variant={"default"} className={"bg-green-700"}>
                 {"Assign agency"}
               </Button>

@@ -19,9 +19,9 @@ export function Nav({ links, isCollapsed }) {
     <TooltipProvider>
       <div
         data-collapsed={isCollapsed}
-        className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+        className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 "
       >
-        <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        <nav className="grid gap-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 mr-3">
           {links.map((link, index) =>
             isCollapsed ? (
               <Tooltip key={index} delayDuration={0}>
@@ -65,14 +65,3 @@ export function Nav({ links, isCollapsed }) {
   );
 }
 
-Nav.propTypes = {
-  isCollapsed: PropTypes.bool.isRequired,
-  links: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired, // Make sure each link object has a path property
-      icon: PropTypes.elementType.isRequired,
-      variant: PropTypes.oneOf(["default", "ghost"]).isRequired,
-    })
-  ).isRequired,
-};

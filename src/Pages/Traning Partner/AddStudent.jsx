@@ -83,7 +83,7 @@ const AddStudent = () => {
 
       const data = await response.json();
       if (response.ok) {
-        console.log("Student added successfully:", data);
+        console.log("student data", data);
         toast.success(data.message);
         navigate('/trainingPartner/dashboard');
         setStudentInputs(

@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
-
+import { Loader } from 'lucide-react';
 const Signin = () => {
   const navigate = useNavigate();
   const [registeredOfficeEmail, setRegisteredOfficeEmail] = useState("");
   const [password, setPassword] = useState("");
   const [tpStatus, setTpStatus] = useState("");
   const [responseData, setResponseData] = useRecoilState(tpDataAtoms);
+  const[isLoading,setIsLoading] = useState(false)
 
   const handleEmailChange = (e) => {
     setRegisteredOfficeEmail(e.target.value);
@@ -24,6 +25,7 @@ const Signin = () => {
 
   const handleSignin = async () => {
     try {
+      setIsLoading(true)
       const response = await fetch("http://localhost:8000/api/v1/tp/login", {
         method: "POST",
         headers: {
@@ -41,13 +43,13 @@ const Signin = () => {
 
       const data = await response.json();
       setTpStatus(data.applicationStatus);
-      console.log(data.data.data)
+      console.log(data.data.data.applicationStatus)
       setResponseData(data.data.data);
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("trainingPartnerId", data.data.data._id);
       toast.success(data.message);
 
-      if (data.data.data.applicationStatus === "Success") {
+      if (data.data.data.applicationStatus === "Approved") {
         navigate("/trainingPartner/dashboard");
       } else {
         navigate("/statusFail");
@@ -55,13 +57,15 @@ const Signin = () => {
     } catch (error) {
       console.log(error);
       toast.error("Please provide valid credentials");
+    }finally{
+      setIsLoading(false)
     }
   };
 
   return (
-    <div className="h-screen flex justify-center items-center p-4">
-      <div className="bg-slate-300 w-[400px] h-[400px] rounded-md pt-8">
-        <div className="flex justify-center font-extrabold text-lg m-6">
+    <div className="h-screen flex justify-center items-center p-4 bg-black">
+      <div className="bg-black w-[400px] h-[400px] rounded-md pt-8 border border-gray-800">
+        <div className="flex justify-center font-medium text-lg m-6 text-white">
           Training Partner Signin
         </div>
         <div className="p-4">
@@ -71,7 +75,8 @@ const Signin = () => {
               type="email"
               value={registeredOfficeEmail}
               onChange={handleEmailChange}
-              placeholder="Enter your email"
+              placeholder="registered office email"
+              className="bg-transparent text-white"
             />
           </div>
           <div>
@@ -80,12 +85,13 @@ const Signin = () => {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              placeholder="Enter your password"
+              placeholder="password"
+              className="bg-transparent text-white"
             />
           </div>
         </div>
         <div className="flex justify-center pt-8" onClick={handleSignin}>
-          <Button>Submit</Button>
+          <Button className="w-full m-3 bg-violet-700">{ isLoading ? <Loader/> : "Submit"}</Button>
         </div>
       </div>
     </div>

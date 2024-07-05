@@ -14,8 +14,8 @@ const TopBar = () => {
   };
 
   return (
-    <nav className="p-6 flex justify-between items-center relative">
-      <div className="text-sm md:text-lg font-bold">
+    <nav className="p-6 flex justify-between items-center relativeb bg-[#0C0C0C]">
+      <div className="text-sm md:text-lg font-bold text-white">
         Training Partner Dashboard
       </div>
       <div className="flex items-center justify-end md:w-[70%]">
@@ -29,7 +29,7 @@ const TopBar = () => {
         </div>
       </div>
       <div className="relative ml-3">
-        <CircleUserRound className="cursor-pointer" onClick={toggleProfilePopup} />
+        <CircleUserRound size={40} className="cursor-pointer text-white" onClick={toggleProfilePopup} />
         {isProfileOpen && (
           <div className="absolute right-0 mt-2">
             <ProfilePopup />

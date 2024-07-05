@@ -16,7 +16,7 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-2 pb-10 pt-24">
+    <div className=" relative min-w-[80px] border-r px-2  pb-10 pt-24 bg-[#0C0C0C]">
  {
     !mobileWidth &&(
         <div className="absolute right-[-20px] top-5">
@@ -28,7 +28,7 @@ const SideNav = () => {
         </div>
     )
  }
-      <Nav
+      <Nav 
         isCollapsed={mobileWidth?true: isCollapsed}
         links={[
           {
@@ -38,19 +38,13 @@ const SideNav = () => {
             icon: LayoutDashboard,
             variant: "default",
           },
-          {
-            title: "Notifications",
-            label: "",
-            path:"Notifications",
-            icon: BellDot,
-            variant: "ghost",
-          },
+        
           {
             title:"Create Batch",
             label:"",
             path:"CreateBatch",
             icon:CirclePlus,
-            variant:"ghost"
+            variant:"default"
           }
         ]}
       />

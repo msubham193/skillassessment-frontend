@@ -13,7 +13,7 @@ const ProfilePopup = () => {
   };
 
   return (
-    <div className="w-full max-w-md bg-white rounded-lg shadow-xl p-8 flex flex-col justify-between space-y-6">
+    <div className="w-[200px] h-[330px] flex flex-col justify-between bg-white p-4">
       <div className="flex flex-col justify-center items-center space-y-4">
         <div className="bg-gray-300 w-24 h-24 rounded-full flex items-center justify-center">
           {/* Placeholder for profile image */}

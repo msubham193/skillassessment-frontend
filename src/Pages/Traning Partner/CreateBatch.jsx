@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { batchDataAtoms } from '@/Components/Traning Partner/Atoms/batchatom';
+import "./coustom.css";
 const CreateBatch = () => {
   const navigate=useNavigate()
   const [batchInputs, setBatchInputs] = useState({ name: '', startDate: null, endDate: null });
@@ -69,9 +70,9 @@ const CreateBatch = () => {
           />
 
           <Label htmlFor="startDate">Start Date</Label>
-          <div className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full">
+          <div className="flex h-10 rounded-md border border-input  px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full bg-transparent">
             <DatePicker
-              className="w-full"
+              className="w-full "
               value={batchInputs.startDate}
               onChange={(date) => handleDateChange(date, 'startDate')}
             />

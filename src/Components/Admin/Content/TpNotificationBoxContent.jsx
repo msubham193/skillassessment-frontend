@@ -1,6 +1,13 @@
 import { DataTable } from "@/Components/Admin/ui/notiification/DataTable";
-import { Button } from "@/components(shadcn)/ui/button";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components(shadcn)/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components(shadcn)/ui/select";
 import { cn } from "@/lib/utils";
 import { server } from "@/main";
 import axios from "axios";
@@ -52,19 +59,19 @@ const TpNotificationBoxContent = () => {
       registeredOfficeState: "",
     });
   };
-  // state, sector, course, trainingOrganization
 
   const location = useLocation();
   const path = location.pathname;
 
   useEffect(() => {
     try {
-      axios.get(`${server}/sector/all`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setSectors(response.data.data);
-      })
+      axios
+        .get(`${server}/sector/all`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setSectors(response.data.data);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -72,12 +79,13 @@ const TpNotificationBoxContent = () => {
 
   useEffect(() => {
     try {
-      axios.get(`${server}/course/all`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setCourse(response.data.data);
-      })
+      axios
+        .get(`${server}/courses`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setCourse(response.data.data);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -85,12 +93,13 @@ const TpNotificationBoxContent = () => {
 
   useEffect(() => {
     try {
-      axios.get(`${server}/scheme/all`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setSchemes(response.data.data);
-      })
+      axios
+        .get(`${server}/scheme`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setSchemes(response.data.data);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -106,66 +115,74 @@ const TpNotificationBoxContent = () => {
               Here&apos;s a list of Traning Partner's for you!
             </p>
           </div>
+
           <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-2">
-              <Select onValueChange={(value) => handleFilterChange("sector", value)}>
-                <SelectTrigger className="w-fit border-0">
-                  <SelectValue placeholder="Filter by Sector" />
-                </SelectTrigger>
-                <SelectContent>
-                  {sectors.map((sector) => (
-                    <SelectItem key={sector.id} value={sector.name}>
-                      {sector.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <Select
+              onValueChange={(value) => handleFilterChange("sector", value)}
+            >
+              <SelectTrigger className="w-fit border-0">
+                <SelectValue placeholder="Filter by Sector" />
+              </SelectTrigger>
+              <SelectContent>
+                {sectors.map((sector) => (
+                  <SelectItem key={sector.id} value={sector.name}>
+                    {sector.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-              <Select onValueChange={(value) => handleFilterChange("course", value)}>
-                <SelectTrigger className="w-fit border-0">
-                  <SelectValue placeholder="Filter by Course" />
-                </SelectTrigger>
-                <SelectContent>
-                  {course.map((courses) => (
-                    <SelectItem key={courses.id} value={courses.courseName}>
-                      {courses.courseName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <Select
+              onValueChange={(value) => handleFilterChange("course", value)}
+            >
+              <SelectTrigger className="w-fit border-0">
+                <SelectValue placeholder="Filter by Course" />
+              </SelectTrigger>
+              <SelectContent>
+                {course.map((courses) => (
+                  <SelectItem key={courses.id} value={courses.courseName}>
+                    {courses.courseName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-              <Select onValueChange={(value) => handleFilterChange("scheme", value)}>
-                <SelectTrigger className="w-fit border-0">
-                  <SelectValue placeholder="Filter by Scheme" />
-                </SelectTrigger>
-                <SelectContent>
-                  {schemes.map((scheme) => (
-                    <SelectItem key={scheme.id} value={scheme.name}>
-                      {scheme.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <Select
+              onValueChange={(value) => handleFilterChange("scheme", value)}
+            >
+              <SelectTrigger className="w-fit border-0">
+                <SelectValue placeholder="Filter by Scheme" />
+              </SelectTrigger>
+              <SelectContent>
+                {schemes.map((scheme) => (
+                  <SelectItem key={scheme.id} value={scheme.name}>
+                    {scheme.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-              <Select onValueChange={(value) => handleFilterChange("registeredOfficeState", value)}>
-                <SelectTrigger className="w-fit border-0">
-                  <SelectValue placeholder="Filter by State" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>States</SelectLabel>
-                    <SelectItem value="Odisha">Odisha</SelectItem>
-                    <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
-                    <SelectItem value="West Bengal">West Bengal</SelectItem>
-                    <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
-                    <SelectItem value="Jharkhand">Jharkhand</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <Select
+              onValueChange={(value) =>
+                handleFilterChange("registeredOfficeState", value)
+              }
+            >
+              <SelectTrigger className="w-fit border-0">
+                <SelectValue placeholder="Filter by State" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>States</SelectLabel>
+                  <SelectItem value="Odisha">Odisha</SelectItem>
+                  <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+                  <SelectItem value="West Bengal">West Bengal</SelectItem>
+                  <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+                  <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-              <RotateCcw  onClick={resetFilters} className="w-4" />
-
-            </div>
+            <RotateCcw onClick={resetFilters} className="w-4" />
           </div>
         </div>
 

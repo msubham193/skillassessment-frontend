@@ -29,11 +29,11 @@ import {
 } from "@/components(shadcn)/ui/dialog";
 import axios from "axios";
 import { server } from "@/main";
-import { useRecoilValue } from "recoil";
-import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authenticationState, examState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 
-const CreateExam = ({ children, abn_id, course,tp_id }) => {
+const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const [courseName, setCourseName] = useState("");
   const [trainingPartnerId, setTrainingPartnerId] = useState("");
   const [batchId, setBatchId] = useState("");
@@ -41,12 +41,13 @@ const CreateExam = ({ children, abn_id, course,tp_id }) => {
   const [date, setDate] = useState(new Date());
   const [showButton, setShowButton] = useState(false);
   const authState = useRecoilValue(authenticationState);
+  const setExamState = useSetRecoilState(examState);
 
   useEffect(() => {
     setBatchId(abn_id);
     setCourseName(course);
-    setTrainingPartnerId(tp_id)
-  }, [abn_id, course,tp_id]);
+    setTrainingPartnerId(tp_id);
+  }, [abn_id, course, tp_id]);
 
   const handleDateSelect = (selectedDate) => {
     setDate(selectedDate);
@@ -63,7 +64,7 @@ const CreateExam = ({ children, abn_id, course,tp_id }) => {
     try {
       const response = await axios.post(
         `${server}/exam/create`,
-        { courseName,date,batchId,assesmentAgencyId,trainingPartnerId },
+        { courseName, date, batchId, assesmentAgencyId, trainingPartnerId },
         {
           headers: {
             "x-access-token": token,
@@ -74,6 +75,8 @@ const CreateExam = ({ children, abn_id, course,tp_id }) => {
       );
       setAssesmentAgencyId("");
       setDate(new Date());
+      //make exam state to true...
+      setExamState({ isCreated: true });
       toast.success(response.data.message, {
         position: "top-center",
         closeOnClick: true,
@@ -114,11 +117,15 @@ const CreateExam = ({ children, abn_id, course,tp_id }) => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-left w-56">
-                TRANING PARTNER ID
+                  TRANING PARTNER ID
                 </Label>
-                <Input id="tp_id" className="col-span-4" value={trainingPartnerId} />
+                <Input
+                  id="tp_id"
+                  className="col-span-4"
+                  value={trainingPartnerId}
+                />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-left w-40">
                     COURCE NAME
@@ -144,6 +151,9 @@ const CreateExam = ({ children, abn_id, course,tp_id }) => {
                     <SelectContent className="bg-black">
                       <ShowAccessmentAgency
                         setAssesmentAgency={setAssesmentAgencyId}
+                        course={courseName}
+                        sector={sector}
+                        state={state}
                       />
                     </SelectContent>
                   </Select>

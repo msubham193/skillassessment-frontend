@@ -6,9 +6,7 @@ import {
   TableRow,
 } from "@/components(shadcn)/ui/table";
 import { Button } from "@/components(shadcn)/ui/button";
-import {
-  TooltipProvider,
-} from "@/components(shadcn)/ui/tooltip";
+import { TooltipProvider } from "@/components(shadcn)/ui/tooltip";
 // import { useRecoilValue } from "recoil";
 // import { trainingPartnerByID } from "@/Pages/Admin/Atoms/TpSelector";
 import axios from "axios";
@@ -20,7 +18,11 @@ import { toast } from "react-toastify";
 import { DataTable } from "../ui/notiification/DataTable";
 import { batchColumns } from "../ui/HomeTablist/Batch";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@/components(shadcn)/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components(shadcn)/ui/popover";
 
 const TpDetailsBOx = ({ id }) => {
   const [referesh, setReferesh] = useState(false);
@@ -238,22 +240,24 @@ const TpDetailsBOx = ({ id }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">Available Sector*</TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline">Show Sector</Button>
-                </PopoverTrigger>
+                  <TableCell className="font-medium">
+                    Available Sector*
+                  </TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline">Show Sector</Button>
+                      </PopoverTrigger>
 
-                {sector &&
-                  sector.map((sectors, index) => (
-                    <PopoverContent key={index} className="bg-green-300">
-                      {sectors}
-                    </PopoverContent>
-                  ))}
-              </Popover>
-                </TableCell>
-              </TableRow>
+                      {sector &&
+                        sector.map((sectors, index) => (
+                          <PopoverContent key={index} className="bg-green-300">
+                            {sectors}
+                          </PopoverContent>
+                        ))}
+                    </Popover>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
             {/* table for registered office Address */}

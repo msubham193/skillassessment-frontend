@@ -13,7 +13,7 @@ import TableToolBar from '../ui/notiification/TableToolBar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components(shadcn)/ui/table'
 import Loder from '../ui/Loder';
 
-const FormTable = ({ columns, data, isLoding, onRowClick }) => {
+const FormTable = ({ columns, data, isLoding, onRowClick,filter1 }) => {
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
@@ -46,7 +46,7 @@ const FormTable = ({ columns, data, isLoding, onRowClick }) => {
       }
   return (
     <div className="space-y-4">
-    <TableToolBar table={table} />
+    <TableToolBar table={table} filter1={filter1} />
     <div className="rounded-md border overflow-x-auto">
       <Table className="min-w-full divide-y divide-gray-200">
         <TableHeader className="bg-gray-50">

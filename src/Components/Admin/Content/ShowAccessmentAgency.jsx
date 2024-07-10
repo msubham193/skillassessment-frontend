@@ -3,26 +3,37 @@ import FormTable from './FormTable';
 import axios from 'axios';
 import { server } from '@/main';
 
-const ShowAccessmentAgency = ({ setAssesmentAgency }) => {
+const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
     const [assessmentAgency, setAssessmentAgency] = useState([]);
     const [loading, setLoading] = useState(false);
 
     //here i can apply the filter for accessment agency.........
 
+    // console.log(course,sector,state)
+
     useEffect(() => {
-      try {
-        setLoading(true);
-        axios.get(`${server}/aa/status/approved`, {
-          withCredentials: true,
-        }).then((response) => {
-          setLoading(false);
-          setAssessmentAgency(response.data.data.reverse());
-        })
-      } catch (error) {
-        setLoading(false);
-        console.log(error);
-      }
-    }, []);
+      const fetchAssessmentAgency = async () => {
+          setLoading(true);
+          try {
+              const response = await axios.get(`${server}/aa/all/query`, {
+                  params: {
+                      course,
+                      sector,
+                      state
+                  },
+                  withCredentials: true,
+              });
+              // console.log(response)
+              setAssessmentAgency(response.data.data.reverse());
+          } catch (error) {
+              console.error(error);
+          } finally {
+              setLoading(false);
+          }
+      };
+
+      fetchAssessmentAgency();
+  }, [course, sector, state]);
 
     const handleRowClick = (row) => {
       setAssesmentAgency(row._id); // Assuming _id is the id of the assessment agency
@@ -30,7 +41,7 @@ const ShowAccessmentAgency = ({ setAssesmentAgency }) => {
 
     return (
       <div>
-        <FormTable columns={columns} data={assessmentAgency} isLoading={loading} onRowClick={handleRowClick} />
+        <FormTable filter1={"agencyName"}columns={columns} data={assessmentAgency} isLoading={loading} onRowClick={handleRowClick} />
       </div>
     )
 }
@@ -38,12 +49,16 @@ const ShowAccessmentAgency = ({ setAssesmentAgency }) => {
 export default ShowAccessmentAgency
 
 const columns = [
+  {
+    accessorKey: "agencyName",
+    header: "Agency Name ",
+  },
     {
-      accessorKey: "_id",
-      header: "Organization ID",
+      accessorKey: "email",
+      header: "email",
     },
     {
-      accessorKey: "agencyName",
-      header: "Organization Name",
+      accessorKey: "_id",
+      header: "id",
     },
 ];

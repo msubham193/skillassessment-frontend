@@ -13,7 +13,7 @@ const AagencyNotification = () => {
         setLoding(true);
         axios.get(`${server}/aa/status/pending`, {
           withCredentials: true,
-        }).then((response)=>
+        }).then((response)=> 
         {
           setLoding(false);
           setAssessmentAgency(response.data.data.reverse());

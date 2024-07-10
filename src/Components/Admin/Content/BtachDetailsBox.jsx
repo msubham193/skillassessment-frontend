@@ -4,10 +4,15 @@ import React, { useEffect, useState } from "react";
 import Loder from "../ui/Loder";
 import { Button } from "@/components(shadcn)/ui/button";
 import CreateExam from "./CreateExam";
+import { useRecoilValue } from "recoil";
+import { examState } from "@/Pages/Admin/Atoms/atoms";
 
 const BtachDetailsBox = ({ id }) => {
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);
+  const examCreate=useRecoilValue(examState);
+  // console.log(examCreate.isCreated)
+  // console.log(examCreate.isCreated?true:false);
   //function for  fetch battch data by id.
   useEffect(() => {
     try { 
@@ -84,9 +89,11 @@ const BtachDetailsBox = ({ id }) => {
           </div>
         </div>
         {/* Buttion For assin a batch */}
-       <CreateExam abn_id={data?._id} course={data?.courseName} tp_id={data?.trainingOrganizationId}>
-              <Button variant={"default"} className={"bg-green-700"}>
-                {"Assign agency"}
+       <CreateExam abn_id={data?._id}  tp_id={data?.trainingOrganizationId} course={data?.courseName} sector={data?.sectorName} state={data?.state}>
+              <Button disabled={examCreate.isCreated} variant={"default"} className={"bg-green-700"}>
+              {
+              examCreate.isCreated?("Batch Assigned"):("Assign to Agency")
+              }
               </Button>
             </CreateExam>
       </div>

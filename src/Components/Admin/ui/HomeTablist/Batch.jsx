@@ -69,7 +69,7 @@ const Batch = () => {
 
   useEffect(() => {
     try {
-      axios.get(`${server}/course/all`, {
+      axios.get(`${server}/courses`, {
         withCredentials: true,
       }).then((response) => {
         setCourses(response.data.data);

@@ -4,17 +4,20 @@ import { RxCross2 } from "react-icons/rx";
 import { Button } from "@/components(shadcn)/ui/button"
 import { Input } from "@/components(shadcn)/ui/input"
 
-const TableToolBar = ({table}) => {
+const TableToolBar = ({table,filter1}) => {
   const [filterValue, setFilterValue] = useState("");
 
   const handleChange = (e) => {
     const newValue = e.target.value;
     setFilterValue(newValue);
 
-    const column = table.getColumn("email");
+    const column = table.getColumn(filter1);
+    // const column2=table.getColumn("")
     if (column) {
       column.setFilterValue(newValue);
     }
+
+    
   };
   const isFiltered = table.getState().columnFilters.length > 0
   return (

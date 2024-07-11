@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Nav } from "./ui/Nav";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
   } from '@react-hook/window-size'
+import { Nav } from "../ui/Nav";
 
 const SideNav = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -39,18 +39,39 @@ const SideNav = () => {
             href:"/admin/dasbord"
           },
           {
-            title: "Training Partner",
+            title: "Notification's",
             label: "",
             icon: BellDot,
+            variant: "ghost",
+            href:"/admin/dasbord/Notification"
+          },
+          {
+            title: "Total Training Partner",
+            label: "",
+            icon: Handshake,
             variant: "ghost",
             href:"/admin/dasbord/TreaningPartner"
           },
           {
-            title: "Assessment Agency",
+            title: "Total Assessment Agency",
             label: "",
-            icon: BellDot,
+            icon: BotMessageSquare,
             variant: "ghost",
             href:"/admin/dasbord/AssessmentAgency"
+          },
+          {
+            title: "Create Course",
+            label: "",
+            icon: PackagePlus ,
+            variant: "ghost",
+            href:"/admin/dasbord/createCourse"
+          },
+          {
+            title: "Create Scheme",
+            label: "",
+            icon: PackagePlus ,
+            variant: "ghost",
+            href:"/admin/dasbord/createScheme"
           },
         ]}
       />

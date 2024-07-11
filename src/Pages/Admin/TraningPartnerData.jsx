@@ -1,7 +1,8 @@
 import React from "react";
-import TopBar from "@/Components/Admin/TopBar";
-import SideNav from "@/Components/Admin/SideNav";
-import TpNotificationBoxContent from "../../Components/Admin/TpNotificationBoxContent";
+
+import TpNotificationBoxContent from "@/Components/Admin/Content/TpNotificationBoxContent";
+import TopBar from "@/Components/Admin/Content/TopBar";
+import SideNav from "@/Components/Admin/Content/SideNav";
 
 const TpNotification = ({ children }) => {
   return (
@@ -14,7 +15,7 @@ const TpNotification = ({ children }) => {
           <SideNav />
 
           {/* main page */}
-
+ 
           <TpNotificationBoxContent>{children}</TpNotificationBoxContent>
         </div>
       </div>

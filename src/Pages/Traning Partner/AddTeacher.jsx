@@ -4,13 +4,16 @@ import { Input} from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-
+import { useRecoilState, useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { batchDataAtoms } from "@/Components/Traning Partner/Atoms/batchatom";
 const AddTeacher = () => {
   const { id: batchId } = useParams();
+  console.log("this is batch id",batchId)
   const navigate = useNavigate();
-
+   const batchData=useRecoilValue(batchDataAtoms);
+   console.log( "this is batchdata ",batchData);
   const TeacherLabels = [
     "name",
     "phoneNumber",
@@ -82,7 +85,7 @@ const AddTeacher = () => {
       <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-semibold">Add Teacher</h1>
-          <Link className="text-blue-600" to="/trainingPartner/dashboard/Teachers">
+          <Link className="text-blue-600" to={`/trainingPartner/dashboard/Teachers?batchId=${batchId}`}>
             Add existing Teacher
           </Link>
         </div>

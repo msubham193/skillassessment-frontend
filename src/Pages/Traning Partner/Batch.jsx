@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Building2 } from "lucide-react";
 import { BarChart } from "lucide-react";
 import { Calendar } from "lucide-react";
+import { Book } from 'lucide-react';
 import DataTable from "@/Components/Traning Partner/ui/DataTable";
 import { columns } from "@/Components/Traning Partner/ui/coulmns";
 const Batch = () => {
@@ -44,7 +45,7 @@ const Batch = () => {
            <div>
              <div className='flex items-center gap-3'>
                <Building2 className='text-gray-300' size={30} />
-               <h1 className='text-gray-400 font-semibold text-xl'>{batchData.name}</h1>
+               <h1 className='text-gray-400 font-semibold text-xl'>{batchData.courseName}</h1>
              </div>
            </div>
            <div>
@@ -55,6 +56,10 @@ const Batch = () => {
                </h1>
              </div>
            </div>
+           <div className=" flex gap-2">
+              <Book className='text-gray-300 mt-1' size={30} />
+              <h1 className='text-gray-400 font-semibold text-xl'>{batchData.sectorName}</h1>
+             </div>
            <div className='mt-6 flex flex-col gap-4'>
              <div className='flex items-center gap-4 '>
                <Calendar className='text-white' />

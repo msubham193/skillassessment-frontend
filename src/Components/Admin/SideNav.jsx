@@ -43,6 +43,9 @@ const SideNav = () => {
             icon: BellDot,
             variant: "ghost",
           },
+          {
+            
+          }
         ]}
       />
     </div>

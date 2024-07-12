@@ -11,6 +11,7 @@ export const coursesData=atom({
         ({onSet})=>{
          onSet(newValue=>{
             saveState("coursesdata",newValue)
+            
          })
         }
     ]

@@ -7,13 +7,16 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 import { Loader } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
+
 const Signin = () => {
   const navigate = useNavigate();
   const [registeredOfficeEmail, setRegisteredOfficeEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const [tpStatus, setTpStatus] = useState("");
   const [responseData, setResponseData] = useRecoilState(tpDataAtoms);
-  const[isLoading,setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailChange = (e) => {
     setRegisteredOfficeEmail(e.target.value);
@@ -23,9 +26,13 @@ const Signin = () => {
     setPassword(e.target.value);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSignin = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await fetch("http://localhost:8000/api/v1/tp/login", {
         method: "POST",
         headers: {
@@ -43,7 +50,7 @@ const Signin = () => {
 
       const data = await response.json();
       setTpStatus(data.applicationStatus);
-      console.log(data.data.data.applicationStatus)
+      console.log(data.data.data.applicationStatus);
       setResponseData(data.data.data);
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("trainingPartnerId", data.data.data._id);
@@ -57,8 +64,8 @@ const Signin = () => {
     } catch (error) {
       console.log(error);
       toast.error("Please provide valid credentials");
-    }finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,19 +86,28 @@ const Signin = () => {
               className="bg-transparent text-white"
             />
           </div>
-          <div>
+          <div className="relative">
             <label>Password</label>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={handlePasswordChange}
               placeholder="password"
               className="bg-transparent text-white"
             />
+            <button
+              type="button"
+              className="absolute right-3 top-9 text-gray-600"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <EyeOff /> : <Eye />}
+            </button>
           </div>
         </div>
         <div className="flex justify-center pt-8" onClick={handleSignin}>
-          <Button className="w-full m-3 bg-violet-700">{ isLoading ? <Loader/> : "Submit"}</Button>
+          <Button className="w-full m-3 bg-violet-700">
+            {isLoading ? <Loader /> : "Submit"}
+          </Button>
         </div>
       </div>
     </div>

@@ -1,10 +1,11 @@
 import { Button } from '@/components(shadcn)/ui/button';
-import TopBar from '@/Components/Traning Partner/TopBar';
+
 import React, { useEffect, useState } from 'react';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { batchDataAtoms } from '../Atoms/batchatom';
+import TopBar from '../TopBar';
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
@@ -81,15 +82,14 @@ const Content = () => {
               <div key={batch._id} className="  mt-10 px-7  cursor-pointer   rounded-md shadow-md mb-2 ">
                 <div className="flex  justify-between  items-center">
                   <div className=' flex justify-between  w-full items-center'>
-                  <div className='text-white w-full '>{batch.name}</div>
+                  <div className='text-white w-full '>{batch.courseName}</div>
                   <div className={` w-full  items-center bg-opacity-25 rounded-md p-1 ${getStatusClass(batch.status)}`}>{batch.status}</div>
-                  <div className='flex flex-col justify-center items-center text-orange-600'> <Eye className=' mt-1 ' onClick={() => handelView(batch._id)} />
-                    <h1>view</h1>
+                  <div className='flex flex-col justify-center items-center text-orange-600'> <Eye className=' mt-1 '  />
+                    <h1 onClick={()=>handelView(batch._id)}>view</h1>
                   </div>
                   </div>
-                
                 <div className="flex flex-row gap-2 justify-center md:justify-end w-full ">
-                  <Button className="text-xs text-violet-500 px-4 py-1  mt-2 bg-violet-700 bg-opacity-25  " onClick={() => navigate(`/trainingPartner/dashboard/CreateBatch/addteacher/${batch._id}`)}>Add Teacher</Button>
+                  <Button className="text-xs text-violet-500 px-4 py-1  mt-2 bg-violet-700 bg-opacity-25  " onClick={() => navigate(`/trainingPartner/dashboard/CreateBatch/addteacher/${batch._id}`)}>Add Trainer</Button>
                   <Button className="text-xs text-green-400 px-4 py-1  mt-2 bg-green-700 bg-opacity-25" onClick={() => navigate(`/trainingPartner/dashboard/CreateBatch/addstudent/${batch._id}`)}>Add Student</Button>
                 </div>
                 </div>

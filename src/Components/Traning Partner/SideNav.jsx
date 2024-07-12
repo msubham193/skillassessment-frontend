@@ -16,7 +16,7 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-2  pb-10 pt-24 bg-[#0C0C0C]">
+    <div className=" relative min-w-[80px] border-r px-2 pr-5  pb-10 pt-24 bg-[#0C0C0C]">
  {
     !mobileWidth &&(
         <div className="absolute right-[-20px] top-5">
@@ -33,7 +33,7 @@ const SideNav = () => {
         links={[
           {
             title: "DashBoard",
-            path:"Dashboard",
+            path:"",
             label: "",
             icon: LayoutDashboard,
             variant: "default",
@@ -44,8 +44,22 @@ const SideNav = () => {
             label:"",
             path:"CreateBatch",
             icon:CirclePlus,
-            variant:"default"
-          }
+            variant:"secondary"
+          },
+          // {
+          //   title:"Create Course",
+          //   label:"",
+          //   path:"CreateCourse",
+          //   icon:CirclePlus,
+          //   variant:"secondary"
+          // },
+          // {
+          //   title:"Create Sector",
+          //   label:"",
+          //   path:"CreateSector",
+          //   icon:CirclePlus,
+          //   variant:"secondary"
+          // }
         ]}
       />
     </div>

@@ -1,5 +1,4 @@
 import React from 'react'
-import AdminDashboard from './Pages/Admin/AdminDashboard'
 import { Route, Routes } from 'react-router-dom'
 import Signup from './Pages/Traning Partner/Signup'
 import Dashboard from './Pages/Traning Partner/Dashboard'

@@ -87,7 +87,7 @@ const TpartnerNotifiation = () => {
         </SelectGroup>
       </SelectContent>
     </Select>
-  </div>
+  </div>  
     */}
 
     <DataTable

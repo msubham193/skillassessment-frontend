@@ -17,6 +17,7 @@ import Notification from "./Pages/Admin/Notification";
 import CreateCourse from "./Pages/Admin/CreateCourse";
 import CreateScheme from "./Pages/Admin/CreateScheme";
 import BatchWiseStudentResult from "./Pages/Admin/BatchWiseStudentResult";
+import StudentResultDetails from "./Pages/Admin/StudentResultDetails";
 
 const App = () => {
   const [authState, setAuthState] = useRecoilState(authenticationState);
@@ -43,6 +44,7 @@ const App = () => {
             exact
             element={<BatchWiseStudentResult />}
           />
+          <Route path="/admin/dasbord/studentMark/:id" exact element={<StudentResultDetails/>} />
           <Route
             path="/admin/dasbord/TreaningPartner"
             exact

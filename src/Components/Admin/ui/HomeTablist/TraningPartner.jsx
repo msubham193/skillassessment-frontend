@@ -3,8 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "../notiification/DataTable";
 import { cn } from "@/lib/utils";
-import HomeTable from "./HomeTable";
-import { batchColumns } from "./Batch";
+
 
 const TraningPartner = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);

@@ -4,17 +4,13 @@ import React, { useEffect, useState } from "react";
 import Loder from "../ui/Loder";
 import { Button } from "@/components(shadcn)/ui/button";
 import CreateExam from "./CreateExam";
-import { useRecoilValue } from "recoil";
-import { examState } from "@/Pages/Admin/Atoms/atoms";
 import { useNavigate } from "react-router-dom";
 
 const BtachDetailsBox = ({ id }) => {
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);
-  const examCreate = useRecoilValue(examState);
+
   const navigate=useNavigate();
-  // console.log(examCreate.isCreated)
-  // console.log(examCreate.isCreated?true:false);
   //function for  fetch battch data by id.
   useEffect(() => {
     try {
@@ -105,11 +101,11 @@ const BtachDetailsBox = ({ id }) => {
             state={data?.state}
           >
             <Button
-              disabled={examCreate.isCreated || data?.status==="Completed" }
+              disabled={data?.status==="Completed" }
               variant={"default"}
               className={"bg-green-700"}
             >
-              {examCreate.isCreated ? "Batch Assigned" : "Assign to Agency"}
+              {"Assign to Agency"}
             </Button>
           </CreateExam>
 

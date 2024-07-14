@@ -7,11 +7,9 @@ import {
   Presentation,
   SquareActivity,
 } from "lucide-react";
-import Exam from "../ui/HomeTablist/Exam";
 import Batch from "../ui/HomeTablist/Batch";
 import AccessmentAgency from "../ui/HomeTablist/AccessmentAgency";
 import TraningPartner from "../ui/HomeTablist/TraningPartner";
-import CreateExam from "./CreateExam";
 import axios from "axios";
 import { server } from "@/main";
 

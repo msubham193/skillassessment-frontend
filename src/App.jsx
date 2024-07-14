@@ -19,8 +19,8 @@ import Student from './Pages/Traning Partner/Student'
 import ProfilePopup from './Pages/Traning Partner/ProfilePopup'
 const App = () => {
   const Batchdata=useRecoilValue(batchDataAtoms)
-  const batchId=Batchdata._id
-  console.log("app.js",batchId)
+  const batchId=Batchdata._id;
+  console.log(batchId);
   const tpData=useRecoilValue(tpDataAtoms )
   const tpId=localStorage.getItem("trainingPartnerId");
   return (

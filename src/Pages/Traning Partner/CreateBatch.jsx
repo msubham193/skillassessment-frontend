@@ -8,19 +8,38 @@ import 'react-calendar/dist/Calendar.css';
 import { Button } from '@/components(shadcn)/ui/button';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { batchDataAtoms } from '@/Components/Traning Partner/Atoms/batchatom';
 import { Calendar } from '@/components(shadcn)/ui/calendar';
 import { useRecoilValue } from 'recoil';
 import { sectorData } from '@/Components/Traning Partner/Atoms/sectorAtom';
 import { tpDataAtoms } from '@/Components/Traning Partner/Atoms/trainingPartnerData';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+} from "@/components(shadcn)/ui/select";
+import { coursesData } from '@/Components/Traning Partner/Atoms/courseAtom';
 const CreateBatch = () => {
-  const sector=useRecoilValue(tpDataAtoms);
-  console.log("sectorData",sector)
+  const sectors = useRecoilValue(sectorData);
+  const courses = useRecoilValue(coursesData);
   const navigate = useNavigate();
-  const [batchInputs, setBatchInputs] = useState({ courseName: '', sectorName: '', trainingOrganization: '', scheme: '', state: '', startDate: null, endDate: null, ABN_Number: '' });
-  const setBatchData = useSetRecoilState(batchDataAtoms);
-  console.log(batchInputs)
+  const [batchInputs, setBatchInputs] = useState({ 
+    courseName: '', 
+    sectorName: '', 
+    trainingOrganization: '', 
+    scheme: '', 
+    state: '', 
+    startDate: null, 
+    endDate: null, 
+    ABN_Number: '' 
+  });
+  const [batchData, setBatchData] = useRecoilState(batchDataAtoms);
+
   const handleDateChange = (date, name) => {
     setBatchInputs({ ...batchInputs, [name]: date });
   };
@@ -40,7 +59,6 @@ const CreateBatch = () => {
           'x-access-token': localStorage.getItem('token'),
           'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({
           courseName: batchInputs.courseName,
           sectorName: batchInputs.sectorName,
@@ -52,10 +70,11 @@ const CreateBatch = () => {
           ABN_Number: batchInputs.ABN_Number,
         }),
       });
-       console.log(batchInputs)
+
       if (response.ok) {
         const data = await response.json();
         setBatchData(data.data);
+        console.log(batchData);
         toast(`${data.data.name} Batch is Created Successfully`);
         navigate('/trainingPartner/dashboard');
       } else {
@@ -78,17 +97,41 @@ const CreateBatch = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="course-name">Course Name</Label>
-            <Input id="course-name" name="courseName" placeholder="Enter course name" value={batchInputs.courseName} onChange={handleInputChange} />
+            <Select onValueChange={(value) => setBatchInputs({ ...batchInputs, courseName: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Course" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Course</SelectLabel>
+                  {courses.map((course, index) => (
+                    <SelectItem key={index} value={course.courseName}>{course.courseName}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="sector-name">Sector Name</Label>
-            <Input id="sector-name" name="sectorName" placeholder="Enter sector name" value={sector.sec} onChange={handleInputChange} />
+            <Select onValueChange={(value) => setBatchInputs({ ...batchInputs, sectorName: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Sector" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sector</SelectLabel>
+                  {sectors.map((sector, index) => (
+                    <SelectItem key={index} value={sector.name}>{sector.name}</SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="training-org">Training Organization</Label>
-            <Input id="training-org" name="rainingOrganization" placeholder="Enter training organization" value={batchInputs.rainingOrganization} onChange={handleInputChange} />
+            <Input id="training-org" name="trainingOrganization" placeholder="Enter training organization" value={batchInputs.trainingOrganization} onChange={handleInputChange} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="scheme">Scheme</Label>
@@ -150,6 +193,5 @@ const CreateBatch = () => {
     </div>
   );
 };
-
 
 export default CreateBatch;

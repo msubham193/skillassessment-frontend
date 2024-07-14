@@ -57,7 +57,7 @@ const AddTeacher = () => {
     e.preventDefault();
     try {
       const response = await fetch(`http://localhost:8000/api/v1/batch/addtrainer/${batchId}`, {
-        method: "POST",
+        method: "POST",  
         headers: {
           "Content-Type": "application/json",
           "x-access-token": localStorage.getItem('token'),
@@ -65,7 +65,7 @@ const AddTeacher = () => {
         body: JSON.stringify(teacherInputs),
       });
 
-      const data = await response.json(); // Parse the response data
+      const data = await response.json(); 
       if (response.ok) {
         console.log("Teacher added successfully:", data);
         toast.success("Teacher added successfully");

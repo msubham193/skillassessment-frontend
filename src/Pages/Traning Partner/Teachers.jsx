@@ -1,33 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components(shadcn)/ui/dialog";
-import { Button } from "@/components(shadcn)/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "@/components(shadcn)/ui/select";
+import React, { useEffect, useState } from 'react';
+import { useLocation,useNavigate } from 'react-router-dom';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components(shadcn)/ui/dialog";
+import { Button } from '@/components(shadcn)/ui/button';
+import { toast } from 'react-toastify';
 
 const Teachers = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const batchId = queryParams.get("batchId");
+  const batchId = queryParams.get('batchId');
   console.log("Retrieved batchId:", batchId);
 
   const [trainers, setTrainers] = useState([]);
-  const [selectedTrainer, setSelectedTrainer] = useState({});
+
+  const handleClick = async (trainer) => {
+    delete trainer._id;
+    console.log("this is the main data",trainer)
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/batch/addtrainer/${batchId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem('token'),
+        },
+        body: JSON.stringify(trainer),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Teacher added successfully:", data);
+        toast.success("Teacher added successfully");
+        navigate('/trainingPartner/dashboard');
+      } else {
+        console.error("Failed to add teacher:", data);
+        toast.error(data.message || "Failed to add teacher");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to add teacher");
+    }
+  };
 
   const fetchTeachers = async () => {
     try {
@@ -72,41 +84,8 @@ const Teachers = () => {
                   <td className="py-4 px-4 text-right">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button>Assign</Button>
+                        <Button onClick={() => handleClick(trainer)}>Assign</Button>
                       </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Assign Trainer to Batch</DialogTitle>
-                          <DialogDescription>
-                            Assign {trainer.name} to batch {batchId}.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <Select
-                          onValueChange={(value) =>
-                            setSelectedTrainer({ ...trainer, batchId: value })
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Batch" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Batches</SelectLabel>
-                              {/* Replace the following with your batch data */}
-                              <SelectItem value="batch1">Batch 1</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                        <DialogFooter>
-                          <Button
-                            onClick={() =>
-                              console.log("Assigned trainer:", selectedTrainer)
-                            }
-                          >
-                            Confirm
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
                     </Dialog>
                   </td>
                 </tr>
@@ -120,3 +99,4 @@ const Teachers = () => {
 };
 
 export default Teachers;
+

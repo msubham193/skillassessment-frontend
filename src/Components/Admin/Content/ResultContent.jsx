@@ -1,7 +1,31 @@
-import React from 'react'
+import { server } from '@/main';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 
 const ResultContent = ({batchId}) => {
-    console.log(batchId)
+  const[students,setSutdents]=useState([]);
+  const[loding,setLoding]=useState(false);
+    console.log(`batch id is ${batchId}`)
+
+    //function for fetch the result data...
+    useEffect(() => {
+      try {
+        setLoding(true);
+        axios
+          .get(`${server}/mark/batch/${batchId}`, {
+            withCredentials: true,
+          })
+          .then((response) => {
+            setLoding(false);
+            setSutdents(response);
+            console.log(response.data.data)
+          });
+      } catch (error) {
+        setLoding(false);
+        console.log(error);
+      }
+    }, []);
+  
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
     <div className="flex items-center justify-between space-y-2">

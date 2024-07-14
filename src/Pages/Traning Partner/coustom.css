@@ -1,0 +1,15 @@
+.react-date-picker__wrapper {
+    display: flex !important;
+    flex-grow: 1 !important;
+    flex-shrink: 0 !important;
+    border: none !important;
+}
+
+  react-calendar, .react-calendar *, .react-calendar *:before, .react-calendar *:after {
+    box-sizing: border-box;
+    background: #8D95CF;
+    text:white;
+}
+.react-date-picker__clear-button {
+    color:white
+}

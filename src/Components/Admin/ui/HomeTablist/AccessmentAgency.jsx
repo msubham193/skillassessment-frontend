@@ -5,36 +5,42 @@ import { cn } from '@/lib/utils';
 import { DataTable } from '../notiification/DataTable';
 
 const AccessmentAgency = () => {
-    const[assessmentAgency,setAssessmentAgency]=useState([]);
-    const[loding,setLoding]=useState(false)
-    useEffect(() => {
+  const [assessmentAgency, setAssessmentAgency] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isDataFetched, setIsDataFetched] = useState(false);
+ 
+  useEffect(() => {
+    if (!isDataFetched) {
       try {
-        setLoding(true);
+        setLoading(true);
         axios.get(`${server}/aa/status/approved`, {
           withCredentials: true,
-        }).then((response)=>
-        {
-          setLoding(false);
+        }).then((response) => {
+          setLoading(false);
           setAssessmentAgency(response.data.data.reverse());
-        })
+          setIsDataFetched(true); // Set isDataFetched to true after data is fetched
+        });
       } catch (error) {
-        setLoding(false);
+        setLoading(false);
         console.log(error);
       }
-    }, [])
+    }
+  }, [isDataFetched]); // Only fetch data if isDataFetched is false
+
   return (
     <div>
-    <DataTable
-     filter1={"agencyName"}
-     columns={columns}
-     data={assessmentAgency}
-     isLoding={loding}
-   />
+      <DataTable
+        filter1={"agencyName"}
+        columns={columns}
+        path={"/admin/dasbord/AssessmentAgency"}
+        data={assessmentAgency}
+        isLoading={loading}
+      />
     </div>
   )
 }
 
-export default AccessmentAgency
+export default AccessmentAgency;
 
 const columns = [
   {
@@ -57,7 +63,6 @@ const columns = [
     accessorKey: "total_no_of_certified_Assessor",
     header: "No fo assessor",
   },
-
   {
     accessorKey: "applicationStatus",
     header: "applicationStatus",
@@ -77,5 +82,5 @@ const columns = [
         </div>
       );
     },
-  }, 
+  },
 ];

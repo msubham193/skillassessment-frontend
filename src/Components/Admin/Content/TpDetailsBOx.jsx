@@ -25,7 +25,7 @@ import {
 } from "@/components(shadcn)/ui/popover";
 
 const TpDetailsBOx = ({ id }) => {
-  const [referesh, setReferesh] = useState(false);
+  const [referesh, setReferesh] = useState(false); 
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);
   const [batch, setBatch] = useState([]);

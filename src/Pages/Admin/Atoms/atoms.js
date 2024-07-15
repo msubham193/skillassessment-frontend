@@ -8,11 +8,6 @@ export const authenticationState = atom({
   }
 });
 
-export const examState=atom({
-  key:'examState',
-  default:{
-    isCreated:false
-  }
-});
+
 
 

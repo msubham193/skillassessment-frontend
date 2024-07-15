@@ -29,8 +29,8 @@ import {
 } from "@/components(shadcn)/ui/dialog";
 import axios from "axios";
 import { server } from "@/main";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { authenticationState, examState } from "@/Pages/Admin/Atoms/atoms";
+import { useRecoilValue } from "recoil";
+import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 
 const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
@@ -41,7 +41,6 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const [date, setDate] = useState(new Date());
   const [showButton, setShowButton] = useState(false);
   const authState = useRecoilValue(authenticationState);
-  const setExamState = useSetRecoilState(examState);
 
   useEffect(() => {
     setBatchId(abn_id);
@@ -75,8 +74,6 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
       );
       setAssesmentAgencyId("");
       setDate(new Date());
-      //make exam state to true...
-      setExamState({ isCreated: true });
       toast.success(response.data.message, {
         position: "top-center",
         closeOnClick: true,

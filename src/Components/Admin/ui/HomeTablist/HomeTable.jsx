@@ -19,14 +19,14 @@ import {
   TableRow,
 } from "@/components(shadcn)/ui/table";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import Loder from "../Loder";
 import TableToolBar from "../notiification/TableToolBar";
 import TablePagination from "../notiification/TablePagination";
 
-export function HomeTable({ columns, data,isLoding}) {
-  const location = useLocation();
-  const path=location.pathname;
+export function HomeTable({ columns, path, data, isLoding, filter1}) {
+  // const location = useLocation();
+  // const path=location.pathname;
   // console.log(data);
 
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ export function HomeTable({ columns, data,isLoding}) {
 
   return (
     <div className="space-y-4">
-      <TableToolBar table={table} />
+      <TableToolBar table={table} filter1={filter1} />
       <div className="rounded-md border overflow-x-auto">
         <Table className="min-w-full divide-y divide-gray-200">
           <TableHeader className="bg-gray-50">
@@ -93,6 +93,7 @@ export function HomeTable({ columns, data,isLoding}) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => navigate(`${path}/${row.original.studentId}`)}
                   className="bg-white even:bg-gray-50"
                 >
                   {row.getVisibleCells().map((cell) => (

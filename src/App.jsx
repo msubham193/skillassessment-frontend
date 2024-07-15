@@ -16,27 +16,34 @@ import BatchDetails from "./Pages/Admin/BatchDetails";
 import Notification from "./Pages/Admin/Notification";
 import CreateCourse from "./Pages/Admin/CreateCourse";
 import CreateScheme from "./Pages/Admin/CreateScheme";
-
+import StudentResultDetails from "./Pages/Admin/StudentResultDetails";
+import BatchWiseStudentResult from "./Pages/Admin/BatchWiseStudentResult";
 const App = () => {
-  const [authState,setAuthState] = useRecoilState(authenticationState);
+  const [authState, setAuthState] = useRecoilState(authenticationState);
   useEffect(() => {
     const isTokenValid = checkTokenValidity();
     if (isTokenValid) {
-      const token = localStorage.getItem('adminAuthToken');
-      // console.log(JSON.parse(token).data)
+      const token = localStorage.getItem("adminAuthToken");
       setAuthState({
         isAuthenticated: true,
-        token:token,
+        token: token,
       });
     }
   }, [setAuthState]);
-  // console.log(authState)
+
     return (
     <div>
       <Routes>
         <Route path="/adminLogin" exact element={<AdminLogin />} />
         <Route element={<ProtectedRout />}>
+
           <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
+          <Route
+            path="/admin/dasbord/batch/mark/students/:id"
+            exact
+            element={<BatchWiseStudentResult />}
+          />
+          <Route path="/admin/dasbord/studentMark/:id" exact element={<StudentResultDetails/>} />
           <Route
             path="/admin/dasbord/TreaningPartner"
             exact
@@ -72,11 +79,7 @@ const App = () => {
             exact
             element={<AaDetails />}
           />
-          <Route
-            path="/admin/dasbord/:id"
-            exact
-            element={<BatchDetails />}
-          />
+          <Route path="/admin/dasbord/:id" exact element={<BatchDetails />} />
           <Route
             path="/admin/dasbord/createCourse"
             exact
@@ -87,14 +90,11 @@ const App = () => {
             exact
             element={<CreateScheme />}
           />
-        </Route>
+        </Route> 
       </Routes>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
 
 export default App;
-
-
-

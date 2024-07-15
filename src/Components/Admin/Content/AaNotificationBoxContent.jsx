@@ -156,6 +156,7 @@ const AaNotificationBoxContent = () => {
         </div>
         {/* Data table for the notification */}
         <DataTable
+         filter1={"agencyName"}
           path={path}
           columns={columns}
           data={assessmentAgency}
@@ -209,5 +210,5 @@ const columns = [
         </div>
       );
     },
-  },
+  }, 
 ];

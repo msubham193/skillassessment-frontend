@@ -30,7 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components(shadcn)/ui/tooltip";
-import jsPDF from "jspdf";
+import jsPDF from "jspdf"; 
 import 'jspdf-autotable';
 export function DataTable({ columns, path, data, isLoding, filter1 }) {
   // console.log(data);
@@ -78,6 +78,8 @@ export function DataTable({ columns, path, data, isLoding, filter1 }) {
 
     doc.save("table.pdf");
   };
+
+  // console.log(table.getRowModel().rows[0].original.studentId)
 
   if (isLoding) {
     return <Loder />;

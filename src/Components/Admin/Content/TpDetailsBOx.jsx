@@ -628,6 +628,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
+            disabled={data.applicationStatus === "Rejected"}
           >
             {loding
               ? "Loding..."

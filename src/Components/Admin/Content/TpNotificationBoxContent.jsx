@@ -11,17 +11,23 @@ import {
 import { cn } from "@/lib/utils";
 import { server } from "@/main";
 import axios from "axios";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const TpNotificationBoxContent = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
-  const [loding, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [course, setCourse] = useState([]);
   const [schemes, setSchemes] = useState([]);
   const [filters, setFilters] = useState({
+    sector: "",
+    course: "",
+    scheme: "",
+    registeredOfficeState: "",
+  });
+  const [selectedValues, setSelectedValues] = useState({
     sector: "",
     course: "",
     scheme: "",
@@ -49,10 +55,17 @@ const TpNotificationBoxContent = () => {
 
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
+    setSelectedValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const resetFilters = () => {
     setFilters({
+      sector: "",
+      course: "",
+      scheme: "",
+      registeredOfficeState: "",
+    });
+    setSelectedValues({
       sector: "",
       course: "",
       scheme: "",
@@ -105,6 +118,10 @@ const TpNotificationBoxContent = () => {
     }
   }, []);
 
+  const hasActiveFilters = Object.values(filters).some(value => value !== "");
+  
+
+
   return (
     <>
       <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
@@ -118,6 +135,7 @@ const TpNotificationBoxContent = () => {
 
           <div className="flex items-center space-x-2">
             <Select
+              value={selectedValues.sector}
               onValueChange={(value) => handleFilterChange("sector", value)}
             >
               <SelectTrigger className="w-fit border-0">
@@ -133,6 +151,7 @@ const TpNotificationBoxContent = () => {
             </Select>
 
             <Select
+              value={selectedValues.course}
               onValueChange={(value) => handleFilterChange("course", value)}
             >
               <SelectTrigger className="w-fit border-0">
@@ -148,6 +167,7 @@ const TpNotificationBoxContent = () => {
             </Select>
 
             <Select
+              value={selectedValues.scheme}
               onValueChange={(value) => handleFilterChange("scheme", value)}
             >
               <SelectTrigger className="w-fit border-0">
@@ -163,6 +183,7 @@ const TpNotificationBoxContent = () => {
             </Select>
 
             <Select
+              value={selectedValues.registeredOfficeState}
               onValueChange={(value) =>
                 handleFilterChange("registeredOfficeState", value)
               }
@@ -182,7 +203,9 @@ const TpNotificationBoxContent = () => {
               </SelectContent>
             </Select>
 
-            <RotateCcw onClick={resetFilters} className="w-4" />
+            {
+              hasActiveFilters && <div className='flex'><span className='font-semibold'>Reset</span><X onClick={resetFilters} className="w-4 cursor-pointer hover:cursor-pointer" /></div>
+            }
           </div>
         </div>
 
@@ -191,7 +214,7 @@ const TpNotificationBoxContent = () => {
           path={path}
           columns={columns}
           data={traningPartnerData}
-          isLoding={loding}
+          isLoding={loading}
         />
       </div>
     </>

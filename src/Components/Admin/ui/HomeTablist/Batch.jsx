@@ -5,23 +5,33 @@ import { cn } from '@/lib/utils';
 import { server } from '@/main';
 import { DataTable } from '../notiification/DataTable';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components(shadcn)/ui/select';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, X } from 'lucide-react';
 
 const Batch = () => {
   const [batch, setBatch] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [traningOraganization, setTraningOraganization] = useState([]);
+  const [trainingOrganizations, setTrainingOrganizations] = useState([]);
   const [filters, setFilters] = useState({
     state: "",
     sector: "",
     course: "",
     trainingOrganization: "",
   });
-//state, sector, course, trainingOrganization 
+  const [selectedValues, setSelectedValues] = useState({
+    state: "",
+    sector: "",
+    course: "",
+    trainingOrganization: "",
+  });
+
+  const [isDataFetched, setIsDataFetched] = useState(false);
+
   useEffect(() => {
-    fetchBatches();
+    if (!isDataFetched) {
+      fetchBatches();
+    }
   }, [filters]);
 
   const fetchBatches = async () => {
@@ -32,6 +42,7 @@ const Batch = () => {
         withCredentials: true,
       });
       setBatch(response.data.data.reverse());
+      setIsDataFetched(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -41,6 +52,8 @@ const Batch = () => {
 
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
+    setSelectedValues((prev) => ({ ...prev, [name]: value }));
+    setIsDataFetched(false);
   };
 
   const resetFilters = () => {
@@ -50,56 +63,59 @@ const Batch = () => {
       course: "",
       trainingOrganization: "",
     });
+    setSelectedValues({
+      state: "",
+      sector: "",
+      course: "",
+      trainingOrganization: "",
+    });
+    setIsDataFetched(false);
   };
 
   const location = useLocation();
   const path = location.pathname;
-//here all the functioon for get the data's
+
   useEffect(() => {
-    try {
-      axios.get(`${server}/sector/all`, {
-        withCredentials: true,
-      }).then((response) => {
+    axios.get(`${server}/sector/all`, { withCredentials: true })
+      .then((response) => {
         setSectors(response.data.data);
       })
-    } catch (error) {
-      console.log(error);
-    }
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   useEffect(() => {
-    try {
-      axios.get(`${server}/courses`, {
-        withCredentials: true,
-      }).then((response) => {
+    axios.get(`${server}/courses`, { withCredentials: true })
+      .then((response) => {
         setCourses(response.data.data);
       })
-    } catch (error) {
-      console.log(error);
-    }
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   useEffect(() => {
-    try {
-      axios.get(`${server}/tp`, {
-        withCredentials: true,
-      }).then((response) => {
-        setTraningOraganization(response.data.data);
+    axios.get(`${server}/tp`, { withCredentials: true })
+      .then((response) => {
+        setTrainingOrganizations(response.data.data);
       })
-    } catch (error) {
-      console.log(error);
-    }
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
+
+  const hasActiveFilters = Object.values(filters).some(value => value !== "");
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Batch Details</h2>
-          <p className="text-muted-foreground">Here&apos;s a list of Batches for you!</p>
+          <p className="text-muted-foreground">Here's a list of Batches for you!</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Select onValueChange={(value) => handleFilterChange("sector", value)}>
+          <Select value={selectedValues.sector} onValueChange={(value) => handleFilterChange("sector", value)}>
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by Sector" />
             </SelectTrigger>
@@ -112,7 +128,7 @@ const Batch = () => {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={(value) => handleFilterChange("course", value)}>
+          <Select value={selectedValues.course} onValueChange={(value) => handleFilterChange("course", value)}>
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by Course" />
             </SelectTrigger>
@@ -125,12 +141,12 @@ const Batch = () => {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={(value) => handleFilterChange("trainingOrganization", value)}>
+          <Select value={selectedValues.trainingOrganization} onValueChange={(value) => handleFilterChange("trainingOrganization", value)}>
             <SelectTrigger className="w-fit border-0">
-              <SelectValue placeholder="Filter by Traning partner" />
+              <SelectValue placeholder="Filter by Training Organization" />
             </SelectTrigger>
             <SelectContent>
-              {traningOraganization.map((tp) => (
+              {trainingOrganizations.map((tp) => (
                 <SelectItem key={tp.id} value={tp.organizationName}>
                   {tp.organizationName}
                 </SelectItem>
@@ -138,7 +154,7 @@ const Batch = () => {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={(value) => handleFilterChange("state", value)}>
+          <Select value={selectedValues.state} onValueChange={(value) => handleFilterChange("state", value)}>
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by State" />
             </SelectTrigger>
@@ -153,8 +169,10 @@ const Batch = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-
-          <RotateCcw onClick={resetFilters} className="w-4" />
+{
+  hasActiveFilters && <div className='flex'><span className='font-semibold'>Reset</span><X onClick={resetFilters} className="w-4 cursor-pointer hover:cursor-pointer" /></div>
+}
+          
         </div>
       </div>
 
@@ -163,7 +181,7 @@ const Batch = () => {
         path={path}
         columns={batchColumns}
         data={batch}
-        isLoding={loading}
+        isLoading={loading}
       />
     </div>
   );

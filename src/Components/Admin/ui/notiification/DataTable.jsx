@@ -23,15 +23,17 @@ import TablePagination from "./TablePagination";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loder from "../Loder";
-import { Download } from "lucide-react";
+import { Download, FileDown } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components(shadcn)/ui/tooltip";
-import jsPDF from "jspdf"; 
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { Button } from "@/components(shadcn)/ui/button";
+import DownLoadJson from "../../Content/DownLoadJson";
 export function DataTable({ columns, path, data, isLoding, filter1 }) {
   // console.log(data);
   const navigate = useNavigate();
@@ -62,15 +64,15 @@ export function DataTable({ columns, path, data, isLoding, filter1 }) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
   // console.log(table.getRowModel().rows[0].original.id);
-  // console.log(data._id);
-  // console.log(table.getRowModel().rows?.length);
 
-  //function for download the data...
+  //function for download the dataAsPDF...
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
-    const tableColumn = columns.map(col => col.header);
-    const tableRows = data.map(row => columns.map(col => row[col.accessorKey]));
-    
+    const tableColumn = columns.map((col) => col.header);
+    const tableRows = data.map((row) =>
+      columns.map((col) => row[col.accessorKey])
+    );
+
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
@@ -153,16 +155,21 @@ export function DataTable({ columns, path, data, isLoding, filter1 }) {
             <span className="ml-1 font-bold  text-blue-800">
               {table.getRowModel().rows?.length}
             </span>
-            <Tooltip>
-              <TooltipTrigger>
-                {" "}
-                {/* here i create he function for download  the row data.. */}
-                <Download onClick={handleDownloadPDF} className="ml-3 text-red-600 font-bold w-8" />
-              </TooltipTrigger>
-              <TooltipContent>Downlload the row data as PDF.</TooltipContent>
-            </Tooltip>
           </div>
           <TablePagination table={table} />
+        </div>
+        <div className="flex">
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger>
+              {" "}
+              {/* here i create he function for download  the row data.. */}
+              <Button className="mr-2" onClick={handleDownloadPDF}>
+                <FileDown />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Downlload the data as PDF.</TooltipContent>
+          </Tooltip>
+          <DownLoadJson data={data} fileName={"Exported_Data"}/>
         </div>
       </div>
     </TooltipProvider>

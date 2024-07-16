@@ -33,7 +33,7 @@ const AaDetails = () => {
               </div>
             </div>
             {/* Derails of Traning Partner */}
-            <AaDetailsBox id={id} data={Assessment_Agency}/>
+            <AaDetailsBox id={id}/>
           </div>
         </div>
       </div>
@@ -43,46 +43,3 @@ const AaDetails = () => {
 
 export default AaDetails;
 
-export const Assessment_Agency ={
-    agencyName:"Rakesh Pradhan",
-    officeAddress: {
-       city:"Nimapada",
-      street:"puri",
-      state:"Odisha",
-      pin:752114,
-      country:"INDIA"
-    },
-    password: "GUNGUN",
-    applicationStatus: "Pending",
-    communicationAddress: {
-     city:"Nimapada",
-      street:"puri",
-      state:"Odisha",
-      pin:752114,
-      country:"INDIA"
-     },
-    subject: "Approve the letter",
-    phoneNumber: "6372700872",
-    availability:true,
-    role: "AssesmentAgency",
-    email:"rp5865442@gmail.com",
-    websiteLink: "cutm.ac.in",
-    headOfTheOrganization:"RAkesh Pradhan",
-    SPOC_NAME:"centurion",
-    SPOC_EMAIL:"centurion@gmail.com",
-    SPOC_CONTACT_NO:"55666998833",
-    legalStatusOfTheOrganization: "Avable",
-    COMPANY_PAN_NO:"56TYG58",
-    COMPANY_GST_NO:"33773276445",
-    NO_OF_BRANCHES:"6",
-    BRANCH_ADDRESS: {
-       city:"Nimapada",
-      dist:"puri",
-      state:"Odisha",
-      pin:752114
-    },
-    geographical_region:"near SandhaPur",
-    state_Under_geographicalRegion:"INDIA",
-    total_no_of_certified_Assessor: "5",
-    LETTER_OF_NCVET:"this ia a letter",
-  }

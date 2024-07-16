@@ -7,9 +7,8 @@ import { cn } from "@/lib/utils";
 
 const TraningPartner = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
-  const [referesh, setReferesh] = useState(false);
   const [loding, setLoding] = useState(false);
-
+  const [isDataFetched, setIsDataFetched] = useState(false);
   useEffect(() => {
     try {
       setLoding(true);
@@ -20,13 +19,13 @@ const TraningPartner = () => {
         .then((response) => {
           setLoding(false);
           setTraningPartnerData(response.data.data.reverse());
-          setReferesh((prev) => !prev);
+          setIsDataFetched(true);
         });
     } catch (error) {
       setLoding(false);
       console.log(error);
     }
-  }, []);
+  }, [isDataFetched]);
   return (
     <div>
       <DataTable

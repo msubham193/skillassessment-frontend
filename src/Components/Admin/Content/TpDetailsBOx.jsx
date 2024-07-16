@@ -584,7 +584,7 @@ const TpDetailsBOx = ({ id }) => {
                   <p className="text-lg ">{data && data.status}</p>
                 </div>
               </div>
-            </div>
+            </div> 
             <div>
               {data.applicationStatus === "Approved" ? (
                 <div>

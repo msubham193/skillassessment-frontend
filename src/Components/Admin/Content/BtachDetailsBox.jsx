@@ -22,6 +22,7 @@ const BtachDetailsBox = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
+          console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);
@@ -101,7 +102,7 @@ const BtachDetailsBox = ({ id }) => {
             state={data?.state}
           >
             <Button
-              disabled={data?.status==="Completed" }
+              disabled={data?.status==="Completed" || data?.isAssigned }
               variant={"default"}
               className={"bg-green-700"}
             >

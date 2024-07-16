@@ -119,7 +119,7 @@ export function DataTable({ columns, path, data, isLoding, filter1 }) {
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    onClick={() => navigate(`${path}/${row.original._id}`)}
+                    onClick={() =>path && navigate(`${path}/${row.original._id}`)}
                     className="bg-white even:bg-gray-50"
                   >
                     {row.getVisibleCells().map((cell) => (

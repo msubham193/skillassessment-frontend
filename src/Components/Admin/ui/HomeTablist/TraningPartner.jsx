@@ -13,7 +13,7 @@ const TraningPartner = () => {
     try {
       setLoding(true);
       axios
-        .get(`${server}/tp/status/approved`, {
+        .get(`${server}/tp/status/approved`, { 
           withCredentials: true,
         })
         .then((response) => {

@@ -24,14 +24,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components(shadcn)/ui/popover";
+import { DataTable } from "../ui/notiification/DataTable";
+import { examcolumns } from "../ui/HomeTablist/AllExam";
 const AaDetailsBox = ({ id }) => {
   const [referesh, setReferesh] = useState(false);
   const [data, setData] = useState({});
+  const [exam, setExam] = useState({});
   const [loding, setLoding] = useState(false);
   const [course, setCourse] = useState([]);
   const [sector, setSector] = useState([]);
   //  const data=useRecoilValue(trainingPartnerByID(id))
   //  console.log(data)
+
+  // function for fetch exam by aaID.........
+  useEffect(() => {
+    try {
+      setLoding(true);
+      axios
+        .get(`${server}/exam/aa/${id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setLoding(false);
+          setExam(response.data.data.reverse());
+          setReferesh((prev) => !prev);
+        });
+    } catch (error) {
+      setLoding(false);
+      console.log(error);
+    }
+  }, []);
 
   //function for fetch data from aa by id...
   useEffect(() => {
@@ -386,6 +408,22 @@ const AaDetailsBox = ({ id }) => {
                 </TableCell>
               </TableRow>
             </Table>
+            <div>
+              {data.applicationStatus === "Approved" ? (
+                <div>
+                  <div className="font-bold text-l my-4 underline">
+                    Exams Assign to this Assessment Agency
+                  </div>
+                  <DataTable
+                    columns={examcolumns}
+                    data={exam && exam}
+                    isLoding={loding}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
           <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden mt-4 md:mt-0">
             <img

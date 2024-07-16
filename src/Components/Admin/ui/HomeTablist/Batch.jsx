@@ -92,7 +92,7 @@ const Batch = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      }); 
   }, []);
 
   useEffect(() => {

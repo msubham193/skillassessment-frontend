@@ -111,7 +111,6 @@ const BtachDetailsBox = ({ id }) => {
               {"Assign to Agency"}
             </Button>
           </CreateExam>
-
           {/* here admin can see the result of the  student */}
           <div>
           {

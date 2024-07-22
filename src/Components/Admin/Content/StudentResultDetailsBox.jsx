@@ -6,7 +6,7 @@ import axios from "axios";
 import { Download } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-const StudentResultDetailsBox = ({ id }) => {
+const StudentResultDetailsBox = ({ id }) => { 
   // console.log(id)
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);

@@ -1,75 +1,126 @@
 import { server } from '@/main';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import HomeTable from '../ui/HomeTablist/HomeTable';
 import { Button } from '@/components(shadcn)/ui/button';
 
-const ResultContent = ({batchId}) => {
-  const[students,setSutdents]=useState([]); 
-  const[loding,setLoding]=useState(false);
-    // console.log(`batch id is ${batchId}`)
+const ResultContent = ({ batchId }) => {
+  const [students, setSutdents] = useState([]); 
+  const [loading, setLoading] = useState(false);
+  const [examId, setExamId] = useState("");
+  const [exam, setExam] = useState({});
+  const [attendanceSheet, setAttendanceSheet] = useState("");
+  const [resultSheet, setResultSheet] = useState("");
+  const [images, setImages] = useState([]);
+  const [showPhotos, setShowPhotos] = useState(false);
 
-    //function for fetch the result data...
-    useEffect(() => {
+  // Fetch the result data
+  useEffect(() => {
+    const fetchResultData = async () => {
       try {
-        setLoding(true);
-        axios
-          .get(`${server}/mark/batch/${batchId}`, {
-            withCredentials: true,
-          })
-          .then((response) => {
-            setLoding(false);
-            setSutdents(response.data.data.reverse());
-            // console.log(response.data.data)
-          });
+        setLoading(true);
+        const response = await axios.get(`${server}/mark/batch/${batchId}`, {
+          withCredentials: true,
+        });
+        setLoading(false);
+        setSutdents(response.data.data.reverse());
+        setExamId(response.data.data[0]?.examId || ""); // Handle the case if data is empty
       } catch (error) {
-        setLoding(false);
-        console.log(error);
+        setLoading(false);
+        console.error(error);
       }
-    }, []);
-  
+    };
+    fetchResultData();
+  }, [batchId]);
+
+  // Fetch the exam data using the examId
+  useEffect(() => {
+    const fetchExamData = async () => {
+      if (examId) {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${server}/exam/${examId}`, {
+            withCredentials: true,
+          });
+          setLoading(false);
+          setExam(response.data.data);
+          setAttendanceSheet(response.data.data.attendanceSheet);
+          setResultSheet(response.data.data.resultSheet);
+          setImages(response.data.data.images || []);
+        } catch (error) {
+          setLoading(false);
+          console.error(error);
+        }
+      }
+    };
+    fetchExamData();
+  }, [examId]);
+
+  // Functions for viewing sheets
+  const viewAttendanceSheet = () => {
+    console.log(attendanceSheet);
+    attendanceSheet && window.open(attendanceSheet, '_blank');
+  };
+
+  const viewResultSheet = () => {
+    console.log(resultSheet);
+    resultSheet && window.open(resultSheet, '_blank');
+  };
+
+  const togglePhotos = () => {
+    setShowPhotos(!showPhotos);
+  };
+
+  const approveAndPublish = () => {
+    // Implement the approve and publish logic here
+    console.log('Approve & Publish button clicked');
+  };
+
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
-    <div className="flex items-center justify-between space-y-2">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
-        <p className="text-muted-foreground">
-          Here&apos;s a Mark list of All students present in this Batch!
-        </p>
-      </div>
-    </div>
-    {/* Data table for the student result */}
-    <HomeTable
-    filter1={"studentName"}
-    path={`/admin/dasbord/studentMark`}
-    columns={columns}
-    data={students && students}
-    isLoding={loding}
-    />
-    <div className="flex justify-between">
-       
-              {" "}
-              {/* here i create he function for approve and publish the result.. */}
-              <Button className="mr-2">
-              View Attendence Sheet
-              </Button>
-              <Button className="mr-2">
-              View Result Sheet
-              </Button>
-              <Button className="mr-2">
-              View Photo
-              </Button>
-              <Button className="mr-2 bg-green-600">
-              Approve & Publish
-              </Button>
-          
+      <div className="flex items-center justify-between space-y-2">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
+          <p className="text-muted-foreground">
+            Here&apos;s a Mark list of All students present in this Batch!
+          </p>
         </div>
-  </div>
-  )
-}
+      </div>
+      {/* Data table for the student result */}
+      <HomeTable
+        filter1={"studentName"}
+        path={`/admin/dasbord/studentMark`} 
+        columns={columns}
+        data={students}
+        isLoading={loading}
+      />
+      <div className="flex justify-between">
+        <Button className="mr-2" onClick={viewAttendanceSheet}>
+          View Attendance Sheet
+        </Button>
+        <Button className="mr-2" onClick={viewResultSheet}>
+          View Result Sheet
+        </Button>
+        <Button className="mr-2" onClick={togglePhotos}>
+          {showPhotos ? "Hide Photos" : "View Photos"}
+        </Button>
+        <Button className="mr-2 bg-green-600" onClick={approveAndPublish}>
+          Approve & Publish
+        </Button>
+      </div>
+      {showPhotos && (
+        <div className="grid grid-cols-4 gap-2 mt-4">
+          {images.slice(0, 10).map((url, index) => (
+            <img key={index} src={url} alt={`Photo ${index + 1}`} className="w-72 h-96" />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default ResultContent
+export default ResultContent;
 
 const columns = [
   {
@@ -103,10 +154,8 @@ const columns = [
       return (
         <div
           className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
-            "bg-red-100 text-red-500":
-              row.getValue("Result") === "Fail",
-            "bg-green-100 text-green-400":
-              row.getValue("Result") === "Pass",
+            "bg-red-100 text-red-500": row.getValue("Result") === "Fail",
+            "bg-green-100 text-green-400": row.getValue("Result") === "Pass",
           })}
         >
           {row.getValue("Result")}

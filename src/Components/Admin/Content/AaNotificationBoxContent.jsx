@@ -176,6 +176,7 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
           columns={columns}
           data={assessmentAgency}
           isLoding={loading}
+          pageUrl={"accessmentagency"}
         />
       </div>
     </>

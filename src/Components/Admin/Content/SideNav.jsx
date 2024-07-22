@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2 } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
@@ -38,12 +38,20 @@ const SideNav = () => {
             variant: "default",
             href:"/admin/dasbord"
           },
+         
           {
             title: "Notification's",
             label: "",
             icon: BellDot,
             variant: "ghost",
             href:"/admin/dasbord/Notification"
+          },
+          {
+            title: "Total Batch",
+            label: "",
+            icon: GraduationCap,
+            variant: "default",
+            href:"/admin/dasbord/batch"
           },
           {
             title: "Total Training Partner",
@@ -60,6 +68,13 @@ const SideNav = () => {
             href:"/admin/dasbord/AssessmentAgency"
           },
           {
+            title: "All Payments",
+            label: "",
+            icon: HandCoins,
+            variant: "ghost",
+            href:"/admin/dasbord/PaymentsDetails"
+          },
+          {
             title: "Create Course",
             label: "",
             icon: PackagePlus ,
@@ -72,6 +87,13 @@ const SideNav = () => {
             icon: PackagePlus ,
             variant: "ghost",
             href:"/admin/dasbord/createScheme"
+          },
+          {
+            title: "Create Certificate",
+            label: "",
+            icon: FilePlus2 ,
+            variant: "ghost",
+            href:"/admin/dasbord/createCertificate"
           },
         ]}
       />

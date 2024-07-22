@@ -14,6 +14,8 @@ const TopBar = () => {
   const [initialLoad, setInitialLoad] = useState(true);
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
+  const [data3, setData3] = useState([]);
+  const [data4, setData4] = useState([]);
 
   const fetchData1 = async () => {
     try {
@@ -48,11 +50,45 @@ const TopBar = () => {
       console.error('Error fetching data2:', error);
     }
   };
+  const fetchData3 = async () => {
+    try {
+      const response = await axios.get(`${server}/batch/all/paymentnotification`, { withCredentials: true });
+      const newData = response.data.data;
+
+      if (initialLoad) {
+        setData3(newData);
+      } else if (newData.length > data3.length) {
+        setNotification("A new Batch requst found");
+        setData3(newData);
+        localStorage.setItem("notification", "A new Batch requst found");
+      }
+    } catch (error) {
+      console.error('Error fetching data3:', error);
+    }
+  };
+  const fetchData4 = async () => {
+    try {
+      const response = await axios.get(`${server}/batch/all/corporate`, { withCredentials: true });
+      const newData = response.data.data;
+
+      if (initialLoad) {
+        setData4(newData);
+      } else if (newData.length > data3.length) {
+        setNotification("A new Batch requst found(Corporet)");
+        setData4(newData);
+        localStorage.setItem("notification", "A new Batch requst found(Corporet)");
+      }
+    } catch (error) {
+      console.error('Error fetching data3:', error);
+    }
+  };
+
+  //here i have to add a notification for corporate batch.....
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([fetchData1(), fetchData2()]);
+      await Promise.all([fetchData1(), fetchData2(),fetchData3(),fetchData4()]);
       setLoading(false);
       if (initialLoad) {
         setInitialLoad(false);
@@ -68,18 +104,33 @@ const TopBar = () => {
     const interval2 = setInterval(() => {
       fetchData2();
     }, 20 * 1000); // 20 seconds for training partner
+    const interval3 = setInterval(() => {
+      fetchData3();
+    }, 20 * 1000);
+    const interval4 = setInterval(() => {
+      fetchData4();
+    }, 20 * 1000); // 20 seconds for training partner
 
     return () => {
       clearInterval(interval1);
       clearInterval(interval2);
+      clearInterval(interval3);
+      clearInterval(interval4);
+
     };
-  }, [data1, data2]);
+  }, [data1, data2,data3,data4]);
 
   const handelOnClick = () => {
     if (notification.includes("Assessment Agency")) {
       navigate("/admin/dasbord/Notification?tab=overview");
     } else if (notification.includes("Training Partner")) {
       navigate("/admin/dasbord/Notification?tab=analytics");
+    }
+    else if (notification.includes("Batch requst")) {
+      navigate("/admin/dasbord/batch?tab=analytics");
+    }
+    else if (notification.includes("Batch requst found(Corporet)")) {
+      navigate("/admin/dasbord/batch?tab=addppayment");
     }
     setNotification("No new notification !!");
     localStorage.setItem("notification", "No new notification !!");

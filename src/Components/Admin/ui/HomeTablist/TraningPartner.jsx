@@ -34,6 +34,7 @@ const TraningPartner = () => {
         columns={columns}
         data={traningPartnerData && traningPartnerData}
         isLoding={loding}
+        pageUrl={"trainingpartner"}
       />
     </div>
   );

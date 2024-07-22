@@ -10,9 +10,8 @@ import {
   CandlestickChart,
   GraduationCap,
   Presentation,
-  SquareActivity,
+  SquareActivity, 
 } from "lucide-react";
-import Batch from "../ui/HomeTablist/Batch";
 import AccessmentAgency from "../ui/HomeTablist/AccessmentAgency";
 import TraningPartner from "../ui/HomeTablist/TraningPartner";
 import axios from "axios";
@@ -115,7 +114,7 @@ const AdminContent = () => {
               },
             ]}
           />
-        </Tabs>
+        </Tabs> 
         <Tabs defaultValue="accessmentagency" className="space-y-4">
           <TabsList>
             <TabsTrigger
@@ -131,12 +130,6 @@ const AdminContent = () => {
               All Exam
             </TabsTrigger>
             <TabsTrigger
-              onClick={() => setSelectedTab("batches")}
-              value="batches"
-            >
-              Batches
-            </TabsTrigger>
-            <TabsTrigger
               onClick={() => setSelectedTab("traningPartner")}
               value="traningPartner"
             >
@@ -144,9 +137,6 @@ const AdminContent = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="batches">
-            {selectedTab === "batches" && <Batch />}
-          </TabsContent>
           <TabsContent value="accessmentagency">
             {selectedTab === "accessmentagency" && <AccessmentAgency />}
           </TabsContent>
@@ -154,7 +144,7 @@ const AdminContent = () => {
             {selectedTab === "traningPartner" && <TraningPartner />}
           </TabsContent>
           <TabsContent value="allExam">
-            {selectedTab === "allExam" && <AllExam />}
+            {selectedTab === "allExam" && <AllExam />} 
           </TabsContent>
         </Tabs>
       </div>

@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { server } from '@/main';
-import { DataTable } from '../notiification/DataTable';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components(shadcn)/ui/select';
-import { RotateCcw, X } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { server } from "@/main";
+import { DataTable } from "../notiification/DataTable";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components(shadcn)/ui/select";
+import { RotateCcw, X } from "lucide-react";
 
 const Batch = () => {
   const [batch, setBatch] = useState([]);
@@ -72,11 +80,9 @@ const Batch = () => {
     setIsDataFetched(false);
   };
 
-  const location = useLocation();
-  const path = location.pathname;
-
   useEffect(() => {
-    axios.get(`${server}/sector/all`, { withCredentials: true })
+    axios
+      .get(`${server}/sector/all`, { withCredentials: true })
       .then((response) => {
         setSectors(response.data.data);
       })
@@ -86,17 +92,19 @@ const Batch = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`${server}/courses`, { withCredentials: true })
+    axios
+      .get(`${server}/courses`, { withCredentials: true })
       .then((response) => {
         setCourses(response.data.data);
       })
       .catch((error) => {
         console.log(error);
-      }); 
+      });
   }, []);
 
   useEffect(() => {
-    axios.get(`${server}/tp`, { withCredentials: true })
+    axios
+      .get(`${server}/tp`, { withCredentials: true })
       .then((response) => {
         setTrainingOrganizations(response.data.data);
       })
@@ -105,17 +113,22 @@ const Batch = () => {
       });
   }, []);
 
-  const hasActiveFilters = Object.values(filters).some(value => value !== "");
+  const hasActiveFilters = Object.values(filters).some((value) => value !== "");
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Batch Details</h2>
-          <p className="text-muted-foreground">Here's a list of Batches for you!</p>
+          <p className="text-muted-foreground">
+            Here's a list of Batches for you!
+          </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Select value={selectedValues.sector} onValueChange={(value) => handleFilterChange("sector", value)}>
+          <Select
+            value={selectedValues.sector}
+            onValueChange={(value) => handleFilterChange("sector", value)}
+          >
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by Sector" />
             </SelectTrigger>
@@ -128,7 +141,10 @@ const Batch = () => {
             </SelectContent>
           </Select>
 
-          <Select value={selectedValues.course} onValueChange={(value) => handleFilterChange("course", value)}>
+          <Select
+            value={selectedValues.course}
+            onValueChange={(value) => handleFilterChange("course", value)}
+          >
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by Course" />
             </SelectTrigger>
@@ -141,7 +157,12 @@ const Batch = () => {
             </SelectContent>
           </Select>
 
-          <Select value={selectedValues.trainingOrganization} onValueChange={(value) => handleFilterChange("trainingOrganization", value)}>
+          <Select
+            value={selectedValues.trainingOrganization}
+            onValueChange={(value) =>
+              handleFilterChange("trainingOrganization", value)
+            }
+          >
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by Training Organization" />
             </SelectTrigger>
@@ -154,7 +175,10 @@ const Batch = () => {
             </SelectContent>
           </Select>
 
-          <Select value={selectedValues.state} onValueChange={(value) => handleFilterChange("state", value)}>
+          <Select
+            value={selectedValues.state}
+            onValueChange={(value) => handleFilterChange("state", value)}
+          >
             <SelectTrigger className="w-fit border-0">
               <SelectValue placeholder="Filter by State" />
             </SelectTrigger>
@@ -169,19 +193,25 @@ const Batch = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-{
-  hasActiveFilters && <div className='flex'><span className='font-semibold'>Reset</span><X onClick={resetFilters} className="w-4 cursor-pointer hover:cursor-pointer" /></div>
-}
-          
+          {hasActiveFilters && (
+            <div className="flex">
+              <span className="font-semibold">Reset</span>
+              <X
+                onClick={resetFilters}
+                className="w-4 cursor-pointer hover:cursor-pointer"
+              />
+            </div>
+          )}
         </div>
       </div>
 
       <DataTable
-        filter1={"courseName"}
-        path={path}
+        filter1={"status"}
+        path={"/admin/dasbord"}
         columns={batchColumns}
         data={batch}
         isLoading={loading}
+        pageUrl={"batch"}
       />
     </div>
   );
@@ -213,11 +243,30 @@ export const batchColumns = [
       return (
         <div
           className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
-            "bg-orange-100 text-orange-500": row.getValue("status") === "onGoing",
-            "bg-green-100 text-green-400": row.getValue("status") === "Completed",
+            "bg-orange-100 text-orange-500":
+              row.getValue("status") === "onGoing",
+            "bg-green-100 text-green-400":
+              row.getValue("status") === "Completed",
           })}
         >
           {row.getValue("status")}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "paymentStatus",
+    header: "Payment Status",
+    cell: ({ row }) => {
+      const paymentStatus = row.getValue("paymentStatus");
+      return (
+        <div
+          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+            "bg-orange-100 text-orange-500": paymentStatus === false,
+            "bg-green-100 text-green-400": paymentStatus === true,
+          })}
+        >
+          {paymentStatus ? "Paid" : "Not Paid"}
         </div>
       );
     },

@@ -19,10 +19,10 @@ const BtachDetailsBox = ({ id }) => {
         .get(`${server}/batch/${id}`, {
           withCredentials: true,
         })
-        .then((response) => {
+        .then((response) => { 
           setLoding(false);
           setData(response.data.data);
-          console.log(response.data.data)
+          // console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);
@@ -91,9 +91,11 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-xl font-bold ">{data?.status}</p>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           {/* Buttion For assin a batch */}
+
+          
+
           <CreateExam
             abn_id={data?._id}
             tp_id={data?.trainingOrganizationId}
@@ -102,7 +104,7 @@ const BtachDetailsBox = ({ id }) => {
             state={data?.state}
           >
             <Button
-              disabled={data?.status==="Completed" || data?.isAssigned }
+              disabled={data?.status==="Completed" || data?.paymentStatus===false || data?.isAssigned }
               variant={"default"}
               className={"bg-green-700"}
             >

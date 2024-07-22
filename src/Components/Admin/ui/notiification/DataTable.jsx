@@ -29,18 +29,39 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components(shadcn)/ui/tooltip";
+} from "@/components(shadcn)/ui/tooltip"; 
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { Button } from "@/components(shadcn)/ui/button";
-import DownLoadJson from "../../Content/DownLoadJson";
-export function DataTable({ columns, path, data, isLoding, filter1 }) {
-  // console.log(data);
+import AaAnalysis from "@/Pages/Admin/AaAnalysis";
+import TpAnalysis from "@/Pages/Admin/TpAnalysis";
+import BathAnalysis from "@/Pages/Admin/BathAnalysis";
+import ExamAnalysis from "@/Pages/Admin/ExamAnalysis";
+export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
+  console.log(data);
   const navigate = useNavigate();
   const [rowSelection, setRowSelection] = useState({});
+  const [anylisis, setAnylisis] = useState("");
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
   const [sorting, setSorting] = useState([]);
+  //funncction for navigate to anylisis..
+  const handleRedirect = () => {
+    switch (pageUrl) {
+      case "accessmentagency":
+        setAnylisis("accessmentagency");
+        break;
+      case "trainingpartner":
+        setAnylisis("trainingpartner");
+        break;
+      case "batch":
+        setAnylisis("batch");
+        break;
+      case "allexam":
+        setAnylisis("allexam");
+        break;
+    }
+  };
 
   const table = useReactTable({
     data,
@@ -119,7 +140,9 @@ export function DataTable({ columns, path, data, isLoding, filter1 }) {
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    onClick={() =>path && navigate(`${path}/${row.original._id}`)}
+                    onClick={() =>
+                      path && navigate(`${path}/${row.original._id}`)
+                    }
                     className="bg-white even:bg-gray-50"
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -167,10 +190,17 @@ export function DataTable({ columns, path, data, isLoding, filter1 }) {
                 <FileDown />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Downlload the data as PDF.</TooltipContent>
+            <TooltipContent>Download the data as PDF.</TooltipContent>
           </Tooltip>
-          <DownLoadJson data={data} fileName={"Exported_Data"}/>
+          <div className="ml-4">
+            <Button onClick={handleRedirect}>view statistic</Button>
+          </div>
+          
         </div>
+        {anylisis==="accessmentagency" &&  <AaAnalysis data={data} />}
+          {anylisis==="trainingpartner" &&  <TpAnalysis data={data} />}
+          {anylisis==="batch" &&  <BathAnalysis data={data} />}
+          {anylisis==="allexam" &&  <ExamAnalysis data={data} />}
       </div>
     </TooltipProvider>
   );

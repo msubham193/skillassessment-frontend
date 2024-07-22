@@ -18,6 +18,15 @@ import CreateCourse from "./Pages/Admin/CreateCourse";
 import CreateScheme from "./Pages/Admin/CreateScheme";
 import StudentResultDetails from "./Pages/Admin/StudentResultDetails";
 import BatchWiseStudentResult from "./Pages/Admin/BatchWiseStudentResult";
+import AllBAtch from "./Pages/Admin/AllBAtch";
+import CreateCertificate from "./Pages/Admin/CreateCertificate";
+import PaymentDEtails from "./Pages/Admin/PaymentDEtails";
+import AaAnalysis from "./Pages/Admin/AaAnalysis";
+import TpAnalysis from "./Pages/Admin/TpAnalysis";
+import BathAnalysis from "./Pages/Admin/BathAnalysis";
+import UpdateBatchBox from "./Pages/Admin/UpdateBatchBox";
+import AddfeeInCorporetbatch from "./Pages/Admin/AddfeeInCorporetbatch";
+import ExamDetails from "./Pages/Admin/ExamDetails";
 const App = () => {
   const [authState, setAuthState] = useRecoilState(authenticationState);
   useEffect(() => {
@@ -38,6 +47,7 @@ const App = () => {
         <Route element={<ProtectedRout />}>
 
           <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
+          <Route path="/admin/dasbord/batch" exact element={<AllBAtch />} />
           <Route
             path="/admin/dasbord/batch/mark/students/:id"
             exact
@@ -67,7 +77,12 @@ const App = () => {
           <Route
             path="/admin/dasbord/Notification/tp/:id"
             exact
-            element={<TpDetails />}
+            element={<TpDetails />} 
+          />
+          <Route
+            path="/admin/dasbord/allExam/:id"
+            exact
+            element={<ExamDetails />} 
           />
           <Route
             path="/admin/dasbord/AssessmentAgency/:id"
@@ -89,6 +104,31 @@ const App = () => {
             path="/admin/dasbord/createScheme"
             exact
             element={<CreateScheme />}
+          />
+          <Route
+            path="/admin/dasbord/createCertificate"
+            exact
+            element={<CreateCertificate />}
+          />
+          <Route
+            path="/admin/dasbord/PaymentsDetails"
+            exact
+            element={<PaymentDEtails />}
+          />
+          <Route
+            path="/admin/dasbord/BatchAnylisis"
+            exact
+            element={<BathAnalysis />}
+          />
+          <Route
+            path="/admin/dasbord/Batch/payment/update/:id"
+            exact
+            element={<UpdateBatchBox />}
+          />
+          <Route
+            path="/admin/dasbord/Batch/cprporate/payment/update/:id"
+            exact
+            element={<AddfeeInCorporetbatch />}
           />
         </Route> 
       </Routes>

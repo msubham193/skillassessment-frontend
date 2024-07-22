@@ -2,7 +2,7 @@ import { server } from '@/main';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { DataTable } from '../notiification/DataTable';
-
+import { cn } from '@/lib/utils';
 const AllExam = () => {
     const [allExam, setAllExam] = useState([]);
     const [loding, setLoding] = useState(false);
@@ -37,10 +37,11 @@ const AllExam = () => {
       <DataTable
       filter1={"assesmentAgency"}
       columns={examcolumns}
+      path={"/admin/dasbord/allExam"}
       data={allExam && allExam}
       isLoding={loding}
+      pageUrl={"allexam"} 
     />
-     
     </div>
   )
 }
@@ -55,7 +56,7 @@ export const examcolumns = [
     },
     {
       accessorKey: "batchABN",
-      header: "Batch ABN",
+      header: "ABN No",
     },
     {
       accessorKey: "course",
@@ -67,7 +68,23 @@ export const examcolumns = [
     },
     {
         accessorKey: "TrainingOrganization",
-        header: "Traning Partner Name",
+        header: "Traning Partner Name", 
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => {
+          return (
+            <div
+              className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+                "bg-orange-100 text-orange-500": row.getValue("status") === "not-started",
+                "bg-green-100 text-green-400": row.getValue("status") === "completed",
+              })}
+            >
+              {row.getValue("status")}
+            </div>
+          );
+        },
       },
   ];
   

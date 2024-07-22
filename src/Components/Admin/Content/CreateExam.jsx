@@ -33,7 +33,7 @@ import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 
-const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
+const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => { 
   const [courseName, setCourseName] = useState("");
   const [trainingPartnerId, setTrainingPartnerId] = useState("");
   const [batchId, setBatchId] = useState("");
@@ -42,7 +42,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const [showButton, setShowButton] = useState(false);
   const authState = useRecoilValue(authenticationState);
 
-  useEffect(() => {
+  useEffect(() => { 
     setBatchId(abn_id);
     setCourseName(course);
     setTrainingPartnerId(tp_id);

@@ -3,11 +3,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils';
 import HomeTable from '../ui/HomeTablist/HomeTable';
+import { Button } from '@/components(shadcn)/ui/button';
 
 const ResultContent = ({batchId}) => {
-  const[students,setSutdents]=useState([]);
+  const[students,setSutdents]=useState([]); 
   const[loding,setLoding]=useState(false);
-    console.log(`batch id is ${batchId}`)
+    // console.log(`batch id is ${batchId}`)
 
     //function for fetch the result data...
     useEffect(() => {
@@ -20,7 +21,7 @@ const ResultContent = ({batchId}) => {
           .then((response) => {
             setLoding(false);
             setSutdents(response.data.data.reverse());
-            console.log(response.data.data)
+            // console.log(response.data.data)
           });
       } catch (error) {
         setLoding(false);
@@ -46,6 +47,24 @@ const ResultContent = ({batchId}) => {
     data={students && students}
     isLoding={loding}
     />
+    <div className="flex justify-between">
+       
+              {" "}
+              {/* here i create he function for approve and publish the result.. */}
+              <Button className="mr-2">
+              View Attendence Sheet
+              </Button>
+              <Button className="mr-2">
+              View Result Sheet
+              </Button>
+              <Button className="mr-2">
+              View Photo
+              </Button>
+              <Button className="mr-2 bg-green-600">
+              Approve & Publish
+              </Button>
+          
+        </div>
   </div>
   )
 }

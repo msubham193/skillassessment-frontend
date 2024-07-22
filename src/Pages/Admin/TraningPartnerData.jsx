@@ -10,7 +10,7 @@ const TpNotification = ({ children }) => {
       <div className="min-h-screen bg-white text-black flex flex-col">
         {/*top Bar */}
         <TopBar />
-        {/* side bar */}
+        {/* side bar */} 
         <div className="min-h-screen bg-white text-black flex">
           <SideNav />
 

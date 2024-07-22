@@ -39,7 +39,7 @@ const NotificationContent = () => {
           {selectedTab === "overview" && <AagencyNotification />}
         </TabsContent>
         <TabsContent value="analytics">
-          {selectedTab === "analytics" && <TpartnerNotification />}
+          {selectedTab === "analytics" && <TpartnerNotification />} 
         </TabsContent>
       </Tabs>
     </div>

@@ -23,14 +23,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components(shadcn)/ui/popover";
+import { Label } from "@/components(shadcn)/ui/label";
+import { Input } from "@/components(shadcn)/ui/input";
 
 const TpDetailsBOx = ({ id }) => {
-  const [referesh, setReferesh] = useState(false); 
+  const [referesh, setReferesh] = useState(false);
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);
   const [batch, setBatch] = useState([]);
   const [course, setCourse] = useState([]);
   const [sector, setSector] = useState([]);
+  const [cost,setCost] = useState();
+
 
   //function for fetch batch by tpID............
   useEffect(() => {
@@ -104,7 +108,7 @@ const TpDetailsBOx = ({ id }) => {
       setData(responce.data.data);
     } catch (error) {
       setLoding(false);
-      toast.success("Somthing went wrong", {
+      toast.error("Somthing went wrong", {
         position: "bottom-right",
         closeOnClick: true,
         draggable: true,
@@ -569,22 +573,13 @@ const TpDetailsBOx = ({ id }) => {
 
             <div className="w-full mt-5">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Payment Status*</h3>
-                  <p className="text-lg ">
-                    {data && data.paymentStatus === "Pending" ? (
-                      <p className="text-red-600">{data.paymentStatus}</p>
-                    ) : (
-                      <p className="text-green-500">{data.paymentStatus}</p>
-                    )}
-                  </p>
-                </div>
+               
                 <div className="p-3">
                   <h3 className="text-lg font-medium mb-2">Status*</h3>
                   <p className="text-lg ">{data && data.status}</p>
                 </div>
               </div>
-            </div> 
+            </div>
             <div>
               {data.applicationStatus === "Approved" ? (
                 <div>
@@ -617,7 +612,7 @@ const TpDetailsBOx = ({ id }) => {
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
             disabled={data.applicationStatus === "Approved"}
-          >
+          > 
             {" "}
             {loding
               ? "Loding..."

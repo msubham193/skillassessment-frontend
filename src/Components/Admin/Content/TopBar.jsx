@@ -60,35 +60,16 @@ const TopBar = () => {
       } else if (newData.length > data3.length) {
         setNotification("A new Batch requst found");
         setData3(newData);
-        localStorage.setItem("notification", "A new Batch requst found");
+        localStorage.setItem("notification", "A new Batch requst found !!!");
       }
     } catch (error) {
       console.error('Error fetching data3:', error);
     }
   };
-  const fetchData4 = async () => {
-    try {
-      const response = await axios.get(`${server}/batch/all/corporate`, { withCredentials: true });
-      const newData = response.data.data;
-
-      if (initialLoad) {
-        setData4(newData);
-      } else if (newData.length > data3.length) {
-        setNotification("A new Batch requst found(Corporet)");
-        setData4(newData);
-        localStorage.setItem("notification", "A new Batch requst found(Corporet)");
-      }
-    } catch (error) {
-      console.error('Error fetching data3:', error);
-    }
-  };
-
-  //here i have to add a notification for corporate batch.....
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([fetchData1(), fetchData2(),fetchData3(),fetchData4()]);
+      await Promise.all([fetchData1(), fetchData2(),fetchData3()]);
       setLoading(false);
       if (initialLoad) {
         setInitialLoad(false);
@@ -107,15 +88,13 @@ const TopBar = () => {
     const interval3 = setInterval(() => {
       fetchData3();
     }, 20 * 1000);
-    const interval4 = setInterval(() => {
-      fetchData4();
-    }, 20 * 1000); // 20 seconds for training partner
+ // 20 seconds for training partner
 
     return () => {
       clearInterval(interval1);
       clearInterval(interval2);
       clearInterval(interval3);
-      clearInterval(interval4);
+
 
     };
   }, [data1, data2,data3,data4]);
@@ -126,12 +105,10 @@ const TopBar = () => {
     } else if (notification.includes("Training Partner")) {
       navigate("/admin/dasbord/Notification?tab=analytics");
     }
-    else if (notification.includes("Batch requst")) {
+    else if (notification.includes("Batch requst !!!")) {
       navigate("/admin/dasbord/batch?tab=analytics");
     }
-    else if (notification.includes("Batch requst found(Corporet)")) {
-      navigate("/admin/dasbord/batch?tab=addppayment");
-    }
+    
     setNotification("No new notification !!");
     localStorage.setItem("notification", "No new notification !!");
   };

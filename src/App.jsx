@@ -125,11 +125,6 @@ const App = () => {
             exact
             element={<UpdateBatchBox />}
           />
-          <Route
-            path="/admin/dasbord/Batch/cprporate/payment/update/:id"
-            exact
-            element={<AddfeeInCorporetbatch />}
-          />
         </Route> 
       </Routes>
       <ToastContainer />

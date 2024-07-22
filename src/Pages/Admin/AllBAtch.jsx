@@ -11,7 +11,7 @@ const AllBAtch = ({children}) => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const defaultTab = query.get("tab") || "overview"; 
-  const [selectedTab, setSelectedTab] = useState(defaultTab);
+  const [selectedTab, setSelectedTab] = useState(defaultTab); 
 
   useEffect(() => {
     setSelectedTab(defaultTab);
@@ -35,9 +35,6 @@ const AllBAtch = ({children}) => {
             <TabsTrigger onClick={() => setSelectedTab("analytics")} value="analytics">
               Update Payment
             </TabsTrigger>
-            <TabsTrigger onClick={() => setSelectedTab("addppayment")} value="addppayment">
-              Add payment for batch
-            </TabsTrigger>
           </TabsList>
   
           <TabsContent value="overview">
@@ -46,9 +43,7 @@ const AllBAtch = ({children}) => {
           <TabsContent value="analytics">
             {selectedTab === "analytics" &&  <UpdateBatch/>}
           </TabsContent>
-          <TabsContent value="addppayment">
-            {selectedTab === "addppayment" &&  <AddfeeCorporate/>}
-          </TabsContent>
+
         </Tabs>
       </div>
         

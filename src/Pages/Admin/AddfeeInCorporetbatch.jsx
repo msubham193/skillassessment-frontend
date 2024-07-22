@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 const AddfeeInCorporetbatch = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const [amount, setAmount] = useState(null);
 
   // Function for fetching batch by id

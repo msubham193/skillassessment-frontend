@@ -221,20 +221,31 @@ export default Batch;
 
 export const batchColumns = [
   {
-    accessorKey: "courseName",
-    header: "Batch Name",
-  },
-  {
-    accessorKey: "trainingOrganization",
-    header: "Created By",
+    accessorKey: "ABN_Number",
+    header: "Abn no",
   },
   {
     accessorKey: "scheme",
     header: "Batch under Scheme",
   },
   {
-    accessorKey: "state",
-    header: "State",
+    accessorKey: "courseName",
+    header: "Course ",
+  },
+  {
+    accessorKey: "trainingOrganization",
+    header: "Created By",
+  },
+  {
+    accessorKey: "students",
+    header: "No of Student",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.students.length}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",

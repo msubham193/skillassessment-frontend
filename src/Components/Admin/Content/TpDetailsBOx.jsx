@@ -33,7 +33,7 @@ const TpDetailsBOx = ({ id }) => {
   const [batch, setBatch] = useState([]);
   const [course, setCourse] = useState([]);
   const [sector, setSector] = useState([]);
-  const [cost,setCost] = useState();
+  const [amount, setAmount] = useState(null);
 
 
   //function for fetch batch by tpID............
@@ -47,6 +47,7 @@ const TpDetailsBOx = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setBatch(response.data.data.reverse());
+          console.log(response.data.data)
           setReferesh((prev) => !prev);
         });
     } catch (error) {
@@ -153,6 +154,42 @@ const TpDetailsBOx = ({ id }) => {
         theme: "colored",
       });
     }
+  };
+
+  //function for add amount manualy for a traningPartner
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoding(true);
+    // try {
+    //   const response = await axios.put(
+    //     `${server}/batch/addpayment/${id}`,
+    //     {amount},
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   setAmount("");
+    
+    //   toast.success("Cost added !!", {
+    //     position: "top-center",
+    //     closeOnClick: true,
+    //     draggable: true,
+    //     theme: "colored",
+    //   });
+    //   setLoding(false);
+    // } catch (error) {
+    //     console.log(error)
+    //   toast.error("Something went wrong, try after some time !!!", {
+    //     position: "top-center",
+    //     closeOnClick: true,
+    //     draggable: true,
+    //     theme: "colored",
+    //   });
+    //   setLoding(false);
+    // }
   };
 
   const defaultUserPhoto = "/user.png";
@@ -576,7 +613,7 @@ const TpDetailsBOx = ({ id }) => {
                
                 <div className="p-3">
                   <h3 className="text-lg font-medium mb-2">Status*</h3>
-                  <p className="text-lg ">{data && data.status}</p>
+                  <p className="text-lg ">{data && data.applicationStatus}</p>
                 </div>
               </div>
             </div>
@@ -607,6 +644,24 @@ const TpDetailsBOx = ({ id }) => {
             />
           </div>
         </div>
+        {/* field for add amount for tp according to scheme */}
+       {data?.scheme==="Corporate" && data?.applicationStatus==="Pending"? <div className="p-8 w-[500px]">
+        <form onSubmit={submitHandler}>
+        <Label htmlFor="name" className="text-left w-40 text-lg">
+          Add cost per Student for this Traning Partner..
+        </Label>
+        <Input
+          id="scheme-name"
+          className="col-span-4 py-6 mt-2"
+          placeholder="Add amount in rupee"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        </form>
+      </div>:""}
+
+
+
         <div className="flex flex-col md:flex-row justify-between mt-6 mx-4 md:mx-10 w-full md:w-[625px]">
           <Button
             onClick={applicationReject}
@@ -623,7 +678,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data.applicationStatus === "Rejected"}
+            disabled={data.applicationStatus === "Rejected" || amount===null}
           >
             {loding
               ? "Loding..."

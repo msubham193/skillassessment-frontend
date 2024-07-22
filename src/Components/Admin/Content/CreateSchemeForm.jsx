@@ -1,7 +1,13 @@
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components(shadcn)/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components(shadcn)/ui/select";
 import { server } from "@/main";
 import axios from "axios";
 import React, { useState } from "react";
@@ -62,7 +68,23 @@ const CreateSchemeForm = () => {
       </div>
       <form onSubmit={submitHandler}>
         <div className="mx-72 mt-20">
-          <Label htmlFor="name" className="text-left w-40"> 
+          <Label htmlFor="projectType" className="text-left w-40">
+            Scheme Type
+          </Label>
+          <Select
+            id="projectType"
+            value={projectType}
+            onValueChange={(value) => setProjectType(value)}
+          >
+            <SelectTrigger className="col-span-4 py-6">
+              <SelectValue placeholder="Select Scheme Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="government">Government</SelectItem>
+              <SelectItem value="corporate">Corporate</SelectItem>
+            </SelectContent>
+          </Select>
+          <Label htmlFor="name" className="text-left w-40">
             Scheme Name
           </Label>
           <Input
@@ -82,23 +104,7 @@ const CreateSchemeForm = () => {
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          <Label htmlFor="projectType" className="text-left w-40">
-            Project Type
-          </Label>
-          <Select
-            id="projectType"
-            value={projectType}
-            onValueChange={(value) => setProjectType(value)}
-          >
-            <SelectTrigger className="col-span-4 py-6">
-              <SelectValue placeholder="Select Project Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="central government">Central Government</SelectItem>
-              <SelectItem value="state government">State Government</SelectItem>
-              <SelectItem value="corporate">Corporate</SelectItem>
-            </SelectContent>
-          </Select>
+
           {projectType !== "corporate" && (
             <>
               <Label htmlFor="cost" className="text-left w-40">

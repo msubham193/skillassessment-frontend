@@ -23,7 +23,7 @@ const AdminContent = () => {
   const [totalTp, setTotalTp] = useState(0);
   const [totalAa, setTotalAa] = useState(0);
   const [totalExam, setTotalExam] = useState(0);
-  const [totalBatch, setTotalBatch] = useState(0);
+  const [totalBatch, setTotalBatch] = useState(0); 
   useEffect(() => {
     try {
       axios
@@ -85,7 +85,7 @@ const AdminContent = () => {
         </div>
 
         {/* DataTabs component is always visible */}
-        <Tabs defaultValue="overview" className="space-y-4">
+        <Tabs defaultValue="overview" className="space-y-4 ">
           <DataTabs
             cardData={[
               {
@@ -115,21 +115,21 @@ const AdminContent = () => {
             ]}
           />
         </Tabs> 
-        <Tabs defaultValue="accessmentagency" className="space-y-4">
-          <TabsList>
-            <TabsTrigger
+        <Tabs defaultValue="accessmentagency" className="space-y-4 ">
+          <TabsList >
+            <TabsTrigger 
               onClick={() => setSelectedTab("accessmentagency")}
               value="accessmentagency"
             >
               Assessment Agency
             </TabsTrigger>
-            <TabsTrigger
+            <TabsTrigger 
               onClick={() => setSelectedTab("allExam")}
               value="allExam"
             >
               All Exam
             </TabsTrigger>
-            <TabsTrigger
+            <TabsTrigger className="text-gray-700"
               onClick={() => setSelectedTab("traningPartner")}
               value="traningPartner"
             >

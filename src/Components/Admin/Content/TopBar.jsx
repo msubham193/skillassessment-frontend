@@ -8,7 +8,7 @@ import { server } from "@/main";
 import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [notification, setNotification] = useState(localStorage.getItem("notification") || "No new notification !!");
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -122,7 +122,7 @@ const TopBar = () => {
   };
 
   return (
-    <nav className="bg-white w-full h-16 border-b border-gray-200 dark:bg-gray-900">
+    <nav className="bg-[#f2f9f2] w-full h-16 border-b  border-gray-200 dark:bg-gray-900">
       <div className="w-full h-full flex flex-row items-center justify-between m-auto px-5">
         {/* Avatar logo and name */}
         <a href="#about-me" className="h-auto w-auto flex flex-row items-center">
@@ -139,7 +139,7 @@ const TopBar = () => {
         <div className="flex flex-row gap-5">
           {/* Notification stuff */}
           <Select>
-            <SelectTrigger className="w-[60px]">
+            <SelectTrigger className="w-[60px] bg-[#f2f9f2] border-none">
               <Bell size={23} className="cursor-pointer mt-[5px]" />
               <span className="absolute top-5 right-[100px]">
                 {notification === "No new notification !!" ? "" : (

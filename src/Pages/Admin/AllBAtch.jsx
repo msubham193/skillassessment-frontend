@@ -36,7 +36,6 @@ const AllBAtch = ({children}) => {
               Update Payment
             </TabsTrigger>
           </TabsList>
-  
           <TabsContent value="overview">
             {selectedTab === "overview" &&  <Batch>{children}</Batch>}
           </TabsContent>

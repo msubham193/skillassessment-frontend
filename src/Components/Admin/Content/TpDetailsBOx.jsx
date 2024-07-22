@@ -645,7 +645,7 @@ const TpDetailsBOx = ({ id }) => {
           </div>
         </div>
         {/* field for add amount for tp according to scheme */}
-       {data?.scheme==="Corporate" && data?.applicationStatus==="Pending"? <div className="p-8 w-[500px]">
+       {data?.applicationStatus==="Pending"? <div className="p-8 w-[500px]">
         <form onSubmit={submitHandler}>
         <Label htmlFor="name" className="text-left w-40 text-lg">
           Add cost per Student for this Traning Partner..
@@ -659,9 +659,6 @@ const TpDetailsBOx = ({ id }) => {
         />
         </form>
       </div>:""}
-
-
-
         <div className="flex flex-col md:flex-row justify-between mt-6 mx-4 md:mx-10 w-full md:w-[625px]">
           <Button
             onClick={applicationReject}

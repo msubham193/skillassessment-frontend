@@ -16,20 +16,14 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-2 pb-10 pt-12">
+    <div className=" relative min-w-[80px] border-r px-1 pb-10 pt-4 bg-[#E8F5E9]">
  {
     !mobileWidth &&(
         <div className="absolute right-[-20px] top-2">
-        <Button onClick={toogelSideBar} className={"rounded-full p-2"} variant="secondary">
-        {
-          isCollapsed ?<ChevronRight/>:<ChevronLeft/>
-        }
-        </Button>
         </div>
     )
  }
-      <Nav
-        isCollapsed={mobileWidth?true: isCollapsed}
+      <Nav 
         links={[
           {
             title: "Home",

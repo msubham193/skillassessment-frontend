@@ -278,7 +278,7 @@ export const batchColumns = [
           })}
         >
           {paymentStatus ? "Paid" : "Not Paid"}
-        </div>
+        </div> 
       );
     },
   },

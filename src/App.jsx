@@ -21,12 +21,10 @@ import BatchWiseStudentResult from "./Pages/Admin/BatchWiseStudentResult";
 import AllBAtch from "./Pages/Admin/AllBAtch";
 import CreateCertificate from "./Pages/Admin/CreateCertificate";
 import PaymentDEtails from "./Pages/Admin/PaymentDEtails";
-import AaAnalysis from "./Pages/Admin/AaAnalysis";
-import TpAnalysis from "./Pages/Admin/TpAnalysis";
 import BathAnalysis from "./Pages/Admin/BathAnalysis";
 import UpdateBatchBox from "./Pages/Admin/UpdateBatchBox";
-import AddfeeInCorporetbatch from "./Pages/Admin/AddfeeInCorporetbatch";
 import ExamDetails from "./Pages/Admin/ExamDetails";
+import AaPaymentInvoice from "./Pages/Admin/AaPaymentInvoice";
 const App = () => {
   const [authState, setAuthState] = useRecoilState(authenticationState);
   useEffect(() => {
@@ -43,7 +41,7 @@ const App = () => {
     return (
     <div>
       <Routes>
-        <Route path="/adminLogin" exact element={<AdminLogin />} />
+        <Route path="/adminLogin" exact element={<AdminLogin />} /> 
         <Route element={<ProtectedRout />}>
 
           <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
@@ -124,6 +122,11 @@ const App = () => {
             path="/admin/dasbord/Batch/payment/update/:id"
             exact
             element={<UpdateBatchBox />}
+          />
+          <Route
+            path="/admin/dasbord/Aa/invoice/payment/update/:id"
+            exact
+            element={<AaPaymentInvoice />}
           />
         </Route> 
       </Routes>

@@ -10,7 +10,7 @@ const UpdateBatch = () => {
     const [loading, setLoading] = useState(false);
     //function for get all ppending sttus data
     useEffect(() => {
-       
+        
           fetchBatches();
         
       }, []);
@@ -23,7 +23,6 @@ const UpdateBatch = () => {
           });
           setBatch(response.data.data.reverse());
           console.log(response.data.data)
-          setIsDataFetched(true);
         } catch (error) {
           console.error(error);
         } finally {
@@ -41,7 +40,7 @@ const UpdateBatch = () => {
     filter1={"courseName"}
     path={"/admin/dasbord/Batch/payment/update"}
     columns={batchColumns}
-    data={batch}
+    data={batch} 
     isLoading={loading}
     pageUrl={"batch"}
   />

@@ -4,7 +4,7 @@ import TpNotificationBoxContent from "@/Components/Admin/Content/TpNotificationB
 import TopBar from "@/Components/Admin/Content/TopBar";
 import SideNav from "@/Components/Admin/Content/SideNav";
 
-const TpNotification = ({ children }) => {
+const TpNotification = ({ children }) => {  
   return (
     <>
       <div className="min-h-screen bg-white text-black flex flex-col">

@@ -12,7 +12,7 @@ const UpdateBatchBox = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showPreInvoice, setShowPreInvoice] = useState(false);
+  const [showPreInvoice, setShowPreInvoice] = useState(false); 
   const [showPostInvoice, setShowPostInvoice] = useState(false);
 
   // Function for fetching batch by id

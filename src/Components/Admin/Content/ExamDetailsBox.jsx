@@ -22,7 +22,7 @@ const ExamDetailsBox = ({id}) => {
             .then((response) => {
               setLoding(false);
               setData(response.data.data);
-              setBatchId(response.data.data.batchId._id)
+              // setBatchId(response.data.data.batchId._id)
               console.log(response.data.data)
             });
         } catch (error) {
@@ -92,14 +92,14 @@ const ExamDetailsBox = ({id}) => {
             <p className="text-lg font-semibold  text-red-400">{data?.paymentStatus===true?"Paid":"Create invoice and make payment"}</p>
           </div>
           
-          {
+          {/*
             data?.paymentStatus===true?"":<div>
             <MakePayment assessmentagencyId={data?.assesmentAgencyId} batchId={batchId}>
             <Button>Make Payment</Button>
             </MakePayment>
             
             </div>
-          }
+          */}
           
         </div>
         {/* shoow pree invoice */}

@@ -63,7 +63,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
     try {
       const response = await axios.post(
         `${server}/exam/create`,
-        { courseName, date, batchId, assesmentAgencyId, trainingPartnerId },
+        { courseName, batchId, assesmentAgencyId, trainingPartnerId },
         {
           headers: {
             "x-access-token": token,
@@ -155,31 +155,6 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Accessment Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={handleDateSelect}
-                      className="rounded-md border"
-                    />
-                  </PopoverContent>
-                </Popover>
               </div>
             </div>
           </form>

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { DataTable } from '../notiification/DataTable';
 
 const AccessmentAgency = () => { 
-  const [assessmentAgency, setAssessmentAgency] = useState([]);
+  const [assessmentAgency, setAssessmentAgency] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
  

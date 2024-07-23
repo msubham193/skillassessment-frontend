@@ -20,7 +20,7 @@ import {
 } from "@/components(shadcn)/ui/table";
 import TableToolBar from "./TableToolBar";
 import TablePagination from "./TablePagination";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loder from "../Loder";
 import { Download, FileDown } from "lucide-react";
@@ -29,7 +29,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components(shadcn)/ui/tooltip"; 
+} from "@/components(shadcn)/ui/tooltip";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { Button } from "@/components(shadcn)/ui/button";
@@ -37,6 +37,7 @@ import AaAnalysis from "@/Pages/Admin/AaAnalysis";
 import TpAnalysis from "@/Pages/Admin/TpAnalysis";
 import BathAnalysis from "@/Pages/Admin/BathAnalysis";
 import ExamAnalysis from "@/Pages/Admin/ExamAnalysis";
+
 export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
   console.log(data);
   const navigate = useNavigate();
@@ -45,7 +46,9 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
   const [sorting, setSorting] = useState([]);
-  //funncction for navigate to anylisis..
+  const analysisRef = useRef(null); // Create a ref for the analysis section
+
+  // Function for navigate to analysis
   const handleRedirect = () => {
     switch (pageUrl) {
       case "accessmentagency":
@@ -61,6 +64,8 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
         setAnylisis("allexam");
         break;
     }
+    analysisRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll to the analysis section
+  
   };
 
   const table = useReactTable({
@@ -84,9 +89,8 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-  // console.log(table.getRowModel().rows[0].original.id);
 
-  //function for download the dataAsPDF...
+  // Function for download the data as PDF
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
     const tableColumn = columns.map((col) => col.header);
@@ -101,8 +105,6 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
 
     doc.save("table.pdf");
   };
-
-  // console.log(table.getRowModel().rows[0].original.studentId)
 
   if (isLoding) {
     return <Loder />;
@@ -185,7 +187,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
           <Tooltip delayDuration={0}>
             <TooltipTrigger>
               {" "}
-              {/* here i create he function for download  the row data.. */}
+              {/* Function to download the row data */}
               <Button className="mr-2" onClick={handleDownloadPDF}>
                 <FileDown />
               </Button>
@@ -195,12 +197,13 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
           <div className="ml-4">
             <Button onClick={handleRedirect}>view statistic</Button>
           </div>
-          
         </div>
-        {anylisis==="accessmentagency" &&  <AaAnalysis data={data} />}
-          {anylisis==="trainingpartner" &&  <TpAnalysis data={data} />}
-          {anylisis==="batch" &&  <BathAnalysis data={data} />}
-          {anylisis==="allexam" &&  <ExamAnalysis data={data} />}
+        <div ref={analysisRef}>
+          {anylisis === "accessmentagency" && <AaAnalysis data={data} />}
+          {anylisis === "trainingpartner" && <TpAnalysis data={data} />}
+          {anylisis === "batch" && <BathAnalysis data={data} />}
+          {anylisis === "allexam" && <ExamAnalysis data={data} />}
+        </div>
       </div>
     </TooltipProvider>
   );

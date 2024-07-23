@@ -116,94 +116,86 @@ const Batch = () => {
   const hasActiveFilters = Object.values(filters).some((value) => value !== "");
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Batch Details</h2>
-          <p className="text-muted-foreground">
-            Here's a list of Batches for you!
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Select
-            value={selectedValues.sector}
-            onValueChange={(value) => handleFilterChange("sector", value)}
-          >
-            <SelectTrigger className="w-fit border-0">
-              <SelectValue placeholder="Filter by Sector" />
-            </SelectTrigger>
-            <SelectContent>
-              {sectors.map((sector) => (
-                <SelectItem key={sector.id} value={sector.name}>
-                  {sector.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <>
+     <div className="flex justify-end">
+     <Select
+     value={selectedValues.sector}
+     onValueChange={(value) => handleFilterChange("sector", value)}
+   >
+     <SelectTrigger className="w-fit border-0">
+       <SelectValue placeholder="Filter by Sector" />
+     </SelectTrigger>
+     <SelectContent>
+       {sectors.map((sector) => (
+         <SelectItem key={sector.id} value={sector.name}>
+           {sector.name}
+         </SelectItem>
+       ))}
+     </SelectContent>
+   </Select>
 
-          <Select
-            value={selectedValues.course}
-            onValueChange={(value) => handleFilterChange("course", value)}
-          >
-            <SelectTrigger className="w-fit border-0">
-              <SelectValue placeholder="Filter by Course" />
-            </SelectTrigger>
-            <SelectContent>
-              {courses.map((course) => (
-                <SelectItem key={course.id} value={course.courseName}>
-                  {course.courseName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+   <Select
+     value={selectedValues.course}
+     onValueChange={(value) => handleFilterChange("course", value)}
+   >
+     <SelectTrigger className="w-fit border-0">
+       <SelectValue placeholder="Filter by Course" />
+     </SelectTrigger>
+     <SelectContent>
+       {courses.map((course) => (
+         <SelectItem key={course.id} value={course.courseName}>
+           {course.courseName}
+         </SelectItem>
+       ))}
+     </SelectContent>
+   </Select>
 
-          <Select
-            value={selectedValues.trainingOrganization}
-            onValueChange={(value) =>
-              handleFilterChange("trainingOrganization", value)
-            }
-          >
-            <SelectTrigger className="w-fit border-0">
-              <SelectValue placeholder="Filter by Training Organization" />
-            </SelectTrigger>
-            <SelectContent>
-              {trainingOrganizations.map((tp) => (
-                <SelectItem key={tp.id} value={tp.organizationName}>
-                  {tp.organizationName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+   <Select
+     value={selectedValues.trainingOrganization}
+     onValueChange={(value) =>
+       handleFilterChange("trainingOrganization", value)
+     }
+   >
+     <SelectTrigger className="w-fit border-0">
+       <SelectValue placeholder="Filter by Training Organization" />
+     </SelectTrigger>
+     <SelectContent>
+       {trainingOrganizations.map((tp) => (
+         <SelectItem key={tp.id} value={tp.organizationName}>
+           {tp.organizationName}
+         </SelectItem>
+       ))}
+     </SelectContent>
+   </Select>
 
-          <Select
-            value={selectedValues.state}
-            onValueChange={(value) => handleFilterChange("state", value)}
-          >
-            <SelectTrigger className="w-fit border-0">
-              <SelectValue placeholder="Filter by State" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>States</SelectLabel>
-                <SelectItem value="Odisha">Odisha</SelectItem>
-                <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
-                <SelectItem value="West Bengal">West Bengal</SelectItem>
-                <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
-                <SelectItem value="Jharkhand">Jharkhand</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          {hasActiveFilters && (
-            <div className="flex">
-              <span className="font-semibold">Reset</span>
-              <X
-                onClick={resetFilters}
-                className="w-4 cursor-pointer hover:cursor-pointer"
-              />
-            </div>
-          )}
-        </div>
-      </div>
+   <Select
+     value={selectedValues.state}
+     onValueChange={(value) => handleFilterChange("state", value)}
+   >
+     <SelectTrigger className="w-fit border-0">
+       <SelectValue placeholder="Filter by State" />
+     </SelectTrigger>
+     <SelectContent>
+       <SelectGroup>
+         <SelectLabel>States</SelectLabel>
+         <SelectItem value="Odisha">Odisha</SelectItem>
+         <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+         <SelectItem value="West Bengal">West Bengal</SelectItem>
+         <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+         <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+       </SelectGroup>
+     </SelectContent>
+   </Select>
+   {hasActiveFilters && (
+     <div className="flex">
+       <span className="font-semibold">Reset</span>
+       <X
+         onClick={resetFilters}
+         className="w-4 cursor-pointer hover:cursor-pointer"
+       />
+     </div>
+   )}
+     </div>
 
       <DataTable
         filter1={"status"}
@@ -213,7 +205,7 @@ const Batch = () => {
         isLoading={loading}
         pageUrl={"batch"}
       />
-    </div>
+    </>
   );
 };
 
@@ -226,7 +218,11 @@ export const batchColumns = [
   },
   {
     accessorKey: "scheme",
-    header: "Batch under Scheme",
+    header: "Scheme name",
+  },
+  {
+    accessorKey: "schemeType",
+    header: "Scheme Type",
   },
   {
     accessorKey: "courseName",
@@ -278,7 +274,7 @@ export const batchColumns = [
           })}
         >
           {paymentStatus ? "Paid" : "Not Paid"}
-        </div> 
+        </div>
       );
     },
   },

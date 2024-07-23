@@ -98,19 +98,19 @@ const TopBar = () => {
 
     };
   }, [data1, data2,data3,data4]);
-
+ 
   const handelOnClick = () => {
     if (notification.includes("Assessment Agency")) {
       navigate("/admin/dasbord/Notification?tab=overview");
     } else if (notification.includes("Training Partner")) {
       navigate("/admin/dasbord/Notification?tab=analytics");
     }
-    else if (notification.includes("Batch requst !!!")) {
-      navigate("/admin/dasbord/batch?tab=analytics");
+    else if (notification.includes("A new Batch requst")) {
+      navigate("/admin/dasbord/batch?tab=updateBatch");
     }
     
     setNotification("No new notification !!");
-    localStorage.setItem("notification", "No new notification !!");
+    localStorage.setItem("notification", "No new notification !!"); 
   };
 
   const admin = {
@@ -122,7 +122,7 @@ const TopBar = () => {
   };
 
   return (
-    <nav className="bg-[#f2f9f2] w-full h-16 border-b  border-gray-200 dark:bg-gray-900">
+    <nav className="bg-[#f2f9f2] w-full h-16 border-b  border-gray-200 dark:bg-gray-900 ">
       <div className="w-full h-full flex flex-row items-center justify-between m-auto px-5">
         {/* Avatar logo and name */}
         <a href="#about-me" className="h-auto w-auto flex flex-row items-center">
@@ -130,7 +130,7 @@ const TopBar = () => {
             src={logo}
             alt="logo"
             width={40}
-            height={40}
+            height={40} 
             className="cursor-pointer hover:animate-spin-slow"
           />
         </a>

@@ -19,7 +19,7 @@ const ExamUnderAccessmentAgecy = ({id}) => {
         .then((response) => {
           setLoding(false);
           setExam(response.data.data.reverse());
-          setReferesh((prev) => !prev);
+          setReferesh((prev) => !prev); 
         });
     } catch (error) {
       setLoding(false);

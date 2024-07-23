@@ -3,7 +3,7 @@ import { DataTable } from "../ui/notiification/DataTable";
 import axios from "axios";
 import { server } from "@/main";
 import { cn } from "@/lib/utils";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom"; 
 
 const AagencyNotification = () => {
   const [assessmentAgency, setAssessmentAgency] = useState([]);
@@ -12,7 +12,7 @@ const AagencyNotification = () => {
     try {
       setLoding(true);
       axios
-        .get(`${server}/aa/status/pending`, {
+        .get(`${server}/aa/status/pending`, { 
           withCredentials: true,
         })
         .then((response) => {

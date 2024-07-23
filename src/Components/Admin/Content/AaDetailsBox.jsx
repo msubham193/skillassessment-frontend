@@ -24,6 +24,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components(shadcn)/ui/popover";
+import { Label } from "@/components(shadcn)/ui/label";
+import { Input } from "@/components(shadcn)/ui/input";
 
 const AaDetailsBox = ({ id }) => {
   const [referesh, setReferesh] = useState(false);
@@ -31,10 +33,9 @@ const AaDetailsBox = ({ id }) => {
   const [loding, setLoding] = useState(false);
   const [course, setCourse] = useState([]);
   const [sector, setSector] = useState([]);
+  const [percentage, setPercentage] = useState(null);
   //  const data=useRecoilValue(trainingPartnerByID(id))
   //  console.log(data)
-
- 
 
   //function for fetch data from aa by id...
   useEffect(() => {
@@ -70,7 +71,7 @@ const AaDetailsBox = ({ id }) => {
     try {
       const responce = await axios.put(
         `${server}/aa/approve/${id}`,
-        {},
+        {percentage},
         {
           headers: {
             "x-access-token": token,
@@ -399,11 +400,31 @@ const AaDetailsBox = ({ id }) => {
             />
           </div>
         </div>
+        {/* field for add amount for tp according to scheme */}
+        {data?.applicationStatus === "Pending" ? (
+          <div className="p-8 w-[500px]">
+            <form onSubmit={applicationApproved}>
+              <Label htmlFor="name" className="text-left w-40 text-lg">
+                Add Share in Percentege for this Assessment agency..
+              </Label>
+              <Input
+                id="scheme-name"
+                className="col-span-4 py-6 mt-2"
+                placeholder="Add amount in percentage"
+                value={percentage}
+                onChange={(e) => setPercentage(e.target.value)}
+              />
+            </form>
+          </div>
+        ) : (
+          ""
+        )}
+
         <div className="flex flex-col md:flex-row justify-between mt-6 mx-4 md:mx-10 w-full md:w-[625px]">
           <Button
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
-            disabled={data?.applicationStatus === "Approved"}
+            disabled={data?.applicationStatus === "Approved" || percentage===null}
           >
             {" "}
             {loding
@@ -430,3 +451,4 @@ const AaDetailsBox = ({ id }) => {
 };
 
 export default AaDetailsBox;
+ 

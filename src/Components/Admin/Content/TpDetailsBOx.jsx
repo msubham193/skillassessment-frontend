@@ -91,7 +91,7 @@ const TpDetailsBOx = ({ id }) => {
     try {
       const responce = await axios.put(
         `${server}/tp/approve/${id}`,
-        {},
+        { amount },
         {
           headers: {
             "x-access-token": token,
@@ -199,7 +199,7 @@ const TpDetailsBOx = ({ id }) => {
   return (
     <TooltipProvider>
       <div className="m-4 md:m-10">
-        <div className="flex flex-col md:flex-row justify-between mx-4 md:mx-10">
+        <div className="flex flex-col md:flex-row justify-between mx-4 md:mx-10"> 
           <div className="w-full md:w-3/4">
             <Table>
               <TableBody>
@@ -617,7 +617,7 @@ const TpDetailsBOx = ({ id }) => {
                 </div>
               </div>
             </div>
-            <div>
+            {/*<div>
               {data.applicationStatus === "Approved" ? (
                 <div>
                   <div className="font-bold text-l my-4 underline">
@@ -633,7 +633,7 @@ const TpDetailsBOx = ({ id }) => {
               ) : (
                 ""
               )}
-            </div>
+            </div>*/}
           </div>
           <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden mt-4 md:mt-0">
             <img
@@ -646,7 +646,7 @@ const TpDetailsBOx = ({ id }) => {
         </div>
         {/* field for add amount for tp according to scheme */}
        {data?.applicationStatus==="Pending"? <div className="p-8 w-[500px]">
-        <form onSubmit={submitHandler}>
+        <form onSubmit={applicationApproved}>
         <Label htmlFor="name" className="text-left w-40 text-lg">
           Add cost per Student for this Traning Partner..
         </Label>

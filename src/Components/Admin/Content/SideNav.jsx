@@ -16,7 +16,7 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-1 pb-10 pt-4 bg-[#E8F5E9]">
+    <div className="relative min-w-[80px] border-r px-2 pb-10 pt-4 bg-[#E8F5E9]">
  {
     !mobileWidth &&(
         <div className="absolute right-[-20px] top-2">

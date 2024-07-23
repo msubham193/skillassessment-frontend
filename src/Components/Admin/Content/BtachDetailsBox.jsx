@@ -75,6 +75,10 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?.courseName}</p>
           </div>
           <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under Scheme Type*</h3>
+            <p className="text-lg ">{data?.schemeType}</p>
+          </div>
+          <div className="p-3">
             <h3 className="text-lg font-medium mb-2">Batch Under Scheme*</h3>
             <p className="text-lg ">{data?.scheme}</p>
           </div>

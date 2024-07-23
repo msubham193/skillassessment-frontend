@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 //in this component fetch by id of a poticular rewuest of the aa from the aanotifaction
 const AaDetails = () => { 
   const { id } = useParams();
-  const [selectedTab, setSelectedTab] = useState("accessmentagency");
+  const [selectedTab, setSelectedTab] = useState("accessmentagency"); 
 
   // console.log(id);
   return (
@@ -35,7 +35,7 @@ const AaDetails = () => {
                 </p>
               </div>
               <div className="flex items-center space-x-2">
-                {/* add the functionality like search and filter */}
+                {/* add the functionality like search and filter */} 
                 {/* For now  there is nothing to add in fecture if there some data  thenn we will put there  */}
               </div>
             </div>
@@ -48,7 +48,7 @@ const AaDetails = () => {
               value="accessmentagency"
             >
               Profile
-            </TabsTrigger>
+            </TabsTrigger> 
             <TabsTrigger
               onClick={() => setSelectedTab("allExam")}
               value="allExam"

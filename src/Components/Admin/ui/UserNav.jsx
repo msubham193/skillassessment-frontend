@@ -53,7 +53,7 @@ const UserNav = ({ admin }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+        <Button variant="ghost" className="relative h-9 w-9 rounded-full bg-white">
           <Avatar className="h-8 w-8">
             <AvatarImage src={admin.profile} className="w-full h-full object-cover"/>
             <AvatarFallback>{initials}</AvatarFallback>

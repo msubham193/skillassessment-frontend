@@ -9,7 +9,7 @@ const ExamDetailsBox = ({id}) => {
     const [data, setData] = useState({});
     const [loding, setLoding] = useState(false);
     const[batchId,setBatchId]=useState(null);
-    const [showPreInvoice, setShowPreInvoice] = useState(false);
+    const [showPreInvoice, setShowPreInvoice] = useState(false); 
     const navigate=useNavigate();
     //function for fetch exam details by id
     useEffect(() => {
@@ -22,8 +22,8 @@ const ExamDetailsBox = ({id}) => {
             .then((response) => {
               setLoding(false);
               setData(response.data.data);
-              // setBatchId(response.data.data.batchId._id)
-              console.log(response.data.data)
+              setBatchId(response.data.data.batchId._id)
+              // console.log(response.data.data.batchId._id)
             });
         } catch (error) {
           setLoding(false);
@@ -33,6 +33,7 @@ const ExamDetailsBox = ({id}) => {
       }, []);
       //funcrion for navigation..
       const handleViewResult = () => {
+        //eexam detail's have  batch id by the basis of batch id i find the list of studen....
         navigate(`/admin/dasbord/batch/mark/students/${batchId}`);
       };
   return (
@@ -103,32 +104,13 @@ const ExamDetailsBox = ({id}) => {
           
         </div>
         {/* shoow pree invoice */}
-         {data?.prePaymentInvoice?<div className="p-3 flex justify-between">
-            <h3 className="text-lg font-medium mb-2">View Pre Invoice*</h3>
-            <Button onClick={() => setShowPreInvoice(!showPreInvoice)}>
-              <Eye className="mr-2 h-4 w-4" />
-              Pre Invoice
-            </Button>
-            {showPreInvoice && (
-              <div className="mt-4">
-                <a
-                  href={data?.prePaymentInvoice}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  View Pre Invoice
-                </a>
-              </div>
-            )}
-          </div>:<p className="text-lg font-semibold">Invoice is not avable</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           {/* Buttion For assin a batch */}
 
           {/* here admin can see the result of the  student */}
           <div>
           {
-             data?.status==="completed"?(
+             data?.markUploadAndExamCompleteStatus===true?(
              <Button
               className={"bg-red-800"}
               onClick={handleViewResult}

@@ -9,7 +9,7 @@ import TopBar from "@/Components/Admin/Content/TopBar";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-const AaPaymentInvoice = () => {
+const AaPaymentInvoice = () => { 
     const { id } = useParams();
     const [selectedTab, setSelectedTab] = useState("accessmentagency"); 
 

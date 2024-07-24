@@ -4,7 +4,7 @@ import TopBar from '@/Components/Admin/Content/TopBar'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-const BatchWiseStudentResult = ({children}) => {   
+const BatchWiseStudentResult = ({children}) => {    
     const { id } = useParams();
     
   return (
@@ -16,7 +16,9 @@ const BatchWiseStudentResult = ({children}) => {
       <div className='min-h-screen bg-white text-black flex'>
       <SideNav/>
   
-        {/* main page */}
+        {/* main page
+          here i fetch the student data in the basis of batch id....
+          */}
         
         <ResultContent batchId={id}>{children}</ResultContent>
       </div>

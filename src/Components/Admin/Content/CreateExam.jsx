@@ -38,7 +38,6 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const [trainingPartnerId, setTrainingPartnerId] = useState("");
   const [batchId, setBatchId] = useState("");
   const [assesmentAgencyId, setAssesmentAgencyId] = useState("");
-  const [date, setDate] = useState(new Date());
   const [showButton, setShowButton] = useState(false);
   const authState = useRecoilValue(authenticationState);
 
@@ -48,10 +47,9 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
     setTrainingPartnerId(tp_id);
   }, [abn_id, course, tp_id]);
 
-  const handleDateSelect = (selectedDate) => {
-    setDate(selectedDate);
-  };
+  
   //function for create batch........
+
   const createExam = async (e) => {
     e.preventDefault();
     setShowButton(true);
@@ -61,7 +59,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
       return;
     }
     try {
-      const response = await axios.post(
+      const response = await axios.post( 
         `${server}/exam/create`,
         { courseName, batchId, assesmentAgencyId, trainingPartnerId },
         {
@@ -73,7 +71,6 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
         }
       );
       setAssesmentAgencyId("");
-      setDate(new Date());
       toast.success(response.data.message, {
         position: "top-center",
         closeOnClick: true,

@@ -51,7 +51,7 @@ const BatchDetails = () => {
                 onClick={() => setSelectedTab("allExam")} 
                 value="allExam"
               >
-                Payment Details
+                View Invoice*
               </TabsTrigger>
             </TabsList>
   

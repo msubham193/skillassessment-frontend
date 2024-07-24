@@ -91,7 +91,7 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?.state}</p>
           </div>
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Status*</h3>
+            <h3 className="text-lg font-medium mb-2">Status*</h3> 
             <p className="text-xl font-bold ">{data?.status}</p>
           </div>
         </div>

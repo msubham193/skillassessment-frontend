@@ -29,8 +29,10 @@ const ExamUnderAccessmentAgecy = ({id}) => {
   return (
     <div>
     <DataTable
+    filter1={"markUploadAndExamCompleteStatus"}
     columns={examcolumns}
-    data={exam && exam}
+    data={exam && exam} 
+    path={"/admin/dasbord/allExam"}
     isLoding={loding}
   />
     </div>

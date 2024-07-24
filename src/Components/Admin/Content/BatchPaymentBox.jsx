@@ -22,7 +22,7 @@ const BatchPaymentBox = ({ id }) => {
         setData(response.data.data);
         console.log(response.data.data);
       } catch (error) {
-        console.error("Error fetching batch data:", error);
+        console.error("Error fetching batch data:", error); 
       } finally {
         setLoading(false);
       }
@@ -62,6 +62,13 @@ const BatchPaymentBox = ({ id }) => {
             <h3 className="text-lg font-medium mb-2">Client-side Payment*</h3>
             <p className="text-lg font-semibold ">
               {data?.clientPaymentStatus ? "Paid" : "Not Paid"}
+            </p>
+            
+          </div>
+          <div className="p-3 flex justify-between">
+          <h3 className="text-lg font-medium mb-2">Client-side TransactionId*</h3>
+          <p className="text-lg font-semibold ">
+              {data?.clientPaymentStatus===true ? data?.transactionId : "Not Paid"}
             </p>
           </div>
           <div className="p-3 flex justify-between">

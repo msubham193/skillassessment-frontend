@@ -13,7 +13,7 @@ const ResultContent = ({ batchId }) => {
   const [attendanceSheet, setAttendanceSheet] = useState("");
   const [resultSheet, setResultSheet] = useState("");
   const [images, setImages] = useState([]);
-  const [showPhotos, setShowPhotos] = useState(false);
+  const [showPhotos, setShowPhotos] = useState(false); 
 
   // Fetch the result data
   useEffect(() => {
@@ -59,12 +59,12 @@ const ResultContent = ({ batchId }) => {
 
   // Functions for viewing sheets
   const viewAttendanceSheet = () => {
-    console.log(attendanceSheet);
+    // console.log(attendanceSheet);
     attendanceSheet && window.open(attendanceSheet, '_blank');
   };
 
   const viewResultSheet = () => {
-    console.log(resultSheet);
+    // console.log(resultSheet);
     resultSheet && window.open(resultSheet, '_blank');
   };
 

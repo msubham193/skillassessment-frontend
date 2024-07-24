@@ -34,7 +34,7 @@ const AllBatchTabs = ({children}) => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
-        {selectedTab === "overview" &&  <Batch>{children}</Batch>}
+        {selectedTab === "overview" &&  <Batch>{children}</Batch>} 
       </TabsContent>
       <TabsContent value="updateBatch"> 
         {selectedTab === "updateBatch" &&  <UpdateBatch/>}

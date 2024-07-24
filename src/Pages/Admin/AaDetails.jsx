@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 //in this component fetch by id of a poticular rewuest of the aa from the aanotifaction
 const AaDetails = () => { 
-  const { id } = useParams();
+  const { id } = useParams(); 
   const [selectedTab, setSelectedTab] = useState("accessmentagency"); 
 
   // console.log(id);

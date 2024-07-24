@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 const AllExam = () => {
     const [allExam, setAllExam] = useState([]);
     const [loding, setLoding] = useState(false);
-    const [isDataFetched, setIsDataFetched] = useState(false);
+    const [isDataFetched, setIsDataFetched] = useState(false); 
     useEffect(() => {
       try {
         setLoding(true);
@@ -16,7 +16,7 @@ const AllExam = () => {
           })
           .then((response) => {
             setLoding(false);
-            setAllExam(response.data.data.reverse());
+            setAllExam(response.data.data.reverse()); 
             setIsDataFetched(true);
             console.log(response.data.data);
           });
@@ -34,6 +34,8 @@ const AllExam = () => {
           <p className="text-muted-foreground">Here's a list of Exams for you!</p>
         </div>
       </div>
+      {/* here i fetch all the exams present in our potal.... 
+        when i click on row it will naviget to details of that exam ......*/}
       <DataTable
       filter1={"assesmentAgency"}
       columns={examcolumns}
@@ -71,17 +73,18 @@ export const examcolumns = [
         header: "Traning Partner Name", 
       },
       {
-        accessorKey: "status",
+        accessorKey: "markUploadAndExamCompleteStatus",
         header: "Status",
         cell: ({ row }) => {
+          const paymentStatus = row.getValue("markUploadAndExamCompleteStatus");
           return (
             <div
               className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
-                "bg-orange-100 text-orange-500": row.getValue("status") === "not-started",
-                "bg-green-100 text-green-400": row.getValue("status") === "completed",
+                "bg-orange-100 text-orange-500": paymentStatus === false,
+                "bg-green-100 text-green-400": paymentStatus === true,
               })}
             >
-              {row.getValue("status")}
+              {paymentStatus ? "Complited" : "On Going"}
             </div>
           );
         },

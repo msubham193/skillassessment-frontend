@@ -14,6 +14,7 @@ import { DataTable } from "../ui/notiification/DataTable";
 import { X } from "lucide-react";
 
 const AaPaymentInvoicedetails = ({ id }) => {
+  console.log(id);
   const months = [
     { id: "01", name: "January" },
     { id: "02", name: "February" },

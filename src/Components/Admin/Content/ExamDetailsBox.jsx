@@ -94,12 +94,7 @@ const ExamDetailsBox = ({id}) => {
           </div>
           
           {/*
-            data?.paymentStatus===true?"":<div>
-            <MakePayment assessmentagencyId={data?.assesmentAgencyId} batchId={batchId}>
-            <Button>Make Payment</Button>
-            </MakePayment>
-            
-            </div>
+           
           */}
           
         </div>

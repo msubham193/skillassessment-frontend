@@ -9,7 +9,7 @@ import { Tabs,
   TabsContent, } from "@/components(shadcn)/ui/tabs";
 import BatchPaymentBox from "@/Components/Admin/Content/BatchPaymentBox";
 
-const BatchDetails = () => {
+const BatchDetails = () => { 
   const { id } = useParams();
   const [selectedTab, setSelectedTab] = useState("accessmentagency");
 

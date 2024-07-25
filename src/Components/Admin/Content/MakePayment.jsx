@@ -24,24 +24,51 @@ import axios from "axios";
 import { server } from "@/main";
 import { toast } from "react-toastify";
 
-const MakePayment = ({ children, assessmentagencyId, batchId }) => {
-  console.log(batchId);
-  console.log(assessmentagencyId);
-  const [urt, setUtr] = useState(null);
-  const [assessmentId, setAssessmentId] = useState("");
+const MakePayment = ({ children, invoice_id, amountToPaid }) => {
+  const [transactionId, setTransactionId] = useState(null);
+  const [invoiceId, setInvoiceId] = useState(null);
   const [amount, setAmount] = useState(null);
-  const [batchid, setBatchid] = useState("");
-  const [date, setDate] = useState(new Date());
   const [showButton, setShowButton] = useState(false);
 
-  //function for select date
-  const handleDateSelect = (selectedDate) => {
-    setDate(selectedDate);
-  };
   useEffect(() => {
-    setAssessmentId(assessmentagencyId);
-    setBatchid(batchId);
-  }, [assessmentagencyId, batchId]);
+    setInvoiceId(invoice_id);
+    setAmount(amountToPaid);
+  }, [invoice_id,amountToPaid]);
+
+  //function for make payment
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setShowButton(true);
+    try {
+      const response = await axios.put(
+        `${server}/invoice/payment/${invoiceId}`,
+        { transactionId, amount },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setTransactionId("");
+      setAmount("");
+      toast.success("Payment Update !!", {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
+    } catch (error) {
+      toast.error("Something went wrong, try after some time !!!", {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
+    }
+  };
 
   return (
     <div>
@@ -52,33 +79,26 @@ const MakePayment = ({ children, assessmentagencyId, batchId }) => {
             <DialogTitle>Add Payment Details</DialogTitle>
             <DialogDescription>Add all the field .</DialogDescription>
           </DialogHeader>
-          <form>
+          <form onSubmit={submitHandler}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
-                  assessment agency ID
+                  Invoice ID
                 </Label>
-                <Input id="batch" className="col-span-4" value={assessmentId} />
+                <Input id="batch" className="col-span-4" value={invoiceId} />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-left">
-                  Batch ID
+                <Label htmlFor="name" className="text-left w-56">
+                  Enter Trangection ID
                 </Label>
-                <Input id="batch" className="col-span-4" value={batchId} />
+                <Input
+                  id="batch"
+                  className="col-span-4"
+                  value={transactionId}
+                  onChange={(e) => setTransactionId(e.target.value)}
+                />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-left w-36">
-                    UTR NO
-                  </Label>
-                  <Input
-                    id="name"
-                    value={urt}
-                    className="col-span-4"
-                    placeholder="Utr Name"
-                    onChange={(e) => setUtr(e.target.value)}
-                  />
-                </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-left w-36">
                     Amount Pade
@@ -88,40 +108,14 @@ const MakePayment = ({ children, assessmentagencyId, batchId }) => {
                     value={amount}
                     className="col-span-4"
                     placeholder="enter the amount"
-                    onChange={(e) => setAmount(e.target.value)}
                   />
                 </div>
               </div>
               {/* for manual input */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Date of issue</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={handleDateSelect}
-                      className="rounded-md border"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
             </div>
           </form>
           <DialogFooter>
-            <Button disabled={showButton} type="submit">
+            <Button onClick={submitHandler} disabled={showButton} type="submit">
               {showButton ? "Loading...." : "Make payment"}
             </Button>
           </DialogFooter>

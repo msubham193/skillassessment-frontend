@@ -27,7 +27,7 @@ const AllBatchTabs = ({children}) => {
           <Tabs defaultValue={selectedTab} className="space-y-4">
             <TabsList>
         <TabsTrigger onClick={() => setSelectedTab("overview")} value="overview"> 
-          All Batches 
+          Assign Batches 
         </TabsTrigger>
         <TabsTrigger onClick={() => setSelectedTab("updateBatch")} value="updateBatch">
           Update Payment

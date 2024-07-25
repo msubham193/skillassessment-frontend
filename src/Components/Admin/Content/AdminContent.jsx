@@ -123,12 +123,6 @@ const AdminContent = () => {
             >
               Assessment Agency
             </TabsTrigger>
-            <TabsTrigger 
-              onClick={() => setSelectedTab("allExam")}
-              value="allExam"
-            >
-              All Exam
-            </TabsTrigger>
             <TabsTrigger className="text-gray-700"
               onClick={() => setSelectedTab("traningPartner")}
               value="traningPartner"
@@ -142,9 +136,6 @@ const AdminContent = () => {
           </TabsContent>
           <TabsContent value="traningPartner">
             {selectedTab === "traningPartner" && <TraningPartner />}
-          </TabsContent>
-          <TabsContent value="allExam">
-            {selectedTab === "allExam" && <AllExam />} 
           </TabsContent>
         </Tabs>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2 } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
@@ -41,21 +41,28 @@ const SideNav = () => {
             href:"/admin/dasbord/Notification"
           },
           {
-            title: "Total Batch",
+            title: "Batch",
             label: "",
             icon: GraduationCap,
             variant: "default",
             href:"/admin/dasbord/batch"
           },
           {
-            title: "Total Training Partner",
+            title: "Exam's",
+            label: "",
+            icon: BookOpenCheck,
+            variant: "default",
+            href:"/admin/dasbord/AllExam"
+          },
+          {
+            title: "Training Partner",
             label: "",
             icon: Handshake,
             variant: "ghost",
             href:"/admin/dasbord/TreaningPartner"
           },
           {
-            title: "Total Assessment Agency",
+            title: "Assessment Agency",
             label: "",
             icon: BotMessageSquare,
             variant: "ghost",

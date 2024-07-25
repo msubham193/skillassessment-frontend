@@ -15,7 +15,7 @@ const AllBAtch = ({children}) => {
        <SideNav />
  
        {/* main page */}
-
+ 
        <AllBatchTabs>{children}</AllBatchTabs> 
      </div>
    </div>

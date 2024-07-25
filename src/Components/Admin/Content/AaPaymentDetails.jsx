@@ -11,7 +11,7 @@ const AaPaymentDetails = () => {
   const [isDataFetched, setIsDataFetched] = useState(false);
  
   useEffect(() => {
-    if (!isDataFetched) {
+    if (!isDataFetched) { 
       try {
         setLoading(true);
         axios.get(`${server}/aa/status/approved`, {
@@ -98,7 +98,7 @@ const columns = [
           onClick={() => handlePaymentClick(row.original)}
           className="bg-blue-200 text-blue-700  rounded"
         >
-          Payment
+          Pay
         </Button>
       );
     },

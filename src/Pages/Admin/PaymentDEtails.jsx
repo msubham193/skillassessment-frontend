@@ -6,7 +6,7 @@ import {
 } from "@/components(shadcn)/ui/tabs";
 import AaPaymentDetails from "@/Components/Admin/Content/AaPaymentDetails";
 import BatchPaymentDetails from "@/Components/Admin/Content/BatchPaymentDetails";
-import SideNav from "@/Components/Admin/Content/SideNav";
+import SideNav from "@/Components/Admin/Content/SideNav"; 
 import TopBar from "@/Components/Admin/Content/TopBar";
 import React, { useState } from "react";
 

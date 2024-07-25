@@ -36,10 +36,11 @@ import { Button } from "@/components(shadcn)/ui/button";
 import AaAnalysis from "@/Pages/Admin/AaAnalysis";
 import TpAnalysis from "@/Pages/Admin/TpAnalysis";
 import BathAnalysis from "@/Pages/Admin/BathAnalysis";
-import ExamAnalysis from "@/Pages/Admin/ExamAnalysis";
+import ExamAnalysis from "@/Pages/Admin/ExamAnalysis"; 
 
 export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
   console.log(data);
+  console.log(typeof(data));
   const navigate = useNavigate();
   const [rowSelection, setRowSelection] = useState({});
   const [anylisis, setAnylisis] = useState("");
@@ -50,7 +51,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
 
   // Function for navigate to analysis
   const handleRedirect = () => {
-    switch (pageUrl) {
+    switch (pageUrl && pageUrl) {
       case "accessmentagency":
         setAnylisis("accessmentagency");
         break;
@@ -113,7 +114,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
   return (
     <TooltipProvider>
       <div className="space-y-4">
-        <TableToolBar table={table} filter1={filter1} />
+        <TableToolBar table={table} filter1={filter1 && filter1} />
 
         <div className="rounded-md border overflow-x-auto">
           <Table className="min-w-full divide-y divide-gray-200">
@@ -147,6 +148,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
                     }
                     className="bg-white even:bg-gray-50"
                   >
+                  
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}

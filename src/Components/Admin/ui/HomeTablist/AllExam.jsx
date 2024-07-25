@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { DataTable } from '../notiification/DataTable';
 import { cn } from '@/lib/utils';
+import SideNav from '../../Content/SideNav';
+import TopBar from '../../Content/TopBar';
 const AllExam = () => {
     const [allExam, setAllExam] = useState([]);
     const [loding, setLoding] = useState(false);
@@ -11,7 +13,7 @@ const AllExam = () => {
       try {
         setLoding(true);
         axios
-          .get(`${server}/exam/all`, { 
+          .get(`${server}/exam/all`, {  
             withCredentials: true,
           })
           .then((response) => {
@@ -27,7 +29,16 @@ const AllExam = () => {
     }, [isDataFetched]);
     console.log("running")
   return (
-    <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
+
+    <div className="min-h-screen bg-white text-black flex flex-col">
+    {/*top Bar */}
+    <TopBar />
+    {/* side bar */}
+    <div className="min-h-screen bg-white text-black flex">
+      <SideNav />
+
+      {/* main page */}
+      <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">All Exam Details</h2>
@@ -45,6 +56,12 @@ const AllExam = () => {
       pageUrl={"allexam"} 
     />
     </div>
+     
+    </div>
+  </div>
+
+
+   
   )
 }
 

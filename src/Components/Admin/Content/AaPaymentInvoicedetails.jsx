@@ -11,10 +11,14 @@ import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "../ui/notiification/DataTable";
-import { X } from "lucide-react";
+import { ArrowBigDownDash, Download, X } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components(shadcn)/ui/button";
+import MakePayment from "./MakePayment";
 
-const AaPaymentInvoicedetails = ({ id }) => {
-  console.log(id);
+const AaPaymentInvoicedetails = () => {
+  const { id } = useParams();
+  // console.log("assessment agency id",id);
   const months = [
     { id: "01", name: "January" },
     { id: "02", name: "February" },
@@ -44,7 +48,7 @@ const AaPaymentInvoicedetails = ({ id }) => {
     year: "",
   });
   const [isDataFetched, setIsDataFetched] = useState(false);
-  const [invoice, setInvoice] = useState(false);
+  const [paymentData, setPaymentData] = useState({});
   const [loading, setLoading] = useState(false);
 
   //function for fetch monthly data in the table.....
@@ -54,14 +58,20 @@ const AaPaymentInvoicedetails = ({ id }) => {
     }
   }, [filters]);
 
+  //** here is the function for get payment and invoice details for the assessment agency by month */
   const fetchBatches = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${server}/batch/all/query`, {
-        params: filters,
-        withCredentials: true,
-      });
-      setInvoice(response.data.data.reverse());
+      const response = await axios.post(
+        `${server}/invoice/monthly/query`,
+        { assesmentAgencyId: id },
+        {
+          params: filters,
+          withCredentials: true,
+        }
+      );
+      setPaymentData(response.data.data);
+      console.log(response.data.data);
       setIsDataFetched(true);
     } catch (error) {
       console.error(error);
@@ -89,7 +99,7 @@ const AaPaymentInvoicedetails = ({ id }) => {
     });
     setIsDataFetched(false);
   };
-  //is for reset thr unfilter data
+  //is for reset thr filter data
   const hasActiveFilters = Object.values(filters).some((value) => value !== "");
   return (
     <div>
@@ -104,7 +114,7 @@ const AaPaymentInvoicedetails = ({ id }) => {
             </SelectTrigger>
             <SelectContent>
               {months.map((month) => (
-                <SelectItem key={month.id} value={month.id}>
+                <SelectItem key={month.id} value={month.name}>
                   {month.name}
                 </SelectItem>
               ))}
@@ -137,16 +147,148 @@ const AaPaymentInvoicedetails = ({ id }) => {
           )}
         </div>
       </div>
-      {/*<DataTable
-        filter1={"status"}
-        path={"/admin/dasbord"}
-        columns={batchColumns}
-        data={batch}
-        isLoading={loading}
-        pageUrl={"batch"}
-      />*/}
+
+      {/* here is the data table  */}
+      {
+        paymentData.month? (<div className="p-8">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-2 px-4 border-b">Agency Name</th>
+                <th className="py-2 px-4 border-b">No of Exam</th>
+                <th className="py-2 px-4 border-b">Total No of Candidates</th>
+                <th className="py-2 px-4 border-b">No of Assessed Candidates</th>
+                <th className="py-2 px-4 border-b">Total Amount to be Paid</th>
+                <th className="py-2 px-4 border-b">Download Invoice</th>
+                <th className="py-2 px-4 border-b">Payment Status</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+                <tr >
+                  <td className="py-2 px-4 border-b text-center">{paymentData?.AssesmentAgencyDetails?.name}</td>
+                  <td className="py-2 px-4 border-b text-center">{paymentData?.examDetails?.length}</td>
+                  <td className="py-2 px-4 border-b text-center">{paymentData?.totalNoOfcandidates}</td>
+                  <td className="py-2 px-4 border-b text-center">{paymentData?.totalNoOfAssessedCandidates}</td>
+                  <td className="py-2 px-4 border-b text-center">${paymentData?.totalAmountToBePaid}</td>
+                  <td className="py-2 px-4 border-b text-center">
+                    <a href={paymentData?.invoicePdf} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                      <Download className="ml-14"/>
+                    </a>
+                  </td>
+                  <td className="py-2 px-4 border-b text-center">
+                  
+                  
+                    <MakePayment invoice_id={paymentData?._id} amountToPaid={paymentData?.totalAmountToBePaid} >
+                    <Button
+                    className={`px-4 py-2 rounded-lg text-white ${paymentData.paidAmount === 0 ? 'bg-green-500' : 'bg-green-800'}`}
+                    disabled={paymentData.paidAmount !== 0}
+                  >
+                    {paymentData.paidAmount === 0 ? 'Pay' : 'Paid'}
+                  </Button>
+                    </MakePayment>
+                    
+                  
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>):(<div className=" flex justify-center">
+          <p className="mt-5 text-2xl font-semibold text-green-900">Please select Month and Year (●'◡'●) !!! </p>
+          </div>)
+      }
     </div>
   );
 };
 
 export default AaPaymentInvoicedetails;
+
+export const aAcolumn = [
+  {
+    accessorKey: "AssesmentAgencyDetails",
+    header: "Agency Name",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.AssesmentAgencyDetails.name}
+        </div>
+      );
+    },
+  },
+ 
+  {
+    accessorKey: "examDetails",
+    header: "No of Exam",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.examDetails.length}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "totalNoOfcandidates",
+    header: "Total No of candidates",
+  },
+  {
+    accessorKey: "totalNoOfAssessedCandidates",
+    header: "No of Assessed Candidates",
+  },
+  {
+    accessorKey: "totalAmountToBePaid",
+    header: "Total amount to paid",
+  },
+  {
+    accessorKey: "invoicePdf",
+    header: "Download Invoice",
+    cell: ({ row }) => {
+      const handleDownload = () => {
+        const pdfUrl = row.getValue("invoicePdf");
+        window.open(pdfUrl, "_blank");
+      };
+      return (
+        <Button
+          onClick={handleDownload}
+        >
+        <ArrowBigDownDash />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "paidAmount",
+    header: "Payment status",
+    cell: ({ row }) => {
+      const paidStatus = row.getValue("paidAmount");
+      const handleClick = () => {
+        alert(`Action button clicked for row: ${row.original._id}`);
+      };
+      return (
+        <Button
+          onClick={handleClick}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg"
+          disabled={paidStatus!=0}
+        >
+          {paidStatus===0?"Pay":"Paid"}
+        </Button>
+      );
+    },
+  },
+];
+
+export const batchColumns = [
+  {
+    accessorKey: "AssesmentAgencyId",
+    header: "Abn no",
+  },
+  {
+    accessorKey: "invoiceGenerateDate",
+    header: "Scheme Type",
+  },
+  {
+    accessorKey: "transactionId",
+    header: "Course ",
+  },
+ 
+];

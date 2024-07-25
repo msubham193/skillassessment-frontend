@@ -24,6 +24,7 @@ const UpdateBatchBox = () => {
           withCredentials: true,
         });
         setData(response.data.data);
+        console.log(response.data.data)
       } catch (error) {
         console.error("Error fetching batch data:", error);
       } finally {
@@ -181,12 +182,12 @@ const UpdateBatchBox = () => {
                 <Button
                   onClick={batchApproved}
                   className="bg-green-600 hover:bg-green-400 w-full md:w-auto ml-3"
-                  disabled={!data.clientPaymentStatus}
+                  disabled={!data.clientPaymentStatus || data.paymentStatus}
                 >
                   {loading
                     ? "Loading..."
                     : data?.paymentStatus === true
-                    ? "Approved"
+                    ? "Payment successfull"
                     : "Approve Batch"}
                 </Button>
               </div>

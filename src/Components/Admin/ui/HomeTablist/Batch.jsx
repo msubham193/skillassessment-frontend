@@ -48,7 +48,7 @@ const Batch = () => {
       const response = await axios.get(`${server}/batch/all/query`, {
         params: filters,
         withCredentials: true,
-      });
+      }); 
       setBatch(response.data.data.reverse());
       setIsDataFetched(true);
     } catch (error) {
@@ -217,10 +217,6 @@ export const batchColumns = [
     header: "Abn no",
   },
   {
-    accessorKey: "scheme",
-    header: "Scheme name",
-  },
-  {
     accessorKey: "schemeType",
     header: "Scheme Type",
   },
@@ -249,7 +245,7 @@ export const batchColumns = [
     cell: ({ row }) => {
       return (
         <div
-          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+          className={cn("font-medium w-fit px-4 py-2 rounded-lg", { 
             "bg-orange-100 text-orange-500":
               row.getValue("status") === "onGoing",
             "bg-green-100 text-green-400":
@@ -257,6 +253,23 @@ export const batchColumns = [
           })}
         >
           {row.getValue("status")}
+        </div>
+      );
+    },
+  },
+    {
+    accessorKey: "isAssigned",
+    header: "Assigned Status",
+     cell: ({ row }) => {
+      const paymentStatus = row.getValue("isAssigned");
+      return (
+        <div
+          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+            "bg-orange-100 text-orange-500": paymentStatus === false,
+            "bg-green-100 text-green-400": paymentStatus === true,
+          })}
+        >
+          {paymentStatus ? "Assigned" : "Not Assigned"}
         </div>
       );
     },
@@ -270,7 +283,7 @@ export const batchColumns = [
         <div
           className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
             "bg-orange-100 text-orange-500": paymentStatus === false,
-            "bg-green-100 text-green-400": paymentStatus === true,
+            "bg-green-100 text-green-400": paymentStatus === true, 
           })}
         >
           {paymentStatus ? "Paid" : "Not Paid"}

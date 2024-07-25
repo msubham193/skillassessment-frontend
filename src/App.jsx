@@ -25,6 +25,7 @@ import BathAnalysis from "./Pages/Admin/BathAnalysis";
 import UpdateBatchBox from "./Pages/Admin/UpdateBatchBox";
 import ExamDetails from "./Pages/Admin/ExamDetails";
 import AaPaymentInvoice from "./Pages/Admin/AaPaymentInvoice";
+import AllExam from "./Components/Admin/ui/HomeTablist/AllExam";
 const App = () => {
   const [authState, setAuthState] = useRecoilState(authenticationState);
   useEffect(() => {
@@ -46,6 +47,7 @@ const App = () => {
 
           <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
           <Route path="/admin/dasbord/batch" exact element={<AllBAtch />} />
+          <Route path="/admin/dasbord/AllExam" exact element={<AllExam />} />
           <Route
             path="/admin/dasbord/batch/mark/students/:id"
             exact
@@ -63,7 +65,7 @@ const App = () => {
             element={<AaNotification />}
           />
           <Route
-            path="/admin/dasbord/Notification"
+            path="/admin/dasbord/Notification" 
             exact
             element={<Notification />}
           />

@@ -9,7 +9,7 @@ export const checkTokenValidity = () => {
     const currentTime = new Date().getTime();
     if (currentTime > expirationTime) {
       localStorage.removeItem('adminAuthToken');
-      localStorage.removeItem('tokenExpiration');
+      localStorage.removeItem('tokenExpiration'); 
       return false;
     }
   

@@ -132,7 +132,7 @@ const AaDetailsBox = ({ id }) => {
         closeOnClick: true,
         draggable: true,
         theme: "colored",
-      });
+      }); 
     }
   };
 
@@ -390,14 +390,6 @@ const AaDetailsBox = ({ id }) => {
                 </TableCell>
               </TableRow>
             </Table>
-          </div>
-          <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden mt-4 md:mt-0">
-            <img
-              src={data.PHOTO || defaultUserPhoto}
-              alt="user"
-              onError={(e) => (e.target.src = defaultUserPhoto)}
-              className="w-full h-full object-cover"
-            />
           </div>
         </div>
         {/* field for add amount for tp according to scheme */}

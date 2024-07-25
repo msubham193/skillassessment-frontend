@@ -23,7 +23,7 @@ const ExamDetailsBox = ({id}) => {
               setLoding(false);
               setData(response.data.data);
               setBatchId(response.data.data.batchId._id)
-              // console.log(response.data.data.batchId._id)
+              console.log(response.data.data)
             });
         } catch (error) {
           setLoding(false);

@@ -13,10 +13,10 @@ const Notification = ({ children }) => {
      {/* side bar */}
      <div className="min-h-screen bg-white text-black flex">
        <SideNav />
-
+ 
        {/* main page */}
 
-       <NotificationContent>{children}</NotificationContent>
+       <NotificationContent>{children}</NotificationContent>  
      </div>
    </div>
    </>

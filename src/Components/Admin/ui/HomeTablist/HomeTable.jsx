@@ -23,6 +23,7 @@ import {  useNavigate } from "react-router-dom";
 import Loder from "../Loder";
 import TableToolBar from "../notiification/TableToolBar";
 import TablePagination from "../notiification/TablePagination";
+import { Button } from "@/components(shadcn)/ui/button";
 
 export function HomeTable({ columns, path, data, isLoding, filter1}) {
   // const location = useLocation();
@@ -38,7 +39,7 @@ export function HomeTable({ columns, path, data, isLoding, filter1}) {
   const table = useReactTable({
     data,
     columns,
-    state: {
+    state: { 
       sorting,
       columnVisibility,
       rowSelection,
@@ -123,7 +124,9 @@ export function HomeTable({ columns, path, data, isLoding, filter1}) {
         </Table>
       </div>
       <TablePagination table={table} />
+      
     </div>
+    
   );
 }
 

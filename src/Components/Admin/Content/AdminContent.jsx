@@ -1,76 +1,78 @@
 import React, { useEffect, useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components(shadcn)/ui/tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components(shadcn)/ui/tabs";
 import DataTabs from "@/Components/Admin/ui/DataTabs";
 import {
   CandlestickChart,
   GraduationCap,
   Presentation,
-  SquareActivity,
+  SquareActivity, 
 } from "lucide-react";
-import Batch from "../ui/HomeTablist/Batch";
 import AccessmentAgency from "../ui/HomeTablist/AccessmentAgency";
 import TraningPartner from "../ui/HomeTablist/TraningPartner";
 import axios from "axios";
 import { server } from "@/main";
-
+import AllExam from "../ui/HomeTablist/AllExam";
 
 const AdminContent = () => {
-  const [selectedTab, setSelectedTab] = useState('accessmentagency');
-  const [totalTp,setTotalTp]=useState(0);
-  const [totalAa,setTotalAa]=useState(0);
-  const [totalExam,setTotalExam]=useState(0);
-  const [totalBatch,setTotalBatch]=useState(0);
+  const [selectedTab, setSelectedTab] = useState("accessmentagency");
+  const [totalTp, setTotalTp] = useState(0);
+  const [totalAa, setTotalAa] = useState(0);
+  const [totalExam, setTotalExam] = useState(0);
+  const [totalBatch, setTotalBatch] = useState(0); 
   useEffect(() => {
     try {
-      axios.get(`${server}/tp`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setTotalTp(response.data.data.length);
-
-      })
+      axios
+        .get(`${server}/tp`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setTotalTp(response.data.data.length);
+        });
     } catch (error) {
       console.log(error);
     }
     try {
-      axios.get(`${server}/aa`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setTotalAa(response.data.data.length);
-
-      })
+      axios
+        .get(`${server}/aa`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setTotalAa(response.data.data.length);
+        });
     } catch (error) {
       console.log(error);
     }
     try {
-      axios.get(`${server}/exam/all`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setTotalExam(response.data.data.length);
-
-      })
+      axios
+        .get(`${server}/exam/all`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setTotalExam(response.data.data.length);
+        });
     } catch (error) {
       console.log(error);
     }
     try {
-      axios.get(`${server}/batch`, {
-        withCredentials: true,
-      }).then((response)=>
-      {
-        setTotalBatch(response.data.data.length);
-
-      })
+      axios
+        .get(`${server}/batch`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setTotalBatch(response.data.data.length);
+        });
     } catch (error) {
       console.log(error);
     }
-  }, [])
- 
+  }, []);
+
   // console.log(totalTp)
 
-
-  
   return (
     <>
       {/* Content */}
@@ -81,53 +83,59 @@ const AdminContent = () => {
             {/* Add some content if required at the Dashboard side Section */}
           </div>
         </div>
-        
+
         {/* DataTabs component is always visible */}
-        <Tabs defaultValue="overview" className="space-y-4">
-        <DataTabs
-          cardData={[
-            {
-              titel: "Total Training Partner",
-              total: +totalTp,
-              fromLast: "+0 from last Month",
-              logo: CandlestickChart,
-            },
-            {
-              titel: "Total Batchs",
-              total: +totalBatch,
-              fromLast: "+0 from last Month",
-              logo: GraduationCap,
-            },
-            {
-              titel: "Total Assessment Agency",
-              total: +totalAa,
-              fromLast: "+0 from last Month",
-              logo: SquareActivity,
-            },
-            {
-              titel: "Total Assessment(Exam) ",
-              total: +totalExam,
-              fromLast: "+0 from last Year",
-              logo: Presentation,
-            },
-          ]}
-        />
-        </Tabs>
-        <Tabs defaultValue="accessmentagency" className="space-y-4">
-          <TabsList>
-          <TabsTrigger onClick={() => setSelectedTab('accessmentagency')} value="accessmentagency">Assessment Agency</TabsTrigger>
-            <TabsTrigger onClick={() => setSelectedTab('batches')} value="batches">Batches</TabsTrigger>
-            <TabsTrigger onClick={() => setSelectedTab('traningPartner')} value="traningPartner">Training Partner</TabsTrigger>
+        <Tabs defaultValue="overview" className="space-y-4 ">
+          <DataTabs
+            cardData={[
+              {
+                titel: "Total Training Partner",
+                total: +totalTp,
+                fromLast: "+0 from last Month",
+                logo: CandlestickChart,
+              },
+              {
+                titel: "Total Batchs",
+                total: +totalBatch,
+                fromLast: "+0 from last Month",
+                logo: GraduationCap,
+              },
+              {
+                titel: "Total Assessment Agency",
+                total: +totalAa,
+                fromLast: "+0 from last Month",
+                logo: SquareActivity,
+              },
+              {
+                titel: "Total Assessment(Exam) ",
+                total: +totalExam,
+                fromLast: "+0 from last Year",
+                logo: Presentation,
+              },
+            ]}
+          />
+        </Tabs> 
+        <Tabs defaultValue="accessmentagency" className="space-y-4 ">
+          <TabsList >
+            <TabsTrigger 
+              onClick={() => setSelectedTab("accessmentagency")}
+              value="accessmentagency"
+            >
+              Assessment Agency
+            </TabsTrigger>
+            <TabsTrigger className="text-gray-700"
+              onClick={() => setSelectedTab("traningPartner")}
+              value="traningPartner"
+            >
+              Training Partner
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="batches">
-            {selectedTab === 'batches' && <Batch/>}
-          </TabsContent>
           <TabsContent value="accessmentagency">
-            {selectedTab === 'accessmentagency' && <AccessmentAgency />}
+            {selectedTab === "accessmentagency" && <AccessmentAgency />}
           </TabsContent>
           <TabsContent value="traningPartner">
-            {selectedTab === 'traningPartner' && <TraningPartner />}
+            {selectedTab === "traningPartner" && <TraningPartner />}
           </TabsContent>
         </Tabs>
       </div>

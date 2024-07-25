@@ -6,14 +6,14 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue,
+  SelectValue, 
 } from "@/components(shadcn)/ui/select";
 import { cn } from "@/lib/utils";
 import { server } from "@/main";
 import axios from "axios";
 import { RotateCcw, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom"; 
 
 const TpNotificationBoxContent = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
@@ -124,7 +124,7 @@ const TpNotificationBoxContent = () => {
 
   return (
     <>
-      <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+      <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex"> 
         <div className="flex items-center justify-between space-y-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
@@ -211,10 +211,11 @@ const TpNotificationBoxContent = () => {
 
         <DataTable
           filter1={"organizationName"}
-          path={path}
+          path={path} 
           columns={columns}
           data={traningPartnerData}
           isLoding={loading}
+          pageUrl={"trainingpartner"}
         />
       </div>
     </>

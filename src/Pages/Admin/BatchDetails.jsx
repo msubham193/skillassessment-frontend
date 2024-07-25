@@ -1,11 +1,18 @@
 import BtachDetailsBox from "@/Components/Admin/Content/BtachDetailsBox";
 import SideNav from "@/Components/Admin/Content/SideNav";
 import TopBar from "@/Components/Admin/Content/TopBar";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent, } from "@/components(shadcn)/ui/tabs";
+import BatchPaymentBox from "@/Components/Admin/Content/BatchPaymentBox";
 
-const BatchDetails = () => {
+const BatchDetails = () => { 
   const { id } = useParams();
+  const [selectedTab, setSelectedTab] = useState("accessmentagency");
+
   return (
     <>
       <div className="min-h-screen bg-white text-black flex flex-col">
@@ -32,8 +39,32 @@ const BatchDetails = () => {
               </div>
             </div>
             {/* Derails of Traning Partner */}
-            <BtachDetailsBox id={id} />
-          </div>
+            <Tabs defaultValue="accessmentagency" className="space-y-4">
+            <TabsList>
+              <TabsTrigger
+                onClick={() => setSelectedTab("accessmentagency")}
+                value="accessmentagency"
+              >
+                Profile
+              </TabsTrigger>
+              <TabsTrigger
+                onClick={() => setSelectedTab("allExam")} 
+                value="allExam"
+              >
+                View Invoice*
+              </TabsTrigger>
+            </TabsList>
+  
+            <TabsContent value="accessmentagency">
+              {selectedTab === "accessmentagency" && <BtachDetailsBox id={id} /> }
+            </TabsContent>
+           
+            <TabsContent value="allExam">
+              {selectedTab === "allExam" && <BatchPaymentBox id={id} />}  
+            </TabsContent>
+          </Tabs>
+           
+          </div> 
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
@@ -16,20 +16,14 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-2 pb-10 pt-12">
+    <div className="relative min-w-[80px] border-r px-2 pb-10 pt-4 bg-[#E8F5E9]">
  {
     !mobileWidth &&(
         <div className="absolute right-[-20px] top-2">
-        <Button onClick={toogelSideBar} className={"rounded-full p-2"} variant="secondary">
-        {
-          isCollapsed ?<ChevronRight/>:<ChevronLeft/>
-        }
-        </Button>
         </div>
     )
  }
-      <Nav
-        isCollapsed={mobileWidth?true: isCollapsed}
+      <Nav 
         links={[
           {
             title: "Home",
@@ -38,6 +32,7 @@ const SideNav = () => {
             variant: "default",
             href:"/admin/dasbord"
           },
+         
           {
             title: "Notification's",
             label: "",
@@ -46,18 +41,39 @@ const SideNav = () => {
             href:"/admin/dasbord/Notification"
           },
           {
-            title: "Total Training Partner",
+            title: "Batch",
+            label: "",
+            icon: GraduationCap,
+            variant: "default",
+            href:"/admin/dasbord/batch"
+          },
+          {
+            title: "Exam's",
+            label: "",
+            icon: BookOpenCheck,
+            variant: "default",
+            href:"/admin/dasbord/AllExam"
+          },
+          {
+            title: "Training Partner",
             label: "",
             icon: Handshake,
             variant: "ghost",
             href:"/admin/dasbord/TreaningPartner"
           },
           {
-            title: "Total Assessment Agency",
+            title: "Assessment Agency",
             label: "",
             icon: BotMessageSquare,
             variant: "ghost",
             href:"/admin/dasbord/AssessmentAgency"
+          },
+          {
+            title: "All Payments",
+            label: "",
+            icon: HandCoins,
+            variant: "ghost",
+            href:"/admin/dasbord/PaymentsDetails"
           },
           {
             title: "Create Course",
@@ -72,6 +88,13 @@ const SideNav = () => {
             icon: PackagePlus ,
             variant: "ghost",
             href:"/admin/dasbord/createScheme"
+          },
+          {
+            title: "Create Certificate",
+            label: "",
+            icon: FilePlus2 ,
+            variant: "ghost",
+            href:"/admin/dasbord/createCertificate"
           },
         ]}
       />

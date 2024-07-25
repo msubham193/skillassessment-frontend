@@ -18,6 +18,14 @@ import CreateCourse from "./Pages/Admin/CreateCourse";
 import CreateScheme from "./Pages/Admin/CreateScheme";
 import StudentResultDetails from "./Pages/Admin/StudentResultDetails";
 import BatchWiseStudentResult from "./Pages/Admin/BatchWiseStudentResult";
+import AllBAtch from "./Pages/Admin/AllBAtch";
+import CreateCertificate from "./Pages/Admin/CreateCertificate";
+import PaymentDEtails from "./Pages/Admin/PaymentDEtails";
+import BathAnalysis from "./Pages/Admin/BathAnalysis";
+import UpdateBatchBox from "./Pages/Admin/UpdateBatchBox";
+import ExamDetails from "./Pages/Admin/ExamDetails";
+import AaPaymentInvoice from "./Pages/Admin/AaPaymentInvoice";
+import AllExam from "./Components/Admin/ui/HomeTablist/AllExam";
 const App = () => {
   const [authState, setAuthState] = useRecoilState(authenticationState);
   useEffect(() => {
@@ -34,10 +42,12 @@ const App = () => {
     return (
     <div>
       <Routes>
-        <Route path="/adminLogin" exact element={<AdminLogin />} />
+        <Route path="/adminLogin" exact element={<AdminLogin />} /> 
         <Route element={<ProtectedRout />}>
 
           <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
+          <Route path="/admin/dasbord/batch" exact element={<AllBAtch />} />
+          <Route path="/admin/dasbord/AllExam" exact element={<AllExam />} />
           <Route
             path="/admin/dasbord/batch/mark/students/:id"
             exact
@@ -55,7 +65,7 @@ const App = () => {
             element={<AaNotification />}
           />
           <Route
-            path="/admin/dasbord/Notification"
+            path="/admin/dasbord/Notification" 
             exact
             element={<Notification />}
           />
@@ -67,7 +77,12 @@ const App = () => {
           <Route
             path="/admin/dasbord/Notification/tp/:id"
             exact
-            element={<TpDetails />}
+            element={<TpDetails />} 
+          />
+          <Route
+            path="/admin/dasbord/allExam/:id"
+            exact
+            element={<ExamDetails />} 
           />
           <Route
             path="/admin/dasbord/AssessmentAgency/:id"
@@ -89,6 +104,31 @@ const App = () => {
             path="/admin/dasbord/createScheme"
             exact
             element={<CreateScheme />}
+          />
+          <Route
+            path="/admin/dasbord/createCertificate"
+            exact
+            element={<CreateCertificate />}
+          />
+          <Route
+            path="/admin/dasbord/PaymentsDetails"
+            exact
+            element={<PaymentDEtails />}
+          />
+          <Route
+            path="/admin/dasbord/BatchAnylisis"
+            exact
+            element={<BathAnalysis />}
+          />
+          <Route
+            path="/admin/dasbord/Batch/payment/update/:id"
+            exact
+            element={<UpdateBatchBox />}
+          />
+          <Route
+            path="/admin/dasbord/Aa/invoice/payment/update/:id"
+            exact
+            element={<AaPaymentInvoice />}
           />
         </Route> 
       </Routes>

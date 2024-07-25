@@ -8,14 +8,14 @@ const NotificationContent = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const defaultTab = query.get("tab") || "overview";
-  const [selectedTab, setSelectedTab] = useState(defaultTab);
+  const [selectedTab, setSelectedTab] = useState(defaultTab); 
 
   useEffect(() => {
     setSelectedTab(defaultTab);
   }, [defaultTab]);
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex"> 
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Notifications!</h2>
@@ -39,7 +39,7 @@ const NotificationContent = () => {
           {selectedTab === "overview" && <AagencyNotification />}
         </TabsContent>
         <TabsContent value="analytics">
-          {selectedTab === "analytics" && <TpartnerNotification />}
+          {selectedTab === "analytics" && <TpartnerNotification />} 
         </TabsContent>
       </Tabs>
     </div>

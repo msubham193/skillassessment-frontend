@@ -5,12 +5,12 @@ import AaNotificationBoxContent from '@/Components/Admin/Content/AaNotificationB
 
 const AaNotification = ({children}) => {
   return (
-    <div>
+    <div> 
     <div className='min-h-screen bg-white text-black flex flex-col'>
     {/*top Bar */}
     <TopBar/>
       {/* side bar */}
-      <div className='min-h-screen bg-white text-black flex'>
+      <div className='min-h-screen bg-white text-black flex'> 
       <SideNav/>
   
         {/* main page */}

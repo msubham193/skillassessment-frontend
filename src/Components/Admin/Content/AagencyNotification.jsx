@@ -1,37 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import { DataTable } from '../ui/notiification/DataTable';
-import axios from 'axios';
-import { server } from '@/main';
-import { cn } from '@/lib/utils';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { DataTable } from "../ui/notiification/DataTable";
+import axios from "axios";
+import { server } from "@/main";
+import { cn } from "@/lib/utils";
+import { useLocation } from "react-router-dom"; 
 
 const AagencyNotification = () => {
-    const[assessmentAgency,setAssessmentAgency]=useState([]);
-    const[loding,setLoding]=useState(false)
-    useEffect(() => {
-      try {
-        setLoding(true);
-        axios.get(`${server}/aa/status/pending`, {
+  const [assessmentAgency, setAssessmentAgency] = useState([]);
+  const [loding, setLoding] = useState(false);
+  useEffect(() => {
+    try {
+      setLoding(true);
+      axios
+        .get(`${server}/aa/status/pending`, { 
           withCredentials: true,
-        }).then((response)=> 
-        {
+        })
+        .then((response) => {
           setLoding(false);
           setAssessmentAgency(response.data.data.reverse());
-        })
-      } catch (error) {
-        setLoding(false);
-        console.log(error);
-      }
-    }, [])
-    const location = useLocation();
-    const path=location.pathname;
+        });
+    } catch (error) {
+      setLoding(false);
+      console.log(error);
+    }
+  }, []);
+  const location = useLocation();
+  const path = location.pathname;
   return (
     <div>
-    <DataTable  filter1={"agencyName"} path={`${path}/aa`} columns={columns} data={assessmentAgency} isLoding={loding}/>
+      <DataTable
+        filter1={"agencyName"}
+        path={`${path}/aa`}
+        columns={columns}
+        data={assessmentAgency}
+        isLoding={loding}
+        pageUrl={"accessmentagency"}
+      />
     </div>
-  )
-}
-export default AagencyNotification
+  );
+};
+export default AagencyNotification;
 
 const columns = [
   {

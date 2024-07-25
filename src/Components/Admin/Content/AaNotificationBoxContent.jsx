@@ -20,7 +20,7 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [course, setCourse] = useState([]);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState({ 
     sector: "",
     course: "",
     state: "",
@@ -176,6 +176,7 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
           columns={columns}
           data={assessmentAgency}
           isLoding={loading}
+          pageUrl={"accessmentagency"}
         />
       </div>
     </>

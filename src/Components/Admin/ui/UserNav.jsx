@@ -21,7 +21,7 @@ import { useRecoilState } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 const UserNav = ({ admin }) => {
-  const [auth,setAuth]=useRecoilState(authenticationState)
+  const [auth,setAuth]=useRecoilState(authenticationState) 
   //function for  Name
 
   const nameParts = admin.name.split(" ");
@@ -53,7 +53,7 @@ const UserNav = ({ admin }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button variant="ghost" className="relative h-9 w-9 rounded-full bg-white">
           <Avatar className="h-8 w-8">
             <AvatarImage src={admin.profile} className="w-full h-full object-cover"/>
             <AvatarFallback>{initials}</AvatarFallback>

@@ -19,9 +19,10 @@ const BtachDetailsBox = ({ id }) => {
         .get(`${server}/batch/${id}`, {
           withCredentials: true,
         })
-        .then((response) => {
+        .then((response) => { 
           setLoding(false);
           setData(response.data.data);
+          // console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);
@@ -74,6 +75,10 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?.courseName}</p>
           </div>
           <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under Scheme Type*</h3>
+            <p className="text-lg ">{data?.schemeType}</p>
+          </div>
+          <div className="p-3">
             <h3 className="text-lg font-medium mb-2">Batch Under Scheme*</h3>
             <p className="text-lg ">{data?.scheme}</p>
           </div>
@@ -86,13 +91,15 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?.state}</p>
           </div>
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Status*</h3>
+            <h3 className="text-lg font-medium mb-2">Status*</h3> 
             <p className="text-xl font-bold ">{data?.status}</p>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           {/* Buttion For assin a batch */}
+
+          
+
           <CreateExam
             abn_id={data?._id}
             tp_id={data?.trainingOrganizationId}
@@ -101,14 +108,13 @@ const BtachDetailsBox = ({ id }) => {
             state={data?.state}
           >
             <Button
-              disabled={data?.status==="Completed" }
+              disabled={data?.status==="Completed" || data?.paymentStatus===false || data?.isAssigned }
               variant={"default"}
               className={"bg-green-700"}
             >
               {"Assign to Agency"}
             </Button>
           </CreateExam>
-
           {/* here admin can see the result of the  student */}
           <div>
           {

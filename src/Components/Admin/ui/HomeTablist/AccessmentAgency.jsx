@@ -4,8 +4,8 @@ import { server } from '@/main';
 import { cn } from '@/lib/utils';
 import { DataTable } from '../notiification/DataTable';
 
-const AccessmentAgency = () => {
-  const [assessmentAgency, setAssessmentAgency] = useState([]);
+const AccessmentAgency = () => { 
+  const [assessmentAgency, setAssessmentAgency] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
  
@@ -35,6 +35,7 @@ const AccessmentAgency = () => {
         path={"/admin/dasbord/AssessmentAgency"}
         data={assessmentAgency}
         isLoading={loading}
+        pageUrl={"accessmentagency"}
       />
     </div>
   )

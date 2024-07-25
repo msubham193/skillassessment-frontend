@@ -1,169 +1,112 @@
-import { Button } from '@/components(shadcn)/ui/button'
-import { StudentDataAtom } from '@/Components/Traning Partner/Atoms/studentAtom'
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { Button } from '@/components(shadcn)/ui/button';
+import { StudentDataAtom } from '@/Components/Traning Partner/Atoms/studentAtom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components(shadcn)/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components(shadcn)/ui/avatar';
+
 const Student = () => {
     const navigate = useNavigate();
-    const studentData=useRecoilValue(StudentDataAtom)
-    const defaultUserPhoto='./image/user.'
+    const studentData = useRecoilValue(StudentDataAtom);
+    const defaultUserPhoto = './image/user.png';
 
-  return (
-   <div className='bg-white h-screen w-auto'>
-    <div className=' flex justify-between items-center p-4'>
-     <div className='flex flex-col'>
-        <h1 className='text-gray-700 text-3xl font-bold'>Student Information</h1>
-        <p className='text-gray-500 text-sm'>This page contain all the info about Student</p>
-     </div>
-     <div>
-     <Button className="bg-blue-700" onClick={() => navigate("/trainingPartner/dashboard")}>
-      Back to Dashboard
-    </Button>
-     </div>
-     </div>
-     <div className='flex justify-between  w-full h-auto p-8'>
-     {/* student info */}
+    const InfoSection = ({ title, data }) => (
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle className="text-xl font-semibold text-gray-800">{title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                    {Object.entries(data).map(([key, value]) => (
+                        <div key={key} className="flex flex-col">
+                            <span className="text-sm font-medium text-gray-500">{key}</span>
+                            <span className="text-base text-gray-900">{value}</span>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
 
-     <div className='grid grid-cols-3 gap-8  w-[70%] font-medium text-gray-700'>
-      {/* Column 1: Basic Info */}
-      <div className=''>
-        <h2 className='text-lg font-bold mb-4 underline'>Basic Info</h2>
-        <table className='w-full'>
-          <tbody>
-            <tr>
-              <td className='p-2'>Name</td>
-              <td className=' p-2'>{studentData.name}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Father's Name</td>
-              <td className=' p-2'>{studentData.fathername}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Mother's Name</td>
-              <td className=' p-2'>{studentData.mothername}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Date of Birth</td>
-              <td className=' p-2'>{new Date(studentData.dob).toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Gender</td>
-              <td className=' p-2'>{studentData.gender}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Religion</td>
-              <td className=' p-2'>{studentData.religion}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Category</td>
-              <td className=' p-2'>{studentData.category}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Nationality</td>
-              <td className=' p-2'>{studentData.nationality}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>General Qualification</td>
-              <td className=' p-2'>{studentData.generalqualification}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      {/* Column 2: Address */}
-      <div>
-        <h2 className='text-lg font-bold mb-4 underline'>Address</h2>
-        <table className='w-full'>
-          <tbody >
-            <tr>
-              <td className=' p-2'>Address</td>
-              <td className=' p-2'>{studentData.address}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>State</td>
-              <td className=' p-2'>{studentData.state}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>District</td>
-              <td className=' p-2'>{studentData.district}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>City</td>
-              <td className=' p-2'>{studentData.city}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Pincode</td>
-              <td className=' p-2'>{studentData.pincode}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Mobile</td>
-              <td className=' p-2'>{studentData.mobile}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Email</td>
-              <td className=' p-2'>{studentData.email}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      {/* Column 3: Training Details */}
-      <div>
-        <h2 className='text-lg font-bold mb-4 underline'>Training Details</h2>
-        <table className='w-full'>
-          <tbody>
-            <tr>
-              <td className=' p-2'>Sector Name</td>
-              <td className=' p-2'>{studentData.sector_name}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Course</td>
-              <td className=' p-2'>{studentData.course}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Module</td>
-              <td className=' p-2'>{studentData.module}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>UID</td>
-              <td className=' p-2'>{studentData.uid}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Training Start Date</td>
-              <td className=' p-2'>{new Date(studentData.traininstartdate).toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Training End Date</td>
-              <td className=' p-2'>{new Date(studentData.trainingenddate).toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Training Hours</td>
-              <td className=' p-2'>{studentData.trainingHours}</td>
-            </tr>
-            <tr>
-              <td className=' p-2'>Total Hours</td>
-              <td className=' p-2'>{studentData.totalhours}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-     </div>
-     {/* student image */}
-     <div className='w-[20%]'>
-     <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden  md:mt-0">
-          <img
-            src={studentData.profilepic || defaultUserPhoto}
-            alt="user"
-            onError={(e) => (e.target.src = defaultUserPhoto)}
-            className="w-full h-full object-cover"
-          />
+    return (
+        <div className='bg-gray-100 min-h-screen p-8'>
+            <div className='max-w-6xl mx-auto'>
+                <div className='flex justify-between items-center mb-8'>
+                    <h1 className='text-3xl font-bold text-gray-800'>Student Profile</h1>
+                    <Button 
+                        variant="outline"
+                        onClick={() => navigate("/trainingPartner/dashboard")}
+                    >
+                        Back to Dashboard
+                    </Button>
+                </div>
+
+                <div className='grid grid-cols-3 gap-8'>
+                    {/* Left Column: Profile Summary */}
+                    <div className='col-span-1'>
+                        <Card className="mb-6">
+                            <CardContent className="pt-6">
+                                <div className="flex flex-col items-center">
+                                    <Avatar className="w-32 h-32 mb-4">
+                                        <AvatarImage src={studentData.profilepic || defaultUserPhoto} alt="Student" />
+                                        <AvatarFallback>{studentData.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-1">{studentData.name}</h2>
+                                    <p className="text-sm text-gray-500 mb-4">{studentData.uid}</p>
+                                    <p className="text-sm text-gray-700 text-center mb-2">{studentData.course}</p>
+                                    <p className="text-sm text-gray-700 text-center">{studentData.sector_name}</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <InfoSection 
+                            title="Training Details" 
+                            data={{
+                                "Start Date": new Date(studentData.traininstartdate).toLocaleDateString(),
+                                "End Date": new Date(studentData.trainingenddate).toLocaleDateString(),
+                                "Training Hours": studentData.trainingHours,
+                                "Total Hours": studentData.totalhours,
+                                "Module": studentData.module,
+                            }} 
+                        />
+                    </div>
+
+                    {/* Right Column: Detailed Information */}
+                    <div className='col-span-2'>
+                        <InfoSection 
+                            title="Personal Information" 
+                            data={{
+                                "Father's Name": studentData.fathername,
+                                "Mother's Name": studentData.mothername,
+                                "Date of Birth": new Date(studentData.dob).toLocaleDateString(),
+                                "Gender": studentData.gender,
+                                "Religion": studentData.religion,
+                                "Category": studentData.category,
+                                "Nationality": studentData.nationality,
+                                "General Qualification": studentData.generalqualification
+                            }} 
+                        />
+
+                        <InfoSection 
+                            title="Contact Information" 
+                            data={{
+                                "Address": studentData.address,
+                                "State": studentData.state,
+                                "District": studentData.district,
+                                "City": studentData.city,
+                                "Pincode": studentData.pincode,
+                                "Mobile": studentData.mobile,
+                                "Email": studentData.email
+                            }} 
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-     </div>
-   </div>
+    );
+};
 
-  )
-}
+export default Student;
 
-export default Student
 

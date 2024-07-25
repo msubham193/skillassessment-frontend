@@ -1,50 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
-import DatePicker from "react-date-picker";
-import 'react-date-picker/dist/DatePicker.css';
-import 'react-calendar/dist/Calendar.css';
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import "./coustom.css";
+import { format, differenceInDays, differenceInHours } from "date-fns";
 
 const AddStudent = () => {
   const { id: batchId } = useParams();
   const navigate = useNavigate();
 
   const studentFields = [
-    "name",
-    "fathername",
-    "mothername",
-    "dob",
-    "gender",
-    "religion",
-    "category",
-    "nationality",
-    "generalqualification",
-    "address",
-    "state",
-    "district",
-    "city",
-    "pincode",
-    "mobile",
-    "email",
-    "sector_name",
-    "course",
-    "module",
-    "uid",
-    "traininstartdate",
-    "trainingenddate",
-    "trainingHours",
-    "totalhours",
-    "totaldays",
-    "cenid",
-    "profilepic",
+    "name", "fathername", "mothername", "dob", "gender", "religion", "category",
+    "nationality", "generalqualification", "address", "state", "district", "city",
+    "pincode", "mobile", "email", "sector_name", "course", "module", "uid",
+    "traininstartdate", "trainingenddate", "trainingHours", "totalhours",
+    "totaldays", "cenid", "redg_No",
   ];
 
   const dateFields = ["dob", "traininstartdate", "trainingenddate"];
-
+  const [batchdata, setbatchdata] = useState({});
   const [studentInputs, setStudentInputs] = useState(
     studentFields.reduce((acc, field) => {
       acc[field] = "";
@@ -60,17 +38,96 @@ const AddStudent = () => {
     }));
   };
 
-  const handleDateChange = (field, date) => {
-    setStudentInputs((prevState) => ({
-      ...prevState,
-      [field]: date,
-    }));
+  const calculateTrainingDuration = (startDate, endDate) => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      if (start <= end) {
+        const totalDays = differenceInDays(end, start) + 1;
+        const totalHours = differenceInHours(end, start) + 24;
+
+        return {
+          totaldays: totalDays.toString(),
+          totalhours: totalHours.toString(),
+          trainingHours: totalHours.toString(),
+        };
+      } else {
+        toast.error("End date cannot be before start date");
+        return {
+          totaldays: "",
+          totalhours: "",
+          trainingHours: "",
+        };
+      }
+    }
+    return {};
   };
+
+  const handleDateChange = (field, date) => {
+    setStudentInputs((prevState) => {
+      const newState = {
+        ...prevState,
+        [field]: date,
+      };
+
+      if (field === 'traininstartdate' || field === 'trainingenddate') {
+        const { totaldays, totalhours, trainingHours } = calculateTrainingDuration(newState.traininstartdate, newState.trainingenddate);
+        newState.totaldays = totaldays;
+        newState.totalhours = totalhours;
+        newState.trainingHours = trainingHours;
+      }
+
+      return newState;
+    });
+  };
+
+  const fetchBatchdata = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/batch/${batchId}`, {
+        method: 'GET',
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setbatchdata(data.data);
+        setStudentInputs((prevState) => {
+          const newState = {
+            ...prevState,
+            sector_name: data.data.sectorName || "",
+            course: data.data.courseName || "",
+            traininstartdate: data.data.startDate || "",
+            trainingenddate: data.data.endDate || "",
+          };
+
+          const { totaldays, totalhours, trainingHours } = calculateTrainingDuration(newState.traininstartdate, newState.trainingenddate);
+          newState.totaldays = totaldays;
+          newState.totalhours = totalhours;
+          newState.trainingHours = trainingHours;
+
+          return newState;
+        });
+      } else {
+        console.error('Failed to fetch batch data');
+        toast.error("Failed to fetch batch data");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Error fetching batch data");
+    }
+  };
+
+  useEffect(() => {
+    fetchBatchdata();
+  }, [batchId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formattedInputs = { ...studentInputs };
-
+    console.log("formdata", formattedInputs);
     try {
       const response = await fetch(`http://localhost:8000/api/v1/batch/addstudent/${batchId}`, {
         method: "POST",
@@ -112,12 +169,30 @@ const AddStudent = () => {
           {studentFields.map((field, index) => (
             <div key={index} className="flex flex-col gap-2">
               <Label htmlFor={field}>{field}</Label>
-              {dateFields.includes(field) ? (
+              {['sector_name', 'course'].includes(field) ? (
+                <Input
+                  type="text"
+                  name={field}
+                  id={field}
+                  onChange={handleChange}
+                  value={studentInputs[field]}
+                  readOnly
+                />
+              ) : dateFields.includes(field) ? (
                 <DatePicker
+                  selected={studentInputs[field] ? new Date(studentInputs[field]) : null}
                   onChange={(date) => handleDateChange(field, date)}
-                  value={studentInputs[field] || null}
-                  format="y-MM-dd"
-                  className="w-full bg-white rounded-md p-2 text-black"
+                  showYearDropdown
+                  dateFormat="dd/MM/yyyy"
+                  className="w-full"
+                />
+              ) : ['totalhours', 'totaldays', 'trainingHours'].includes(field) ? (
+                <Input
+                  type="text"
+                  name={field}
+                  id={field}
+                  value={studentInputs[field]}
+                  readOnly
                 />
               ) : (
                 <Input
@@ -138,3 +213,4 @@ const AddStudent = () => {
 };
 
 export default AddStudent;
+

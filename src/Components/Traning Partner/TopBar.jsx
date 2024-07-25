@@ -1,58 +1,105 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { Link } from 'react-router-dom'; // Import Link from your routing library
-import { tpDataAtoms } from './Atoms/trainingPartnerData';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components(shadcn)/ui/dropdown-menu";
-import { Button } from '@/components(shadcn)/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components(shadcn)/ui/avatar';
-import ProfilePopup from '@/Pages/Traning Partner/ProfilePopup'; // Fix import path
-import { useNavigate } from 'react-router-dom';
-
+import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { Link } from "react-router-dom"; // Import Link from your routing library
+import { tpDataAtoms } from "./Atoms/trainingPartnerData";
+import logo from "./images/logo.png"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components(shadcn)/ui/dropdown-menu";
+import { Button } from "@/components(shadcn)/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components(shadcn)/ui/avatar";
+import ProfilePopup from "@/Pages/Traning Partner/ProfilePopup"; // Fix import path
+import { useNavigate } from "react-router-dom";
+import Setting from "@/Pages/Traning Partner/Setting";
+import NotificationPopver from "./ui/NotificationPopver";
 
 function TopBar() {
+  const navigate = useNavigate();
+  const [isSettingOpen, setISettingOpen] = useState(false);
 
-  const navigate=useNavigate();
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const toggleProfilePopup = () => {
-    navigate("/profile")
+    navigate("/profile");
   };
 
-  const handelLogout=()=>{
-    localStorage.clear()
-    navigate("/trainingPartner/signin")
-  }
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/trainingPartner/signin");
+  };
+
+  const handleSetting = () => {
+    setISettingOpen(!isSettingOpen);
+  };
 
   return (
-    <header className="flex h-16 w-full items-center justify-between bg-[#0C0C0C] px-4 md:px-6">
-        <MountainIcon className="h-6 w-6" />
-        <span className="text-lg text-white font-medium bg-transparent">Training Partner Dashboard</span>
-      
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>TP</AvatarFallback>
-            </Avatar>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={toggleProfilePopup}>
-            <div className="flex items-center gap-2">
-              <UserIcon className="h-4 w-4" />
-              <span>Profile</span>
-            </div>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-
-              <LogOutIcon className="h-4 w-4" />
-              <span onClick={handelLogout}>Logout</span>
-            
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div>
+    <header className="flex h-16 w-full items-center justify-between bg-[#FFFF] px-4 md:px-6">
+    <a href="#about-me" className="h-auto w-auto flex flex-row items-center">
+          <img
+            src={logo}
+            alt="logo"
+            width={40}
+            height={40}
+            className="cursor-pointer hover:animate-spin-slow"
+          />
+        </a>
+      <span className="text-lg text-black font-semibold  bg-transparent">
+        Training Partner Dashboard
+      </span>
+      <div className="flex  items-center justify-center gap-4">
+        <div>
+        <NotificationPopver />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full bg-black">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src="" />
+                <AvatarFallback className="text-black">TP</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={toggleProfilePopup}>
+              <div className="flex items-center gap-2">
+                <UserIcon className="h-4 w-4" />
+                <span>Profile</span>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleSetting}>
+              <div className="flex items-center gap-2">
+                <SettingsIcon className="h-4 w-4" />
+                <span>Setting</span>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <div className="flex items-center gap-2">
+                <LogOutIcon className="h-4 w-4" />
+                <span>Logout</span>
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
+
+    {isSettingOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <Setting onClose={() => setISettingOpen(false)} />
+          </div>
+        </div>
+      )}
+  </div>
   );
 }
 

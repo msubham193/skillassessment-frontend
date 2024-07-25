@@ -1,83 +1,48 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { toast } from "react-toastify";
+import { format } from "date-fns";
+import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+
+// shadcn components
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
-import "./coustom.css";
-import React, { useEffect, useState } from "react";
-import DatePicker from "react-date-picker";
-import "react-date-picker/dist/DatePicker.css";
-import "react-calendar/dist/Calendar.css";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { Calendar } from "@/components(shadcn)/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components(shadcn)/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components(shadcn)/ui/select";
 
-import { useRecoilState, useRecoilValue } from "recoil";
+// Custom imports
+import "./coustom.css";
+import "react-toastify/dist/ReactToastify.css";
 import { coursesData } from "@/Components/Traning Partner/Atoms/courseAtom";
 import { sectorData } from "@/Components/Traning Partner/Atoms/sectorAtom";
 import { validationSchema } from "@/Components/Traning Partner/utils/validation";
+
 const Signup = () => {
   const inputLabels = [
-    "organizationName",
-    "password",
-    "organizationCategory",
-    "centerId",
-    "tpCode",
-    "scheme",
-    "affiliation",
-    "dateOfIncorporation",
-    "registeredOfficeAddress",
-    "registeredOfficeDistrict",
-    "registeredOfficeCity",
-    "registeredOfficeState",
-    "registeredOfficePin",
-    "registeredOfficeTelephone",
-    "registeredOfficeMobile",
-    "registeredOfficeFax",
-    "registeredOfficeEmail",
-    "registeredOfficeGst",
-    "regionalStateOfficeAddress",
-    "regionalStateOfficeDistrict",
-    "regionalStateOfficeCity",
-    "regionalStateOfficeState",
-    "regionalStateOfficePin",
-    "regionalStateOfficeTelephone",
-    "regionalStateOfficeMobile",
-    "regionalStateOfficeFax",
-    "regionalStateOfficeEmail",
-    "regionalStateOfficeGst",
-    "website",
-    "pan",
-    "prnNo",
-    "headOwnerName",
-    "headOwnerDob",
-    "headOwnerCity",
-    "headOwnerResidenceAddress",
-    "headOwnerPermanentAddress",
-    "headOwnerMobile",
-    "headOwnerAlternateMobile",
-    "headOwnerEmail",
-    "headOwnerQualification",
-    "headOwnerWorkExperience",
-    "headOwnerPanNo",
-    "headOwnerAadharNo",
-    "headOwnerPromoter1",
-    "headOwnerPromoter2",
-    "headOwnerPromoter3",
-    "projectContactPersonName",
-    "projectContactPersonDesignation",
-    "projectContactPersonCity",
-    "projectContactPersonMobile",
-    "projectContactPersonAlternateMobile",
-    "projectContactPersonResidenceAddress",
-    "projectContactPersonPermanentAddress",
-    "projectContactPersonEmail",
-    "projectContactPersonAlternateEmail",
-    "sector",
-    "courses",
-    "businessesType",
+    "organizationName", "password", "organizationCategory", "centerId", "tpCode",
+    "scheme", "affiliation", "dateOfIncorporation", "registeredOfficeAddress",
+    "registeredOfficeDistrict", "registeredOfficeCity", "registeredOfficeState",
+    "registeredOfficePin", "registeredOfficeTelephone", "registeredOfficeMobile",
+    "registeredOfficeFax", "registeredOfficeEmail", "registeredOfficeGst",
+    "regionalStateOfficeAddress", "regionalStateOfficeDistrict", "regionalStateOfficeCity",
+    "regionalStateOfficeState", "regionalStateOfficePin", "regionalStateOfficeTelephone",
+    "regionalStateOfficeMobile", "regionalStateOfficeFax", "regionalStateOfficeEmail",
+    "regionalStateOfficeGst", "website", "pan", "prnNo", "headOwnerName", "headOwnerDob",
+    "headOwnerCity", "headOwnerResidenceAddress", "headOwnerPermanentAddress",
+    "headOwnerMobile", "headOwnerAlternateMobile", "headOwnerEmail", "headOwnerQualification",
+    "headOwnerWorkExperience", "headOwnerPanNo", "headOwnerAadharNo", "headOwnerPromoter1",
+    "headOwnerPromoter2", "headOwnerPromoter3", "projectContactPersonName",
+    "projectContactPersonDesignation", "projectContactPersonCity", "projectContactPersonMobile",
+    "projectContactPersonAlternateMobile", "projectContactPersonResidenceAddress",
+    "projectContactPersonPermanentAddress", "projectContactPersonEmail",
+    "projectContactPersonAlternateEmail", "sector"
   ];
-  const selectFields = ["sector", "courses", "businessesType"];
+
+  const TimeLabel = ["dateOfIncorporation", "headOwnerDob"];
   const navigate = useNavigate();
-  const TimeLabel = ["dateOfIncorporation", "headOwnerDob", "timestamp"];
 
   const [currentPage, setCurrentPage] = useState(0);
   const [inputs, setInputs] = useState({});
@@ -88,18 +53,28 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [courses, setCourses] = useRecoilState(coursesData);
   const [sectors, setSectors] = useRecoilState(sectorData);
-  const [selectedSector, setSelecetdSector] = useState("");
+  const [selectedSector, setSelectedSector] = useState("");
+
+  
+
+
 
 
   useEffect(() => {
-    // Fetch sectors and courses from API
-    fetchSectors();
-    
+    setOnSubmit(currentPage === totalPages - 1);
+  }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 786);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
-
-
-
-  // fecthing the values of course
 
   const fetchSectors = async () => {
     try {
@@ -110,40 +85,14 @@ const Signup = () => {
         },
       });
       const data = await response.json();
-
       setSectors(data.data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // fecthing the courses
-  console.log("sectorname", selectedSector);
-  const fetchCourses = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/v1/sector?name=${selectedSector}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      setCourses(data.data);
-    } catch (error) {}
-  };
-  useEffect(()=>{
-    fetchCourses();
-  },[selectedSector])
-  // validation schema
-  
-
   useEffect(() => {
-    setOnSubmit(currentPage === totalPages - 1);
-  }, [currentPage, totalPages]);
-
+    fetchSectors();
+  }, []);
   const currentInputs = inputLabels.slice(
     currentPage * inputsPerPage,
     (currentPage + 1) * inputsPerPage
@@ -157,7 +106,7 @@ const Signup = () => {
       [label]: value,
     }));
     if (label === "sector") {
-      setSelecetdSector(value);
+      setSelectedSector(value);
     }
   };
 
@@ -175,18 +124,6 @@ const Signup = () => {
     }
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 786);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-  //  submiting the form
   const handleSubmit = async () => {
     try {
       await validationSchema.validate(inputs, { abortEarly: false });
@@ -215,173 +152,117 @@ const Signup = () => {
         error.inner.forEach((err) => {
           newError[err.path] = err.message;
         });
-        console.log("newerror", newError);
         setErrors(newError);
-        console.log("this is store error", errors);
       } else {
         console.log(error);
       }
     }
   };
 
+  const renderInput = (label) => {
+    if (TimeLabel.includes(label)) {
+      return (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={`w-full justify-start text-left font-normal ${
+                !inputs[label] && "text-muted-foreground"
+              }`}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {inputs[label] ? format(inputs[label], "PPP") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={inputs[label]}
+              onSelect={(date) => handleChange(label, date)}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+      );
+    } else if (label === "scheme") {
+      return (
+        <Select onValueChange={(value) => handleChange(label, value)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select scheme" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Government">Government</SelectItem>
+            <SelectItem value="StateGovernment">State Government</SelectItem>
+            <SelectItem value="Corporate">Corporate</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+    } else if (label === "sector") {
+      return (
+        <Select onValueChange={(value) => handleChange(label, value)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select sector" />
+          </SelectTrigger>
+          <SelectContent>
+            {sectors.map((sector) => (
+              <SelectItem key={sector._id} value={sector.name}>
+                {sector.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    } else {
+      return (
+        <Input
+          className="w-full bg-transparent text-black"
+          onChange={(e) => handleChange(label, e.target.value)}
+          value={inputs[label] || ""}
+        />
+      );
+    }
+  };
+
   return (
-    <div className="bg-black min-h-screen p-10 flex flex-col justify-between">
-      <div className="flex justify-center font-extrabold text-lg m-6 text-white">
+    <div className="bg-white min-h-screen p-10 flex flex-col justify-between">
+      <div className="flex justify-center font-extrabold text-lg m-6 text-black">
         Training-Partner-SignUp
       </div>
       <div>
         {isMobile ? (
           <div className="grid grid-cols-1 gap-4">
-            <div>
-              {firstColumn.map((label, index) => (
-                <div key={index} className="text-white">
-                  <Label>{label}</Label>
-                  {TimeLabel.includes(label) ? (
-                    <div className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full">
-                    <DatePicker
-                      className="w-full bg-transparent text-white"
-                      onChange={(date) => handleChange(label, date)}
-                      value={inputs[label] || ""}
-                    />
-                  </div>
-                  ) : (
-                    <>
-                      <Input
-                        className="w-full bg-transparent text-white"
-                        onChange={(e) => handleChange(label, e.target.value)}
-                        value={inputs[label] || ""}
-                      />
-                      {errors[label] && (
-                        <p style={{ color: "red" }}>{errors[label]}</p>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div>
-              {secondColumn.map((label, index) => (
-                <div key={index} className="text-white">
-                  <Label>{label}</Label>
-                  {TimeLabel.includes(label) ? (
-                   <div className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full">
-                   <DatePicker
-                     className="w-full bg-transparent text-white"
-                     onChange={(date) => handleChange(label, date)}
-                     value={inputs[label] || ""}
-                   />
-                 </div>
-                  ) : (
-                    <>
-                      <Input
-                        className="w-full bg-transparent text-white"
-                        onChange={(e) => handleChange(label, e.target.value)}
-                        value={inputs[label] || ""}
-                      />
-                      {errors[label] && (
-                        <p style={{ color: "red" }}>{errors[label]}</p>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
+            {/* Mobile layout */}
+            {[...firstColumn, ...secondColumn].map((label, index) => (
+              <div key={index} className="text-black">
+                <Label>{label}</Label>
+                {renderInput(label)}
+                {errors[label] && (
+                  <p className="text-red-500">{errors[label]}</p>
+                )}
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
+            {/* Desktop layout */}
             <div>
               {firstColumn.map((label, index) => (
-                <div key={index} className="text-white">
+                <div key={index} className="text-black">
                   <Label>{label}</Label>
-                  {TimeLabel.includes(label) ? (
-                     <div className="flex h-10 rounded-md border border-input bg-black px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full">
-                     <DatePicker
-                       className="w-full"
-                       onChange={(date) => handleChange(label, date)}
-                       value={inputs[label] || ""}
-                     />
-                   </div>
-                  ) : (
-                    <>
-                      <Input
-                        className="w-full bg-transparent text-white"
-                        onChange={(e) => handleChange(label, e.target.value)}
-                        value={inputs[label] || ""}
-                      />
-                      {errors[label] && (
-                        <p style={{ color: "red" }}>{errors[label]}</p>
-                      )}
-                    </>
+                  {renderInput(label)}
+                  {errors[label] && (
+                    <p className="text-red-500">{errors[label]}</p>
                   )}
                 </div>
               ))}
             </div>
             <div>
               {secondColumn.map((label, index) => (
-                <div key={index} className="text-white">
+                <div key={index} className="text-black">
                   <Label>{label}</Label>
-                  {TimeLabel.includes(label) ? (
-                    <div className="flex h-10 rounded-md border border-input bg-black px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full">
-                      <DatePicker
-                        className="w-full"
-                        onChange={(date) => handleChange(label, date)}
-                        value={inputs[label] || ""}
-                      />
-                    </div>
-                  ) : selectFields.includes(label) ? (
-                    <div className=" border rounded-md bg-black">
-                      <select
-                        className="w-full bg-black text-white p-2 rounded-md"
-                        onChange={(e) => handleChange(label, e.target.value)}
-                        value={inputs[label] || ""}
-                      >
-                        {label === "sector" && (
-                          <>
-                            <option value="">Select a sector</option>
-                            {sectors.map((sector, index) => (
-                              <option key={index} value={sector.name}>
-                                {sector.name}
-                              </option>
-                            ))}
-                          </>
-                        )}
-                     
-                        {label === "courses" &&
-                          courses &&
-                          courses.length > 0 && (
-                            <>
-                             <option value="">Select a Course</option>
-                              {courses.map((course, index) => (
-                                <option key={index} value={course._id}>
-                                  
-                                  {course.courseName}
-                                </option>
-                              ))}
-                            </>
-                          )}
-
-                        {label === "businessesType" && (
-                          <>
-                            <option value="Type1">Type1</option>
-                            <option value="Type2">Type2</option>
-                            <option value="Type3">Type3</option>
-                          </>
-                        )}
-                      </select>
-                      
-                    </div>
-                  ) : (
-                    <>
-                      <Input
-                        className="w-full bg-transparent text-white"
-                        onChange={(e) => handleChange(label, e.target.value)}
-                        value={inputs[label] || ""}
-                      />
-                      {errors[label] && (
-                        <p style={{ color: "red" }}>{errors[label]}</p>
-                      )}
-                    </>
+                  {renderInput(label)}
+                  {errors[label] && (
+                    <p className="text-red-500">{errors[label]}</p>
                   )}
                 </div>
               ))}
@@ -389,13 +270,16 @@ const Signup = () => {
           </div>
         )}
       </div>
-
-      <div className="flex justify-between mt-4">
-        <Button onClick={handlePreviousPage} disabled={currentPage === 0}>
+      <div className="flex justify-between">
+        <Button
+          onClick={handlePreviousPage}
+          className="text-white"
+          disabled={currentPage === 0}
+        >
           Previous
         </Button>
-        <Button onClick={handleNextPage}>
-          {currentPage === totalPages - 1 ? "Submit" : "Next"}
+        <Button onClick={handleNextPage} className="text-white">
+          {onSubmit ? "Submit" : "Next"}
         </Button>
       </div>
     </div>

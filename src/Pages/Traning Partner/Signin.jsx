@@ -44,25 +44,24 @@ const Signin = () => {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
-
       const data = await response.json();
-      setTpStatus(data.applicationStatus);
-      console.log(data.data.data.applicationStatus);
+      console.log('Response Data:', data);
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Invalid credentials');
+      }
       setResponseData(data.data.data);
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("trainingPartnerId", data.data.data._id);
       toast.success(data.message);
-
-      if (data.data.data.applicationStatus === "Approved") {
+      console.log("satatus",data.data.data.applicationStatus)
+      if ( data.data.data.applicationStatus === "Approved") {
         navigate("/trainingPartner/dashboard");
       } else {
         navigate("/statusFail");
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error:', error.message);
       toast.error("Please provide valid credentials");
     } finally {
       setIsLoading(false);
@@ -77,7 +76,7 @@ const Signin = () => {
         </div>
         <div className="p-4">
           <div>
-            <label>Email</label>
+            <label className="text-white">Email</label>
             <Input
               type="email"
               value={registeredOfficeEmail}
@@ -87,7 +86,7 @@ const Signin = () => {
             />
           </div>
           <div className="relative">
-            <label>Password</label>
+            <label className="text-white">Password</label>
             <Input
               type={showPassword ? "text" : "password"}
               value={password}
@@ -104,8 +103,8 @@ const Signin = () => {
             </button>
           </div>
         </div>
-        <div className="flex justify-center pt-8" onClick={handleSignin}>
-          <Button className="w-full m-3 bg-violet-700">
+        <div className="flex justify-center pt-8">
+          <Button className="w-full m-3 bg-violet-700" onClick={handleSignin}>
             {isLoading ? <Loader /> : "Submit"}
           </Button>
         </div>

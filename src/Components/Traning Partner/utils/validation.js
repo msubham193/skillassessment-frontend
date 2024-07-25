@@ -19,7 +19,6 @@ export const validationSchema = Yup.object({
     organizationCategory: Yup.string().required(
       "organizationCategory is required"
     ),
-    centerId: Yup.string().required("centerId is required"),
     tpCode: Yup.string().required("tpCode is required"),
     scheme: Yup.string().required("scheme is required"),
     affiliation: Yup.string().required("affiliation is required"),

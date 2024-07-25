@@ -4,8 +4,10 @@ import React from 'react'
 import { useRecoilValue } from 'recoil'
 import { Separator } from '@/components(shadcn)/ui/separator'
 import { Link } from 'react-router-dom'
+
 const ProfilePopup = () => {
   const trainingPartner = useRecoilValue(tpDataAtoms);
+  console.log(trainingPartner)
   const formattedDate = new Date(trainingPartner.dateOfIncorporation).toLocaleDateString();
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white">

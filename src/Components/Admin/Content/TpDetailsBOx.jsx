@@ -23,6 +23,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components(shadcn)/ui/popover";
+import { Label } from "@/components(shadcn)/ui/label";
+import { Input } from "@/components(shadcn)/ui/input";
 
 const TpDetailsBOx = ({ id }) => {
   const [referesh, setReferesh] = useState(false);
@@ -31,6 +33,8 @@ const TpDetailsBOx = ({ id }) => {
   const [batch, setBatch] = useState([]);
   const [course, setCourse] = useState([]);
   const [sector, setSector] = useState([]);
+  const [amount, setAmount] = useState(null);
+
 
   //function for fetch batch by tpID............
   useEffect(() => {
@@ -43,6 +47,7 @@ const TpDetailsBOx = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setBatch(response.data.data.reverse());
+          console.log(response.data.data)
           setReferesh((prev) => !prev);
         });
     } catch (error) {
@@ -86,7 +91,7 @@ const TpDetailsBOx = ({ id }) => {
     try {
       const responce = await axios.put(
         `${server}/tp/approve/${id}`,
-        {},
+        { amount },
         {
           headers: {
             "x-access-token": token,
@@ -104,7 +109,7 @@ const TpDetailsBOx = ({ id }) => {
       setData(responce.data.data);
     } catch (error) {
       setLoding(false);
-      toast.success("Somthing went wrong", {
+      toast.error("Somthing went wrong", {
         position: "bottom-right",
         closeOnClick: true,
         draggable: true,
@@ -151,6 +156,42 @@ const TpDetailsBOx = ({ id }) => {
     }
   };
 
+  //function for add amount manualy for a traningPartner
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoding(true);
+    // try {
+    //   const response = await axios.put(
+    //     `${server}/batch/addpayment/${id}`,
+    //     {amount},
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   setAmount("");
+    
+    //   toast.success("Cost added !!", {
+    //     position: "top-center",
+    //     closeOnClick: true,
+    //     draggable: true,
+    //     theme: "colored",
+    //   });
+    //   setLoding(false);
+    // } catch (error) {
+    //     console.log(error)
+    //   toast.error("Something went wrong, try after some time !!!", {
+    //     position: "top-center",
+    //     closeOnClick: true,
+    //     draggable: true,
+    //     theme: "colored",
+    //   });
+    //   setLoding(false);
+    // }
+  };
+
   const defaultUserPhoto = "/user.png";
   if (loding) {
     return <Loder />;
@@ -158,7 +199,7 @@ const TpDetailsBOx = ({ id }) => {
   return (
     <TooltipProvider>
       <div className="m-4 md:m-10">
-        <div className="flex flex-col md:flex-row justify-between mx-4 md:mx-10">
+        <div className="flex flex-col md:flex-row justify-between mx-4 md:mx-10"> 
           <div className="w-full md:w-3/4">
             <Table>
               <TableBody>
@@ -569,23 +610,14 @@ const TpDetailsBOx = ({ id }) => {
 
             <div className="w-full mt-5">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Payment Status*</h3>
-                  <p className="text-lg ">
-                    {data && data.paymentStatus === "Pending" ? (
-                      <p className="text-red-600">{data.paymentStatus}</p>
-                    ) : (
-                      <p className="text-green-500">{data.paymentStatus}</p>
-                    )}
-                  </p>
-                </div>
+               
                 <div className="p-3">
                   <h3 className="text-lg font-medium mb-2">Status*</h3>
-                  <p className="text-lg ">{data && data.status}</p>
+                  <p className="text-lg ">{data && data.applicationStatus}</p>
                 </div>
               </div>
             </div>
-            <div>
+            {/*<div>
               {data.applicationStatus === "Approved" ? (
                 <div>
                   <div className="font-bold text-l my-4 underline">
@@ -601,7 +633,7 @@ const TpDetailsBOx = ({ id }) => {
               ) : (
                 ""
               )}
-            </div>
+            </div>*/}
           </div>
           <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden mt-4 md:mt-0">
             <img
@@ -612,12 +644,27 @@ const TpDetailsBOx = ({ id }) => {
             />
           </div>
         </div>
+        {/* field for add amount for tp according to scheme */}
+       {data?.applicationStatus==="Pending"? <div className="p-8 w-[500px]">
+        <form onSubmit={applicationApproved}>
+        <Label htmlFor="name" className="text-left w-40 text-lg">
+          Add cost per Student for this Traning Partner..
+        </Label>
+        <Input
+          id="scheme-name"
+          className="col-span-4 py-6 mt-2"
+          placeholder="Add amount in rupee"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        </form>
+      </div>:""}
         <div className="flex flex-col md:flex-row justify-between mt-6 mx-4 md:mx-10 w-full md:w-[625px]">
           <Button
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
             disabled={data.applicationStatus === "Approved"}
-          >
+          > 
             {" "}
             {loding
               ? "Loding..."
@@ -628,6 +675,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
+            disabled={data.applicationStatus === "Rejected" || amount===null}
           >
             {loding
               ? "Loding..."

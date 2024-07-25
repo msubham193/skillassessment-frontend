@@ -13,21 +13,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components(shadcn)/ui/select";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, X } from "lucide-react";
 
 //in this component fetech all the request of AA  that are present in the database as notification data...
-const AaNotificationBoxContent = () => {
-  const [assessmentAgency, setAssessmentAgency] = useState([]);
+const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentAgency] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [course, setCourse] = useState([]);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState({ 
+    sector: "",
+    course: "",
+    state: "",
+  });
+  const [selectedValues, setSelectedValues] = useState({
     sector: "",
     course: "",
     state: "",
   });
 
-  //function for fetch all data  as query...
   useEffect(() => {
     fetchAccessmentAgency();
   }, [filters]);
@@ -49,6 +52,7 @@ const AaNotificationBoxContent = () => {
 
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
+    setSelectedValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const resetFilters = () => {
@@ -57,9 +61,12 @@ const AaNotificationBoxContent = () => {
       course: "",
       state: "",
     });
+    setSelectedValues({
+      sector: "",
+      course: "",
+      state: "",
+    });
   };
-
-  //function for retrive all data course and sector
 
   useEffect(() => {
     try {
@@ -89,9 +96,11 @@ const AaNotificationBoxContent = () => {
     }
   }, []);
 
-  // console.log(assessmentAgency);
   const location = useLocation();
   const path = location.pathname;
+
+  const hasActiveFilters = Object.values(filters).some(value => value !== "");
+
 
   return (
     <>
@@ -105,6 +114,7 @@ const AaNotificationBoxContent = () => {
           </div>
           <div className="flex items-center space-x-2">
             <Select
+              value={selectedValues.sector}
               onValueChange={(value) => handleFilterChange("sector", value)}
             >
               <SelectTrigger className="w-fit border-0">
@@ -120,6 +130,7 @@ const AaNotificationBoxContent = () => {
             </Select>
 
             <Select
+              value={selectedValues.course}
               onValueChange={(value) => handleFilterChange("course", value)}
             >
               <SelectTrigger className="w-fit border-0">
@@ -133,7 +144,9 @@ const AaNotificationBoxContent = () => {
                 ))}
               </SelectContent>
             </Select>
+
             <Select
+              value={selectedValues.state}
               onValueChange={(value) => handleFilterChange("state", value)}
             >
               <SelectTrigger className="w-fit border-0">
@@ -151,20 +164,25 @@ const AaNotificationBoxContent = () => {
               </SelectContent>
             </Select>
 
-            <RotateCcw onClick={resetFilters} className="w-4" />
+            {
+              hasActiveFilters && <div className='flex'><span className='font-semibold'>Reset</span><X onClick={resetFilters} className="w-4 cursor-pointer hover:cursor-pointer" /></div>
+            }
           </div>
         </div>
         {/* Data table for the notification */}
         <DataTable
+          filter1={"agencyName"}
           path={path}
           columns={columns}
           data={assessmentAgency}
           isLoding={loading}
+          pageUrl={"accessmentagency"}
         />
       </div>
     </>
   );
 };
+
 
 export default AaNotificationBoxContent;
 
@@ -209,5 +227,5 @@ const columns = [
         </div>
       );
     },
-  },
+  }, 
 ];

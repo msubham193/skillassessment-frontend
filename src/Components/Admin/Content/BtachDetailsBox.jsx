@@ -4,26 +4,25 @@ import React, { useEffect, useState } from "react";
 import Loder from "../ui/Loder";
 import { Button } from "@/components(shadcn)/ui/button";
 import CreateExam from "./CreateExam";
-import { useRecoilValue } from "recoil";
-import { examState } from "@/Pages/Admin/Atoms/atoms";
+import { useNavigate } from "react-router-dom";
 
 const BtachDetailsBox = ({ id }) => {
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);
-  const examCreate=useRecoilValue(examState);
-  // console.log(examCreate.isCreated)
-  // console.log(examCreate.isCreated?true:false);
+
+  const navigate=useNavigate();
   //function for  fetch battch data by id.
   useEffect(() => {
-    try { 
+    try {
       setLoding(true);
       axios
         .get(`${server}/batch/${id}`, {
           withCredentials: true,
         })
-        .then((response) => {
+        .then((response) => { 
           setLoding(false);
           setData(response.data.data);
+          // console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);
@@ -32,6 +31,10 @@ const BtachDetailsBox = ({ id }) => {
     }
   }, []);
   // console.log(data)
+  //function for handel the navigation for resultPage..
+  const handleViewResult = () => {
+    navigate(`/admin/dasbord/batch/mark/students/${id}`);
+  };
   if (loding) {
     return <Loder />;
   }
@@ -72,6 +75,10 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?.courseName}</p>
           </div>
           <div className="p-3">
+            <h3 className="text-lg font-medium mb-2">Batch Under Scheme Type*</h3>
+            <p className="text-lg ">{data?.schemeType}</p>
+          </div>
+          <div className="p-3">
             <h3 className="text-lg font-medium mb-2">Batch Under Scheme*</h3>
             <p className="text-lg ">{data?.scheme}</p>
           </div>
@@ -84,18 +91,44 @@ const BtachDetailsBox = ({ id }) => {
             <p className="text-lg ">{data?.state}</p>
           </div>
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Status*</h3>
+            <h3 className="text-lg font-medium mb-2">Status*</h3> 
             <p className="text-xl font-bold ">{data?.status}</p>
           </div>
         </div>
-        {/* Buttion For assin a batch */}
-       <CreateExam abn_id={data?._id}  tp_id={data?.trainingOrganizationId} course={data?.courseName} sector={data?.sectorName} state={data?.state}>
-              <Button disabled={examCreate.isCreated} variant={"default"} className={"bg-green-700"}>
-              {
-              examCreate.isCreated?("Batch Assigned"):("Assign to Agency")
-              }
-              </Button>
-            </CreateExam>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          {/* Buttion For assin a batch */}
+
+          
+
+          <CreateExam
+            abn_id={data?._id}
+            tp_id={data?.trainingOrganizationId}
+            course={data?.courseName}
+            sector={data?.sectorName}
+            state={data?.state}
+          >
+            <Button
+              disabled={data?.status==="Completed" || data?.paymentStatus===false || data?.isAssigned }
+              variant={"default"}
+              className={"bg-green-700"}
+            >
+              {"Assign to Agency"}
+            </Button>
+          </CreateExam>
+          {/* here admin can see the result of the  student */}
+          <div>
+          {
+             data?.status==="Completed"?(
+             <Button 
+              className={"bg-red-800"}
+              onClick={handleViewResult}
+              >
+             View Result
+             </Button>
+             ):""
+          }
+          </div>
+        </div>
       </div>
     </div>
   );

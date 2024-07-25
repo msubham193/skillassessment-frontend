@@ -3,31 +3,29 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "../notiification/DataTable";
 import { cn } from "@/lib/utils";
-import HomeTable from "./HomeTable";
-import { batchColumns } from "./Batch";
+
 
 const TraningPartner = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
-  const [referesh, setReferesh] = useState(false);
   const [loding, setLoding] = useState(false);
-
+  const [isDataFetched, setIsDataFetched] = useState(false);
   useEffect(() => {
     try {
       setLoding(true);
       axios
-        .get(`${server}/tp/status/approved`, {
+        .get(`${server}/tp/status/approved`, { 
           withCredentials: true,
         })
         .then((response) => {
           setLoding(false);
           setTraningPartnerData(response.data.data.reverse());
-          setReferesh((prev) => !prev);
+          setIsDataFetched(true);
         });
     } catch (error) {
       setLoding(false);
       console.log(error);
     }
-  }, []);
+  }, [isDataFetched]);
   return (
     <div>
       <DataTable
@@ -36,6 +34,7 @@ const TraningPartner = () => {
         columns={columns}
         data={traningPartnerData && traningPartnerData}
         isLoding={loding}
+        pageUrl={"trainingpartner"}
       />
     </div>
   );

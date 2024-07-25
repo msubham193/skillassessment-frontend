@@ -17,6 +17,16 @@ import Notification from "./Pages/Admin/Notification";
 import CreateCourse from "./Pages/Admin/CreateCourse";
 import CreateScheme from "./Pages/Admin/CreateScheme";
 import ProtectedRoute from "./Components/Traning Partner/utils/ProtectedRoute";
+import StudentResultDetails from "./Pages/Admin/StudentResultDetails";
+import BatchWiseStudentResult from "./Pages/Admin/BatchWiseStudentResult";
+import AllBAtch from "./Pages/Admin/AllBAtch";
+import CreateCertificate from "./Pages/Admin/CreateCertificate";
+import PaymentDEtails from "./Pages/Admin/PaymentDEtails";
+import BathAnalysis from "./Pages/Admin/BathAnalysis";
+import UpdateBatchBox from "./Pages/Admin/UpdateBatchBox";
+import ExamDetails from "./Pages/Admin/ExamDetails";
+import AaPaymentInvoice from "./Pages/Admin/AaPaymentInvoice";
+import AllExam from "./Components/Admin/ui/HomeTablist/AllExam";
 import Signup from "./Pages/Traning Partner/Signup";
 import ApllicationStatusFail from "./Pages/Traning Partner/ApllicationStatusFail";
 import Signin from "./Pages/Traning Partner/Signin";
@@ -36,19 +46,19 @@ import ManageBatch from "./Pages/Traning Partner/ManageBatch";
 import Transcript from "./Pages/Traning Partner/Transcript";
 import { CompeltebatchDataAtoms } from "./Components/Traning Partner/Atoms/completeBtachAtom";
 import CompeteBtachData from "./Pages/Traning Partner/CompeteBtachData";
-import AllTrainers from "./Pages/Traning Partner/AllTrainers";
+import AllTrainers from "./Pages/Traning Partner/AllTrainers";  
+  const App = () => {
+    //code for admin
+    const [authState, setAuthState] = useRecoilState(authenticationState);
+    useEffect(() => {
+      const isTokenValid = checkTokenValidity();
+      if (isTokenValid) {
+        const token = localStorage.getItem("adminAuthToken");
 
-const App = () => {
-  //code for admin
-  const [authState,setAuthState] = useRecoilState(authenticationState);
-  useEffect(() => {
-    const isTokenValid = checkTokenValidity();
-    if (isTokenValid) {
-      const token = localStorage.getItem('adminAuthToken');
 
       setAuthState({
         isAuthenticated: true,
-        token:token,
+        token: token,
       });
     }
   }, [setAuthState]);
@@ -67,9 +77,18 @@ const App = () => {
     return (
     <div>
       <Routes>
-        <Route path="/adminLogin" exact element={<AdminLogin />} />
+        <Route path="/adminLogin" exact element={<AdminLogin />} /> 
         <Route element={<ProtectedRout />}>
+
           <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
+          <Route path="/admin/dasbord/batch" exact element={<AllBAtch />} />
+          <Route path="/admin/dasbord/AllExam" exact element={<AllExam />} />
+          <Route
+            path="/admin/dasbord/batch/mark/students/:id"
+            exact
+            element={<BatchWiseStudentResult />}
+          />
+          <Route path="/admin/dasbord/studentMark/:id" exact element={<StudentResultDetails/>} />
           <Route
             path="/admin/dasbord/TreaningPartner"
             exact
@@ -81,7 +100,7 @@ const App = () => {
             element={<AaNotification />}
           />
           <Route
-            path="/admin/dasbord/Notification"
+            path="/admin/dasbord/Notification" 
             exact
             element={<Notification />}
           />
@@ -93,7 +112,12 @@ const App = () => {
           <Route
             path="/admin/dasbord/Notification/tp/:id"
             exact
-            element={<TpDetails />}
+            element={<TpDetails />} 
+          />
+          <Route
+            path="/admin/dasbord/allExam/:id"
+            exact
+            element={<ExamDetails />} 
           />
           <Route
             path="/admin/dasbord/AssessmentAgency/:id"
@@ -105,11 +129,7 @@ const App = () => {
             exact
             element={<AaDetails />}
           />
-          <Route
-            path="/admin/dasbord/:id"
-            exact
-            element={<BatchDetails />}
-          />
+          <Route path="/admin/dasbord/:id" exact element={<BatchDetails />} />
           <Route
             path="/admin/dasbord/createCourse"
             exact
@@ -120,7 +140,33 @@ const App = () => {
             exact
             element={<CreateScheme />}
           />
-        </Route>
+           <Route
+            path="/admin/dasbord/createCertificate"
+            exact
+            element={<CreateCertificate />}
+          />
+          <Route
+            path="/admin/dasbord/PaymentsDetails"
+            exact
+            element={<PaymentDEtails />}
+          />
+          <Route
+            path="/admin/dasbord/BatchAnylisis"
+            exact
+            element={<BathAnalysis />}
+          />
+          <Route
+            path="/admin/dasbord/Batch/payment/update/:id"
+            exact
+            element={<UpdateBatchBox />}
+          />
+          <Route
+            path="/admin/dasbord/Aa/invoice/payment/update/:id"
+            exact
+            element={<AaPaymentInvoice />}
+          />
+        </Route> 
+
         <Route
           path="/trainingPartner/dashboard"
           // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}  
@@ -142,12 +188,9 @@ const App = () => {
     <Route path='/trainingPartner/dashboard/student/:Id' element={<Student />} />
     <Route path='//trainingPartner/setting' exact element={<Setting />} />
       </Routes>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
 
 export default App;
-
-
-

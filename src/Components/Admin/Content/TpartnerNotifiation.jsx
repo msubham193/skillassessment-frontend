@@ -87,7 +87,7 @@ const TpartnerNotifiation = () => {
         </SelectGroup>
       </SelectContent>
     </Select>
-  </div>
+  </div>  
     */}
 
     <DataTable
@@ -96,6 +96,7 @@ const TpartnerNotifiation = () => {
     columns={columns}
     data={traningPartnerData && traningPartnerData}
     isLoding={loding}
+    pageUrl={"trainingpartner"}
   />
     </div>
   )

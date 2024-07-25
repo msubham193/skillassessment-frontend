@@ -1,97 +1,145 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation,useNavigate } from 'react-router-dom';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components(shadcn)/ui/dialog";
-import { Button } from '@/components(shadcn)/ui/button';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components(shadcn)/ui/table";
+import { Button } from '@/components(shadcn)/ui/button';
+import { Checkbox } from "@/components(shadcn)/ui/checkbox";
+import { Input } from "@/components(shadcn)/ui/input";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components(shadcn)/ui/select";
 
 const Teachers = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const batchId = queryParams.get('batchId');
-  console.log("Retrieved batchId:", batchId);
-
+  const batchIds = queryParams.getAll('batchId');
+ console.log("id",batchIds)
   const [trainers, setTrainers] = useState([]);
+  const [selectedTrainers, setSelectedTrainers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterSubject, setFilterSubject] = useState("all");
+  const tpid = localStorage.getItem("trainingPartnerId");
 
-  const handleClick = async (trainer) => {
-    delete trainer._id;
-    console.log("this is the main data",trainer)
-    try {
-      const response = await fetch(`http://localhost:8000/api/v1/batch/addtrainer/${batchId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": localStorage.getItem('token'),
-        },
-        body: JSON.stringify(trainer),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Teacher added successfully:", data);
-        toast.success("Teacher added successfully");
-        navigate('/trainingPartner/dashboard');
-      } else {
-        console.error("Failed to add teacher:", data);
-        toast.error(data.message || "Failed to add teacher");
+    const handleAssign = async () => {
+      try {
+          const response = await fetch(`http://localhost:8000/api/v1/batch/bulkaddTrainer/${batchIds}`, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  "x-access-token": localStorage.getItem('token'),
+              },
+              body: JSON.stringify({ trainerIds: selectedTrainers }), 
+          });
+  
+          const data = await response.json();
+          if (response.ok) {
+              toast.success("Teachers assigned successfully");
+              navigate('/trainingPartner/dashboard');
+          } else {
+              toast.error(data.message || "Failed to assign teachers");
+          }
+      } catch (error) {
+          console.error("Error:", error);
+          toast.error("Failed to assign teachers");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to add teacher");
-    }
   };
 
-  const fetchTeachers = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/api/v1/trainer", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      console.log(data.data);
-      setTrainers(data.data);
-    } catch (error) {
-      console.error("Error fetching teachers:", error);
-    }
-  };
+
 
   useEffect(() => {
-    fetchTeachers();
-  }, []);
+    const fetchTeachers = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/v1/trainer/tp/${tpid}`, { method: "GET" });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.data);
+          setTrainers(data.data.map(trainer => ({
+            ...trainer,
+            isSelected: false
+          })));
+        } else {
+          console.error("Failed to fetch teachers");
+          setTrainers([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setTrainers([]);
+      }
+    };
 
+    fetchTeachers();
+  }, [tpid]);
+
+  const handleCheckboxChange = (trainerId) => {
+    setTrainers(prevTrainers => prevTrainers.map(trainer => 
+      trainer._id === trainerId ? { ...trainer, isSelected: !trainer.isSelected } : trainer
+    ));
+
+    setSelectedTrainers(prevSelected => 
+      prevSelected.includes(trainerId)
+        ? prevSelected.filter(id => id !== trainerId)
+        : [...prevSelected, trainerId]
+    );
+  };
+
+  const filteredTrainers = trainers.filter(trainer => 
+    trainer.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (filterSubject === "all" || trainer.certifiedIn.toLowerCase().includes(filterSubject.toLowerCase()))
+  );
+
+
+  console.log(selectedTrainers);
   return (
     <div className="w-full min-h-screen bg-background text-foreground">
       <header className="bg-primary text-primary-foreground py-4 px-6">
-        <h1 className="text-2xl font-bold">Teacher Display</h1>
+        <h1 className="text-2xl font-bold">Trainers Bulk Assign</h1>
       </header>
       <main className="container mx-auto py-8 px-4 md:px-6">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-muted text-muted-foreground">
-                <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Subject Expertise</th>
-                <th className="py-3 px-4 text-right">Assign to Batch</th>
-              </tr>
-            </thead>
-            <tbody>
-              {trainers.map((trainer, index) => (
-                <tr key={index} className="border-b border-muted/20">
-                  <td className="py-4 px-4">{trainer.name}</td>
-                  <td className="py-4 px-4">{trainer.certifiedIn}</td>
-                  <td className="py-4 px-4 text-right">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button onClick={() => handleClick(trainer)}>Assign</Button>
-                      </DialogTrigger>
-                    </Dialog>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="flex gap-4 mb-4">
+          <Input
+            placeholder="Search trainers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
+          />
+          <Select value={filterSubject} onValueChange={setFilterSubject}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by subject" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Subjects</SelectItem>
+              <SelectItem value="math">Math</SelectItem>
+              <SelectItem value="science">Science</SelectItem>
+              {/* Add more subjects as needed */}
+            </SelectContent>
+          </Select>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[50px]">Select</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Subject Expertise</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredTrainers.map((trainer) => (
+              <TableRow key={trainer._id}>
+                <TableCell>
+                  <Checkbox
+                    checked={trainer.isSelected}
+                    onCheckedChange={() => handleCheckboxChange(trainer._id)}
+                  />
+                </TableCell>
+                <TableCell>{trainer.name}</TableCell>
+                <TableCell>{trainer.certifiedIn}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <div className="mt-4">
+          <Button onClick={handleAssign} disabled={selectedTrainers.length === 0}>
+            Assign Selected Trainers
+          </Button>
         </div>
       </main>
     </div>
@@ -99,4 +147,3 @@ const Teachers = () => {
 };
 
 export default Teachers;
-

@@ -92,6 +92,8 @@ const Batch = () => {
  const data={
   name:"ajit",
   email:"ajit@gmail.com",
-  course:"c++"
+  course:"c++",
+  ViewProfile:"dhbhd",
+  UploadImage:" "
  }
 

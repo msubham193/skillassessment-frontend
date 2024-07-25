@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Nav } from "./ui/Nav";
-import { LayoutDashboard, BellDot,CirclePlus, ChevronRight, ChevronLeft, Ghost } from "lucide-react";
+import { LayoutDashboard, ChevronRight, ChevronLeft, BotMessageSquare, PackagePlus,CirclePlus,SquareGanttChart,Users } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
   } from '@react-hook/window-size'
+import { Nav } from "./ui/Nav";
 
 const SideNav = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -16,10 +16,10 @@ const SideNav = () => {
     }
 
   return (
-    <div className=" relative min-w-[80px] border-r px-2 pr-5  pb-10 pt-24 bg-[#0C0C0C]">
+    <div className=" relative min-w-[80px] border-r px-2 pb-10 pt-12">
  {
     !mobileWidth &&(
-        <div className="absolute right-[-20px] top-5">
+        <div className="absolute right-[-20px] top-2">
         <Button onClick={toogelSideBar} className={"rounded-full p-2"} variant="secondary">
         {
           isCollapsed ?<ChevronRight/>:<ChevronLeft/>
@@ -28,38 +28,51 @@ const SideNav = () => {
         </div>
     )
  }
-      <Nav 
+      <Nav
         isCollapsed={mobileWidth?true: isCollapsed}
         links={[
           {
-            title: "DashBoard",
-            path:"",
+            title: "Home",
             label: "",
             icon: LayoutDashboard,
             variant: "default",
+            href:"/trainingPartner/dashboard"
           },
-        
           {
-            title:"Create Batch",
-            label:"",
-            path:"CreateBatch",
-            icon:CirclePlus,
-            variant:"secondary"
+            title: "createBatch",
+            label: "",
+            icon: CirclePlus ,
+            variant: "ghost",
+            href:"/CreateBatch"
           },
-          // {
-          //   title:"Create Course",
-          //   label:"",
-          //   path:"CreateCourse",
-          //   icon:CirclePlus,
-          //   variant:"secondary"
-          // },
-          // {
-          //   title:"Create Sector",
-          //   label:"",
-          //   path:"CreateSector",
-          //   icon:CirclePlus,
-          //   variant:"secondary"
-          // }
+          {
+            title: "Manage batches",
+            label: "",
+            icon: SquareGanttChart,
+            variant: "ghost",
+            href:"/manageBatch"
+          },
+          {
+            title: "Create center",
+            label: "",
+            icon: BotMessageSquare,
+            variant: "ghost",
+            href:"/Createcenter"
+          },
+          {
+            title: "Transcript",
+            label: "",
+            icon: PackagePlus ,
+            variant: "ghost",
+            href:"/transcript"
+          },
+          {
+            title: "Teachers",
+            label: "",
+            icon: Users ,
+            variant: "ghost",
+            href:"/trainers"
+          },
         ]}
       />
     </div>

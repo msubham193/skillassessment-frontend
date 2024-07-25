@@ -71,7 +71,7 @@ const AaPaymentInvoicedetails = () => {
         }
       );
       setPaymentData(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
       setIsDataFetched(true);
     } catch (error) {
       console.error(error);
@@ -194,7 +194,7 @@ const AaPaymentInvoicedetails = () => {
             </tbody>
           </table>
         </div>):(<div className=" flex justify-center">
-          <p className="mt-5 text-2xl font-semibold text-green-900">Please select Month and Year (●'◡'●) !!! </p>
+          <p className="mt-5 text-2xl font-semibold text-green-900">Month and Year not selected  !!! </p>
           </div>)
       }
     </div>

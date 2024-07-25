@@ -21,19 +21,22 @@ export const useAuthentication = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          withCredentials: true,
+          withCredentials: true, 
         }
       );
       setAuthState((prevState) => ({
         ...prevState,
         isAuthenticated: true,
-        token: response.data.data,
+        token: response.data.data.token,
+        email:response.data.data.data
       }));
 
       //store token and time in local Storage
+      // console.log(response.data.data.data);
       const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; 
-      localStorage.setItem('adminAuthToken',response.data.data);
+      localStorage.setItem('adminAuthToken',response.data.data.token);
       localStorage.setItem('tokenExpiration', expirationTime);
+      localStorage.setItem('specificEmail',response.data.data.data)
 
 
       toast.success(" You have successfully logged in.", {
@@ -48,6 +51,7 @@ export const useAuthentication = () => {
         ...prevState,
         isAuthenticated: false,
         token: null,
+        email:null
       }));
       toast.error(
         error.response.data.error  ,

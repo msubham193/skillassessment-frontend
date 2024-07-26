@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import HomeTable from '../ui/HomeTablist/HomeTable';
 import { Button } from '@/components(shadcn)/ui/button';
-
-const ResultContent = ({ batchId }) => {
+import { toast } from 'react-toastify';
+const ResultContent = ({ batchId }) => { 
   const [students, setSutdents] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [examId, setExamId] = useState("");
@@ -15,7 +15,7 @@ const ResultContent = ({ batchId }) => {
   const [images, setImages] = useState([]);
   const [showPhotos, setShowPhotos] = useState(false); 
 
-  // Fetch the result data
+  // Fetch the student from batch by using batchID data
   useEffect(() => {
     const fetchResultData = async () => {
       try {
@@ -25,6 +25,8 @@ const ResultContent = ({ batchId }) => {
         });
         setLoading(false);
         setSutdents(response.data.data.reverse());
+        // console.log(response.data.data);
+        // console.log(response.data.data[0]?.examId );
         setExamId(response.data.data[0]?.examId || ""); // Handle the case if data is empty
       } catch (error) {
         setLoading(false);
@@ -45,6 +47,7 @@ const ResultContent = ({ batchId }) => {
           });
           setLoading(false);
           setExam(response.data.data);
+          console.log(response.data.data)
           setAttendanceSheet(response.data.data.attendanceSheet);
           setResultSheet(response.data.data.resultSheet);
           setImages(response.data.data.images || []);
@@ -59,22 +62,52 @@ const ResultContent = ({ batchId }) => {
 
   // Functions for viewing sheets
   const viewAttendanceSheet = () => {
-    // console.log(attendanceSheet);
     attendanceSheet && window.open(attendanceSheet, '_blank');
   };
-
   const viewResultSheet = () => {
-    // console.log(resultSheet);
+
     resultSheet && window.open(resultSheet, '_blank');
   };
 
+
+//function for show the assessment photo's
   const togglePhotos = () => {
     setShowPhotos(!showPhotos);
   };
 
-  const approveAndPublish = () => {
-    // Implement the approve and publish logic here
-    console.log('Approve & Publish button clicked');
+
+  // Implement the approve and publish result logic here
+  const approveAndPublish = async(e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post( 
+        `${server}/publish/certificate/exam/${examId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      toast.success(response.data.message, {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -106,7 +139,7 @@ const ResultContent = ({ batchId }) => {
           {showPhotos ? "Hide Photos" : "View Photos"}
         </Button>
         <Button className="mr-2 bg-green-600" onClick={approveAndPublish}>
-          Approve & Publish
+         {loading?"Loding...":(exam?.certificateIssued?"Approved":"Approve & Publish")} 
         </Button>
       </div>
       {showPhotos && (

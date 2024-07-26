@@ -106,7 +106,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                 </Label>
                 <Input
                   id="tp_id"
-                  className="col-span-4"
+                  className="col-span-4" 
                   value={trainingPartnerId}
                 />
               </div>

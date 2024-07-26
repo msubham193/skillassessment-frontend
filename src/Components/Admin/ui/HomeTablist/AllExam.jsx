@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import SideNav from '../../Content/SideNav';
 import TopBar from '../../Content/TopBar';
 const AllExam = () => {
-    const [allExam, setAllExam] = useState([]);
+    const [allExam, setAllExam] = useState([]); 
     const [loding, setLoding] = useState(false);
     const [isDataFetched, setIsDataFetched] = useState(false); 
     useEffect(() => {

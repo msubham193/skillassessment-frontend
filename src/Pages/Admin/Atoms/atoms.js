@@ -5,7 +5,7 @@ export const authenticationState = atom({
   default:{
     isAuthenticated:localStorage.getItem('adminAuthToken')?true:false ,
     token: localStorage.getItem('adminAuthToken')?localStorage.getItem('adminAuthToken') :null,
-    email:localStorage.getItem('specificEmail')?localStorage.getItem('specificEmail'):null
+    // email:localStorage.getItem('specificEmail')?localStorage.getItem('specificEmail'):null
   } 
 });
  

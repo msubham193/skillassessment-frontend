@@ -15,7 +15,7 @@ const CreateScheme = ({children}) => {
       {/* main page */}
 
       <CreateSchemeForm>{children}</CreateSchemeForm>
-    </div>
+    </div> 
   </div>
   )
 }

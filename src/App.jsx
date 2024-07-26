@@ -47,6 +47,7 @@ import Transcript from "./Pages/Traning Partner/Transcript";
 import { CompeltebatchDataAtoms } from "./Components/Traning Partner/Atoms/completeBtachAtom";
 import CompeteBtachData from "./Pages/Traning Partner/CompeteBtachData";
 import AllTrainers from "./Pages/Traning Partner/AllTrainers";  
+import CertificateGenerator from "./Components/Admin/Content/CertificateGenerator";
   const App = () => {
     //code for admin
     const [authState, setAuthState] = useRecoilState(authenticationState);
@@ -185,6 +186,11 @@ import AllTrainers from "./Pages/Traning Partner/AllTrainers";
                 path="/admin/dasbord/Aa/invoice/payment/update/:id"
                 exact
                 element={<AaPaymentInvoice />}
+              />
+              <Route
+                path="/admin/dasbord/CertificateGenerate"
+                exact
+                element={<CertificateGenerator />}
               />
             </>
           )}

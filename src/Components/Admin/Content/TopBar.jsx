@@ -88,8 +88,6 @@ const TopBar = () => {
     const interval3 = setInterval(() => {
       fetchData3();
     }, 20 * 1000);
- // 20 seconds for training partner
-
     return () => {
       clearInterval(interval1);
       clearInterval(interval2);
@@ -97,7 +95,7 @@ const TopBar = () => {
 
 
     };
-  }, [data1, data2,data3,data4]);
+  }, [data1, data2,data3]);
  
   const handelOnClick = () => {
     if (notification.includes("Assessment Agency")) {

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import MakePayment from './MakePayment';
 
 const ExamDetailsBox = ({id}) => {
+  // console.log("exam id is",id);
     const [data, setData] = useState({});
     const [loding, setLoding] = useState(false);
     const[batchId,setBatchId]=useState(null);

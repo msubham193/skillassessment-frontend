@@ -51,6 +51,9 @@ const CertificateGenerator = () => {
                     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 });
 
+                // Convert the DOCX content to a readable string
+                const docxText = await new Response(out).text();
+
                 // Load custom font
                 const fontUrl = '/NunitoSans_10pt-Regular.ttf'; // Ensure this path is correct
                 const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
@@ -62,15 +65,21 @@ const CertificateGenerator = () => {
                 const page = pdfDoc.addPage();
                 const { width, height } = page.getSize();
 
-                const text = new TextDecoder().decode(out);
+                // Split the DOCX text into lines to draw on PDF
+                const lines = docxText.split('\n');
 
-                // page.drawText(text, {
-                //     x: 50,
-                //     y: height - 50,
-                //     size: 12,
-                //     font,
-                //     color: rgb(0, 0, 0),
-                // });
+                let yOffset = height - 50;
+
+                lines.forEach((line) => {
+                    page.drawText(line, {
+                        x: 50,
+                        y: yOffset,
+                        size: 12,
+                        font,
+                        color: rgb(0, 0, 0),
+                    });
+                    yOffset -= 20; // Adjust line height as necessary
+                });
 
                 const pdfBytes = await pdfDoc.save();
                 saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'certificate.pdf');

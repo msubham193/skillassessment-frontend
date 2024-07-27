@@ -8,7 +8,7 @@ const AllBatchTabs = ({children}) => {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
     const defaultTab = query.get("tab") || "overview"; 
-    const [selectedTab, setSelectedTab] = useState(defaultTab); 
+    const [selectedTab, setSelectedTab] = useState(defaultTab);  
   
     useEffect(() => {
       setSelectedTab(defaultTab);

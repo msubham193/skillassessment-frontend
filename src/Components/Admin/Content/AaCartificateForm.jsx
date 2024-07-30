@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components(shadcn)/ui/button';
 import { Label } from '@/components(shadcn)/ui/label';
 import { Input } from '@/components(shadcn)/ui/input';
-import Aacertificate from './Aacertificate';  // Make sure the path to Aacertificate component is correct
+import Aacertificate from './Aacertificate'; // Make sure the path to Aacertificate component is correct
 
 const AaCertificateForm = () => {
   const [formData, setFormData] = useState({
@@ -14,9 +14,9 @@ const AaCertificateForm = () => {
     earned: "",
     nsqfLevel: "",
     duration: "",
-    centerplace: "",
-    District: "",
-    State: "",
+    centerPlace: "",
+    district: "",
+    state: "",
     placeOfIssue: "",
     dateOfIssue: "",
     assessorPic: null,
@@ -137,36 +137,36 @@ const AaCertificateForm = () => {
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="centerplace">Center Place</Label>
+          <Label htmlFor="centerPlace">Center Place</Label>
           <Input
-            id="centerplace"
-            name="centerplace"
+            id="centerPlace"
+            name="centerPlace"
             type="text"
-            value={formData.centerplace}
+            value={formData.centerPlace}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="District">District</Label>
+          <Label htmlFor="district">District</Label>
           <Input
-            id="District"
-            name="District"
+            id="district"
+            name="district"
             type="text"
-            value={formData.District}
+            value={formData.district}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="State">State</Label>
+          <Label htmlFor="state">State</Label>
           <Input
-            id="State"
-            name="State"
+            id="state"
+            name="state"
             type="text"
-            value={formData.State}
+            value={formData.state}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
@@ -208,11 +208,13 @@ const AaCertificateForm = () => {
             required
           />
         </div>
-      </form>
-      <div className='mt-4'> <Aacertificate data={formData}/></div>
-      <div className="mt-4 text-center">
+        <div className="mt-4">
           <Button type="submit">Generate Marksheet</Button>
         </div>
+      </form>
+      <div className='mt-4'>
+        <Aacertificate data={formData} />
+      </div>
     </div>
   );
 }

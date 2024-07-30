@@ -34,7 +34,7 @@ const AagencyNotification = () => {
         columns={columns}
         data={assessmentAgency}
         isLoding={loding}
-        pageUrl={"accessmentagency"}
+        pageUrl={"assessmentagency"}
       />
     </div>
   );
@@ -44,7 +44,7 @@ export default AagencyNotification;
 const columns = [
   {
     accessorKey: "agencyName",
-    header: "Agency Name ",
+    header: "Agency Name",
   },
   {
     accessorKey: "email",
@@ -56,16 +56,16 @@ const columns = [
   },
   {
     accessorKey: "sectors",
-    header: "Sector's",
+    header: "Sectors",
   },
   {
     accessorKey: "total_no_of_certified_Assessor",
-    header: "No fo assessor",
+    header: "No of assessors",
   },
 
   {
     accessorKey: "applicationStatus",
-    header: "applicationStatus",
+    header: "Application Status",
     cell: ({ row }) => {
       return (
         <div

@@ -15,12 +15,13 @@ import {
 } from "@/components(shadcn)/ui/select";
 import { RotateCcw, X } from "lucide-react";
 
-//in this component fetech all the request of AA  that are present in the database as notification data...
-const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentAgency] = useState([]);
+// Component to fetch and display all AA notifications
+const AaNotificationBoxContent = () => {
+  const [assessmentAgency, setAssessmentAgency] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [course, setCourse] = useState([]);
-  const [filters, setFilters] = useState({ 
+  const [filters, setFilters] = useState({
     sector: "",
     course: "",
     state: "",
@@ -99,8 +100,7 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
   const location = useLocation();
   const path = location.pathname;
 
-  const hasActiveFilters = Object.values(filters).some(value => value !== "");
-
+  const hasActiveFilters = Object.values(filters).some((value) => value !== "");
 
   return (
     <>
@@ -164,9 +164,15 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
               </SelectContent>
             </Select>
 
-            {
-              hasActiveFilters && <div className='flex'><span className='font-semibold'>Reset</span><X onClick={resetFilters} className="w-4 cursor-pointer hover:cursor-pointer" /></div>
-            }
+            {hasActiveFilters && (
+              <div className="flex">
+                <span className="font-semibold">Reset</span>
+                <X
+                  onClick={resetFilters}
+                  className="w-4 cursor-pointer hover:cursor-pointer"
+                />
+              </div>
+            )}
           </div>
         </div>
         {/* Data table for the notification */}
@@ -182,7 +188,6 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
     </>
   );
 };
-
 
 export default AaNotificationBoxContent;
 
@@ -205,27 +210,23 @@ const columns = [
   },
   {
     accessorKey: "total_no_of_certified_Assessor",
-    header: "No fo assessor",
+    header: "No of assessor",
   },
-
   {
     accessorKey: "applicationStatus",
-    header: "applicationStatus",
+    header: "Application Status",
     cell: ({ row }) => {
       return (
         <div
           className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
-            "bg-red-100 text-red-500":
-              row.getValue("applicationStatus") === "Rejected",
-            "bg-orange-100 text-orange-500":
-              row.getValue("applicationStatus") === "Pending",
-            "bg-green-100 text-green-400":
-              row.getValue("applicationStatus") === "Approved",
+            "bg-red-100 text-red-500": row.getValue("applicationStatus") === "Rejected",
+            "bg-orange-100 text-orange-500": row.getValue("applicationStatus") === "Pending",
+            "bg-green-100 text-green-400": row.getValue("applicationStatus") === "Approved",
           })}
         >
           {row.getValue("applicationStatus")}
         </div>
       );
     },
-  }, 
+  },
 ];

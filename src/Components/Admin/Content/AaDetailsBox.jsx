@@ -34,10 +34,7 @@ const AaDetailsBox = ({ id }) => {
   const [course, setCourse] = useState([]);
   const [sector, setSector] = useState([]);
   const [percentage, setPercentage] = useState(null);
-  //  const data=useRecoilValue(trainingPartnerByID(id))
-  //  console.log(data)
 
-  //function for fetch data from aa by id...
   useEffect(() => {
     try {
       setLoding(true);
@@ -59,19 +56,18 @@ const AaDetailsBox = ({ id }) => {
     }
   }, []);
 
-  //function for approve the application
   const authState = useRecoilValue(authenticationState);
   const applicationApproved = async () => {
     setLoding(true);
     const token = authState.token;
     if (!token) {
-      console.log("Admin not  found");
+      console.log("Admin not found");
       return;
     }
     try {
       const responce = await axios.put(
         `${server}/aa/approve/${id}`,
-        {percentage},
+        { percentage },
         {
           headers: {
             "x-access-token": token,
@@ -89,7 +85,7 @@ const AaDetailsBox = ({ id }) => {
       setData(responce.data.data);
     } catch (error) {
       setLoding(false);
-      toast.success("Somthing went wrong", {
+      toast.success("Something went wrong", {
         position: "bottom-right",
         closeOnClick: true,
         draggable: true,
@@ -98,12 +94,11 @@ const AaDetailsBox = ({ id }) => {
     }
   };
 
-  //function for reject the application
   const applicationReject = async () => {
     setLoding(true);
     const token = authState.token;
     if (!token) {
-      console.log("Admin not  found");
+      console.log("Admin not found");
       return;
     }
     try {
@@ -127,12 +122,12 @@ const AaDetailsBox = ({ id }) => {
       setData(responce.data.data);
     } catch (error) {
       setLoding(false);
-      toast.success("Somthing went wrong", {
+      toast.success("Something went wrong", {
         position: "bottom-right",
         closeOnClick: true,
         draggable: true,
         theme: "colored",
-      }); 
+      });
     }
   };
 
@@ -149,84 +144,85 @@ const AaDetailsBox = ({ id }) => {
             <Table>
               <TableBody>
                 <TableRow className="text-lg border-none h-[5px]">
-                  <TableCell className="font-medium">AgencyName*</TableCell>
+                  <TableCell className="font-medium">Name*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.agencyName ?? "Unknown"}
+                    {data?.name ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">
-                    HeadOfTheOrganization*
-                  </TableCell>
+                  <TableCell className="font-medium">Ward*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.headOfTheOrganization ?? "Unknown"}
+                    {data?.ward ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">Email*</TableCell>
+                  <TableCell className="font-medium">Date of Birth*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.email ?? "Unknown"}
+                    {data?.dob ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">Phone No*</TableCell>
+                  <TableCell className="font-medium">Assessor ID*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.phoneNumber ?? "Unknown"}
+                    {data?.assessorID ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">Course*</TableCell>
+                  <TableCell className="font-medium">Qualification*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.subject ?? "Unknown"}
+                    {data?.qualificationName ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">WebsiteLink *</TableCell>
+                  <TableCell className="font-medium">Duration*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.websiteLink ?? "Unknown"}
+                    {data?.duration ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">
-                    Courses Provided By Traning Partner *
-                  </TableCell>
+                  <TableCell className="font-medium">Earned*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline">Show Course</Button>
-                      </PopoverTrigger>
-
-                      {course &&
-                        course.map((courses, index) => (
-                          <PopoverContent key={index} className="bg-green-300">
-                            {courses}
-                          </PopoverContent>
-                        ))}
-                    </Popover>
+                    {data?.earned ?? "Unknown"}
                   </TableCell>
                 </TableRow>
                 <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">
-                    Available Sector*
-                  </TableCell>
+                  <TableCell className="font-medium">NSQF Level*</TableCell>
                   <TableCell className="pl-4 md:pl-24 text-lg">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline">Show Sector</Button>
-                      </PopoverTrigger>
-
-                      {sector &&
-                        sector.map((sectors, index) => (
-                          <PopoverContent key={index} className="bg-green-300">
-                            {sectors}
-                          </PopoverContent>
-                        ))}
-                    </Popover>
+                    {data?.nsqfLevel ?? "Unknown"}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="text-lg border-none">
+                  <TableCell className="font-medium">Center Place*</TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    {data?.centerplace ?? "Unknown"}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="text-lg border-none">
+                  <TableCell className="font-medium">District*</TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    {data?.District ?? "Unknown"}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="text-lg border-none">
+                  <TableCell className="font-medium">State*</TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    {data?.State ?? "Unknown"}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="text-lg border-none">
+                  <TableCell className="font-medium">Place of Issue*</TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    {data?.placeOfIssue ?? "Unknown"}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="text-lg border-none">
+                  <TableCell className="font-medium">Date of Issue*</TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    {data?.dateOfIssue ?? "Unknown"}
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
-            {/* table for office Address */}
             <div className="w-full mt-5">
               <p className="text-xl font-semibold underline">OFFICE ADDRESS</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
@@ -249,193 +245,134 @@ const AaDetailsBox = ({ id }) => {
                   </p>
                 </div>
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Zip code*</h3>
+                  <h3 className="text-lg font-medium mb-2">Pincode*</h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.pin ?? "Unknown"}
+                    {data?.officeAddress?.pincode ?? "Unknown"}
                   </p>
                 </div>
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Country*</h3>
+                  <h3 className="text-lg font-medium mb-2">Contact Number*</h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.country ?? "Unknown"}
+                    {data?.officeAddress?.contact ?? "Unknown"}
+                  </p>
+                </div>
+                <div className="p-3">
+                  <h3 className="text-lg font-medium mb-2">Email ID*</h3>
+                  <p className="text-lg border-b-[1px]">
+                    {data?.officeAddress?.email ?? "Unknown"}
                   </p>
                 </div>
               </div>
             </div>
-            {/* table for  communicationAddress */}
+          </div>
+          <div className="w-full md:w-1/4 md:ml-20 mt-10 md:mt-0">
+            <div className="flex justify-center md:justify-end">
+              <img
+                src={data?.userPhoto || defaultUserPhoto}
+                alt="User Photo"
+                className="rounded-lg w-[400px] h-[300px]"
+              />
+            </div>
             <div className="w-full mt-5">
-              <p className="text-xl font-semibold underline">
-                COMMUNICATION ADDRESS
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+              <h3 className="text-xl font-semibold underline">
+                Bank Details
+              </h3>
+              <div className="grid grid-cols-1 gap-4 mt-3">
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">State*</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    Bank Name*
+                  </h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.state ?? "Unknown"}
+                    {data?.bankDetails?.bankName ?? "Unknown"}
                   </p>
                 </div>
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Street*</h3>
+                  <h3 className="text-lg font-medium mb-2">Account Number*</h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.street ?? "Unknown"}
+                    {data?.bankDetails?.accountNumber ?? "Unknown"}
                   </p>
                 </div>
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">City*</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    Branch Name*
+                  </h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.city ?? "Unknown"}
+                    {data?.bankDetails?.branchName ?? "Unknown"}
                   </p>
                 </div>
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Zip code*</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    IFSC Code*
+                  </h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.pin ?? "Unknown"}
+                    {data?.bankDetails?.ifscCode ?? "Unknown"}
                   </p>
                 </div>
                 <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Country*</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    Account Holder Name*
+                  </h3>
                   <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.country ?? "Unknown"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* About Spoc */}
-            <div className="w-full mt-5">
-              <p className="text-xl font-semibold underline">ABOUT SPOC</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">SPOC NAME*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.SPOC_NAME ?? "Unknown"}
-                  </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">SPOC EMAIL*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.SPOC_EMAIL ?? "Unknown"}
-                  </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">SPOC CONTACT NO*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.SPOC_CONTACT_NO ?? "Unknown"}
+                    {data?.bankDetails?.accountHolderName ?? "Unknown"}
                   </p>
                 </div>
               </div>
             </div>
-            <Table className="mt-5">
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  Legal Status Of The Organization*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  <p className="flex justify-between">
-                    <div>{data?.legalStatusOfTheOrganization ?? "Unknown"}</div>
-                    {/* <TbFileCertificate /> */}
-                  </p>
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  PAN NO OF COMPANY*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.COMPANY_PAN_NO ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  GST NO OF COMPANY*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.COMPANY_GST_NO ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">NO OF BRANCHES*</TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.NO_OF_BRANCHES ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  State Under GeographicalRegion*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.state_Under_geographicalRegion ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  Total no of certified Assessor*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.total_no_of_certified_Assessor ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">LETTER OF NCVET*</TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.LETTER_OF_NCVET ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              {/* location maybe edit later */}
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  geographical region*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.geographical_region ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-            </Table>
           </div>
         </div>
-        {/* field for add amount for tp according to scheme */}
-        {data?.applicationStatus === "Pending" ? (
-          <div className="p-8 w-[500px]">
-            <form onSubmit={applicationApproved}>
-              <Label htmlFor="name" className="text-left w-40 text-lg">
-                Add Share in Percentege for this Assessment agency..
-              </Label>
-              <Input
-                id="scheme-name"
-                className="col-span-4 py-6 mt-2"
-                placeholder="Add amount in percentage"
-                value={percentage}
-                onChange={(e) => setPercentage(e.target.value)}
-              />
-            </form>
-          </div>
-        ) : (
-          ""
-        )}
-
-        <div className="flex flex-col md:flex-row justify-between mt-6 mx-4 md:mx-10 w-full md:w-[625px]">
-          <Button
-            onClick={applicationReject}
-            className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
-            disabled={data?.applicationStatus === "Approved" || percentage===null}
-          >
-            {" "}
-            {loding
-              ? "Loding..."
-              : data.applicationStatus === "Rejected"
-              ? "Rejected"
-              : "Reject"}
-          </Button>
-          <Button
-            onClick={applicationApproved}
-            className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data?.applicationStatus === "Rejected"}
-          >
-            {loding
-              ? "Loding..."
-              : data.applicationStatus === "Approved"
-              ? "Approved"
-              : "Approve"}
-          </Button>
+        <div className="m-5 flex flex-col items-center justify-center md:flex-row md:justify-end">
+          {data.status === "underReview" && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
+                >
+                  Approve
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="p-4 w-full mx-auto bg-white rounded-md shadow-md">
+                  <Label className="text-xl font-semibold underline">
+                    Percentage
+                  </Label>
+                  <Input
+                    className="border mt-2"
+                    value={percentage}
+                    onChange={(e) => setPercentage(e.target.value)}
+                    type="text"
+                    placeholder="Enter percentage"
+                  />
+                  <Button
+                    className="mt-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={applicationApproved}
+                  >
+                    Confirm Approval
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+          {data.status === "underReview" && (
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2"
+                  onClick={applicationReject}
+                >
+                  Reject
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="text-lg font-semibold">
+                Are you sure you want to reject this application?
+              </TooltipContent>
+            </Tooltip>
+          )}
+          {data.status === "approved" && (
+            <h3 className="text-2xl font-semibold text-green-500">Approved</h3>
+          )}
+          {data.status === "rejected" && (
+            <h3 className="text-2xl font-semibold text-red-500">Rejected</h3>
+          )}
         </div>
       </div>
     </TooltipProvider>
@@ -443,4 +380,3 @@ const AaDetailsBox = ({ id }) => {
 };
 
 export default AaDetailsBox;
- 

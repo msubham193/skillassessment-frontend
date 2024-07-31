@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components(shadcn)/ui/tabs";
 import AagencyNotification from "./AagencyNotification";
 import TpartnerNotification from "./TpartnerNotifiation";
+import UpdateBatch from "./UpdateBatch";
 
 const NotificationContent = () => {
   const location = useLocation();
@@ -30,9 +31,13 @@ const NotificationContent = () => {
           <TabsTrigger onClick={() => setSelectedTab("overview")} value="overview">
             Assessment Agency
           </TabsTrigger>
+          <TabsTrigger onClick={() => setSelectedTab("updateBatch")} value="updateBatch">
+          Batch
+        </TabsTrigger>
           <TabsTrigger onClick={() => setSelectedTab("analytics")} value="analytics">
             Training Partner
           </TabsTrigger>
+         
         </TabsList>
 
         <TabsContent value="overview">
@@ -41,6 +46,9 @@ const NotificationContent = () => {
         <TabsContent value="analytics">
           {selectedTab === "analytics" && <TpartnerNotification />} 
         </TabsContent>
+        <TabsContent value="updateBatch"> 
+        {selectedTab === "updateBatch" &&  <UpdateBatch/>}
+      </TabsContent>
       </Tabs>
     </div>
   );

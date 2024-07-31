@@ -244,7 +244,7 @@ const CreateCourseForm = () => {
             >
               <div className="p-3">
                 <Label htmlFor="description" className="text-left w-40">
-                  Add NOS
+                  NOS MANE
                 </Label>
                 <Input
                   type="text"
@@ -358,7 +358,7 @@ const CreateCourseForm = () => {
           className="flex items-center space-x-1"
         >
           <PlusIcon className="h-5 w-5" />
-          <span>Add Field</span>
+          <span>Add NOS</span>
         </Button>
         <Button onClick={handleCreateCOurse} className="flex items-center space-x-1">
           Create course

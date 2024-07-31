@@ -15,8 +15,6 @@ import Loder from "../ui/Loder";
 import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
-import { DataTable } from "../ui/notiification/DataTable";
-import { batchColumns } from "../ui/HomeTablist/Batch";
 
 import {
   Popover,
@@ -68,7 +66,7 @@ const TpDetailsBOx = ({ id }) => {
           setLoding(false);
           setData(response.data.data);
           setReferesh((prev) => !prev);
-          // console.log(response.data.data);
+          console.log(response.data.data);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sector);
         });
@@ -650,7 +648,7 @@ const TpDetailsBOx = ({ id }) => {
           </div>
         </div>
         {/* field for add amount for tp according to scheme */}
-       {data?.applicationStatus==="Pending"? <div className="p-8 w-[500px] relative left-44">
+       {data?.applicationStatus==="Pending" && data?.scheme==="corporate"? <div className="p-8 w-[500px] relative left-44">
         <form onSubmit={applicationApproved}>
         <Label htmlFor="name" className="text-left w-40 text-lg">
           Add cost per Student for this Traning Partner..
@@ -680,7 +678,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data.applicationStatus === "Rejected" || amount===null}
+            disabled={data?.applicationStatus === "Rejected" || (data?.scheme==="corporate" && amount===null)}
           >
             {loding
               ? "Loding..."

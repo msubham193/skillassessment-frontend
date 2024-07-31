@@ -24,54 +24,28 @@ const AdminContent = () => {
   const [totalAa, setTotalAa] = useState(0);
   const [totalExam, setTotalExam] = useState(0);
   const [totalBatch, setTotalBatch] = useState(0); 
-  useEffect(() => {
-    try {
-      axios
-        .get(`${server}/tp`, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          setTotalTp(response.data.data.length);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      axios
-        .get(`${server}/aa`, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          setTotalAa(response.data.data.length);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      axios
-        .get(`${server}/exam/all`, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          setTotalExam(response.data.data.length);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      axios
-        .get(`${server}/batch`, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          setTotalBatch(response.data.data.length);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
-  // console.log(totalTp)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tpResponse = await axios.get(`${server}/tp`, { withCredentials: true });
+        setTotalTp(tpResponse.data.data.length);
+
+        const aaResponse = await axios.get(`${server}/aa`, { withCredentials: true });
+        setTotalAa(aaResponse.data.data.length);
+
+        const examResponse = await axios.get(`${server}/exam/all`, { withCredentials: true });
+        setTotalExam(examResponse.data.data.length);
+
+        const batchResponse = await axios.get(`${server}/batch`, { withCredentials: true });
+        setTotalBatch(batchResponse.data.data.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -85,45 +59,47 @@ const AdminContent = () => {
         </div>
 
         {/* DataTabs component is always visible */}
-        <Tabs defaultValue="overview" className="space-y-4 ">
+        <Tabs defaultValue="overview" className="space-y-4">
           <DataTabs
             cardData={[
               {
                 titel: "Total Training Partner",
-                total: +totalTp,
+                total: totalTp,
                 fromLast: "+0 from last Month",
                 logo: CandlestickChart,
               },
               {
-                titel: "Total Batchs",
-                total: +totalBatch,
+                titel: "Total Batches",
+                total: totalBatch,
                 fromLast: "+0 from last Month",
                 logo: GraduationCap,
               },
               {
                 titel: "Total Assessment Agency",
-                total: +totalAa,
+                total: totalAa,
                 fromLast: "+0 from last Month",
                 logo: SquareActivity,
               },
               {
-                titel: "Total Assessment(Exam) ",
-                total: +totalExam,
+                titel: "Total Assessment (Exam)",
+                total: totalExam,
                 fromLast: "+0 from last Year",
                 logo: Presentation,
               },
             ]}
           />
-        </Tabs> 
-        <Tabs defaultValue="accessmentagency" className="space-y-4 ">
-          <TabsList >
-            <TabsTrigger 
+        </Tabs>
+
+        <Tabs defaultValue="accessmentagency" className="space-y-4">
+          <TabsList>
+            <TabsTrigger
               onClick={() => setSelectedTab("accessmentagency")}
               value="accessmentagency"
             >
               Assessment Agency
             </TabsTrigger>
-            <TabsTrigger className="text-gray-700"
+            <TabsTrigger
+              className="text-gray-700"
               onClick={() => setSelectedTab("traningPartner")}
               value="traningPartner"
             >

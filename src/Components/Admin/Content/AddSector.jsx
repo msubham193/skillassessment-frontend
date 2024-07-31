@@ -18,16 +18,16 @@ import { toast } from "react-toastify";
 const AddSector = ({ children }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [showbuttion, setShowbuttion] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
-  //function for create  sector
+  // Function for creating sector
   const createSector = async (e) => {
     e.preventDefault();
-    setShowbuttion(true);
+    setShowButton(true);
     try {
       const response = await axios.post(
         `${server}/sector`,
-        { name, description},
+        { name, description },
         {
           headers: {
             "Content-Type": "application/json",
@@ -37,27 +37,21 @@ const AddSector = ({ children }) => {
       );
       setName("");
       setDescription("");
-      toast.success(
-        "New Sector created",
-        {
-          position: "top-center",
-          closeOnClick: true,
-          draggable: true,
-          theme: "colored",
-        }
-      );
-      setShowbuttion(false);
+      toast.success("New Sector created", {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
     } catch (error) {
-      toast.error(
-        error.response.data,
-        {
-          position: "top-center",
-          closeOnClick: true,
-          draggable: true,
-          theme: "colored",
-        }
-      );
-      setShowbuttion(false);
+      toast.error(error.response.data, {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
     }
   };
 
@@ -69,7 +63,7 @@ const AddSector = ({ children }) => {
           <DialogHeader>
             <DialogTitle>Create Sector</DialogTitle>
             <DialogDescription>
-              Create Sector for Course or select from dropedown
+              Create Sector for Course or select from dropdown
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={createSector}>
@@ -82,16 +76,17 @@ const AddSector = ({ children }) => {
                   id="name"
                   value={name}
                   className="col-span-4"
-                  placeholder="Create  Sector Name"
+                  placeholder="Create Sector Name"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-left  w-40">
+                <Label htmlFor="description" className="text-left w-40">
                   SECTOR DESCRIPTION
                 </Label>
                 <Input
                   id="description"
+                  value={description}
                   className="col-span-4"
                   placeholder="Add description"
                   onChange={(e) => setDescription(e.target.value)}
@@ -100,8 +95,8 @@ const AddSector = ({ children }) => {
             </div>
           </form>
           <DialogFooter>
-            <Button onClick={createSector} type="submit" disabled={showbuttion}>
-              {showbuttion ? "Loding...." : "Generate Sector"}
+            <Button onClick={createSector} type="submit" disabled={showButton}>
+              {showButton ? "Loading...." : "Generate Sector"}
             </Button>
           </DialogFooter>
         </DialogContent>

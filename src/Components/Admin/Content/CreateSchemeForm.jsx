@@ -19,7 +19,7 @@ const CreateSchemeForm = () => {
   const [schemeType, setSchemeType] = useState("");
   const [code, setCode] = useState("");
   const [cost, setCost] = useState("");
-  const [showButton, setShowButton] = useState(false);
+  const [showButton, setShowButton] = useState(false); 
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -83,8 +83,8 @@ const CreateSchemeForm = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="corporate">Corporate</SelectItem>
-              <SelectItem value="state government">State Government</SelectItem>
-              <SelectItem value="central government">Central Government</SelectItem>
+              <SelectItem value="State Government">State Government</SelectItem>
+              <SelectItem value="Central Government">Central Government</SelectItem>
             </SelectContent>
           </Select>
           <Label htmlFor="projectType" className="text-left w-40">

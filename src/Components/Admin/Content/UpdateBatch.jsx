@@ -12,7 +12,7 @@ const UpdateBatch = () => {
     useEffect(() => {
         
           fetchBatches();
-        
+         
       }, []);
     
       const fetchBatches = async () => {

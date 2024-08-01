@@ -3,7 +3,7 @@ import SideNav from '@/Components/Admin/Content/SideNav'
 import TopBar from '@/Components/Admin/Content/TopBar'
 import React from 'react'
 
-const AllBAtch = ({children}) => {
+const AllBAtch = ({children}) => { 
 
   return (
   <>

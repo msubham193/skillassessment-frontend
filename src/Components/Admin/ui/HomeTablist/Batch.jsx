@@ -17,7 +17,7 @@ import { RotateCcw, X } from "lucide-react";
 
 const Batch = () => {
   const [batch, setBatch] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
   const [trainingOrganizations, setTrainingOrganizations] = useState([]);

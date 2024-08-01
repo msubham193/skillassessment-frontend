@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck, UserPlus } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import { useWindowWidth } from '@react-hook/window-size';
 import { Nav } from "../ui/Nav";
@@ -99,12 +99,19 @@ const SideNav = () => {
               href: "/admin/dasbord/createScheme"
             },
             {
-              title: "Create Certificate",
+              title: "Create SNA",
+              label: "",
+              icon: UserPlus,
+              variant: "ghost",
+              href: "/admin/dasbord/CreateSna"
+            },
+            {
+              title: "TOA & TOT",
               label: "",
               icon: FilePlus2,
               variant: "ghost",
               href: "/admin/dasbord/createCertificate"
-            }
+            },
           ]}
         />
       )}

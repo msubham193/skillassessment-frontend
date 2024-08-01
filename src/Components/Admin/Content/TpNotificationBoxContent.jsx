@@ -173,7 +173,7 @@ const TpNotificationBoxContent = () => {
               <SelectTrigger className="w-fit border-0">
                 <SelectValue placeholder="Filter by Scheme" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent> 
                 {schemes.map((scheme) => (
                   <SelectItem key={scheme.id} value={scheme.name}>
                     {scheme.name}

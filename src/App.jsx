@@ -48,6 +48,7 @@ import { CompeltebatchDataAtoms } from "./Components/Traning Partner/Atoms/compl
 import CompeteBtachData from "./Pages/Traning Partner/CompeteBtachData";
 import AllTrainers from "./Pages/Traning Partner/AllTrainers";  
 import CertificateGenerator from "./Components/Admin/Content/CertificateGenerator";
+import CreateSNA from "./Pages/Admin/CreateSNA";
   const App = () => {
     //code for admin
     const [authState, setAuthState] = useRecoilState(authenticationState);
@@ -191,6 +192,11 @@ import CertificateGenerator from "./Components/Admin/Content/CertificateGenerato
                 path="/admin/dasbord/CertificateGenerate"
                 exact
                 element={<CertificateGenerator />}
+              />
+              <Route
+                path="/admin/dasbord/CreateSna"
+                exact
+                element={<CreateSNA />}
               />
             </>
           )}

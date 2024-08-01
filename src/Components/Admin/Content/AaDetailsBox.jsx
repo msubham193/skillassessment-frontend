@@ -35,6 +35,8 @@ const AaDetailsBox = ({ id }) => {
   const [sector, setSector] = useState([]);
   const [percentage, setPercentage] = useState(null);
 
+
+  //function for grt all the detail about the assessmment agency...
   useEffect(() => {
     try {
       setLoding(true);
@@ -45,6 +47,7 @@ const AaDetailsBox = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
+          console.log(response.data.data)
           setReferesh((prev) => !prev);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sectors);
@@ -57,6 +60,8 @@ const AaDetailsBox = ({ id }) => {
   }, []);
 
   const authState = useRecoilValue(authenticationState);
+
+  //this is the function for approve the accessment agency
   const applicationApproved = async () => {
     setLoding(true);
     const token = authState.token;
@@ -93,6 +98,8 @@ const AaDetailsBox = ({ id }) => {
       });
     }
   };
+
+    //this is the function for reject the accessment agency
 
   const applicationReject = async () => {
     setLoding(true);

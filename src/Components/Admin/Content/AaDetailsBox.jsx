@@ -382,7 +382,7 @@ const AaDetailsBox = ({ id }) => {
               <TableRow className="text-lg border-none">
                 <TableCell className="font-medium">LETTER OF NCVET*</TableCell>
                 <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.LETTER_OF_NCVET ?? "Unknown"}
+                  <a href={data?.LETTER_OF_NCVET} target="_blank">{data?.LETTER_OF_NCVET ?? "Unknown"}</a>
                 </TableCell>
               </TableRow>
               {/* location maybe edit later */}
@@ -396,6 +396,9 @@ const AaDetailsBox = ({ id }) => {
               </TableRow>
             </Table>
           </div>
+        </div>
+        <div>
+     
         </div>
         {/* field for add amount for tp according to scheme */}
         {data?.applicationStatus === "Pending" ? (

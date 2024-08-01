@@ -28,9 +28,9 @@ const Aacertificate = ({ data }) => {
     firstPage.drawText(data.duration, { x: 100, y: 550, size: 18, color: rgb(0, 0, 0) });
     firstPage.drawText(data.earned, { x: 100, y: 520, size: 18, color: rgb(0, 0, 0) });
     firstPage.drawText(data.nsqfLevel, { x: 100, y: 490, size: 18, color: rgb(0, 0, 0) });
-    firstPage.drawText(data.centerPlace, { x: 100, y: 460, size: 18, color: rgb(0, 0, 0) });
-    firstPage.drawText(data.district, { x: 100, y: 430, size: 18, color: rgb(0, 0, 0) });
-    firstPage.drawText(data.state, { x: 100, y: 400, size: 18, color: rgb(0, 0, 0) });
+    firstPage.drawText(data.centerplace, { x: 100, y: 460, size: 18, color: rgb(0, 0, 0) });
+    firstPage.drawText(data.District, { x: 100, y: 430, size: 18, color: rgb(0, 0, 0) });
+    firstPage.drawText(data.State, { x: 100, y: 400, size: 18, color: rgb(0, 0, 0) });
     firstPage.drawText(data.placeOfIssue, { x: 100, y: 370, size: 18, color: rgb(0, 0, 0) });
     firstPage.drawText(data.dateOfIssue, { x: 100, y: 340, size: 18, color: rgb(0, 0, 0) });
 
@@ -55,9 +55,7 @@ const Aacertificate = ({ data }) => {
           <Page pageNumber={1} />
         </Document>
       </div>
-      <div className="mt-4">
-        <Button onClick={handleDownload}>Download Certificate</Button>
-      </div>
+     
     </div>
   );
 }

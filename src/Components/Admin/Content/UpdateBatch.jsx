@@ -51,54 +51,54 @@ const UpdateBatch = () => {
 export default UpdateBatch
 
 const batchColumns = [
-  {
+    {
       accessorKey: "courseName",
       header: "Batch Name",
-  },
-  {
+    },
+    {
       accessorKey: "trainingOrganization",
       header: "Created By",
-  },
-  {
+    },
+    {
       accessorKey: "scheme",
       header: "Batch under Scheme",
-  },
-  {
+    },
+    {
       accessorKey: "amountToPaid",
-      header: "Total Amount",
-  },
-  {
-      accessorKey: "clientPaymentStatus",
-      header: "Payment from Client",
-      cell: ({ row }) => {
-          const paymentStatusClient = row.getValue("clientPaymentStatus");
+      header: "Total Amount ",
+    },
+    {
+        accessorKey: "clientPaymentStatus",
+        header: "Payment  from clint",
+        cell: ({ row }) => {
+          const paymentStatusclint = row.getValue("clientPaymentStatus");
           return (
-              <div
-                  className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
-                      "bg-orange-100 text-orange-500": paymentStatusClient === false,
-                      "bg-green-100 text-green-400": paymentStatusClient === true,
-                  })}
-              >
-                  {paymentStatusClient ? "Paid" : "Not Paid"}
-              </div>
+            <div
+              className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+                "bg-orange-100 text-orange-500": paymentStatusclint === false,
+                "bg-green-100 text-green-400": paymentStatusclint === true,
+              })}
+            >
+              {paymentStatusclint ? "Paid" : "Not Paid"}
+            </div>
           );
-      },
-  },
-  {
+        },
+    },
+    {
       accessorKey: "paymentStatus",
       header: "Payment Status",
       cell: ({ row }) => {
-          const paymentStatus = row.getValue("paymentStatus");
-          return (
-              <div
-                  className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
-                      "bg-orange-100 text-orange-500": paymentStatus === false,
-                      "bg-green-100 text-green-400": paymentStatus === true,
-                  })}
-              >
-                  {paymentStatus ? "Paid" : "Not Paid"}
-              </div>
-          );
+        const paymentStatus = row.getValue("paymentStatus");
+        return (
+          <div
+            className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+              "bg-orange-100 text-orange-500": paymentStatus === false,
+              "bg-green-100 text-green-400": paymentStatus === true,
+            })}
+          >
+            {paymentStatus ? "Paid" : "Not Paid"}
+          </div>
+        );
       },
-  },
-];
+    },
+  ];

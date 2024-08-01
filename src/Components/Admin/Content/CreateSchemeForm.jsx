@@ -54,7 +54,7 @@ const CreateSchemeForm = () => {
         draggable: true,
         theme: "colored",
       });
-      console.log(error);
+      console.log(error)
       setShowButton(false);
     }
   };
@@ -63,7 +63,7 @@ const CreateSchemeForm = () => {
     <div className="h-full flex-1 flex-col space-y-2 px-8 pt-4 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Create Scheme!</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Create Course!</h2>
           <p className="text-muted-foreground">
             Here&apos;you can create Scheme for Training Partner !!!
           </p>
@@ -75,7 +75,7 @@ const CreateSchemeForm = () => {
             Scheme Type
           </Label>
           <Select
-            id="schemeType"
+            id="projectType"
             value={schemeType}
             onValueChange={(value) => setSchemeType(value)}
           >
@@ -83,6 +83,7 @@ const CreateSchemeForm = () => {
               <SelectValue placeholder="Select Scheme Type" />
             </SelectTrigger>
             <SelectContent>
+            
               <SelectItem value="corporate">Corporate</SelectItem>
               <SelectItem value="State Government">State Government</SelectItem>
               <SelectItem value="Central Government">Central Government</SelectItem>
@@ -107,11 +108,11 @@ const CreateSchemeForm = () => {
             <SelectItem value="Jharkhand">Jharkhand</SelectItem>
             </SelectContent>
           </Select>
-          <Label htmlFor="projectType" className="text-left w-40">
+          <Label htmlFor="name" className="text-left w-40">
             Project Type
           </Label>
           <Input
-            id="projectType"
+            id="scheme-name"
             className="col-span-4 py-6"
             placeholder="Add Project Type"
             value={projectType}
@@ -121,7 +122,7 @@ const CreateSchemeForm = () => {
             Scheme Name
           </Label>
           <Input
-            id="name"
+            id="scheme-name"
             className="col-span-4 py-6"
             placeholder="Add Scheme name"
             value={name}
@@ -131,7 +132,7 @@ const CreateSchemeForm = () => {
             Scheme Code
           </Label>
           <Input
-            id="code"
+            id="scheme-code"
             className="col-span-4 py-6"
             placeholder="Add Code for Scheme"
             value={code}
@@ -144,7 +145,7 @@ const CreateSchemeForm = () => {
                 Student Fee
               </Label>
               <Input
-                id="cost"
+                id="scheme-cost"
                 className="col-span-4 py-6"
                 placeholder="Cost Per Student"
                 value={cost}

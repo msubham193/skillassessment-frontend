@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Batch from '../ui/HomeTablist/Batch';
 import UpdateBatch from './UpdateBatch';
+import UpdateBatchCorporet from './UpdateBatchCorporet';
 
-const AllBatchTabs = ({ children }) => {
+const AllBatchTabs = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const defaultTab = query.get("tab") || "overview";
@@ -30,15 +31,21 @@ const AllBatchTabs = ({ children }) => {
           <TabsTrigger onClick={() => setSelectedTab("overview")} value="overview">
             Assign Batches
           </TabsTrigger>
-          <TabsTrigger onClick={() => setSelectedTab("updateBatch")} value="updateBatch">
-            Update Payment
+          <TabsTrigger onClick={() => setSelectedTab("updateBatchgov")} value="updateBatchgov">
+            Update Payment(Government)
+          </TabsTrigger>
+          <TabsTrigger onClick={() => setSelectedTab("updateBatchcorporet")} value="updateBatchcorporet">
+            Update Payment(Corporate)
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          {selectedTab === "overview" && <Batch>{children}</Batch>}
+          {selectedTab === "overview" && <Batch/>}
         </TabsContent>
-        <TabsContent value="updateBatch">
-          {selectedTab === "updateBatch" && <UpdateBatch />}
+        <TabsContent value="updateBatchgov">
+          {selectedTab === "updateBatchgov" && <UpdateBatch />}
+        </TabsContent>
+        <TabsContent value="updateBatchcorporet">
+          {selectedTab === "updateBatchcorporet" && <UpdateBatchCorporet />}
         </TabsContent>
       </Tabs>
     </div>

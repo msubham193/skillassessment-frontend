@@ -13,7 +13,7 @@ import { server } from "@/main";
 import axios from "axios";
 import { RotateCcw, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";  
 
 const TpNotificationBoxContent = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);

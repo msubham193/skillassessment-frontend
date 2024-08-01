@@ -17,7 +17,7 @@ import { RotateCcw, X } from "lucide-react";
 
 const Batch = () => {
   const [batch, setBatch] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
   const [trainingOrganizations, setTrainingOrganizations] = useState([]);
@@ -48,7 +48,7 @@ const Batch = () => {
       const response = await axios.get(`${server}/batch/all/query`, {
         params: filters,
         withCredentials: true,
-      }); 
+      });
       setBatch(response.data.data.reverse());
       setIsDataFetched(true);
     } catch (error) {
@@ -117,85 +117,92 @@ const Batch = () => {
 
   return (
     <>
-     <div className="flex justify-end">
-     <Select
-     value={selectedValues.sector}
-     onValueChange={(value) => handleFilterChange("sector", value)}
-   >
-     <SelectTrigger className="w-fit border-0">
-       <SelectValue placeholder="Filter by Sector" />
-     </SelectTrigger>
-     <SelectContent>
-       {sectors.map((sector) => (
-         <SelectItem key={sector.id} value={sector.name}>
-           {sector.name}
-         </SelectItem>
-       ))}
-     </SelectContent>
-   </Select>
+    <div className="h-full flex-1 flex-col space-y-8  md:flex  w-[1250px]"> 
+    <div className="flex items-center justify-between space-y-2">
+      <div>
 
-   <Select
-     value={selectedValues.course}
-     onValueChange={(value) => handleFilterChange("course", value)}
-   >
-     <SelectTrigger className="w-fit border-0">
-       <SelectValue placeholder="Filter by Course" />
-     </SelectTrigger>
-     <SelectContent>
-       {courses.map((course) => (
-         <SelectItem key={course.id} value={course.courseName}>
-           {course.courseName}
-         </SelectItem>
-       ))}
-     </SelectContent>
-   </Select>
+      </div>
 
-   <Select
-     value={selectedValues.trainingOrganization}
-     onValueChange={(value) =>
-       handleFilterChange("trainingOrganization", value)
-     }
-   >
-     <SelectTrigger className="w-fit border-0">
-       <SelectValue placeholder="Filter by Training Organization" />
-     </SelectTrigger>
-     <SelectContent>
-       {trainingOrganizations.map((tp) => (
-         <SelectItem key={tp.id} value={tp.organizationName}>
-           {tp.organizationName}
-         </SelectItem>
-       ))}
-     </SelectContent>
-   </Select>
+      <div className="flex items-center space-x-2">
+        <Select
+          value={selectedValues.sector}
+          onValueChange={(value) => handleFilterChange("sector", value)}
+        >
+          <SelectTrigger className="w-fit border-0">
+            <SelectValue placeholder="Filter by Sector" />
+          </SelectTrigger>
+          <SelectContent>
+            {sectors.map((sector) => (
+              <SelectItem key={sector.id} value={sector.name}>
+                {sector.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-   <Select
-     value={selectedValues.state}
-     onValueChange={(value) => handleFilterChange("state", value)}
-   >
-     <SelectTrigger className="w-fit border-0">
-       <SelectValue placeholder="Filter by State" />
-     </SelectTrigger>
-     <SelectContent>
-       <SelectGroup>
-         <SelectLabel>States</SelectLabel>
-         <SelectItem value="Odisha">Odisha</SelectItem>
-         <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
-         <SelectItem value="West Bengal">West Bengal</SelectItem>
-         <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
-         <SelectItem value="Jharkhand">Jharkhand</SelectItem>
-       </SelectGroup>
-     </SelectContent>
-   </Select>
-   {hasActiveFilters && (
-     <div className="flex">
-       <span className="font-semibold">Reset</span>
-       <X
-         onClick={resetFilters}
-         className="w-4 cursor-pointer hover:cursor-pointer"
-       />
-     </div>
-   )}
-     </div>
+        <Select
+          value={selectedValues.course}
+          onValueChange={(value) => handleFilterChange("course", value)}
+        >
+          <SelectTrigger className="w-fit border-0">
+            <SelectValue placeholder="Filter by Course" />
+          </SelectTrigger>
+          <SelectContent>
+            {courses.map((course) => (
+              <SelectItem key={course.id} value={course.courseName}>
+                {course.courseName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={selectedValues.trainingOrganization}
+          onValueChange={(value) =>
+            handleFilterChange("trainingOrganization", value)
+          }
+        >
+          <SelectTrigger className="w-fit border-0">
+            <SelectValue placeholder="Filter by Training Organization" />
+          </SelectTrigger>
+          <SelectContent>
+            {trainingOrganizations.map((tp) => (
+              <SelectItem key={tp.id} value={tp.organizationName}>
+                {tp.organizationName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={selectedValues.state}
+          onValueChange={(value) => handleFilterChange("state", value)}
+        >
+          <SelectTrigger className="w-fit border-0">
+            <SelectValue placeholder="Filter by State" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>States</SelectLabel>
+              <SelectItem value="Odisha">Odisha</SelectItem>
+              <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+              <SelectItem value="West Bengal">West Bengal</SelectItem>
+              <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+              <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        {hasActiveFilters && (
+          <div className="flex">
+            <span className="font-semibold">Reset</span>
+            <X
+              onClick={resetFilters}
+              className="w-4 cursor-pointer hover:cursor-pointer"
+            />
+          </div>
+        )}
+      </div>
+      </div>
 
       <DataTable
         filter1={"status"}
@@ -205,6 +212,7 @@ const Batch = () => {
         isLoading={loading}
         pageUrl={"batch"}
       />
+      </div>
     </>
   );
 };
@@ -245,7 +253,7 @@ export const batchColumns = [
     cell: ({ row }) => {
       return (
         <div
-          className={cn("font-medium w-fit px-4 py-2 rounded-lg", { 
+          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
             "bg-orange-100 text-orange-500":
               row.getValue("status") === "onGoing",
             "bg-green-100 text-green-400":
@@ -257,10 +265,10 @@ export const batchColumns = [
       );
     },
   },
-    {
+  {
     accessorKey: "isAssigned",
     header: "Assigned Status",
-     cell: ({ row }) => {
+    cell: ({ row }) => {
       const paymentStatus = row.getValue("isAssigned");
       return (
         <div
@@ -283,7 +291,7 @@ export const batchColumns = [
         <div
           className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
             "bg-orange-100 text-orange-500": paymentStatus === false,
-            "bg-green-100 text-green-400": paymentStatus === true, 
+            "bg-green-100 text-green-400": paymentStatus === true,
           })}
         >
           {paymentStatus ? "Paid" : "Not Paid"}

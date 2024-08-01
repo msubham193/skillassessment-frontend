@@ -19,6 +19,7 @@ const CreateSchemeForm = () => {
   const [schemeType, setSchemeType] = useState("");
   const [code, setCode] = useState("");
   const [cost, setCost] = useState("");
+  const [state, setState] = useState("");
   const [showButton, setShowButton] = useState(false); 
 
   const submitHandler = async (e) => {
@@ -27,7 +28,7 @@ const CreateSchemeForm = () => {
     try {
       const response = await axios.post(
         `${server}/scheme`,
-        { name, code, projectType, schemeType, cost },
+        { name, code, projectType, schemeType, cost,state },
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +60,7 @@ const CreateSchemeForm = () => {
   };
 
   return (
-    <div className="h-full flex-1 flex-col space-y-2 p-8 md:flex">
+    <div className="h-full flex-1 flex-col space-y-2 px-8 pt-4 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Create Scheme!</h2>
@@ -69,7 +70,7 @@ const CreateSchemeForm = () => {
         </div>
       </div>
       <form onSubmit={submitHandler}>
-        <div className="mx-72 mt-20">
+        <div className="mx-72 mt-10">
           <Label htmlFor="schemeType" className="text-left w-40">
             Scheme Type
           </Label>
@@ -85,6 +86,25 @@ const CreateSchemeForm = () => {
               <SelectItem value="corporate">Corporate</SelectItem>
               <SelectItem value="State Government">State Government</SelectItem>
               <SelectItem value="Central Government">Central Government</SelectItem>
+            </SelectContent>
+          </Select>
+          <Label htmlFor="schemeType" className="text-left w-40">
+            Select State
+          </Label>
+          <Select
+            id="schemeType"
+            value={state}
+            onValueChange={(value) => setState(value)}
+          >
+            <SelectTrigger className="col-span-4 py-6">
+              <SelectValue placeholder="Select State" />
+            </SelectTrigger>
+            <SelectContent>
+            <SelectItem value="Odisha">Odisha</SelectItem>
+            <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+            <SelectItem value="West Bengal">West Bengal</SelectItem>
+            <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+            <SelectItem value="Jharkhand">Jharkhand</SelectItem>
             </SelectContent>
           </Select>
           <Label htmlFor="projectType" className="text-left w-40">

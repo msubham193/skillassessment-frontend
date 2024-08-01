@@ -18,7 +18,7 @@ const UpdateBatch = () => {
       const fetchBatches = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(`${server}/batch/all/paymentnotification`, { 
+          const response = await axios.get(`${server}/batch/all/payment/gov`, { 
             withCredentials: true,
           });
           setBatch(response.data.data.reverse());

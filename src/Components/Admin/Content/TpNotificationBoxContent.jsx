@@ -13,7 +13,7 @@ import { server } from "@/main";
 import axios from "axios";
 import { RotateCcw, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";  
 
 const TpNotificationBoxContent = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
@@ -173,7 +173,7 @@ const TpNotificationBoxContent = () => {
               <SelectTrigger className="w-fit border-0">
                 <SelectValue placeholder="Filter by Scheme" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent> 
                 {schemes.map((scheme) => (
                   <SelectItem key={scheme.id} value={scheme.name}>
                     {scheme.name}

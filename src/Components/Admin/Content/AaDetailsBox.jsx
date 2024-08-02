@@ -37,7 +37,8 @@ const AaDetailsBox = ({ id }) => {
   //  const data=useRecoilValue(trainingPartnerByID(id))
   //  console.log(data)
 
-  //function for fetch data from aa by id...
+
+  //function for grt all the detail about the assessmment agency...
   useEffect(() => {
     try {
       setLoding(true);
@@ -48,6 +49,7 @@ const AaDetailsBox = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
+          console.log(response.data.data)
           setReferesh((prev) => !prev);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sectors);
@@ -61,6 +63,8 @@ const AaDetailsBox = ({ id }) => {
 
   //function for approve the application
   const authState = useRecoilValue(authenticationState);
+
+  //this is the function for approve the accessment agency
   const applicationApproved = async () => {
     setLoding(true);
     const token = authState.token;
@@ -98,7 +102,8 @@ const AaDetailsBox = ({ id }) => {
     }
   };
 
-  //function for reject the application
+    //this is the function for reject the accessment agency
+
   const applicationReject = async () => {
     setLoding(true);
     const token = authState.token;
@@ -132,7 +137,7 @@ const AaDetailsBox = ({ id }) => {
         closeOnClick: true,
         draggable: true,
         theme: "colored",
-      });
+      }); 
     }
   };
 
@@ -377,7 +382,7 @@ const AaDetailsBox = ({ id }) => {
               <TableRow className="text-lg border-none">
                 <TableCell className="font-medium">LETTER OF NCVET*</TableCell>
                 <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.LETTER_OF_NCVET ?? "Unknown"}
+                  <a href={data?.LETTER_OF_NCVET} target="_blank">{data?.LETTER_OF_NCVET ?? "Unknown"}</a>
                 </TableCell>
               </TableRow>
               {/* location maybe edit later */}
@@ -391,14 +396,9 @@ const AaDetailsBox = ({ id }) => {
               </TableRow>
             </Table>
           </div>
-          <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden mt-4 md:mt-0">
-            <img
-              src={data.PHOTO || defaultUserPhoto}
-              alt="user"
-              onError={(e) => (e.target.src = defaultUserPhoto)}
-              className="w-full h-full object-cover"
-            />
-          </div>
+        </div>
+        <div>
+     
         </div>
         {/* field for add amount for tp according to scheme */}
         {data?.applicationStatus === "Pending" ? (

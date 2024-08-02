@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import SideNav from '../../Content/SideNav';
 import TopBar from '../../Content/TopBar';
 const AllExam = () => {
-    const [allExam, setAllExam] = useState([]);
+    const [allExam, setAllExam] = useState([]); 
     const [loding, setLoding] = useState(false);
     const [isDataFetched, setIsDataFetched] = useState(false); 
     useEffect(() => {
@@ -20,20 +20,20 @@ const AllExam = () => {
             setLoding(false);
             setAllExam(response.data.data.reverse()); 
             setIsDataFetched(true);
-            console.log(response.data.data);
+            // console.log(response.data.data);
           });
       } catch (error) {
         setLoding(false);
         console.log(error);
       }
-    }, [isDataFetched]);
-    console.log("running")
+    }, []);
+    // console.log("running")
   return (
 
     <div className="min-h-screen bg-white text-black flex flex-col">
     {/*top Bar */}
     <TopBar />
-    {/* side bar */}
+    {/* side bar */} 
     <div className="min-h-screen bg-white text-black flex">
       <SideNav />
 

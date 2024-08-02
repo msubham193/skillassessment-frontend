@@ -1,16 +1,7 @@
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Calendar } from "@/components(shadcn)/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components(shadcn)/ui/popover";
-import { format } from "date-fns";
 import ShowAccessmentAgency from "./ShowAccessmentAgency";
 import {
   Select,
@@ -115,7 +106,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                 </Label>
                 <Input
                   id="tp_id"
-                  className="col-span-4"
+                  className="col-span-4" 
                   value={trainingPartnerId}
                 />
               </div>

@@ -39,8 +39,8 @@ import BathAnalysis from "@/Pages/Admin/BathAnalysis";
 import ExamAnalysis from "@/Pages/Admin/ExamAnalysis"; 
 
 export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
-  console.log(data);
-  console.log(typeof(data));
+  // console.log(data);
+  // console.log(typeof(data));
   const navigate = useNavigate();
   const [rowSelection, setRowSelection] = useState({});
   const [anylisis, setAnylisis] = useState("");

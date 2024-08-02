@@ -5,7 +5,8 @@ import React from 'react'
 import { useParams } from 'react-router-dom';
 //here is  the function for file  all the details of the exam.....bt its id.
 const ExamDetails = () => {
-    const { id } = useParams(); 
+    const { id } = useParams();  
+    
 
     return (
       <>

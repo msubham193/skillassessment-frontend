@@ -16,9 +16,11 @@ import { toast } from "react-toastify";
 const CreateSchemeForm = () => {
   const [name, setName] = useState("");
   const [projectType, setProjectType] = useState("");
+  const [schemeType, setSchemeType] = useState("");
   const [code, setCode] = useState("");
-  const [cost, setCost] = useState();
-  const [showButton, setShowButton] = useState(false);
+  const [pricePerStudent, setPricePerStudent] = useState("");
+  const [state, setState] = useState("");
+  const [showButton, setShowButton] = useState(false); 
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ const CreateSchemeForm = () => {
     try {
       const response = await axios.post(
         `${server}/scheme`,
-        { name, code, projectType },
+        { name, code, projectType, schemeType, pricePerStudent,state },
         {
           headers: {
             "Content-Type": "application/json",
@@ -37,7 +39,7 @@ const CreateSchemeForm = () => {
       setName("");
       setCode("");
       setProjectType("");
-      setCost("");
+      setPricePerStudent("");
       toast.success("New scheme added !!", {
         position: "top-center",
         closeOnClick: true,
@@ -52,12 +54,13 @@ const CreateSchemeForm = () => {
         draggable: true,
         theme: "colored",
       });
+      console.log(error)
       setShowButton(false);
     }
   };
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
+    <div className="h-full flex-1 flex-col space-y-2 px-8 pt-4 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Create Course!</h2>
@@ -67,23 +70,54 @@ const CreateSchemeForm = () => {
         </div>
       </div>
       <form onSubmit={submitHandler}>
-        <div className="mx-72 mt-20">
-          <Label htmlFor="projectType" className="text-left w-40">
+        <div className="mx-72 mt-10">
+          <Label htmlFor="schemeType" className="text-left w-40">
             Scheme Type
           </Label>
           <Select
             id="projectType"
-            value={projectType}
-            onValueChange={(value) => setProjectType(value)}
+            value={schemeType}
+            onValueChange={(value) => setSchemeType(value)}
           >
             <SelectTrigger className="col-span-4 py-6">
               <SelectValue placeholder="Select Scheme Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="government">Government</SelectItem>
+            
               <SelectItem value="corporate">Corporate</SelectItem>
+              <SelectItem value="State Government">State Government</SelectItem>
+              <SelectItem value="Central Government">Central Government</SelectItem>
             </SelectContent>
           </Select>
+          <Label htmlFor="schemeType" className="text-left w-40">
+            Select State
+          </Label>
+          <Select
+            id="schemeType"
+            value={state}
+            onValueChange={(value) => setState(value)}
+          >
+            <SelectTrigger className="col-span-4 py-6">
+              <SelectValue placeholder="Select State" />
+            </SelectTrigger>
+            <SelectContent>
+            <SelectItem value="Odisha">Odisha</SelectItem>
+            <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+            <SelectItem value="West Bengal">West Bengal</SelectItem>
+            <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+            <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+            </SelectContent>
+          </Select>
+          <Label htmlFor="name" className="text-left w-40">
+            Project Type
+          </Label>
+          <Input
+            id="scheme-name"
+            className="col-span-4 py-6"
+            placeholder="Add Project Type"
+            value={projectType}
+            onChange={(e) => setProjectType(e.target.value)}
+          />
           <Label htmlFor="name" className="text-left w-40">
             Scheme Name
           </Label>
@@ -114,8 +148,8 @@ const CreateSchemeForm = () => {
                 id="scheme-cost"
                 className="col-span-4 py-6"
                 placeholder="Cost Per Student"
-                value={cost}
-                onChange={(e) => setCost(e.target.value)}
+                value={pricePerStudent}
+                onChange={(e) => setPricePerStudent(e.target.value)}
               />
             </>
           )}

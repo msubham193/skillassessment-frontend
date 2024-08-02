@@ -48,18 +48,22 @@ import { CompeltebatchDataAtoms } from "./Components/Traning Partner/Atoms/compl
 import CompeteBtachData from "./Pages/Traning Partner/CompeteBtachData";
 import AllTrainers from "./Pages/Traning Partner/AllTrainers";  
 import Centers from "./Pages/Traning Partner/Centers";
+import CertificateGenerator from "./Components/Admin/Content/CertificateGenerator";
+import CreateSNA from "./Pages/Admin/CreateSNA";
   const App = () => {
     //code for admin
     const [authState, setAuthState] = useRecoilState(authenticationState);
+    const isAdmin = useRecoilValue(authenticationState);
+    const specificEmail = "adminaccount@cutm.ac.in";
     useEffect(() => {
       const isTokenValid = checkTokenValidity();
       if (isTokenValid) {
         const token = localStorage.getItem("adminAuthToken");
-
-
+        const email = localStorage.getItem("specificEmail");
       setAuthState({
         isAuthenticated: true,
         token: token,
+        email:email
       });
     }
   }, [setAuthState]);
@@ -76,97 +80,128 @@ import Centers from "./Pages/Traning Partner/Centers";
 
 
     return (
-    <div>
+      <div>
       <Routes>
-        <Route path="/adminLogin" exact element={<AdminLogin />} /> 
+        <Route path="/adminLogin" exact element={<AdminLogin />} />
         <Route element={<ProtectedRout />}>
-
-          <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
-          <Route path="/admin/dasbord/batch" exact element={<AllBAtch />} />
-          <Route path="/admin/dasbord/AllExam" exact element={<AllExam />} />
-          <Route
-            path="/admin/dasbord/batch/mark/students/:id"
-            exact
-            element={<BatchWiseStudentResult />}
-          />
-          <Route path="/admin/dasbord/studentMark/:id" exact element={<StudentResultDetails/>} />
-          <Route
-            path="/admin/dasbord/TreaningPartner"
-            exact
-            element={<TpNotification />}
-          />
-          <Route
-            path="/admin/dasbord/AssessmentAgency"
-            exact
-            element={<AaNotification />}
-          />
-          <Route
-            path="/admin/dasbord/Notification" 
-            exact
-            element={<Notification />}
-          />
-          <Route
-            path="/admin/dasbord/TreaningPartner/:id"
-            exact
-            element={<TpDetails />}
-          />
-          <Route
-            path="/admin/dasbord/Notification/tp/:id"
-            exact
-            element={<TpDetails />} 
-          />
-          <Route
-            path="/admin/dasbord/allExam/:id"
-            exact
-            element={<ExamDetails />} 
-          />
-          <Route
-            path="/admin/dasbord/AssessmentAgency/:id"
-            exact
-            element={<AaDetails />}
-          />
-          <Route
-            path="/admin/dasbord/Notification/aa/:id"
-            exact
-            element={<AaDetails />}
-          />
-          <Route path="/admin/dasbord/:id" exact element={<BatchDetails />} />
-          <Route
-            path="/admin/dasbord/createCourse"
-            exact
-            element={<CreateCourse />}
-          />
-          <Route
-            path="/admin/dasbord/createScheme"
-            exact
-            element={<CreateScheme />}
-          />
-           <Route
-            path="/admin/dasbord/createCertificate"
-            exact
-            element={<CreateCertificate />}
-          />
-          <Route
-            path="/admin/dasbord/PaymentsDetails"
-            exact
-            element={<PaymentDEtails />}
-          />
-          <Route
-            path="/admin/dasbord/BatchAnylisis"
-            exact
-            element={<BathAnalysis />}
-          />
-          <Route
-            path="/admin/dasbord/Batch/payment/update/:id"
-            exact
-            element={<UpdateBatchBox />}
-          />
-          <Route
-            path="/admin/dasbord/Aa/invoice/payment/update/:id"
-            exact
-            element={<AaPaymentInvoice />}
-          />
-        </Route> 
+          {isAdmin?.email === specificEmail ? (
+            <>
+            <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
+              <Route
+                path="/admin/dasbord/PaymentsDetails"
+                exact
+                element={<PaymentDEtails />}
+              />
+              <Route
+                path="/admin/dasbord/Aa/invoice/payment/update/:id"
+                exact
+                element={<AaPaymentInvoice />}
+              />
+            </>
+          ) : (
+            <>
+              <Route path="/admin/dasbord" exact element={<AdminDashboard />} />
+              <Route path="/admin/dasbord/batch" exact element={<AllBAtch />} />
+              <Route path="/admin/dasbord/AllExam" exact element={<AllExam />} />
+              <Route
+                path="/admin/dasbord/batch/mark/students/:id"
+                exact
+                element={<BatchWiseStudentResult />}
+              />
+              <Route
+                path="/admin/dasbord/studentMark/:id"
+                exact
+                element={<StudentResultDetails />}
+              />
+              <Route
+                path="/admin/dasbord/TreaningPartner"
+                exact
+                element={<TpNotification />}
+              />
+              <Route
+                path="/admin/dasbord/AssessmentAgency"
+                exact
+                element={<AaNotification />}
+              />
+              <Route
+                path="/admin/dasbord/Notification"
+                exact
+                element={<Notification />}
+              />
+              <Route
+                path="/admin/dasbord/TreaningPartner/:id"
+                exact
+                element={<TpDetails />}
+              />
+              <Route
+                path="/admin/dasbord/Notification/tp/:id"
+                exact
+                element={<TpDetails />}
+              />
+              <Route
+                path="/admin/dasbord/allExam/:id"
+                exact
+                element={<ExamDetails />}
+              />
+              <Route
+                path="/admin/dasbord/AssessmentAgency/:id"
+                exact
+                element={<AaDetails />}
+              />
+              <Route
+                path="/admin/dasbord/Notification/aa/:id"
+                exact
+                element={<AaDetails />}
+              />
+              <Route path="/admin/dasbord/:id" exact element={<BatchDetails />} />
+              <Route
+                path="/admin/dasbord/createCourse"
+                exact
+                element={<CreateCourse />}
+              />
+              <Route
+                path="/admin/dasbord/createScheme"
+                exact
+                element={<CreateScheme />}
+              />
+              <Route
+                path="/admin/dasbord/createCertificate"
+                exact
+                element={<CreateCertificate />}
+              />
+              <Route
+                path="/admin/dasbord/PaymentsDetails"
+                exact
+                element={<PaymentDEtails />}
+              />
+              <Route
+                path="/admin/dasbord/BatchAnylisis"
+                exact
+                element={<BathAnalysis />}
+              />
+              <Route
+                path="/admin/dasbord/Batch/payment/update/:id"
+                exact
+                element={<UpdateBatchBox />}
+              />
+              <Route
+                path="/admin/dasbord/Aa/invoice/payment/update/:id"
+                exact
+                element={<AaPaymentInvoice />}
+              />
+              <Route
+                path="/admin/dasbord/CertificateGenerate"
+                exact
+                element={<CertificateGenerator />}
+              />
+              <Route
+                path="/admin/dasbord/CreateSna"
+                exact
+                element={<CreateSNA />}
+              />
+            </>
+          )}
+        </Route>
 
         <Route
           path="/trainingPartner/dashboard"

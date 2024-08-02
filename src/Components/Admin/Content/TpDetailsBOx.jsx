@@ -15,8 +15,6 @@ import Loder from "../ui/Loder";
 import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
-import { DataTable } from "../ui/notiification/DataTable";
-import { batchColumns } from "../ui/HomeTablist/Batch";
 
 import {
   Popover,
@@ -68,7 +66,7 @@ const TpDetailsBOx = ({ id }) => {
           setLoding(false);
           setData(response.data.data);
           setReferesh((prev) => !prev);
-          // console.log(response.data.data);
+          console.log(response.data.data);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sector);
         });
@@ -199,7 +197,7 @@ const TpDetailsBOx = ({ id }) => {
   return (
     <TooltipProvider>
       <div className="m-4 md:m-10">
-        <div className="flex flex-col md:flex-row justify-between mx-4 md:mx-10"> 
+        <div className="flex flex-col md:flex-row justify-center mx-4 md:mx-10"> 
           <div className="w-full md:w-3/4">
             <Table>
               <TableBody>
@@ -299,10 +297,21 @@ const TpDetailsBOx = ({ id }) => {
                     </Popover>
                   </TableCell>
                 </TableRow>
+                <TableRow className="text-lg border-none">
+                  <TableCell className="font-medium">
+                    View Certificate's*
+                  </TableCell>
+                  <TableCell className="pl-4 md:pl-24 text-lg">
+                    
+                        <Button variant="outline">Show</Button>
+                      
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
             {/* table for registered office Address */}
-            <div className="w-full mt-5">
+            
+            <div className="w-full mt-5"> 
               <p className="text-xl  font-semibold underline">
                 Registered Office Details
               </p>
@@ -635,17 +644,11 @@ const TpDetailsBOx = ({ id }) => {
               )}
             </div>*/}
           </div>
-          <div className="border-[1px] border-black w-48 mx-auto md:w-40 md:mx-0 h-48 overflow-hidden mt-4 md:mt-0">
-            <img
-              src={data.PHOTO || defaultUserPhoto}
-              alt="user"
-              onError={(e) => (e.target.src = defaultUserPhoto)}
-              className="w-full h-full object-cover"
-            />
+          
           </div>
         </div>
         {/* field for add amount for tp according to scheme */}
-       {data?.applicationStatus==="Pending"? <div className="p-8 w-[500px]">
+       {data?.applicationStatus==="Pending" && data?.scheme==="corporate"? <div className="p-8 w-[500px] relative left-44">
         <form onSubmit={applicationApproved}>
         <Label htmlFor="name" className="text-left w-40 text-lg">
           Add cost per Student for this Traning Partner..
@@ -659,7 +662,7 @@ const TpDetailsBOx = ({ id }) => {
         />
         </form>
       </div>:""}
-        <div className="flex flex-col md:flex-row justify-between mt-6 mx-4 md:mx-10 w-full md:w-[625px]">
+        <div className="flex  md:flex-row justify-between mt-6 md:mx-10 w-full md:w-[625px] relative left-44">
           <Button
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
@@ -675,7 +678,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data.applicationStatus === "Rejected" || amount===null}
+            disabled={data?.applicationStatus === "Rejected" || (data?.scheme==="corporate" && amount===null)}
           >
             {loding
               ? "Loding..."
@@ -684,7 +687,7 @@ const TpDetailsBOx = ({ id }) => {
               : "Approve"}
           </Button>
         </div>
-      </div>
+      
     </TooltipProvider>
   );
 };

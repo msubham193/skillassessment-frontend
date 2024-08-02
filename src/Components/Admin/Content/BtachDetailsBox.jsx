@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const BtachDetailsBox = ({ id }) => {
   const [data, setData] = useState({});
-  const [loding, setLoding] = useState(false);
+  const [loding, setLoding] = useState(false); 
 
   const navigate=useNavigate();
   //function for  fetch battch data by id.
@@ -22,7 +22,7 @@ const BtachDetailsBox = ({ id }) => {
         .then((response) => { 
           setLoding(false);
           setData(response.data.data);
-          // console.log(response.data.data)
+          console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);

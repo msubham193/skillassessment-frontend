@@ -4,12 +4,12 @@ import axios from 'axios';
 import { server } from '@/main';
 
 const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
-    const [assessmentAgency, setAssessmentAgency] = useState([]);
+    const [assessmentAgency, setAssessmentAgency] = useState([]); 
     const [loading, setLoading] = useState(false);
 
     //here i can apply the filter for accessment agency.........
 
-    // console.log(course,sector,state)
+    console.log(course,sector,state)
 
     useEffect(() => {
       const fetchAssessmentAgency = async () => {
@@ -17,13 +17,14 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
           try {
               const response = await axios.get(`${server}/aa/all/query`, {
                   params: {
-                      course,
+                     
                       sector,
-                      state
+                      state,
+                      course
                   },
                   withCredentials: true,
               });
-              // console.log(response)
+              console.log(response.data.data)
               setAssessmentAgency(response.data.data.reverse());
           } catch (error) {
               console.error(error);
@@ -41,7 +42,7 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
 
     return (
       <div>
-        <FormTable filter1={"agencyName"}columns={columns} data={assessmentAgency} isLoading={loading} onRowClick={handleRowClick} />
+        <FormTable filter1={"agencyName"} columns={columns} data={assessmentAgency} isLoading={loading} onRowClick={handleRowClick} />
       </div>
     )
 }

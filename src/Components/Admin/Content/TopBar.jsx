@@ -22,7 +22,7 @@ const TopBar = () => {
       const response = await axios.get(`${server}/aa/status/pending`, { withCredentials: true });
       const newData = response.data.data;
 
-      if (initialLoad) {
+      if (initialLoad) { 
         setData1(newData);
       } else if (newData.length > data1.length) {
         setNotification("A new Assessment Agency found");
@@ -59,14 +59,15 @@ const TopBar = () => {
       if (initialLoad) {
         setData3(newData);
       } else if (newData.length > data3.length) {
-        setNotification("A new Government Batch requst found");
+        setNotification("A new Government Batch request found");
         setData3(newData);
-        localStorage.setItem("notification", "A new Government Batch requst found !!!");
+        localStorage.setItem("notification", "A new Government Batch request found");
       }
     } catch (error) {
       console.error('Error fetching data3:', error);
     }
   };
+
   const fetchData4 = async () => {
     try {
       const response = await axios.get(`${server}/batch/all/corporate`, { withCredentials: true });
@@ -74,20 +75,20 @@ const TopBar = () => {
 
       if (initialLoad) {
         setData4(newData);
-      } else if (newData.length > data3.length) {
-        setNotification("A new Corporate Batch requst found");
+      } else if (newData.length > data4.length) {
+        setNotification("A new Corporate Batch request found");
         setData4(newData);
-        localStorage.setItem("notification", "A new Corporate Batch requst found !!!");
+        localStorage.setItem("notification", "A new Corporate Batch request found");
       }
     } catch (error) {
-      console.error('Error fetching data3:', error);
+      console.error('Error fetching data4:', error);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([fetchData1(), fetchData2(),fetchData3(),fetchData4()]);
+      await Promise.all([fetchData1(), fetchData2(), fetchData3(), fetchData4()]);
       setLoading(false);
       if (initialLoad) {
         setInitialLoad(false);
@@ -98,7 +99,7 @@ const TopBar = () => {
 
     const interval1 = setInterval(() => {
       fetchData1();
-    }, 20 * 1000); // 20 seconds for accessment agency
+    }, 20 * 1000); // 20 seconds for assessment agency
     const interval2 = setInterval(() => {
       fetchData2();
     }, 20 * 1000); // 20 seconds for training partner
@@ -115,19 +116,20 @@ const TopBar = () => {
       clearInterval(interval3);
       clearInterval(interval4);
     };
-  }, [data1, data2,data3,data4]);
+  }, [data1, data2, data3, data4]);
 
   const handleOnClick = (notification) => {
     if (notification.includes("Assessment Agency")) {
       navigate("/admin/dasbord/Notification?tab=overview");
     } else if (notification.includes("Training Partner")) {
       navigate("/admin/dasbord/Notification?tab=analytics");
-    } else if (notification.includes("Government Batch requst")) {
+    } else if (notification.includes("Government Batch request")) {
       navigate("/admin/dasbord/Notification?tab=updateBatchgov");
-    } else if (notification.includes("Corporate Batch requst")) {
+    } else if (notification.includes("Corporate Batch request")) {
       navigate("/admin/dasbord/Notification?tab=updateBatchcorporet");
     }
-
+    console.log("clicked");
+    
     setNotification("No new notification !!");
     localStorage.setItem("notification", "No new notification !!");
   };
@@ -161,15 +163,15 @@ const TopBar = () => {
             <SelectTrigger className="w-[60px] bg-[#f2f9f2] border-none">
               <Bell size={23} className="cursor-pointer mt-[5px]" />
               <span className="absolute top-5 right-[100px]">
-              {notification === "No new notification !!" ? "" : (
+                {notification === "No new notification !!" ? "" : (
                   <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>
                 )}
               </span>
             </SelectTrigger>
             <SelectContent className="hover:cursor-pointer">
-            <SelectContent className="hover:cursor-pointer" onClick={handleOnClick}>
-            {notification}
-            </SelectContent>
+              <div onClick={() => handleOnClick(notification)}>
+                {notification}
+              </div>
             </SelectContent>
           </Select>
 

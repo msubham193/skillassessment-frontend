@@ -3,17 +3,14 @@ import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { batchDataAtoms } from "@/Components/Traning Partner/Atoms/batchatom";
+
 const AddTeacher = () => {
   const { id: batchId } = useParams();
-  console.log("this is batch id", batchId);
   const navigate = useNavigate();
   const [batchData, setBatchData] = useState({});
-  console.log("this is batchdata ", batchData);
+
   const TeacherLabels = [
     "name",
     "phoneNumber",
@@ -38,6 +35,30 @@ const AddTeacher = () => {
     "PRN_NO",
   ];
 
+  const TeacherLabelsForDisplay = [
+    "Name",
+    "Phone Number",
+    "Email",
+    "Education Qualification 1",
+    "Education Qualification 2",
+    "Education Qualification 3",
+    "Education Qualification 4",
+    "Certification Course",
+    "Relevant Industry Experience",
+    "Other Experience",
+    "PAN Card No.",
+    "Aadhar No.",
+    "State",
+    "City",
+    "District",
+    "Pincode",
+    "Certified In",
+    "Course Code",
+    "Sector",
+    "Profile Picture",
+    "PRN No.",
+  ];
+
   const [teacherInputs, setTeacherInputs] = useState(
     TeacherLabels.reduce((acc, label) => {
       acc[label] = "";
@@ -52,8 +73,6 @@ const AddTeacher = () => {
       [name]: value,
     }));
   };
-
-  //fetching the batchdata
 
   const fetchBatchdata = async () => {
     try {
@@ -97,7 +116,7 @@ const AddTeacher = () => {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json", 
             "x-access-token": localStorage.getItem("token"),
           },
           body: JSON.stringify(teacherInputs),
@@ -118,14 +137,14 @@ const AddTeacher = () => {
       toast.error("Failed to add teacher");
     }
   };
-  console.log(teacherInputs);
+
   return (
-    <div className="flex justify-center p-8">
-      <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold">Add Teacher</h1>
+    <div className="flex justify-center p-8 bg-gray-100">
+      <div className="p-6 w-[600px] overflow-y-auto bg-white rounded-lg shadow-md">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-indigo-600">Add Teacher</h1>
           <Link
-            className="text-blue-600"
+            className="text-indigo-600 hover:text-indigo-800 transition-colors"
             to={`/trainingPartner/dashboard/Teachers?batchId=${batchId}`}
           >
             Add existing Teacher
@@ -134,14 +153,16 @@ const AddTeacher = () => {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
           {TeacherLabels.map((label, index) => (
             <div key={index} className="flex flex-col gap-2">
-              <Label htmlFor={label}>{label}</Label>
+              <Label htmlFor={label} className="text-sm font-medium text-gray-700">
+                {TeacherLabelsForDisplay[index]}
+              </Label>
               {label === "profilePic" ? (
                 <Input
                   type="file"
                   name={label}
                   id={label}
                   onChange={handleChange}
-                  value={teacherInputs[label]}
+                  className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               ) : (
                 <Input
@@ -150,11 +171,17 @@ const AddTeacher = () => {
                   id={label}
                   onChange={handleChange}
                   value={teacherInputs[label]}
+                  className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               )}
             </div>
           ))}
-          <Button type="submit">Add Trainer</Button>
+          <Button 
+            type="submit"
+            className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors"
+          >
+            Add Trainer
+          </Button>
         </form>
       </div>
     </div>

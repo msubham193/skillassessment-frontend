@@ -50,6 +50,7 @@ const Student = () => {
                                 <div className="flex flex-col items-center">
                                     <Avatar className="w-32 h-32 mb-4">
                                         <AvatarImage src={studentData.profilepic || defaultUserPhoto} alt="Student" />
+                                        {console.log("pic",studentData.profilepic)}
                                         <AvatarFallback>{studentData.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                     <h2 className="text-2xl font-bold text-gray-800 mb-1">{studentData.name}</h2>

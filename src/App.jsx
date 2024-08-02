@@ -33,7 +33,7 @@ import Signin from "./Pages/Traning Partner/Signin";
 import ProfilePopup from "./Pages/Traning Partner/ProfilePopup";
 import Teachers from "./Pages/Traning Partner/Teachers";
 import CreateBatch from "./Pages/Traning Partner/CreateBatch";
-import AddTeacher from "./Pages/Traning Partner/AddTeacher";
+import AddTeacher from "./Pages/Traning Partner/AddTrainer";
 import AddStudent from "./Pages/Traning Partner/AddStudent";
 import Batch from "./Pages/Traning Partner/Batch";
 import Student from "./Pages/Traning Partner/Student";
@@ -47,6 +47,7 @@ import Transcript from "./Pages/Traning Partner/Transcript";
 import { CompeltebatchDataAtoms } from "./Components/Traning Partner/Atoms/completeBtachAtom";
 import CompeteBtachData from "./Pages/Traning Partner/CompeteBtachData";
 import AllTrainers from "./Pages/Traning Partner/AllTrainers";  
+import Centers from "./Pages/Traning Partner/Centers";
 import CertificateGenerator from "./Components/Admin/Content/CertificateGenerator";
 import CreateSNA from "./Pages/Admin/CreateSNA";
   const App = () => {
@@ -204,24 +205,25 @@ import CreateSNA from "./Pages/Admin/CreateSNA";
 
         <Route
           path="/trainingPartner/dashboard"
-          element={<Dashboard />}
-        />
-        <Route path='/trainingPartner/signup' exact element={<Signup />} />
-        <Route path='/statusFail' exact element={<ApllicationStatusFail />} />
-        <Route path='/trainingPartner/signin' exact element={<Signin />} />
-        <Route path='/profile' exact element={<ProfilePopup />} />
-        <Route path='/trainingPartner/dashboard/Teachers' exact element={<Teachers batchid={batchId} />} />
-        <Route path="/CreateBatch" exact element={<CreateBatch />} />
-        <Route path="/Createcenter" exact element={<CreateCenter />} />
-        <Route path="/manageBatch" exact element={<ManageBatch />} />
-        <Route path="/transcript" exact element={<Transcript />} />
-        <Route path="/trainers" exact element={<AllTrainers />} />
-        <Route path="/completeBatchData/:completebatchId" exact element={<CompeteBtachData />} />
-        <Route path='/trainingPartner/dashboard/CreateBatch/addteacher/:id' exact element={<AddTeacher />} />
-        <Route path='/trainingPartner/dashboard/CreateBatch/addstudent/:id' exact element={<AddStudent>{'Add Student'}</AddStudent>} />
-        <Route path='/trainingPartner/dashboard/:batchId' element={<Batch />} />
-        <Route path='/trainingPartner/dashboard/student/:Id' element={<Student />} />
-        <Route path='//trainingPartner/setting' exact element={<Setting />} />
+          // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}  
+          element={<Dashboard />} />
+    <Route path='/trainingPartner/signup' exact element={ <Signup /> } />
+    <Route path='/statusFail' exact element={ <ApllicationStatusFail /> } />
+    <Route path='/trainingPartner/signin' exact element={ <Signin /> } />
+    <Route path='/profile' exact element={ <ProfilePopup /> } />
+    <Route path='/trainingPartner/dashboard/Teachers' exact element={<Teachers batchid={batchId} />} />
+    <Route path="/CreateBatch" exact element={<CreateBatch />} />
+    <Route path="/Createcenter" exact element={<CreateCenter />} />
+    <Route path="/manageBatch" exact element={<ManageBatch />} />
+    <Route path="/transcript" exact element={<Transcript />} />
+    <Route path="/trainers" exact element={<AllTrainers />} />
+    <Route path="/centers" exact element={<Centers />} />
+    <Route path="/completeBatchData/:completebatchId" exact element={<CompeteBtachData />} />
+    <Route path='/trainingPartner/dashboard/CreateBatch/addteacher/:id' exact element={<AddTeacher />} />
+    <Route path='/trainingPartner/dashboard/CreateBatch/addstudent/:id' exact  element={<AddStudent>{'Add Student'}</AddStudent>} />
+    <Route path='/trainingPartner/dashboard/:batchId' element={<Batch />} />
+    <Route path='/trainingPartner/dashboard/student/:Id' element={<Student />} />
+    <Route path='//trainingPartner/setting' exact element={<Setting />} />
       </Routes>
       <ToastContainer />
     </div>

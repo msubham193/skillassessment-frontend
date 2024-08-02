@@ -14,64 +14,56 @@ const Preinvoice = ({ batch }) => {
 
   return (
     <div
-      className="bg-white text-black p-10"
+      className="bg-white text-black"
       style={{
         fontFamily: "Arial, sans-serif",
         width: "210mm",
-        padding: "20mm",
+        padding: "10mm 20mm",
+        margin: "0 auto",
       }}
     >
-      <div className="text-center mb-10">
-        <img src={logo} alt="Logo" className="w-24 mb-4 mx-auto" />
+      <div className="text-center mb-2">
+        <img src={logo} alt="Logo" className="w-16 mx-auto" />
       </div>
-      <div className="text-center mb-10">
+      <div className="text-center mb-3">
         <h1 className="text-2xl font-bold">INVOICE</h1>
       </div>
-      <div className="mb-10">
-        <table className="w-full table-fixed border-collapse">
+      <div className="mb-3">
+        <table className="w-full border-collapse text-sm">
           <tbody>
             <tr>
-              <td className="w-1/2 border border-black p-2">
+              <td className="w-1/2 border border-black p-1">
                 Invoice No: {invoiceNo}
               </td>
-              <td className="w-1/2 border border-black p-2">
+              <td className="w-1/2 border border-black p-1">
                 Date: {currentDate}
               </td>
             </tr>
             <tr>
-              <td className="w-1/2 border border-black p-2">To: CUTM</td>
-              <td className="w-1/2 border border-black p-2">
+              <td className="w-1/2 border border-black p-1">To: CUTM</td>
+              <td className="w-1/2 border border-black p-1">
                 From: {batch.trainingOrganization}
               </td>
             </tr>
             <tr>
-              <td className="w-1/2 border border-black p-2">
-                CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT
-                <br />
-                CT Campus
-                <br />
-                Paralakhemundi, Gajapati
-                <br />
-                Pin: 761211, Odisha
-                <br />
-                Contact Person: Subrat Kumar Sahu - +91-7008810321
+              <td className="w-1/2 border border-black p-1 align-top">
+                <p className="font-semibold">CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT</p>
+                <p>CT Campus</p>
+                <p>Paralakhemundi, Gajapati</p>
+                <p>Pin: 761211, Odisha</p>
+                <p>Contact Person: Subrat Kumar Sahu - +91-7008810321</p>
               </td>
-              <td className="w-1/2 border border-black p-2">
-                {tpdata.organizationName}
-                <br />
-                {tpdata.registeredOfficeAddres}
-                <br />
-                City: {tpdata.registeredOfficeCity}
-                <br />
-                State: {tpdata.registeredOfficeState}
-                <br />
-                Pin: {tpdata.registeredOfficePin}
-                <br />
-                Mob No: {tpdata.registeredOfficeMobile}
+              <td className="w-1/2 border border-black p-1 align-top">
+                <p className="font-semibold">{tpdata.organizationName}</p>
+                <p>{tpdata.registeredOfficeAddres}</p>
+                <p>City: {tpdata.registeredOfficeCity}</p>
+                <p>State: {tpdata.registeredOfficeState}</p>
+                <p>Pin: {tpdata.registeredOfficePin}</p>
+                <p>Mob No: {tpdata.registeredOfficeMobile}</p>
               </td>
             </tr>
             <tr>
-              <td colSpan="2" className="border border-black p-2">
+              <td colSpan="2" className="border border-black p-1">
                 Dear Sir, Kindly arrange to pay the below amount towards
                 assessment fee.
               </td>
@@ -79,95 +71,71 @@ const Preinvoice = ({ batch }) => {
           </tbody>
         </table>
       </div>
-      <table className="w-full border-collapse mb-10 text-center">
+      <table className="w-full border-collapse mb-3 text-center text-sm">
         <thead>
-          <tr className="border border-black">
-            <th className="border border-black p-2">S.No</th>
-            <th className="border border-black p-2">Description</th>
-            <th className="border border-black p-2">No of candidates</th>
-            <th className="border border-black p-2">Photo</th>
-            <th className="border border-black p-2">Amount</th>
+          <tr className="bg-gray-100">
+            <th className="border border-black p-1">S.No</th>
+            <th className="border border-black p-1">Description</th>
+            <th className="border border-black p-1">No of candidates</th>
+            <th className="border border-black p-1">Photo</th>
+            <th className="border border-black p-1">Amount</th>
           </tr>
         </thead>
         <tbody>
-          <tr className="border border-black">
-            <td className="border border-black p-2">01</td>
-            <td className="border border-black p-2">
+          <tr>
+            <td className="border border-black p-1">01</td>
+            <td className="border border-black p-1 text-left">
               Center name: Assessment of Batch No: {batch.ABN_Number}
             </td>
-            <td className="border border-black p-2">{batch.students.length}</td>
-            <td className="border border-black p-2"></td>
-            <td className="border border-black p-2">
-              {batch.amountToPaid / batch.students.length}
+            <td className="border border-black p-1">{batch.students.length}</td>
+            <td className="border border-black p-1"></td>
+            <td className="border border-black p-1">
+              {(batch.amountToPaid / batch.students.length).toFixed(2)}
             </td>
           </tr>
-          <tr className="border border-black">
-            <td colSpan="4" className="border border-black p-2 text-right">
+          <tr className="font-semibold">
+            <td colSpan="4" className="border border-black p-1 text-right">
               Total
             </td>
-            <td className="border border-black p-2">{batch.amountToPaid}</td>
+            <td className="border border-black p-1">{batch.amountToPaid.toFixed(2)}</td>
           </tr>
-          <tr className="border border-black">
-            <td colSpan="5" className="border border-black p-2">
-              Total Amount in Words: {numberToWords(batch.amountToPaid)} Rupees
-              Only
+          <tr>
+            <td colSpan="5" className="border border-black p-1 text-left">
+              Total Amount in Words: {numberToWords(batch.amountToPaid)} Rupees Only
             </td>
           </tr>
         </tbody>
       </table>
-      <div className="mb-10">
-        <p>Please note the following details for the transfer of funds</p>
-        <table className="w-full border-collapse">
+      <div className="mb-3">
+        <p className="font-semibold mb-1 text-sm">Please note the following details for the transfer of funds</p>
+        <table className="w-full border-collapse text-sm">
           <tbody>
-            <tr>
-              <td className="border border-black p-2">Bank</td>
-              <td className="border border-black p-2">Punjab National Bank</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">In Favour Of</td>
-              <td className="border border-black p-2">
-                Centurion University of Technology and Management
-              </td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">Branch Address</td>
-              <td className="border border-black p-2">Gajapati, Odisha</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">Account Type</td>
-              <td className="border border-black p-2">Current Account</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">Account No</td>
-              <td className="border border-black p-2">14261193014446</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">MICR CODE</td>
-              <td className="border border-black p-2">761024003</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">IFSC</td>
-              <td className="border border-black p-2">PUNB0141610</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">PAN No</td>
-              <td className="border border-black p-2">AAAAJ9465D</td>
-            </tr>
-            <tr>
-              <td className="border border-black p-2">GST No</td>
-              <td className="border border-black p-2">21AAAJC0251B1ZB</td>
-            </tr>
+            {[
+              ["Bank", "Punjab National Bank"],
+              ["In Favour Of", "Centurion University of Technology and Management"],
+              ["Branch Address", "Gajapati, Odisha"],
+              ["Account Type", "Current Account"],
+              ["Account No", "14261193014446"],
+              ["MICR CODE", "761024003"],
+              ["IFSC", "PUNB0141610"],
+              ["PAN No", "AAAAJ9465D"],
+              ["GST No", "21AAAJC0251B1ZB"],
+            ].map(([key, value], index) => (
+              <tr key={index}>
+                <td className="border border-black p-1 font-semibold w-1/3">{key}</td>
+                <td className="border border-black p-1">{value}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <div className="text-right">
+      <div className="text-right text-sm">
         <p>For Centurion University of Technology and Management</p>
         <p className="mt-4">Authorized Signature</p>
       </div>
     </div>
   );
 };
-
 // Helper function to convert number to words
 function numberToWords(num) {
   const ones = [

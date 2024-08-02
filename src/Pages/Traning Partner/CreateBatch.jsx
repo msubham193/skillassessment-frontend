@@ -23,14 +23,13 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components(shadcn)/ui/popover";
-import { format } from "date-fns";
+
 
 const CreateBatch = () => {
   const trainingPartnerData = useRecoilValue(tpDataAtoms);
   const sectors = trainingPartnerData?.sector || [];
   const navigate = useNavigate();
   const [batchInputs, setBatchInputs] = useState({
-    center: null,
     courseName: "",
     courseCode: "",
     CenterCode: "",
@@ -43,26 +42,41 @@ const CreateBatch = () => {
     endDate: null,
     centerName: "",
   });
-  const [centers, setCenters] = useRecoilState(centerAtom);
+  const [centers, setCenters] = useState([]);
   const [batchData, setBatchData] = useRecoilState(batchDataAtoms);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [schemeData, setSchemeData] = useState([]);
-
   const tpid = localStorage.getItem("trainingPartnerId");
-  const tpData=useRecoilValue(tpDataAtoms)
-  const tpcode=tpData.tpCode
-  console.log("tp ra data",tpData.tpCode)
+  const tpData = useRecoilValue(tpDataAtoms);
+  const tpcode = tpData.tpCode;
+  const selcetdSchemeType = batchInputs.schemeType;
+  console.log("selecetdscheme", selcetdSchemeType);
+
   const fetchCenters = async () => {
-    if (!tpid) return;
+    if (!tpid) {
+      console.log("No TPID provided");
+      return;
+    }
+    if(!batchInputs.scheme && !batchInputs.state){
+      console.log("scheme and state not seletcted ")
+      return ;
+    }
+
+    console.log("Fetching centers...");
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:8000/api/v1/center/tp/${tpid}`);
+      const response = await fetch(
+        `http://localhost:8000/api/v1/tp/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
+      );
+      console.log("Response received");
       if (!response.ok) {
+        console.error("Response not ok");
         throw new Error("Failed to fetch centers");
       }
       const data = await response.json();
+      console.log("schemss", data.data);
       setCenters(data.data || []);
     } catch (error) {
       console.error("Error fetching centers:", error);
@@ -76,7 +90,9 @@ const CreateBatch = () => {
     if (!batchInputs.sectorName) return;
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:8000/api/v1/sector?name=${batchInputs.sectorName}`);
+      const response = await fetch(
+        `http://localhost:8000/api/v1/sector?name=${batchInputs.sectorName}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch courses");
       }
@@ -93,20 +109,22 @@ const CreateBatch = () => {
   const fetchScheme = async () => {
     if (!batchInputs.schemeType) return;
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/scheme/query?schemeType=${encodeURIComponent(batchInputs.schemeType)}`);
+      const response = await fetch(
+        `http://localhost:8000/api/v1/scheme/query?schemeType=${selcetdSchemeType}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch schemes');
+        throw new Error("Failed to fetch schemes");
       }
       const data = await response.json();
       setSchemeData(data.data || []);
     } catch (error) {
-      toast.error(error.message || 'Failed to fetch scheme type');
+      toast.error(error.message || "Failed to fetch scheme type");
     }
   };
 
   useEffect(() => {
     fetchCenters();
-  }, [tpid]);
+  }, [tpid,batchInputs.scheme,batchInputs.state]);
 
   useEffect(() => {
     fetchCourses();
@@ -118,8 +136,14 @@ const CreateBatch = () => {
 
   const validateForm = () => {
     const requiredFields = [
-      "center", "courseName", "sectorName", "trainingOrganization",
-      "scheme", "state", "startDate", "endDate"
+      "center",
+      "courseName",
+      "sectorName",
+      "trainingOrganization",
+      "scheme",
+      "state",
+      "startDate",
+      "endDate",
     ];
     for (let field of requiredFields) {
       if (!batchInputs[field]) {
@@ -131,13 +155,13 @@ const CreateBatch = () => {
     return true;
   };
   const handleSelectChange = (name, value) => {
-    setBatchInputs(prev => ({ ...prev, [name]: value }));
+    setBatchInputs((prev) => ({ ...prev, [name]: value }));
   };
   const handleDateChange = (date, name) => {
     setBatchInputs((prev) => ({ ...prev, [name]: date }));
   };
   const handleInputChange = (name, value) => {
-    setBatchInputs(prev => ({ ...prev, [name]: value }));
+    setBatchInputs((prev) => ({ ...prev, [name]: value }));
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,19 +169,26 @@ const CreateBatch = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/batch/create`, {
-        method: "POST",
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...batchInputs,
-          startDate: batchInputs.startDate ? batchInputs.startDate.toISOString() : null,
-          endDate: batchInputs.endDate ? batchInputs.endDate.toISOString() : null,
-          tpcode:tpcode
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:8000/api/v1/batch/create`,
+        {
+          method: "POST",
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...batchInputs,
+            startDate: batchInputs.startDate
+              ? batchInputs.startDate.toISOString()
+              : null,
+            endDate: batchInputs.endDate
+              ? batchInputs.endDate.toISOString()
+              : null,
+            tpcode: tpcode,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -166,7 +197,9 @@ const CreateBatch = () => {
         navigate("/trainingPartner/dashboard");
       } else {
         const errorData = await response.json();
-        setError(errorData.error || "Failed to create batch. Please try again.");
+        setError(
+          errorData.error || "Failed to create batch. Please try again."
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -177,8 +210,8 @@ const CreateBatch = () => {
   };
 
   const handleCenterSelect = (value) => {
-    const selectedCenter = centers.find(center => center.name === value);
-    setBatchInputs(prev => ({
+    const selectedCenter = centers.find((center) => center.name === value);
+    setBatchInputs((prev) => ({
       ...prev,
       center: selectedCenter,
       centerName: selectedCenter.name,
@@ -186,14 +219,22 @@ const CreateBatch = () => {
   };
 
   const handleCourseSelect = (value) => {
-    const selectedCourse = courses.find(course => course.courseName === value);
-    setBatchInputs(prev => ({
+    const selectedCourse = courses.find(
+      (course) => course.courseName === value
+    );
+    console.log("course", selectedCourse);
+    console.log("credit", selectedCourse.totalCredit);
+    console.log("code", selectedCourse.courseCode);
+    setBatchInputs((prev) => ({
       ...prev,
       courseName: selectedCourse.courseName,
       courseCode: selectedCourse.courseCode,
+      courseDuration: selectedCourse.duration,
+      courseCredit: selectedCourse.totalCredit,
+      courseLevel: selectedCourse.ncrfLevel,
     }));
   };
-
+  console.log(batchInputs);
   return (
     <div className="mx-auto max-w-2xl space-y-6 py-12 md:py-24">
       <div className="space-y-2 text-center">
@@ -213,37 +254,6 @@ const CreateBatch = () => {
       )}
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="center-name">Center Name</Label>
-            <Select
-              value={batchInputs.centerName}
-              onValueChange={handleCenterSelect}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a center" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Centers</SelectLabel>
-                  {centers.map(center => (
-                    <SelectItem key={center._id} value={center.name}>
-                      {center.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="center-code">Center Code</Label>
-            <Input
-              id="center-code"
-              name="CenterCode"
-              value={batchInputs.CenterCode}
-              onChange={(e) => handleInputChange("CenterCode", e.target.value)}
-              placeholder="Enter Center Code"
-            />
-          </div>
           <div className="space-y-2">
             <Label htmlFor="sector-name">Sector Name</Label>
             <Select
@@ -297,12 +307,48 @@ const CreateBatch = () => {
             />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="course-code">Course Duration</Label>
+            <Input
+              id="courseDuration"
+              name="courseDuration"
+              value={batchInputs.courseDuration}
+              onChange={(e) =>
+                handleInputChange("courseDuration", e.target.value)
+              }
+              placeholder="Enter Course Duration"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="course-code">Course Credit</Label>
+            <Input
+              id="courseCredit"
+              name="courseCredit"
+              value={batchInputs.courseCredit}
+              onChange={(e) =>
+                handleInputChange("courseCredit", e.target.value)
+              }
+              placeholder="Course Credit"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="course-code">Course Level</Label>
+            <Input
+              id="courseLevel"
+              name="courseLevel"
+              value={batchInputs.courseLevel}
+              onChange={(e) => handleInputChange("courseLevel", e.target.value)}
+              placeholder="Course Level"
+            />
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="training-organization">Training Organization</Label>
             <Input
               id="training-organization"
               name="trainingOrganization"
               value={batchInputs.trainingOrganization}
-              onChange={(e) => handleInputChange("trainingOrganization", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("trainingOrganization", e.target.value)
+              }
               placeholder="Enter Training Organization"
             />
           </div>
@@ -318,8 +364,13 @@ const CreateBatch = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Scheme Types</SelectLabel>
-                  <SelectItem value="government">government</SelectItem>
-                  <SelectItem  value="Corporate">Corporate</SelectItem>
+                  <SelectItem value="Central Government">
+                    Central Government
+                  </SelectItem>
+                  <SelectItem value="State Government">
+                    State Government
+                  </SelectItem>
+                  <SelectItem value="Corporate">Corporate</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -336,6 +387,7 @@ const CreateBatch = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Schemes</SelectLabel>
+
                   {schemeData.map((scheme) => (
                     <SelectItem key={scheme._id} value={scheme.name}>
                       {scheme.name}
@@ -352,7 +404,38 @@ const CreateBatch = () => {
               name="state"
               value={batchInputs.state}
               onChange={(e) => handleInputChange("state", e.target.value)}
-              placeholder="Enter State"
+              placeholder="ex:- Odisha"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="center-name">Center Name</Label>
+            <Select
+              value={batchInputs.centerName}
+              onValueChange={handleCenterSelect}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a center" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Centers</SelectLabel>
+                  {centers.map((center) => (
+                      <SelectItem key={center._id} value={center.name}>
+                        {center.name}
+                      </SelectItem>
+                    ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="center-code">Center Code</Label>
+            <Input
+              id="center-code"
+              name="CenterCode"
+              value={batchInputs.CenterCode}
+              onChange={(e) => handleInputChange("CenterCode", e.target.value)}
+              placeholder="Enter Center Code"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -360,8 +443,13 @@ const CreateBatch = () => {
               <Label htmlFor="start-date">Start Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start font-normal">
-                    {batchInputs.startDate ? batchInputs.startDate.toDateString() : 'Pick a date'}
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start font-normal"
+                  >
+                    {batchInputs.startDate
+                      ? batchInputs.startDate.toDateString()
+                      : "Pick a date"}
                     <div className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -369,7 +457,7 @@ const CreateBatch = () => {
                   <Calendar
                     mode="single"
                     selected={batchInputs.startDate}
-                    onSelect={(date) => handleDateChange(date, 'startDate')}
+                    onSelect={(date) => handleDateChange(date, "startDate")}
                   />
                 </PopoverContent>
               </Popover>
@@ -378,8 +466,13 @@ const CreateBatch = () => {
               <Label htmlFor="end-date">End Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start font-normal">
-                    {batchInputs.endDate ? batchInputs.endDate.toDateString() : 'Pick a date'}
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start font-normal"
+                  >
+                    {batchInputs.endDate
+                      ? batchInputs.endDate.toDateString()
+                      : "Pick a date"}
                     <div className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -387,7 +480,7 @@ const CreateBatch = () => {
                   <Calendar
                     mode="single"
                     selected={batchInputs.endDate}
-                    onSelect={(date) => handleDateChange(date, 'endDate')}
+                    onSelect={(date) => handleDateChange(date, "endDate")}
                   />
                 </PopoverContent>
               </Popover>

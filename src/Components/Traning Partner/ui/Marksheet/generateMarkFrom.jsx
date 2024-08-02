@@ -1,8 +1,6 @@
 import React, { forwardRef } from 'react';
 
-const GenerateMarksheetPDF = forwardRef(({ data }, ref) => {
-  if (!data) return null;
-
+const GenerateMarksheetFrom = forwardRef((props, ref) => {
   const {
     schemCode,
     name,
@@ -22,7 +20,7 @@ const GenerateMarksheetPDF = forwardRef(({ data }, ref) => {
     result,
     dateOfIssue,
     certificateNo,
-  } = data;
+  } = props.data;
 
   return (
     <div ref={ref} className="max-w-3xl mx-auto p-8 border border-green-600 rounded-lg font-cambria">
@@ -98,53 +96,61 @@ const GenerateMarksheetPDF = forwardRef(({ data }, ref) => {
         </tbody>
       </table>
       <table className="w-full mb-4 border-collapse">
-        <tbody>
-          <tr className="text-center bg-green-600 text-white">
-            <th className="border px-2">NOS Code</th>
-            <th className="border px-2">NOS Name</th>
-            <th className="border px-2">NOS Type</th>
-            <th className="border px-2">Maximum Marks</th>
-            <th className="border px-2">Marks Obtained</th>
+        <thead>
+          <tr>
+            <th className="border font-medium">NOS Code</th>
+            <th className="border font-medium">NOS Name</th>
+            <th className="border font-medium">NOS Type</th>
+            <th className="border font-medium">Maximum Marks</th>
+            <th className="border font-medium">Marks Obtained</th>
           </tr>
+        </thead>
+        <tbody>
           {nosMarks.map((nos, index) => (
-            <tr key={index} className="text-center">
-              <td className="border px-2">{nos.code}</td>
-              <td className="border px-2">{nos.name}</td>
-              <td className="border px-2">{nos.type}</td>
-              <td className="border px-2">{nos.maxMarks}</td>
-              <td className="border px-2">{nos.marksObtained}</td>
+            <tr key={index}>
+              <td className="border">{nos.code}</td>
+              <td className="border">{nos.name}</td>
+              <td className="border">{nos.type}</td>
+              <td className="border">{nos.maxMarks}</td>
+              <td className="border">{nos.marksObtained}</td>
             </tr>
           ))}
         </tbody>
       </table>
       <table className="w-full mb-4 border-collapse">
         <tbody>
-          <tr className="text-center bg-green-600 text-white">
-            <th className="border px-2">Total Marks Obtained</th>
-            <th className="border px-2">Grade</th>
-            <th className="border px-2">Result</th>
+          <tr className="flex">
+            <td className="w-1/2 border px-2 text-center font-medium">Total Marks Obtained</td>
+            <td className="w-1/2 border px-2 text-center">{totalMarks}</td>
           </tr>
-          <tr className="text-center">
-            <td className="border px-2">{totalMarks}</td>
-            <td className="border px-2">{grade}</td>
-            <td className="border px-2">{result}</td>
+          <tr className="flex">
+            <td className="w-1/2 border px-2 text-center font-medium">Grade</td>
+            <td className="w-1/2 border px-2 text-center">{grade}</td>
           </tr>
-        </tbody>
-      </table>
-      <table className="w-full border-collapse">
-        <tbody>
-          <tr className="text-center">
-            <td className="border w-1/2">Date of Issue</td>
-            <td className="border w-1/2">Certificate No.</td>
-          </tr>
-          <tr className="text-center">
-            <td className="border">{dateOfIssue}</td>
-            <td className="border">{certificateNo}</td>
+          <tr className="flex">
+            <td className="w-1/2 border px-2 text-center font-medium">Result</td>
+            <td className="w-1/2 border px-2 text-center">{result}</td>
           </tr>
         </tbody>
       </table>
+      <img src="/placeholder.svg" alt="QR Code" className="w-24 h-24" />
+      <div className="flex justify-between font-semibold items-center mt-1 mb-7">
+        <div className="text-center text-sm">
+          <p>Date of Issue: <span>{dateOfIssue}</span></p>
+          <p>Certificate No: <span>{certificateNo}</span></p>
+        </div>
+        <div className="text-center font-semibold">
+          <p>Head – Centre for Skill Certification</p>
+          <p>Centurion University of Technology and Management</p>
+        </div>
+      </div>
     </div>
   );
 });
 
-export default GenerateMarksheetPDF;
+export default GenerateMarksheetFrom;
+
+
+
+
+

@@ -18,7 +18,7 @@ const CreateSchemeForm = () => {
   const [projectType, setProjectType] = useState("");
   const [schemeType, setSchemeType] = useState("");
   const [code, setCode] = useState("");
-  const [cost, setCost] = useState("");
+  const [pricePerStudent, setPricePerStudent] = useState("");
   const [state, setState] = useState("");
   const [showButton, setShowButton] = useState(false); 
 
@@ -28,7 +28,7 @@ const CreateSchemeForm = () => {
     try {
       const response = await axios.post(
         `${server}/scheme`,
-        { name, code, projectType, schemeType, cost,state },
+        { name, code, projectType, schemeType, pricePerStudent,state },
         {
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const CreateSchemeForm = () => {
       setName("");
       setCode("");
       setProjectType("");
-      setCost("");
+      setPricePerStudent("");
       toast.success("New scheme added !!", {
         position: "top-center",
         closeOnClick: true,
@@ -148,8 +148,8 @@ const CreateSchemeForm = () => {
                 id="scheme-cost"
                 className="col-span-4 py-6"
                 placeholder="Cost Per Student"
-                value={cost}
-                onChange={(e) => setCost(e.target.value)}
+                value={pricePerStudent}
+                onChange={(e) => setPricePerStudent(e.target.value)}
               />
             </>
           )}

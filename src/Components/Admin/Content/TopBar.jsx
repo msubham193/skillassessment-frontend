@@ -9,21 +9,25 @@ import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {
   const navigate = useNavigate(); 
-  const [notifications, setNotifications] = useState(JSON.parse(localStorage.getItem("notifications")) || []);
+  const [notification, setNotification] = useState(localStorage.getItem("notification") || "No new notification !!");
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
+  const [data1, setData1] = useState([]);
+  const [data2, setData2] = useState([]);
+  const [data3, setData3] = useState([]);
+  const [data4, setData4] = useState([]);
 
-  const fetchData1 = async () => {
+  const fetchData1 = async () => { 
     try {
       const response = await axios.get(`${server}/aa/status/pending`, { withCredentials: true });
       const newData = response.data.data;
 
       if (initialLoad) {
-        setNotifications((prev) => [...prev, ...newData.map(() => "A new Assessment Agency found")]);
-      } else if (newData.length > notifications.filter((notif) => notif.includes("Assessment Agency")).length) {
-        const newNotifications = new Array(newData.length - notifications.filter((notif) => notif.includes("Assessment Agency")).length).fill("A new Assessment Agency found");
-        setNotifications((prev) => [...prev, ...newNotifications]);
-        localStorage.setItem("notifications", JSON.stringify([...notifications, ...newNotifications]));
+        setData1(newData);
+      } else if (newData.length > data1.length) {
+        setNotification("A new Assessment Agency found");
+        setData1(newData);
+        localStorage.setItem("notification", "A new Assessment Agency found");
       }
     } catch (error) {
       console.error('Error fetching data1:', error);
@@ -36,11 +40,11 @@ const TopBar = () => {
       const newData = response.data.data;
 
       if (initialLoad) {
-        setNotifications((prev) => [...prev, ...newData.map(() => "A new Training Partner found")]);
-      } else if (newData.length > notifications.filter((notif) => notif.includes("Training Partner")).length) {
-        const newNotifications = new Array(newData.length - notifications.filter((notif) => notif.includes("Training Partner")).length).fill("A new Training Partner found");
-        setNotifications((prev) => [...prev, ...newNotifications]);
-        localStorage.setItem("notifications", JSON.stringify([...notifications, ...newNotifications]));
+        setData2(newData);
+      } else if (newData.length > data2.length) {
+        setNotification("A new Training Partner found");
+        setData2(newData);
+        localStorage.setItem("notification", "A new Training Partner found");
       }
     } catch (error) {
       console.error('Error fetching data2:', error);
@@ -49,15 +53,31 @@ const TopBar = () => {
 
   const fetchData3 = async () => {
     try {
-      const response = await axios.get(`${server}/batch/all/paymentnotification`, { withCredentials: true });
+      const response = await axios.get(`${server}/batch/all/payment/gov`, { withCredentials: true });
       const newData = response.data.data;
 
       if (initialLoad) {
-        setNotifications((prev) => [...prev, ...newData.map(() => "A new Batch request found")]);
-      } else if (newData.length > notifications.filter((notif) => notif.includes("Batch request")).length) {
-        const newNotifications = new Array(newData.length - notifications.filter((notif) => notif.includes("Batch request")).length).fill("A new Batch request found");
-        setNotifications((prev) => [...prev, ...newNotifications]);
-        localStorage.setItem("notifications", JSON.stringify([...notifications, ...newNotifications]));
+        setData3(newData);
+      } else if (newData.length > data3.length) {
+        setNotification("A new Government Batch requst found");
+        setData3(newData);
+        localStorage.setItem("notification", "A new Government Batch requst found !!!");
+      }
+    } catch (error) {
+      console.error('Error fetching data3:', error);
+    }
+  };
+  const fetchData4 = async () => {
+    try {
+      const response = await axios.get(`${server}/batch/all/corporate`, { withCredentials: true });
+      const newData = response.data.data;
+
+      if (initialLoad) {
+        setData4(newData);
+      } else if (newData.length > data3.length) {
+        setNotification("A new Corporate Batch requst found");
+        setData4(newData);
+        localStorage.setItem("notification", "A new Corporate Batch requst found !!!");
       }
     } catch (error) {
       console.error('Error fetching data3:', error);
@@ -67,7 +87,7 @@ const TopBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await Promise.all([fetchData1(), fetchData2(), fetchData3()]);
+      await Promise.all([fetchData1(), fetchData2(),fetchData3(),fetchData4()]);
       setLoading(false);
       if (initialLoad) {
         setInitialLoad(false);
@@ -76,29 +96,40 @@ const TopBar = () => {
 
     fetchData();
 
-    const interval1 = setInterval(fetchData1, 20 * 1000); // 20 seconds for assessment agency
-    const interval2 = setInterval(fetchData2, 20 * 1000); // 20 seconds for training partner
-    const interval3 = setInterval(fetchData3, 20 * 1000); // 20 seconds for batch requests
+    const interval1 = setInterval(() => {
+      fetchData1();
+    }, 20 * 1000); // 20 seconds for accessment agency
+    const interval2 = setInterval(() => {
+      fetchData2();
+    }, 20 * 1000); // 20 seconds for training partner
+    const interval3 = setInterval(() => {
+      fetchData3();
+    }, 20 * 1000);
+    const interval4 = setInterval(() => {
+      fetchData4();
+    }, 20 * 1000);
 
     return () => {
       clearInterval(interval1);
       clearInterval(interval2);
       clearInterval(interval3);
+      clearInterval(interval4);
     };
-  }, [initialLoad, notifications]);
+  }, [data1, data2,data3,data4]);
 
   const handleOnClick = (notification) => {
     if (notification.includes("Assessment Agency")) {
-      navigate("/admin/dashboard/Notification?tab=overview");
+      navigate("/admin/dasbord/Notification?tab=overview");
     } else if (notification.includes("Training Partner")) {
-      navigate("/admin/dashboard/Notification?tab=analytics");
-    } else if (notification.includes("Batch request")) {
-      navigate("/admin/dashboard/Notification?tab=updateBatch");
+      navigate("/admin/dasbord/Notification?tab=analytics");
+    } else if (notification.includes("Government Batch requst")) {
+      navigate("/admin/dasbord/Notification?tab=updateBatchgov");
+    } else if (notification.includes("Corporate Batch requst")) {
+      navigate("/admin/dasbord/Notification?tab=updateBatchcorporet");
     }
 
-    const updatedNotifications = notifications.filter(notif => notif !== notification);
-    setNotifications(updatedNotifications);
-    localStorage.setItem("notifications", JSON.stringify(updatedNotifications));
+    setNotification("No new notification !!");
+    localStorage.setItem("notification", "No new notification !!");
   };
 
   const admin = {
@@ -130,21 +161,15 @@ const TopBar = () => {
             <SelectTrigger className="w-[60px] bg-[#f2f9f2] border-none">
               <Bell size={23} className="cursor-pointer mt-[5px]" />
               <span className="absolute top-5 right-[100px]">
-                {notifications.length === 0 ? "" : (
+              {notification === "No new notification !!" ? "" : (
                   <div className="w-2.5 h-2.5 bg-red-600 rounded-full"></div>
                 )}
               </span>
             </SelectTrigger>
             <SelectContent className="hover:cursor-pointer">
-              {notifications.length === 0 ? (
-                <div>No new notifications found</div>
-              ) : (
-                notifications.map((notification, index) => (
-                  <div key={index} onClick={() => handleOnClick(notification)}>
-                    {notification}
-                  </div>
-                ))
-              )}
+            <SelectContent className="hover:cursor-pointer" onClick={handleOnClick}>
+            {notification}
+            </SelectContent>
             </SelectContent>
           </Select>
 

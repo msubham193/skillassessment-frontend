@@ -89,7 +89,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
           <DialogHeader>
             <DialogTitle>Assign agency</DialogTitle>
             <DialogDescription>
-              Assign this course to a assessment agency.
+              Assign this course to a accessment agency.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={createExam}>

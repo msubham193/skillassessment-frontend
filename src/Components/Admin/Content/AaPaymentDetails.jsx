@@ -9,9 +9,9 @@ const AaPaymentDetails = () => {
   const [assessmentAgency, setAssessmentAgency] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
-
+ 
   useEffect(() => {
-    if (!isDataFetched) {
+    if (!isDataFetched) { 
       try {
         setLoading(true);
         axios.get(`${server}/aa/status/approved`, {
@@ -41,7 +41,7 @@ const AaPaymentDetails = () => {
         path={"/admin/dasbord/Aa/invoice/payment/update"}
         data={assessmentAgency}
         isLoading={loading}
-        pageUrl={"assessmentagency"}
+        pageUrl={"accessmentagency"}
       />
     </div>
   );
@@ -64,7 +64,7 @@ const columns = [
   },
   {
     accessorKey: "sectors",
-    header: "Sectors",
+    header: "Sector's",
   },
   {
     accessorKey: "total_no_of_certified_Assessor",
@@ -96,7 +96,7 @@ const columns = [
       return (
         <Button
           onClick={() => handlePaymentClick(row.original)}
-          className="bg-blue-200 text-blue-700 rounded"
+          className="bg-blue-200 text-blue-700  rounded"
         >
           Pay
         </Button>

@@ -102,9 +102,7 @@ const AaAnalysis = ({ data }) => {
         <Pie data={pieDataStatus} />
       </div>
     </div>
-    <div className="flex justify-center mt-4">
-      <Button onClick={handleDownloadExcel}>Download as Excel</Button>
-    </div>
+    <Button onClick={handleDownloadExcel}>Download in Excel</Button>
   </div>
   );
 };

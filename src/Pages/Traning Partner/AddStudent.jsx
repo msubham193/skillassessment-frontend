@@ -6,7 +6,6 @@ import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import "./coustom.css";
 import { format, differenceInDays, differenceInHours } from "date-fns";
 
 const AddStudent = () => {
@@ -18,7 +17,7 @@ const AddStudent = () => {
     "nationality", "generalqualification", "address", "state", "district", "city",
     "pincode", "mobile", "email", "sector_name", "course", "module", "uid",
     "traininstartdate", "trainingenddate", "trainingHours", "totalhours",
-    "totaldays", "cenid", "redg_No",
+    "totaldays", "cenid", "redg_No","MPR_Id","SNA_Id"
   ];
 
   const dateFields = ["dob", "traininstartdate", "trainingenddate"];
@@ -180,11 +179,12 @@ const AddStudent = () => {
                 />
               ) : dateFields.includes(field) ? (
                 <DatePicker
+                
                   selected={studentInputs[field] ? new Date(studentInputs[field]) : null}
                   onChange={(date) => handleDateChange(field, date)}
                   showYearDropdown
                   dateFormat="dd/MM/yyyy"
-                  className="w-full"
+                  className="w-full p-2 rounded-md"
                 />
               ) : ['totalhours', 'totaldays', 'trainingHours'].includes(field) ? (
                 <Input

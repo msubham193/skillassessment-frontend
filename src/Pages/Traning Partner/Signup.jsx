@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 
 // shadcn components
 import { Button } from "@/components(shadcn)/ui/button";
@@ -14,7 +14,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components(shadcn)/ui
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components(shadcn)/ui/select";
 
 // Custom imports
-import "./coustom.css";
 import "react-toastify/dist/ReactToastify.css";
 import { coursesData } from "@/Components/Traning Partner/Atoms/courseAtom";
 import { sectorData } from "@/Components/Traning Partner/Atoms/sectorAtom";
@@ -22,23 +21,62 @@ import { validationSchema } from "@/Components/Traning Partner/utils/validation"
 
 const Signup = () => {
   const inputLabels = [
-    "organizationName", "password", "organizationCategory", "centerId", "tpCode",
-    "scheme", "affiliation", "dateOfIncorporation", "registeredOfficeAddress",
-    "registeredOfficeDistrict", "registeredOfficeCity", "registeredOfficeState",
-    "registeredOfficePin", "registeredOfficeTelephone", "registeredOfficeMobile",
-    "registeredOfficeFax", "registeredOfficeEmail", "registeredOfficeGst",
-    "regionalStateOfficeAddress", "regionalStateOfficeDistrict", "regionalStateOfficeCity",
-    "regionalStateOfficeState", "regionalStateOfficePin", "regionalStateOfficeTelephone",
-    "regionalStateOfficeMobile", "regionalStateOfficeFax", "regionalStateOfficeEmail",
-    "regionalStateOfficeGst", "website", "pan", "prnNo", "headOwnerName", "headOwnerDob",
-    "headOwnerCity", "headOwnerResidenceAddress", "headOwnerPermanentAddress",
-    "headOwnerMobile", "headOwnerAlternateMobile", "headOwnerEmail", "headOwnerQualification",
-    "headOwnerWorkExperience", "headOwnerPanNo", "headOwnerAadharNo", "headOwnerPromoter1",
-    "headOwnerPromoter2", "headOwnerPromoter3", "projectContactPersonName",
-    "projectContactPersonDesignation", "projectContactPersonCity", "projectContactPersonMobile",
-    "projectContactPersonAlternateMobile", "projectContactPersonResidenceAddress",
-    "projectContactPersonPermanentAddress", "projectContactPersonEmail",
-    "projectContactPersonAlternateEmail", "sector"
+    { name: "organizationName", label: "Organization Name" },
+    { name: "password", label: "Password" },
+    { name: "organizationCategory", label: "Organization Category" },
+    { name: "centerId", label: "Center ID" },
+    { name: "tpCode", label: "TP Code" },
+    { name: "scheme", label: "Scheme" },
+    { name: "affiliation", label: "Affiliation" },
+    { name: "dateOfIncorporation", label: "Date of Incorporation" },
+    { name: "registeredOfficeAddress", label: "Registered Office Address" },
+    { name: "registeredOfficeDistrict", label: "Registered Office District" },
+    { name: "registeredOfficeCity", label: "Registered Office City" },
+    { name: "registeredOfficeState", label: "Registered Office State" },
+    { name: "registeredOfficePin", label: "Registered Office PIN" },
+    { name: "registeredOfficeTelephone", label: "Registered Office Telephone" },
+    { name: "registeredOfficeMobile", label: "Registered Office Mobile" },
+    { name: "registeredOfficeFax", label: "Registered Office Fax" },
+    { name: "registeredOfficeEmail", label: "Registered Office Email" },
+    { name: "registeredOfficeGst", label: "Registered Office GST" },
+    { name: "regionalStateOfficeAddress", label: "Regional State Office Address" },
+    { name: "regionalStateOfficeDistrict", label: "Regional State Office District" },
+    { name: "regionalStateOfficeCity", label: "Regional State Office City" },
+    { name: "regionalStateOfficeState", label: "Regional State Office State" },
+    { name: "regionalStateOfficePin", label: "Regional State Office PIN" },
+    { name: "regionalStateOfficeTelephone", label: "Regional State Office Telephone" },
+    { name: "regionalStateOfficeMobile", label: "Regional State Office Mobile" },
+    { name: "regionalStateOfficeFax", label: "Regional State Office Fax" },
+    { name: "regionalStateOfficeEmail", label: "Regional State Office Email" },
+    { name: "regionalStateOfficeGst", label: "Regional State Office GST" },
+    { name: "website", label: "Website" },
+    { name: "pan", label: "PAN" },
+    { name: "prnNo", label: "PRN No" },
+    { name: "headOwnerName", label: "Head Owner Name" },
+    { name: "headOwnerDob", label: "Head Owner DOB" },
+    { name: "headOwnerCity", label: "Head Owner City" },
+    { name: "headOwnerResidenceAddress", label: "Head Owner Residence Address" },
+    { name: "headOwnerPermanentAddress", label: "Head Owner Permanent Address" },
+    { name: "headOwnerMobile", label: "Head Owner Mobile" },
+    { name: "headOwnerAlternateMobile", label: "Head Owner Alternate Mobile" },
+    { name: "headOwnerEmail", label: "Head Owner Email" },
+    { name: "headOwnerQualification", label: "Head Owner Qualification" },
+    { name: "headOwnerWorkExperience", label: "Head Owner Work Experience" },
+    { name: "headOwnerPanNo", label: "Head Owner PAN No" },
+    { name: "headOwnerAadharNo", label: "Head Owner Aadhar No" },
+    { name: "headOwnerPromoter1", label: "Head Owner Promoter 1" },
+    { name: "headOwnerPromoter2", label: "Head Owner Promoter 2" },
+    { name: "headOwnerPromoter3", label: "Head Owner Promoter 3" },
+    { name: "projectContactPersonName", label: "Project Contact Person Name" },
+    { name: "projectContactPersonDesignation", label: "Project Contact Person Designation" },
+    { name: "projectContactPersonCity", label: "Project Contact Person City" },
+    { name: "projectContactPersonMobile", label: "Project Contact Person Mobile" },
+    { name: "projectContactPersonAlternateMobile", label: "Project Contact Person Alternate Mobile" },
+    { name: "projectContactPersonResidenceAddress", label: "Project Contact Person Residence Address" },
+    { name: "projectContactPersonPermanentAddress", label: "Project Contact Person Permanent Address" },
+    { name: "projectContactPersonEmail", label: "Project Contact Person Email" },
+    { name: "projectContactPersonAlternateEmail", label: "Project Contact Person Alternate Email" },
+    { name: "sector", label: "Sector" },
   ];
 
   const TimeLabel = ["dateOfIncorporation", "headOwnerDob"];
@@ -54,11 +92,6 @@ const Signup = () => {
   const [courses, setCourses] = useRecoilState(coursesData);
   const [sectors, setSectors] = useRecoilState(sectorData);
   const [selectedSector, setSelectedSector] = useState("");
-
-  
-
-
-
 
   useEffect(() => {
     setOnSubmit(currentPage === totalPages - 1);
@@ -90,9 +123,11 @@ const Signup = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchSectors();
   }, []);
+
   const currentInputs = inputLabels.slice(
     currentPage * inputsPerPage,
     (currentPage + 1) * inputsPerPage
@@ -100,12 +135,12 @@ const Signup = () => {
   const firstColumn = currentInputs.slice(0, 10);
   const secondColumn = currentInputs.slice(10, 20);
 
-  const handleChange = (label, value) => {
+  const handleChange = (name, value) => {
     setInputs((prevState) => ({
       ...prevState,
-      [label]: value,
+      [name]: value,
     }));
-    if (label === "sector") {
+    if (name === "sector") {
       setSelectedSector(value);
     }
   };
@@ -159,47 +194,49 @@ const Signup = () => {
     }
   };
 
-  const renderInput = (label) => {
-    if (TimeLabel.includes(label)) {
+  const renderInput = (labelObj) => {
+    const { name, label } = labelObj;
+
+    if (TimeLabel.includes(name)) {
       return (
         <Popover>
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
               className={`w-full justify-start text-left font-normal ${
-                !inputs[label] && "text-muted-foreground"
+                !inputs[name] && "text-muted-foreground"
               }`}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {inputs[label] ? format(inputs[label], "PPP") : <span>Pick a date</span>}
+              {inputs[name] ? format(inputs[name], "PPP") : <span>Pick a date</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
               mode="single"
-              selected={inputs[label]}
-              onSelect={(date) => handleChange(label, date)}
+              selected={inputs[name]}
+              onSelect={(date) => handleChange(name, date)}
               initialFocus
             />
           </PopoverContent>
         </Popover>
       );
-    } else if (label === "scheme") {
+    } else if (name === "scheme") {
       return (
-        <Select onValueChange={(value) => handleChange(label, value)}>
+        <Select onValueChange={(value) => handleChange(name, value)}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select scheme" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Government">Government</SelectItem>
-            <SelectItem value="StateGovernment">State Government</SelectItem>
-            <SelectItem value="Corporate">Corporate</SelectItem>
+          <SelectItem value="Central Governmnet">Central Government</SelectItem>
+                <SelectItem value="State Governmnet">State Goverment</SelectItem>
+                <SelectItem value="Corporate">Corporate</SelectItem>
           </SelectContent>
         </Select>
       );
-    } else if (label === "sector") {
+    } else if (name === "sector") {
       return (
-        <Select onValueChange={(value) => handleChange(label, value)}>
+        <Select onValueChange={(value) => handleChange(name, value)}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select sector" />
           </SelectTrigger>
@@ -216,8 +253,8 @@ const Signup = () => {
       return (
         <Input
           className="w-full bg-transparent text-black"
-          onChange={(e) => handleChange(label, e.target.value)}
-          value={inputs[label] || ""}
+          onChange={(e) => handleChange(name, e.target.value)}
+          value={inputs[name] || ""}
         />
       );
     }
@@ -232,12 +269,12 @@ const Signup = () => {
         {isMobile ? (
           <div className="grid grid-cols-1 gap-4">
             {/* Mobile layout */}
-            {[...firstColumn, ...secondColumn].map((label, index) => (
+            {[...firstColumn, ...secondColumn].map((labelObj, index) => (
               <div key={index} className="text-black">
-                <Label>{label}</Label>
-                {renderInput(label)}
-                {errors[label] && (
-                  <p className="text-red-500">{errors[label]}</p>
+                <Label>{labelObj.label}</Label>
+                {renderInput(labelObj)}
+                {errors[labelObj.name] && (
+                  <p className="text-red-500">{errors[labelObj.name]}</p>
                 )}
               </div>
             ))}
@@ -246,23 +283,23 @@ const Signup = () => {
           <div className="grid grid-cols-2 gap-4">
             {/* Desktop layout */}
             <div>
-              {firstColumn.map((label, index) => (
+              {firstColumn.map((labelObj, index) => (
                 <div key={index} className="text-black">
-                  <Label>{label}</Label>
-                  {renderInput(label)}
-                  {errors[label] && (
-                    <p className="text-red-500">{errors[label]}</p>
+                  <Label>{labelObj.label}</Label>
+                  {renderInput(labelObj)}
+                  {errors[labelObj.name] && (
+                    <p className="text-red-500">{errors[labelObj.name]}</p>
                   )}
                 </div>
               ))}
             </div>
             <div>
-              {secondColumn.map((label, index) => (
+              {secondColumn.map((labelObj, index) => (
                 <div key={index} className="text-black">
-                  <Label>{label}</Label>
-                  {renderInput(label)}
-                  {errors[label] && (
-                    <p className="text-red-500">{errors[label]}</p>
+                  <Label>{labelObj.label}</Label>
+                  {renderInput(labelObj)}
+                  {errors[labelObj.name] && (
+                    <p className="text-red-500">{errors[labelObj.name]}</p>
                   )}
                 </div>
               ))}

@@ -18,7 +18,7 @@ const FormTable = ({ columns, data, isLoding, onRowClick,filter1 }) => {
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
-    const table = useReactTable({
+    const table = useReactTable({ 
         data,
         columns,
         state: {

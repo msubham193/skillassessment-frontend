@@ -5,7 +5,7 @@ import { server } from '@/main';
 import { cn } from '@/lib/utils';
 import { Loader } from 'lucide-react';
 
-const UpdateBatch = () => {
+const UpdateBatch = () => { 
     const [batch, setBatch] = useState([]);
     const [loading, setLoading] = useState(false);
     //function for get all ppending sttus data
@@ -56,6 +56,10 @@ const batchColumns = [
       header: "Batch Name",
     },
     {
+      accessorKey: "ABN_Number",
+      header: "Abn no",
+    },
+    {
       accessorKey: "trainingOrganization",
       header: "Created By",
     },
@@ -64,12 +68,24 @@ const batchColumns = [
       header: "Batch under Scheme",
     },
     {
+      accessorKey: "students",
+      header: "No of Student",
+      cell: ({ row }) => {
+        return (
+          <div className="font-medium w-fit px-4 py-2 rounded-lg">
+            {row.original.students.length}
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "amountToPaid",
       header: "Total Amount ",
     },
+  
     {
         accessorKey: "clientPaymentStatus",
-        header: "Payment  from clint",
+        header: "Payment  from tp",
         cell: ({ row }) => {
           const paymentStatusclint = row.getValue("clientPaymentStatus");
           return (
@@ -83,6 +99,10 @@ const batchColumns = [
             </div>
           );
         },
+    },
+    {
+      accessorKey: "amountToPaid",
+      header: "Amount paid by tp ",
     },
     {
       accessorKey: "paymentStatus",

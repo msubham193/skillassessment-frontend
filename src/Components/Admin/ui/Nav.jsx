@@ -20,7 +20,7 @@ function usePathname() {
 }
 
 export function Nav({ links }) { 
-  const isCollapsed=false;
+  const isCollapsed=false; 
   const pathName = usePathname();
   return (
     <TooltipProvider>

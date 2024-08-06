@@ -55,14 +55,14 @@ const SideNav = () => {
               title: "Batch",
               label: "",
               icon: GraduationCap,
-              variant: "default",
+              variant: "ghost",
               href: "/admin/dasbord/batch"
             },
             {
               title: "Exam's",
               label: "",
               icon: BookOpenCheck,
-              variant: "default",
+              variant: "ghost",
               href: "/admin/dasbord/AllExam"
             },
             {

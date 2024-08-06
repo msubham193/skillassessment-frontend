@@ -22,8 +22,8 @@ const BtachDetailsBox = ({ id }) => {
         .then((response) => { 
           setLoding(false);
           setData(response.data.data);
-          console.log(response.data.data)
-        });
+          // console.log(response.data.data)
+        }); 
     } catch (error) {
       setLoding(false);
       console.error("Error fetching training partner:", error);
@@ -37,7 +37,7 @@ const BtachDetailsBox = ({ id }) => {
   };
   if (loding) {
     return <Loder />;
-  }
+  } 
   return (
     <div>
       <div className="w-full mt-5">

@@ -1,0 +1,12 @@
+/* Add these styles to your CSS */
+.pdf-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* Adjust spacing between sections */
+  }
+  
+  .table-container {
+    overflow-x: auto; /* Ensure table content doesn't overflow */
+    margin-bottom: 20px; /* Adjust spacing inside the table container */
+  }
+  

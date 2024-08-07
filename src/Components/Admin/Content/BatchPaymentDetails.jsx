@@ -53,10 +53,25 @@ const batchColumns = [
   {
     accessorKey: "ABN_Number",
     header: "Abn NO",
-  },    
+  }, 
+  {
+    accessorKey: "students",
+    header: "No of Student",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.students.length}
+        </div>
+      );
+    },
+  },   
   {
     accessorKey: "amountToPaid",
     header: "Total Amount ",
+  },
+  {
+    accessorKey: "amountToPaid",
+    header: "Amount paid by tp ",
   },
   {
     accessorKey: "prePaymentInvoice",
@@ -74,7 +89,7 @@ const batchColumns = [
 },
   {
       accessorKey: "clientPaymentStatus",
-      header: "Payment  from clint",
+      header: "Payment  from tp",
       cell: ({ row }) => {
         const paymentStatusclint = row.getValue("clientPaymentStatus");
         return (
@@ -90,7 +105,7 @@ const batchColumns = [
       },
   },
   {
-    accessorKey: "paymentStatus",
+    accessorKey: "paymentStatus", 
     header: "Payment Status",
     cell: ({ row }) => {
       const paymentStatus = row.getValue("paymentStatus");

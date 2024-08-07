@@ -10,7 +10,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectTrigger,
+  SelectTrigger, 
   SelectValue,
 } from "@/components(shadcn)/ui/select";
 import { RotateCcw, X } from "lucide-react";

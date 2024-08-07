@@ -29,6 +29,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const [trainingPartnerId, setTrainingPartnerId] = useState("");
   const [batchId, setBatchId] = useState("");
   const [assesmentAgencyId, setAssesmentAgencyId] = useState("");
+  const [assesmentAgencyName, setAssesmentAgencyName] = useState("");
   const [showButton, setShowButton] = useState(false);
   const authState = useRecoilValue(authenticationState);
 
@@ -62,6 +63,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
         }
       );
       setAssesmentAgencyId("");
+      setAssesmentAgencyName("");
       toast.success(response.data.message, {
         position: "top-center",
         closeOnClick: true,
@@ -127,15 +129,16 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                     id="batch"
                     onChange={(e) => setAssesmentAgencyId(e.target.value)}
                     placeholder="Enter the id of assessment agency or select"
-                    value={assesmentAgencyId}
+                    value={assesmentAgencyName}
                   />
                   <Select>
                     <SelectTrigger className="w-[75px]">
                       <SelectValue placeholder="Show" />
                     </SelectTrigger>
-                    <SelectContent className="bg-black">
+                    <SelectContent>
                       <ShowAccessmentAgency
                         setAssesmentAgency={setAssesmentAgencyId}
+                        setassessmentagencyName={setAssesmentAgencyName}
                         course={courseName}
                         sector={sector}
                         state={state}

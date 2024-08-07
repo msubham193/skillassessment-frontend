@@ -51,7 +51,7 @@ import AllTrainers from "./Pages/Traning Partner/AllTrainers";
 import Centers from "./Pages/Traning Partner/Centers";
 import CertificateGenerator from "./Components/Admin/Content/CertificateGenerator";
 import CreateSNA from "./Pages/Admin/CreateSNA";
-
+import AddNotification from "./Pages/Admin/AddNotification";
 import Layout from "./layout";
 import Assessorlogin from "./Pages/Assessment Agency/Login";
 import RegistrationForm from "./Pages/Assessment Agency/Registration";
@@ -247,6 +247,11 @@ const App = () => {
                 exact
                 element={<CreateSNA />}
               />
+              <Route
+                path="/admin/dasbord/addNotification for mainpage"
+                exact
+                element={<AddNotification />}
+              />
             </>
           )}
         </Route>
@@ -290,9 +295,7 @@ const App = () => {
           path="/trainingPartner/dashboard/student/:Id"
           element={<Student />}
         />
-        <Route path="//trainingPartner/setting" exact element={<Setting />} />
-
-  
+        <Route path="//trainingPartner/setting" exact element={<Setting />} />  
         <Route path="registration" element={<RegistrationForm />} />
         <Route path="login" element={<Assessorlogin />} />
         <Route element={<ProtectedRoutes />}>

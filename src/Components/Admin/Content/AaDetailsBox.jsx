@@ -228,7 +228,7 @@ const AaDetailsBox = ({ id }) => {
                         ))}
                     </Popover>
                   </TableCell>
-                </TableRow>
+                </TableRow> 
               </TableBody>
             </Table>
             {/* table for office Address */}

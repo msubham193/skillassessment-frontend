@@ -17,37 +17,37 @@ const routes = [
   {
     path: "/dashboard/assessmentschedule",
     name: "Assessment Schedule",
-    icon: <FaClock />,
+    icon: <FaClock/>,
   },
   {
     path: "/dashboard/managebatches",
     name: "Batch Management",
-    icon: <FaLayerGroup />,
+    icon: <FaLayerGroup/>,
   },
   {
     path: "/dashboard/addassessor",
     name: "Add Assessor",
-    icon: <FaUserEdit />,
+    icon: <FaUserEdit/>,
   },
   {
     path: "/dashboard/uploadresult",
     name: "Upload Result",
-    icon: <FaUpload />,
+    icon: <FaUpload/>,
   },
   {
     path: "/dashboard/paymentstatus",
     name: "Payment Status",
-    icon: <FaCreditCard />,
+    icon: <FaCreditCard/>,
   },
   {
     path: "/dashboard/invoices",
     name: "Track Invoice",
-    icon: <FaFileInvoice />,
+    icon: <FaFileInvoice/>,
   },
   {
     path: "/dashboard/profile",
     name: "Profile",
-    icon: <FaUserCircle />,
+    icon: <FaUserCircle/>,
   },
 ];
 

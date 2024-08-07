@@ -49,6 +49,7 @@ import CompeteBtachData from "./Pages/Traning Partner/CompeteBtachData";
 import AllTrainers from "./Pages/Traning Partner/AllTrainers";  
 import CertificateGenerator from "./Components/Admin/Content/CertificateGenerator";
 import CreateSNA from "./Pages/Admin/CreateSNA";
+import AddNotification from "./Pages/Admin/AddNotification";
   const App = () => {
     //code for admin
     const [authState, setAuthState] = useRecoilState(authenticationState);
@@ -197,6 +198,11 @@ import CreateSNA from "./Pages/Admin/CreateSNA";
                 path="/admin/dasbord/CreateSna"
                 exact
                 element={<CreateSNA />}
+              />
+              <Route
+                path="/admin/dasbord/addNotification for mainpage"
+                exact
+                element={<AddNotification />}
               />
             </>
           )}

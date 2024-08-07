@@ -1,8 +1,5 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../../../components(shadcn)/ui/button";
 import {
@@ -13,6 +10,7 @@ import {
 } from "../../../components(shadcn)/ui/tooltip";
 import { Link, useLocation } from "react-router-dom";
 import { UserPlus } from "lucide-react";
+
 function usePathname() {
   const location = useLocation();
   return location.pathname;
@@ -20,13 +18,14 @@ function usePathname() {
 
 export function Nav({ links, isCollapsed }) {
   const pathName = usePathname();
+
   return (
     <TooltipProvider>
       <div
         data-collapsed={isCollapsed}
-        className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+        className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2 "
       >
-        <nav className="grid gap-3 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 mt-7">
+        <nav className="grid gap-3 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 mt-7 ">
           {links.map((link, index) =>
             isCollapsed ? (
               <Tooltip key={index} delayDuration={0}>
@@ -70,10 +69,20 @@ export function Nav({ links, isCollapsed }) {
               </Link>
             )
           )}
-
-         
         </nav>
       </div>
     </TooltipProvider>
   );
+}
+
+Nav.propTypes = {
+  links: PropTypes.arrayOf(
+    PropTypes.shape({
+      href: PropTypes.string.isRequired,
+      icon: PropTypes.elementType.isRequired,
+      title: PropTypes.string.isRequired,
+      variant: PropTypes.string,
+    })
+  ).isRequired,
+  isCollapsed: PropTypes.bool.isRequired,
 };

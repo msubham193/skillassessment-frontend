@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 import { Input } from "@/components(shadcn)/ui/input";
@@ -11,9 +11,24 @@ const Setting = ({onClose}) => {
   const [email, setEmail] = useState(`${tpdata.registeredOfficeEmail}`);
   const [course, setCourse] = useState(`${tpdata.courses}`);
   const [sector, setSector] = useState(`${tpdata.sector}`);
-
+  const [allSectors,setAllSectors]=useState({})
   const userId = tpdata._id;
-
+useEffect(()=>{
+  const fetchSectors = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/sector/all", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setAllSectors(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+},[])
   const updateEmail = async () => {
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tp/info/email/${userId}`, {

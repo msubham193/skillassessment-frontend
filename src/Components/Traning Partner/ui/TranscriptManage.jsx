@@ -87,7 +87,7 @@ const TranscriptManage = () => {
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         {batches.length > 0 ? (
           batches.map((batch) => (
-            batch.status === "Completed" && (
+            batch.paymentStatus === true && (
               <div
                 key={batch._id}
                 className="py-5 px-5 bg-transparent gap-2 cursor-pointer"

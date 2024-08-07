@@ -3,16 +3,16 @@ import FormTable from './FormTable';
 import axios from 'axios';
 import { server } from '@/main';
 
-const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
+const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state,setassessmentagencyName }) => {
     const [assessmentAgency, setAssessmentAgency] = useState([]); 
     const [loading, setLoading] = useState(false);
 
     //here i can apply the filter for accessment agency.........
 
-    console.log(course,sector,state)
+    // console.log(course,sector,state)
 
     useEffect(() => {
-      const fetchAssessmentAgency = async () => {
+      const fetchAssessmentAgency = async () => { 
           setLoading(true);
           try {
               const response = await axios.get(`${server}/aa/all/query`, {
@@ -24,7 +24,7 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
                   },
                   withCredentials: true,
               });
-              console.log(response.data.data)
+              // console.log(response.data.data)
               setAssessmentAgency(response.data.data.reverse());
           } catch (error) {
               console.error(error);
@@ -37,6 +37,8 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state }) => {
   }, [course, sector, state]);
 
     const handleRowClick = (row) => {
+      // console.log(row)//agencyName
+      setassessmentagencyName(row?.agencyName)
       setAssesmentAgency(row._id); // Assuming _id is the id of the assessment agency
     };
 

@@ -20,7 +20,7 @@ function usePathname() {
 }
 
 export function Nav({ links }) { 
-  const isCollapsed=false;
+  const isCollapsed=false; 
   const pathName = usePathname();
   return (
     <TooltipProvider>
@@ -63,7 +63,7 @@ export function Nav({ links }) {
                     "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
                   "justify-start"
                 )}
-              >
+              > 
                 <link.icon className="mr-2 h-4 w-4" />
                 {link.title}
               </Link>

@@ -8,7 +8,7 @@ import UpdateBatchCorporet from './UpdateBatchCorporet';
 const AllBatchTabs = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const defaultTab = query.get("tab") || "overview";
+  const defaultTab = query.get("tab") || "overview"; 
   const [selectedTab, setSelectedTab] = useState(defaultTab);
 
   useEffect(() => {

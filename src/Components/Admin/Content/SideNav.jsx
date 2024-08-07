@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck, UserPlus } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck, UserPlus, BellPlus } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
@@ -39,7 +39,7 @@ const SideNav = () => {
           links={[
             {
               title: "Home",
-              label: "",
+              label: "", 
               icon: LayoutDashboard,
               variant: "default",
               href: "/admin/dasbord"
@@ -55,14 +55,14 @@ const SideNav = () => {
               title: "Batch",
               label: "",
               icon: GraduationCap,
-              variant: "default",
+              variant: "ghost",
               href: "/admin/dasbord/batch"
             },
             {
               title: "Exam's",
               label: "",
               icon: BookOpenCheck,
-              variant: "default",
+              variant: "ghost",
               href: "/admin/dasbord/AllExam"
             },
             {
@@ -113,6 +113,13 @@ const SideNav = () => {
               icon: FilePlus2,
               variant: "ghost",
               href: "/admin/dasbord/createCertificate"
+            },
+            {
+              title: "Create Notification",
+              label: "",
+              icon: BellPlus,
+              variant: "ghost",
+              href: "/admin/dasbord/addNotification for mainpage"
             },
           ]}
         />

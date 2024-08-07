@@ -164,7 +164,7 @@ const CreateCourseForm = () => {
         </div>
         {/* create a form for course */}
         <div className="mx-60">
-          <Label htmlFor="name" className="text-left  w-40">
+          <Label htmlFor="name" className="text-left  w-40 ">
             Course Name
           </Label>
           <Input

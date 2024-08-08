@@ -75,6 +75,13 @@ import UploadDocuments from "./Pages/Assessment Agency/UploadDocuments";
 import GenerateInvoice from "./Components/Assessment Agency/ui/GenerateInvoice";
 import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
 import BatchDetailsofAA from "./Pages/Assessment Agency/BatchDetails";
+import SNALayout from "./SNAlayout";
+import SNADashboard from "./pages/Dashboard/Dashboard";
+import BatchDetailsforSNA from "./pages/Dashboard/BatchDetails";
+import SNALogin from "./pages/Dashboard/SNALogin";
+import TCDetails from "./pages/Dashboard/TCDetails";
+import TBDetails from "./pages/Dashboard/TBDetails";
+import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
 
 const App = () => {
   //code for admin
@@ -327,6 +334,20 @@ const App = () => {
             element={<AttendanceSheetForm />}
           />
           <Route path="resultsheet" element={<ResultSheetForm />} />
+        </Route>
+
+        {/* SNA Routes */}
+        <Route path="login" element={<SNALogin />} />
+        <Route element={<SNAProtectedRoutes />}>
+          <Route path="/" element={<SNALayout />}>
+            <Route path="dashboard" element={<SNADashboard />} />
+            <Route path="trainingcenters" element={<TCDetails />} />
+            <Route path="trainingbatches" element={<TBDetails />} />
+            <Route
+              path="batchdetails/:batchId"
+              element={<BatchDetailsforSNA />}
+            />
+          </Route>
         </Route>
       </Routes>
       <ToastContainer />

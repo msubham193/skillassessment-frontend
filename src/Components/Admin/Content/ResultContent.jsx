@@ -20,7 +20,7 @@ const ResultContent = ({ batchId }) => {
     const fetchResultData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${server}/mark/batch/${batchId}`, {
+        const response = await axios.get(`${server}/marks/batch/${batchId}`, {
           withCredentials: true,
         });
         setLoading(false);

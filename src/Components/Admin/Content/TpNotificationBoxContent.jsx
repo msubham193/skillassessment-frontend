@@ -93,7 +93,7 @@ const TpNotificationBoxContent = () => {
   useEffect(() => {
     try {
       axios
-        .get(`${server}/courses`, {
+        .get(`${server}/course/course`, {
           withCredentials: true,
         })
         .then((response) => {

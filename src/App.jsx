@@ -255,6 +255,7 @@ const App = () => {
             </>
           )}
         </Route>
+        {/* traning partner routs */}
         <Route
           path="/trainingPartner/dashboard"
           // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}

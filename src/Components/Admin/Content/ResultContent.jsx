@@ -82,7 +82,7 @@ const ResultContent = ({ batchId }) => {
     setLoading(true);
     try {
       const response = await axios.post( 
-        `${server}/publish/certificate/exam/${examId}`,
+        `${server}/certificate/publish/exam/${examId}`,
         {},
         {
           headers: {

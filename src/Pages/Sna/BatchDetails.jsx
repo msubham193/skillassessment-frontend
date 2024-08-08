@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 
-const BatchDetails = () => {
+const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();
   const navigate = useNavigate();
   const [batchDetails, setBatchDetails] = useState([]);
@@ -176,4 +176,4 @@ const BatchDetails = () => {
   );
 };
 
-export default BatchDetails;
+export default BatchDetailsOfSNA;

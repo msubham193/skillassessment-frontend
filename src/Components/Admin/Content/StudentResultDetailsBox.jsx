@@ -17,7 +17,7 @@ const StudentResultDetailsBox = ({ id }) => {
     try {
       setLoding(true);
       axios
-        .get(`${server}/mark/student/${id}`, {
+        .get(`${server}/marks/student/${id}`, {
           withCredentials: true,
         })
         .then((response) => {

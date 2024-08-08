@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BatchTable = () => {
+const TrainingBatches = () => {
   const [batchData, setBatchData] = useState([]);
   const navigate = useNavigate();
 
@@ -85,4 +85,4 @@ const BatchTable = () => {
   );
 };
 
-export default BatchTable;
+export default TrainingBatches;

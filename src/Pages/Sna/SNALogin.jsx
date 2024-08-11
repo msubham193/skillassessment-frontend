@@ -54,21 +54,20 @@ const SNALogin = () => {
   }, []);
 
   useEffect(() => {
-    const fetchSchemes = async (state) => {
+    const fetchSchemes = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/schemes?state=${state}`
+          `http://localhost:8000/api/v1/scheme/`
         );
-        setSchemes(response.data);
+        console.log(response.data.data);
+        setSchemes(response.data.data);
       } catch (error) {
         console.error("Error fetching schemes:", error);
       }
     };
 
-    if (selectedState) {
-      fetchSchemes(selectedState);
-    }
-  }, [selectedState]);
+    fetchSchemes();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,8 +89,7 @@ const SNALogin = () => {
       const { data } = response.data.data;
       console.log(data.state);
       localStorage.setItem("state", data.state);
-
-      navigate("/dashboard");
+      navigate("/snadashboard");
     } catch (error) {
       console.log(error);
       setErrorMessage(
@@ -101,9 +99,9 @@ const SNALogin = () => {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex items-center justify-center">
+    <section className="bg-gray-50 min-h-screen px-80 py-5">
       <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5">
-        <div className="sm:w-1/2 px-16">
+        <div className="sm:w-1/2 px-6">
           <h2 className="font-bold text-2xl text-green-800">Login</h2>
           <p className="text-sm mt-4 text-start text-green-800">
             If you are already a member, easily login
@@ -128,20 +126,15 @@ const SNALogin = () => {
               onChange={handleChange}
               className="p-2 rounded-xl border"
             />
-            <input
-              type="type"
-              name="scheme"
-              placeholder="Scheme"
-              value={formData.scheme}
-              onChange={handleChange}
-              className="p-2 rounded-xl border"
-            />
             <div>
-              <label htmlFor="state">Select State:</label>
+              <label htmlFor="state" className="block mb-2">
+                Select State:
+              </label>
               <select
                 id="state"
                 value={selectedState}
                 onChange={(e) => setSelectedState(e.target.value)}
+                className="p-2 rounded-xl border w-full"
               >
                 <option value="">--Select State--</option>
                 {indianStates.map((state) => (
@@ -151,9 +144,18 @@ const SNALogin = () => {
                 ))}
               </select>
             </div>
+
             <div>
-              <label htmlFor="scheme">Select Scheme:</label>
-              <select id="scheme" disabled={!selectedState}>
+              <label htmlFor="scheme" className="block mb-2">
+                Select Scheme:
+              </label>
+              <select
+                id="scheme"
+                name="scheme"
+                value={formData.scheme}
+                onChange={handleChange}
+                className="p-2 rounded-xl border w-full"
+              >
                 <option value="">--Select Scheme--</option>
                 {schemes.map((scheme) => (
                   <option key={scheme.id} value={scheme.id}>
@@ -174,10 +176,10 @@ const SNALogin = () => {
             <p className="text-center text-sm">OR</p>
             <hr className="border-gray-400" />
           </div>
-          <button className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm">
+          {/* <button className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm">
             Login with Google
-          </button>
-          <p className="mt-5 text-xs border-b py-4">Forgot your password</p>
+          </button> */}
+          {/* <p className="mt-5 text-xs border-b py-4">Forgot your password</p> */}
           <div className="mt-3 text-xs flex justify-between items-center">
             <p>{`Don't have an account`}</p>
             <Link to="/registration">
@@ -187,13 +189,13 @@ const SNALogin = () => {
             </Link>
           </div>
         </div>
-        <div className="sm:block hidden w-1/2">
+        {/* <div className="sm:block hidden w-1/2">
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRirLNCbs4j_NKIf02OrlIFq-F8kFDUyJxmwQ&s"
             alt=""
             className="rounded-2xl"
           />
-        </div>
+        </div> */}
       </div>
     </section>
   );

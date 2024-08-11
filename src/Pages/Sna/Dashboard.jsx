@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import TrainingBatches from "@/Components/Sna/TrainingBatches";
-import TrainingCenters from "@/Components/Sna/TrainingCentres";
 import axios from "axios";
 import React, { useEffect } from "react";
 import { FaBuilding, FaCalendar, FaRegBuilding } from "react-icons/fa"; // Example icons
+import TrainingCenters from "../../Components/Sna/TrainingCentres";
+import TrainingBatches from "../../Components/Sna/TrainingBatches";
 
 const Card = ({ title, count, pending, approved, icon }) => {
   return (

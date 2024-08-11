@@ -435,34 +435,74 @@ const AttendanceSheetForm = () => {
               </tr>
               <tr>
                 <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {centerName}
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Center Name :
+                    </h2>
+                    {centerName}
+                  </div>
                 </td>
                 <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {centId}
-                </td>
-              </tr>
-              <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {abn}
-                </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {sector}
-                </td>
-              </tr>
-              <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {courseName}
-                </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {courseCode}
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Center ID :
+                    </h2>
+                    {centId}
+                  </div>
                 </td>
               </tr>
               <tr>
                 <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {examDate}
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Batch ABN :
+                    </h2>
+                    {abn}
+                  </div>
                 </td>
                 <td className="border border-black p-2 text-xl font-semibold text-center">
-                  {batchNo}
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Sector :
+                    </h2>
+                    {sector}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2 text-xl font-semibold text-center">
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Course Name :
+                    </h2>
+                    {courseName}
+                  </div>
+                </td>
+                <td className="border border-black p-2 text-xl font-semibold text-center">
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Course Code :
+                    </h2>
+                    {courseCode}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2 text-xl font-semibold text-center">
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Exam Date :
+                    </h2>
+                    {examDate}
+                  </div>
+                </td>
+                <td className="border border-black p-2 text-xl font-semibold text-center">
+                  <div className="flex justify-center">
+                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                      Batch No. :
+                    </h2>
+                    {batchNo}
+                  </div>
                 </td>
               </tr>
             </tbody>

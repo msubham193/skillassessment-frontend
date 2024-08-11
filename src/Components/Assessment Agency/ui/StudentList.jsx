@@ -28,7 +28,7 @@ const StudentList = () => {
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
-      console.log(examId);
+      console.log(localStorage.getItem(`absentSudent_${batchId}`));
       try {
         const response = await axios.get(
           `http://localhost:8000/api/v1/batch/${batchId}`
@@ -75,8 +75,8 @@ const StudentList = () => {
           const updatedAbsentCount = updatedData.filter(
             (student) => student.isAbsent
           ).length;
-
-          setAbsentCount(updatedAbsentCount);
+          console.log(updatedAbsentCount);
+          localStorage.setItem(`absentSudent_${batchId}`, updatedAbsentCount);
           return updatedData;
         });
       }
@@ -101,7 +101,7 @@ const StudentList = () => {
   };
 
   const handlegeneraldata = () => {
-    navigate(`/dashboard/uploaddetails/${examId[0]}`);
+    navigate(`/dashboard/uploaddetails/${examId[0]}/${batchId}`);
   };
 
   return (
@@ -129,6 +129,9 @@ const StudentList = () => {
             </th>
             <th className="p-3 text-md font-semibold tracking-wide text-left">
               Mark Absent
+            </th>
+            <th className="p-3 text-md font-semibold tracking-wide text-left">
+              Marks Uploaded
             </th>
           </tr>
         </thead>
@@ -166,13 +169,24 @@ const StudentList = () => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
               </td>
-              <td className="py-2 px-4 whitespace-nowrap text-sm text-gray-700">
+              <td className="px-4 py-3 text-center">
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
+                    student.markUploadStatus === false
+                      ? "bg-red-100 text-red-800"
+                      : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
+                  {student.markUploadStatus ? "Completed" : "Pending"}
+                </span>
+              </td>
+              <td className="py-2 px-4 whitespace-nowrap text-sm text-gray-700 text-center">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     markAbsent(student._id);
                   }}
-                  className={`p-2 text-sm font-medium rounded-3xl shadow-sm text-white ${
+                  className={`p-2 text-sm font-medium rounded-xl shadow-sm text-white ${
                     student.isAbsent
                       ? "bg-red-500 cursor-not-allowed"
                       : "bg-green-500 hover:bg-green-700"

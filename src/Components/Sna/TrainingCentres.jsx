@@ -57,7 +57,7 @@ const TrainingCenters = () => {
 
   return (
     <div className="overflow-x-auto rounded-md p-2 shadow-sm">
-      <h1 className="text-2xl font-bold">Training Batches</h1>
+      <h1 className="text-2xl font-bold">Training Centers</h1>
       <p className="text-gray-600 mb-4">
         View and manage the training batches submitted by the Training Agency.
       </p>

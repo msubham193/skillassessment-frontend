@@ -20,7 +20,7 @@ const ResultContent = ({ batchId }) => {
     const fetchResultData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${server}/mark/batch/${batchId}`, {
+        const response = await axios.get(`${server}/marks/batch/${batchId}`, {
           withCredentials: true,
         });
         setLoading(false);
@@ -82,7 +82,7 @@ const ResultContent = ({ batchId }) => {
     setLoading(true);
     try {
       const response = await axios.post( 
-        `${server}/publish/certificate/exam/${examId}`,
+        `${server}/certificate/publish/exam/${examId}`,
         {},
         {
           headers: {
@@ -109,7 +109,6 @@ const ResultContent = ({ batchId }) => {
       setLoading(false);
     }
   };
-
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">

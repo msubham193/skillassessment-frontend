@@ -85,6 +85,7 @@ import Marksheet from "./Pages/Sna/Marksheet";
 import ViewResult from "./Pages/Sna/ViewResult";
 import IndividualStudentMarksheet from "./Pages/Sna/IndividualStudentMarksheet";
 import SNADashboard from "./Pages/Sna/Dashboard";
+import BatchDetailsOfSNA from "./Pages/Sna/BatchDetails";
 
 const App = () => {
   //code for admin
@@ -265,6 +266,7 @@ const App = () => {
             </>
           )}
         </Route>
+        {/* traning partner routs */}
         <Route
           path="/trainingPartner/dashboard"
           // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}
@@ -347,7 +349,10 @@ const App = () => {
             <Route path="snadashboard" element={<SNADashboard />} />
             <Route path="trainingcenters" element={<TCDetails />} />
             <Route path="trainingbatches" element={<TBDetails />} />
-            <Route path="batchdetails/:batchId" element={<BatchDetails />} />
+            <Route
+              path="batchdetails/:batchId"
+              element={<BatchDetailsOfSNA />}
+            />
             <Route path="reports" element={<ViewReports />} />
             <Route path="marks" element={<Marksheet />} />
             <Route path="batchresult/:batchId" element={<ViewResult />} />

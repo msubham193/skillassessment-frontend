@@ -3,8 +3,8 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { FaBuilding, FaCalendar, FaRegBuilding } from "react-icons/fa"; // Example icons
-import TrainingCenters from "./TrainingCentres";
-import TrainingBatches from "./TrainingBatches";
+import TrainingCenters from "../../Components/Sna/TrainingCentres";
+import TrainingBatches from "../../Components/Sna/TrainingBatches";
 
 const Card = ({ title, count, pending, approved, icon }) => {
   return (
@@ -24,7 +24,7 @@ const Card = ({ title, count, pending, approved, icon }) => {
   );
 };
 
-const Dashboard = () => {
+const SNADashboard = () => {
   useEffect(() => {
     const fetchData = async (e) => {
       try {
@@ -86,4 +86,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default SNADashboard;

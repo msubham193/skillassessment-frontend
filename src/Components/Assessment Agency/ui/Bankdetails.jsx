@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
+import { assessmentAgencyIdState } from "../../../state/atom/AssessmentAgencyAtoms";
 import toast, { Toaster } from "react-hot-toast";
 
 const BankDetailsForm = () => {
@@ -30,6 +30,7 @@ const BankDetailsForm = () => {
         `http://localhost:8000/api/v1/aa/bdt/${assessmentAgencyId[0]}`,
         formData
       );
+      console.log(response);
       toast.success(response.data);
       // Handle success response
     } catch (error) {

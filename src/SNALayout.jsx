@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Outlet } from "react-router-dom";
-import SideBar from "./pages/Dashboard/Sidebar";
-
+import SideBar from "./Components/Sna/Sidebar";
 
 function snaLayout() {
   return (

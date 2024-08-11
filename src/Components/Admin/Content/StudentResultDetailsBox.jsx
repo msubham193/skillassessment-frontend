@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components(shadcn)/ui/button";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

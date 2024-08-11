@@ -56,7 +56,7 @@ const MarksheetForm = () => {
       try {
         console.log(studentDOB);
         const response = await axios.get(
-          "http://localhost:8000/api/v1/courses"
+          "http://localhost:8000/api/v1/course/course"
         );
         console.log(response.data.data);
         console.log(batchCourseName[0]);

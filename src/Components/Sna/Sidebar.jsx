@@ -6,6 +6,7 @@ import {
   FaBuilding,
   FaClipboardList,
   FaUsers,
+  FaRegFileAlt,
 } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +32,11 @@ const routes = [
     name: "Reports",
     icon: <FaUsers />,
   },
+  {
+    path: "/marks",
+    name: "Marks",
+    icon: <FaRegFileAlt />,
+  },
 ];
 
 const SideBar = () => {
@@ -41,7 +47,7 @@ const SideBar = () => {
   const handleLogout = () => {
     localStorage.removeItem("state");
     localStorage.removeItem("scheme");
-    navigate("/login");
+    navigate("/snalogin");
   };
 
   return (

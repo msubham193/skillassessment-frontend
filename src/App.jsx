@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,useLocation } from "react-router-dom";
 import TpDetails from "./Pages/Admin/TpDetails";
 import AaDetails from "./Pages/Admin/AaDetails";
 import AaNotification from "./Pages/Admin/AccessmentAgeencyDAta";
@@ -82,6 +82,17 @@ import TCDetails from "./Components/Sna/TCDetails";
 import TBDetails from "./Components/Sna/TBDetails";
 import SNADashboard from "./Pages/Sna/Dashboard";
 import BatchDetailsOfSNA from "./Pages/Sna/BatchDetails";
+import StaticLayout from "./StaticLayout";
+import Home from "./Pages/Static/Home";
+import AboutUs from "./Pages/Static/AboutUs.jsx";
+import Partners from "./Pages/Static/Partners.jsx";
+import TraningAndAssignment from "./Pages/Static/TraningAndAssignment";
+import Qualification from "./Pages/Static/Qualification";
+import NewsNotification from "./Pages/Static/NewsNotification.jsx";
+import Resource from "./Pages/Static/Resource";
+import ContactUs from "./Pages/Static/ContactUs";
+import PortalLogin from "./Pages/Static/PortalLogin";
+
 
 
 
@@ -103,6 +114,8 @@ const App = () => {
       });
     }
   }, [setAuthState]);
+
+
 
   //code for traning partner
 
@@ -352,6 +365,24 @@ const App = () => {
             />
           </Route>
         </Route>
+
+
+
+
+        {/* Static Pages */}
+
+        <Route path="/" element={<StaticLayout />}>
+          <Route path="" element={<Home />} />
+          <Route path="about" element={<AboutUs />} />
+          <Route path="partner" element={<Partners />} />
+          <Route path="tp" element={<TraningAndAssignment />} />
+          <Route path="qualification" element={<Qualification />} />
+          <Route path="notification" element={<NewsNotification />} />
+          <Route path="resource" element={<Resource />} />
+          <Route path="contact" element={<ContactUs />} />
+          <Route path="portal" element={<PortalLogin />} />
+        </Route>
+
       </Routes>
       <ToastContainer />
     </div>

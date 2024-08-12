@@ -10,15 +10,12 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components(shadcn)/ui/pagination";
-import { Tabs,TabsList,
-  TabsTrigger,
-  TabsContent, } from "@/components(shadcn)/ui/tabs";
+import { Tabs } from "@/components(shadcn)/ui/tabs";
 import { Skeleton } from "@/components(shadcn)/ui/skeleton";
 import DataTabs from "@/Components/Admin/ui/DataTabs";
 
@@ -31,29 +28,36 @@ import {
 import React, { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { batchDataAtoms } from "../Atoms/batchatom";
 import TopBar from "../TopBar";
 import { toast } from "react-toastify";
+import { centerAtom } from "../Atoms/centerAtom";
+import { server } from "@/main";
 
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalBatches, setTotalBatches] = useState(0);
-  const [totalCenters, setTotalCenters] = useState("");
-  const [totalStudents, setTotalStudents] = useState("");
-  const [totalTrainers, setTotalTrainers] = useState("");
+  const [totalCenters, setTotalCenters] = useState(0);
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [totalTrainers, setTotalTrainers] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
   const setBatchData = useSetRecoilState(batchDataAtoms);
   const trainingPartnerId = localStorage.getItem("trainingPartnerId");
+  const totalCenter = useRecoilValue(centerAtom);
+
+  useEffect(() => {
+    setTotalCenters(totalCenter.length);
+  }, [totalCenter]);
 
   const handelView = async (batchId) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/batch/${batchId}`,
+        `${server}/batch/${batchId}`,
         {
           method: "GET",
         }
@@ -62,7 +66,6 @@ const Content = () => {
       if (response.ok) {
         const data = await response.json();
         setBatchData(data.data);
-        console.log(data.data);
         navigate(`/trainingPartner/dashboard/${batchId}`);
       } else {
         console.error("Failed to fetch batches");
@@ -77,10 +80,10 @@ const Content = () => {
       setLoading(true);
       try {
         const [batchesResponse, trainersResponse] = await Promise.all([
-          fetch(`http://localhost:8000/api/v1/batch/tp/${trainingPartnerId}`, {
+          fetch(`${server}/batch/tp/${trainingPartnerId}`, {
             method: "GET",
           }),
-          fetch(`http://localhost:8000/api/v1/trainer/tp/${trainingPartnerId}`, {
+          fetch(`${server}/trainer/tp/${trainingPartnerId}`, {
             method: "GET",
           }),
         ]);
@@ -91,6 +94,10 @@ const Content = () => {
 
           setTotalBatches(batchesData.data.length);
           setTotalTrainers(trainersData.data.length);
+
+          // Calculate total students
+          const totalStudents = batchesData.data.reduce((sum, batch) => sum + batch.students.length, 0);
+          setTotalStudents(totalStudents);
 
           // Sort batches by creation date
           const sortedBatches = batchesData.data.sort(
@@ -113,6 +120,7 @@ const Content = () => {
   }, [trainingPartnerId]);
 
   const paginate = (pageNumber) => {
+    const totalPages = Math.ceil(allBatch.length / itemsPerPage);
     if (pageNumber < 1) {
       setCurrentPage(totalPages);
     } else if (pageNumber > totalPages) {
@@ -125,7 +133,7 @@ const Content = () => {
   const handelBatchReady = async (batchId) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/batch/active/${batchId}`,
+        `${server}/batch/active/${batchId}`,
         {
           method: "PUT",
         }
@@ -166,8 +174,6 @@ const Content = () => {
   const currentItems = allBatch.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(allBatch.length / itemsPerPage);
 
-  console.log(allBatch);
-
   return (
     <div className="w-full">
       <TopBar />
@@ -189,25 +195,25 @@ const Content = () => {
                 cardData={[
                   {
                     titel: "Total Batches",
-                    total: +totalBatches,
+                    total: totalBatches,
                     fromLast: "+0 from last Month",
                     logo: GraduationCap,
                   },
                   {
                     titel: "Total Centers",
-                    total: +totalCenters,
+                    total: totalCenters,
                     fromLast: "+0 from last Month",
                     logo: CandlestickChart,
                   },
                   {
                     titel: "Total Students",
-                    total: +totalStudents,
+                    total: totalStudents,
                     fromLast: "+0 from last Month",
                     logo: SquareActivity,
                   },
                   {
                     titel: "Total Trainers",
-                    total: +totalTrainers,
+                    total: totalTrainers,
                     fromLast: "+0 from last Year",
                     logo: Presentation,
                   },

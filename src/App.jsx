@@ -75,13 +75,14 @@ import UploadDocuments from "./Pages/Assessment Agency/UploadDocuments";
 import GenerateInvoice from "./Components/Assessment Agency/ui/GenerateInvoice";
 import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
 import BatchDetailsofAA from "./Pages/Assessment Agency/BatchDetails";
-import SNALayout from "./SNAlayout";
-import SNADashboard from "./pages/Dashboard/Dashboard";
-import BatchDetailsforSNA from "./pages/Dashboard/BatchDetails";
-import SNALogin from "./pages/Dashboard/SNALogin";
-import TCDetails from "./pages/Dashboard/TCDetails";
-import TBDetails from "./pages/Dashboard/TBDetails";
-import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
+import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
+// import SNALayout from "./SNAlayout";
+// import SNADashboard from "./pages/Dashboard/Dashboard";
+// import BatchDetailsforSNA from "./pages/Dashboard/BatchDetails";
+// import SNALogin from "./pages/Dashboard/SNALogin";
+// import TCDetails from "./pages/Dashboard/TCDetails";
+// import TBDetails from "./pages/Dashboard/TBDetails";
+// import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
 
 const App = () => {
   //code for admin
@@ -278,6 +279,7 @@ const App = () => {
         />
         <Route path="/CreateBatch" exact element={<CreateBatch />} />
         <Route path="/Createcenter" exact element={<CreateCenter />} />
+        <Route path="/updateCenter" exact element={<UpdateCenter />} />
         <Route path="/manageBatch" exact element={<ManageBatch />} />
         <Route path="/transcript" exact element={<Transcript />} />
         <Route path="/trainers" exact element={<AllTrainers />} />
@@ -336,7 +338,7 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        <Route path="login" element={<SNALogin />} />
+        {/* <Route path="login" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/" element={<SNALayout />}>
             <Route path="dashboard" element={<SNADashboard />} />
@@ -345,9 +347,9 @@ const App = () => {
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsforSNA />}
-            />
-          </Route>
-        </Route>
+            /> */}
+          {/* </Route>
+        </Route> */}
       </Routes>
       <ToastContainer />
     </div>

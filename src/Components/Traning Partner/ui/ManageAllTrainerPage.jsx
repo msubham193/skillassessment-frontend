@@ -17,7 +17,7 @@ const ManageAllTrainerPage = () => {
         const fetchTeachers = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:8000/api/v1/trainer/tp/${tpid}`,{method:"GET"});
+                const response = await fetch(`${server}/trainer/tp/${tpid}`,{method:"GET"});
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data.data);

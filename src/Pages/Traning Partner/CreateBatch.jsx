@@ -68,7 +68,7 @@ const CreateBatch = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:8000/api/v1/tp/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
+        `http://localhost:8000/api/v1/sna/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
       );
       console.log("Response received");
       if (!response.ok) {
@@ -97,6 +97,7 @@ const CreateBatch = () => {
         throw new Error("Failed to fetch courses");
       }
       const data = await response.json();
+      console.log("course",data)
       setCourses(data.data || []);
     } catch (error) {
       console.error("Error fetching courses:", error);

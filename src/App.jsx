@@ -146,6 +146,22 @@ const App = () => {
   return (
     <div>
       <Routes>
+      
+        {/* Static Pages */}
+        
+        <Route path="/" element={<StaticLayout />}>
+          <Route path="" element={<Home />} />
+          <Route path="about" element={<AboutUs />} />
+          <Route path="partner" element={<Partners />} />
+          <Route path="tp" element={<TraningAndAssignment />} />
+          <Route path="qualification" element={<Qualification />} />
+          <Route path="notification" element={<NewsNotification />} />
+          <Route path="resource" element={<Resource />} />
+          <Route path="contact" element={<ContactUs />} />
+          <Route path="portal" element={<PortalLogin />} />
+        </Route>
+
+         {/* Admin routs... */}
         <Route path="/adminLogin" exact element={<AdminLogin />} />
         <Route element={<ProtectedRout />}>
           {isAdmin?.email === specificEmail ? (
@@ -377,21 +393,6 @@ const App = () => {
         </Route>
 
 
-
-
-        {/* Static Pages */}
-
-        <Route path="/" element={<StaticLayout />}>
-          <Route path="" element={<Home />} />
-          <Route path="about" element={<AboutUs />} />
-          <Route path="partner" element={<Partners />} />
-          <Route path="tp" element={<TraningAndAssignment />} />
-          <Route path="qualification" element={<Qualification />} />
-          <Route path="notification" element={<NewsNotification />} />
-          <Route path="resource" element={<Resource />} />
-          <Route path="contact" element={<ContactUs />} />
-          <Route path="portal" element={<PortalLogin />} />
-        </Route>
 
       </Routes>
       <ToastContainer />

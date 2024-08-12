@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 const SNAProtectedRoutes = () => {
   const state = localStorage.getItem("state");
   if (!state) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/snalogin" />;
   }
   return <Outlet />;
 };

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const RegistrationForm = () => {
@@ -30,6 +30,7 @@ const RegistrationForm = () => {
   const [total_no_of_certified_Assessor, setTotal_no_of_certified_Assessor] =
     useState("");
   const [LETTER_OF_NCVET, setLETTER_OF_NCVET] = useState("");
+  const [logo, setLogo] = useState(null);
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
   const [availability, setAvailability] = useState(true);
@@ -213,8 +214,9 @@ const RegistrationForm = () => {
 
   const handelFileUpload = (e) => {
     const { name, files } = e.target;
+    const file = files[0];
+
     if (name === "LETTER_OF_NCVET") {
-      const file = files[0];
       if (file.type === "application/pdf") {
         setLETTER_OF_NCVET(file);
         setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
@@ -222,6 +224,16 @@ const RegistrationForm = () => {
         setErrors((prevErrors) => ({
           ...prevErrors,
           [name]: "Please select a valid PDF file.",
+        }));
+      }
+    } else if (name === "AGENCY_LOGO") {
+      if (file.type.startsWith("image/")) {
+        setLogo(file);
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Please select a valid image file.",
         }));
       }
     }
@@ -258,6 +270,7 @@ const RegistrationForm = () => {
       state_Under_geographicalRegion,
       total_no_of_certified_Assessor,
       LETTER_OF_NCVET,
+      logo,
       sectors,
       courses,
       availability,
@@ -555,19 +568,32 @@ const RegistrationForm = () => {
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Letter of NCVET
-              </label>
-              <input
-                type="file"
-                name="LETTER_OF_NCVET"
-                accept="application/pdf"
-                onChange={handelFileUpload}
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
+            <div className="flex gap-10">
+              <div className="flex flex-col">
+                <label className="block text-sm font-medium text-gray-700">
+                  Letter of NCVET
+                </label>
+                <input
+                  type="file"
+                  name="LETTER_OF_NCVET"
+                  accept="application/pdf"
+                  onChange={handelFileUpload}
+                  className="mt-1 block w-full h-11 p-2 rounded-md bg-white border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="block text-sm font-medium text-gray-700">
+                  Agency Logo
+                </label>
+                <input
+                  type="file"
+                  name="AGENCY_LOGO"
+                  accept="image/*"
+                  onChange={handelFileUpload}
+                  className="mt-1 block w-full h-11 p-2 rounded-md bg-white border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+                />
+              </div>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Sectors
@@ -596,6 +622,7 @@ const RegistrationForm = () => {
                 onChange={handleCourseChange}
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               >
+                <option value="">Select a Course</option>
                 {courseOptions.map((course, index) => (
                   <option key={index} value={course}>
                     {course}

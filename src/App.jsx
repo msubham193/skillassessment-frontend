@@ -75,11 +75,15 @@ import UploadDocuments from "./Pages/Assessment Agency/UploadDocuments";
 import GenerateInvoice from "./Components/Assessment Agency/ui/GenerateInvoice";
 import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
 import BatchDetailsofAA from "./Pages/Assessment Agency/BatchDetails";
-import SnaLayout from "./SNALayout";
+import SNALayout from "./SNALayout";
 import SNALogin from "./Pages/Sna/SNALogin";
-import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
 import TCDetails from "./Components/Sna/TCDetails";
 import TBDetails from "./Components/Sna/TBDetails";
+import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
+import ViewReports from "./Pages/Sna/ViewReports";
+import Marksheet from "./Pages/Sna/Marksheet";
+import ViewResult from "./Pages/Sna/ViewResult";
+import IndividualStudentMarksheet from "./Pages/Sna/IndividualStudentMarksheet";
 import SNADashboard from "./Pages/Sna/Dashboard";
 import BatchDetailsOfSNA from "./Pages/Sna/BatchDetails";
 import StaticLayout from "./StaticLayout";
@@ -92,9 +96,6 @@ import NewsNotification from "./Pages/Static/NewsNotification.jsx";
 import Resource from "./Pages/Static/Resource";
 import ContactUs from "./Pages/Static/ContactUs";
 import PortalLogin from "./Pages/Static/PortalLogin";
-
-
-
 
 
 const App = () => {
@@ -319,7 +320,9 @@ const App = () => {
           path="/trainingPartner/dashboard/student/:Id"
           element={<Student />}
         />
-        <Route path="//trainingPartner/setting" exact element={<Setting />} />  
+        <Route path="//trainingPartner/setting" exact element={<Setting />} />
+
+        {/* Routes for Assessment Agency */}
         <Route path="registration" element={<RegistrationForm />} />
         <Route path="login" element={<Assessorlogin />} />
         <Route element={<ProtectedRoutes />}>
@@ -353,15 +356,22 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        <Route path="login" element={<SNALogin/>} />
-        <Route element={<SNAProtectedRoutes/>}>
-          <Route path="/" element={<SnaLayout/>}>
-            <Route path="dashboard" element={<SNADashboard/>} />
-            <Route path="trainingcenters" element={<TCDetails/>} />
-            <Route path="trainingbatches" element={<TBDetails/>} />
+        <Route path="snalogin" element={<SNALogin />} />
+        <Route element={<SNAProtectedRoutes />}>
+          <Route path="/" element={<SNALayout />}>
+            <Route path="snadashboard" element={<SNADashboard />} />
+            <Route path="trainingcenters" element={<TCDetails />} />
+            <Route path="trainingbatches" element={<TBDetails />} />
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
+            />
+            <Route path="reports" element={<ViewReports />} />
+            <Route path="marks" element={<Marksheet />} />
+            <Route path="batchresult/:batchId" element={<ViewResult />} />
+            <Route
+              path="studentresult/:studentId"
+              element={<IndividualStudentMarksheet />}
             />
           </Route>
         </Route>

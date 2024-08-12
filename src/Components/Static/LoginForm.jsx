@@ -10,7 +10,7 @@ const LoginForm = () => {
 
   const handleAction = async () => {
     if (!selectedOption) return;
-
+ 
     setIsRedirecting(true);
     try {
       const redirectURL = getRedirectURL();
@@ -35,12 +35,12 @@ const LoginForm = () => {
   const getRedirectURL = () => {
     if (isRegistering) {
       return selectedOption === "Training Partner"
-        ? "/register-training-partner"
-        : "/register-assessment-agency";
+        ? "/trainingPartner/signup"
+        : "/registration";
     } else {
       return selectedOption === "Training Partner"
-        ? "/login-training-partner"
-        : "/login-assessment-agency";
+        ? "/trainingPartner/signin"
+        : "/login";
     }
   };
 

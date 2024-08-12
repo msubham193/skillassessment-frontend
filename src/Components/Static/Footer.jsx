@@ -122,7 +122,7 @@ function Footer() {
             </a>
           </div>
           <a
-            href="/admin"
+            href="/admin/dasbord"
             className="absolute bottom-8 right-4 text-[#001d3d] py-2 px-4 rounded-lg font-bold transition duration-300 hover:bg-[#3f37c9] hover:text-white hidden xl:block"
           >
             Admin

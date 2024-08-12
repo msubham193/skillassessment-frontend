@@ -90,7 +90,7 @@ const CreateCourseForm = () => {
     setShowbuttion(true);
     try {
       const response = await axios.post(
-        `${server}/course`,
+        `${server}/course/course`,
         {
           courseName,
           courseCode,

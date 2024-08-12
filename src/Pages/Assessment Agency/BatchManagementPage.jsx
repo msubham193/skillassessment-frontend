@@ -1,8 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  assessmentAgencyIdState,
+  examIdState,
+} from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
+
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,6 +15,7 @@ const BatchManagementPage = () => {
   const navigate = useNavigate();
   const [batchData, setBatchData] = useState([]); // Initialize as an empty array
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
+  const setExamId = useSetRecoilState(examIdState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +43,7 @@ const BatchManagementPage = () => {
 
   const handleRowClick = (batchId, status, examId) => {
     console.log(examId);
+    setExamId(examId);
     if (status === "not-started" || status === "onGoing") {
       navigate(`/dashboard/batch/${batchId}/exam/${examId}`);
     }

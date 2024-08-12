@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,useLocation } from "react-router-dom";
 import TpDetails from "./Pages/Admin/TpDetails";
 import AaDetails from "./Pages/Admin/AaDetails";
 import AaNotification from "./Pages/Admin/AccessmentAgeencyDAta";
@@ -75,14 +75,29 @@ import UploadDocuments from "./Pages/Assessment Agency/UploadDocuments";
 import GenerateInvoice from "./Components/Assessment Agency/ui/GenerateInvoice";
 import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
 import BatchDetailsofAA from "./Pages/Assessment Agency/BatchDetails";
+import SNALayout from "./SNALayout";
+import SNALogin from "./Pages/Sna/SNALogin";
+import TCDetails from "./Components/Sna/TCDetails";
+import TBDetails from "./Components/Sna/TBDetails";
+import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
+import ViewReports from "./Pages/Sna/ViewReports";
+import Marksheet from "./Pages/Sna/Marksheet";
+import ViewResult from "./Pages/Sna/ViewResult";
+import IndividualStudentMarksheet from "./Pages/Sna/IndividualStudentMarksheet";
+import SNADashboard from "./Pages/Sna/Dashboard";
+import BatchDetailsOfSNA from "./Pages/Sna/BatchDetails";
+import StaticLayout from "./StaticLayout";
+import Home from "./Pages/Static/Home";
+import AboutUs from "./Pages/Static/AboutUs.jsx";
+import Partners from "./Pages/Static/Partners.jsx";
+import TraningAndAssignment from "./Pages/Static/TraningAndAssignment";
+import Qualification from "./Pages/Static/Qualification";
+import NewsNotification from "./Pages/Static/NewsNotification.jsx";
+import Resource from "./Pages/Static/Resource";
+import ContactUs from "./Pages/Static/ContactUs";
+import PortalLogin from "./Pages/Static/PortalLogin";
 import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
-// import SNALayout from "./SNAlayout";
-// import SNADashboard from "./pages/Dashboard/Dashboard";
-// import BatchDetailsforSNA from "./pages/Dashboard/BatchDetails";
-// import SNALogin from "./pages/Dashboard/SNALogin";
-// import TCDetails from "./pages/Dashboard/TCDetails";
-// import TBDetails from "./pages/Dashboard/TBDetails";
-// import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
+
 
 const App = () => {
   //code for admin
@@ -101,6 +116,8 @@ const App = () => {
       });
     }
   }, [setAuthState]);
+
+
 
   //code for traning partner
 
@@ -263,6 +280,7 @@ const App = () => {
             </>
           )}
         </Route>
+        {/* traning partner routs */}
         <Route
           path="/trainingPartner/dashboard"
           // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}
@@ -279,8 +297,8 @@ const App = () => {
         />
         <Route path="/CreateBatch" exact element={<CreateBatch />} />
         <Route path="/Createcenter" exact element={<CreateCenter />} />
-        <Route path="/updateCenter" exact element={<UpdateCenter />} />
         <Route path="/manageBatch" exact element={<ManageBatch />} />
+        <Route path="/updateCenter" exact element={<UpdateCenter />} />
         <Route path="/transcript" exact element={<Transcript />} />
         <Route path="/trainers" exact element={<AllTrainers />} />
         <Route path="/centers" exact element={<Centers />} />
@@ -304,7 +322,9 @@ const App = () => {
           path="/trainingPartner/dashboard/student/:Id"
           element={<Student />}
         />
-        <Route path="//trainingPartner/setting" exact element={<Setting />} />  
+        <Route path="//trainingPartner/setting" exact element={<Setting />} />
+
+        {/* Routes for Assessment Agency */}
         <Route path="registration" element={<RegistrationForm />} />
         <Route path="login" element={<Assessorlogin />} />
         <Route element={<ProtectedRoutes />}>
@@ -338,18 +358,41 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        <Route path="login" element={<SNALogin />} />
+        <Route path="snalogin" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/" element={<SNALayout />}>
-            <Route path="dashboard" element={<SNADashboard />} />
+            <Route path="snadashboard" element={<SNADashboard />} />
             <Route path="trainingcenters" element={<TCDetails />} />
             <Route path="trainingbatches" element={<TBDetails />} />
             <Route
               path="batchdetails/:batchId"
-              element={<BatchDetailsforSNA />}
-            /> 
-           </Route>
+              element={<BatchDetailsOfSNA />}
+            />
+            <Route path="reports" element={<ViewReports />} />
+            <Route path="marks" element={<Marksheet />} />
+            <Route path="batchresult/:batchId" element={<ViewResult />} />
+            <Route
+              path="studentresult/:studentId"
+              element={<IndividualStudentMarksheet />}
+            />
+          </Route>
         </Route>
+
+
+        {/* Static Pages */}
+
+        <Route path="/" element={<StaticLayout />}>
+          <Route path="" element={<Home />} />
+          <Route path="about" element={<AboutUs />} />
+          <Route path="partner" element={<Partners />} />
+          <Route path="tp" element={<TraningAndAssignment />} />
+          <Route path="qualification" element={<Qualification />} />
+          <Route path="notification" element={<NewsNotification />} />
+          <Route path="resource" element={<Resource />} />
+          <Route path="contact" element={<ContactUs />} />
+          <Route path="portal" element={<PortalLogin />} />
+        </Route>
+
       </Routes>
       <ToastContainer />
     </div>
@@ -357,3 +400,13 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+
+
+
+
+
+

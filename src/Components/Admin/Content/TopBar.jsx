@@ -174,7 +174,6 @@ const TopBar = () => {
               </div>
             </SelectContent>
           </Select>
-
           {/* Profile and dropdown menu for edit and logout */}
           <UserNav admin={admin} />
         </div>

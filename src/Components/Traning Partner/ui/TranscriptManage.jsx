@@ -187,7 +187,7 @@ const TranscriptManage = () => {
               className="py-5 px-5 bg-transparent gap-2 cursor-pointer"
               onClick={() => handleClick(batch._id)}
             >
-              <div className="flex justify-between font-bold w-full items-center">
+              <div className="flex justify-between font-bold w-full items-center gap-3">
                 <div className="text-black w-full">{batch.courseName}</div>
                 <div className="text-black w-full">{batch.ABN_Number}</div>
                 <div className="text-black w-full">{batch.students.length}</div>

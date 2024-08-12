@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const TBDetails = () => {
+const Marksheet = () => {
   const [batchData, setBatchData] = useState([]);
   const navigate = useNavigate();
 
@@ -32,13 +32,13 @@ const TBDetails = () => {
 
   const handleRowClick = (batchId) => {
     console.log(batchId);
-    navigate(`/batchdetails/${batchId}`);
+    navigate(`/batchresult/${batchId}`);
   };
   return (
     <div className="overflow-x-auto p-2 rounded-md shadow-sm">
-      <h1 className="text-2xl font-bold">Training Batches</h1>
+      <h1 className="text-2xl font-bold">Results of Training Batches</h1>
       <p className="text-gray-600 mb-4">
-        View and manage the training batches submitted by the Training Agency.
+        View the results of training batches submitted by the Training Agency.
       </p>
       <table className="min-w-full bg-white border">
         <thead>
@@ -48,7 +48,8 @@ const TBDetails = () => {
             <th className="py-2 px-4 border-b">Center</th>
             <th className="py-2 px-4 border-b">Course</th>
             <th className="py-2 px-4 border-b">Students</th>
-            <th className="py-2 px-4 border-b">Approval Status</th>
+            <th className="py-2 px-4 border-b">Status</th>
+            <th className="py-2 px-4 border-b">Result Published</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +73,16 @@ const TBDetails = () => {
               <td className="py-2 px-4 border-b text-center">
                 <span
                   className={`inline-block px-2 py-1 text-white ${
-                    batch.approvedByGovernmentBody === "true"
+                    batch.status === "onGoing" ? "bg-red-500" : "bg-green-500"
+                  } rounded-full`}
+                >
+                  {batch.status}
+                </span>
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                <span
+                  className={`inline-block px-2 py-1 text-white ${
+                    batch.resultPublished === "true"
                       ? "bg-green-500"
                       : "bg-red-500"
                   } rounded-full`}
@@ -88,4 +98,4 @@ const TBDetails = () => {
   );
 };
 
-export default TBDetails;
+export default Marksheet;

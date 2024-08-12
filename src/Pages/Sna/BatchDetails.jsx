@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 
-const BatchDetails = () => {
+const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();
   const navigate = useNavigate();
   const [batchDetails, setBatchDetails] = useState([]);
+  const [isApproaved, setIsApproaved] = useState(false);
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
@@ -18,6 +19,9 @@ const BatchDetails = () => {
         console.log(response.data.data);
         const data = response.data.data;
         setBatchDetails(data);
+        if (data.approvedByGovernmentBody === true) {
+          setIsApproaved(true);
+        }
         console.log(batchDetails);
       } catch (error) {
         console.error("Error fetching student data:", error);
@@ -123,6 +127,24 @@ const BatchDetails = () => {
               {Object.keys(batchDetails).map((key, index) => {
                 if (
                   ![
+                    "_id",
+                    "schemeType",
+                    "resultPublished",
+                    "trainingOrganizationId",
+                    "scheme",
+                    "isAssigned",
+                    "clientPaymentStatus",
+                    "paymentStatus",
+                    "batchActivePermission",
+                    "amountToPaid",
+                    "batchCompletedStatus",
+                    "__v",
+                    "prePaymentInvoice",
+                    "postPaymentInvoice",
+                    "transactionId",
+                    "assessorId",
+                    "approvedByGovernmentBody",
+                    "certificateIssued",
                     "ABN_Number",
                     "CenterCode",
                     "centerName",
@@ -159,13 +181,19 @@ const BatchDetails = () => {
         <div className="flex justify-end mt-8">
           <button
             onClick={handleApproval}
-            className="px-6 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition duration-300 mr-4"
+            disabled={isApproaved}
+            className={`px-6 py-2 text-white rounded-lg transition duration-300 mr-4 ${
+              isApproaved ? "bg-green-300" : "bg-green-600 hover:bg-green-700"
+            }`}
           >
             Approve
           </button>
           <button
             onClick={handleRejection}
-            className="px-6 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition duration-300"
+            disabled={isApproaved}
+            className={`px-6 py-2 text-white rounded-lg transition duration-300 ${
+              isApproaved ? "bg-red-300" : "bg-red-600 hover:bg-red-700"
+            }`}
           >
             Reject
           </button>
@@ -176,4 +204,4 @@ const BatchDetails = () => {
   );
 };
 
-export default BatchDetails;
+export default BatchDetailsOfSNA;

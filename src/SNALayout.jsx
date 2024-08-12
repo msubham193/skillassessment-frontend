@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Outlet } from "react-router-dom";
-import SideBar from "./pages/Dashboard/Sidebar";
-
-
-function snaLayout() {
+import SideBar from "./Components/Sna/Sidebar";
+function SnaLayout() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-grow">
@@ -17,4 +15,4 @@ function snaLayout() {
   );
 }
 
-export default snaLayout;
+export default SnaLayout;

@@ -41,10 +41,10 @@ const GenerateInvoice = () => {
         setContact(data.AssesmentAgencyDetails.contactNumber);
         setPan(data.AssesmentAgencyDetails.PAN);
         setGst(data.AssesmentAgencyDetails.GST_Number);
-        setBankName(data.BankInformation.bankName);
-        setBranchName(data.BankInformation.branchName);
-        setAccountNumber(data.BankInformation.accountNumber);
-        setIfscCode(data.BankInformation.IFSCCode);
+        // setBankName(data.BankInformation.bankName);
+        // setBranchName(data.BankInformation.branchName);
+        // setAccountNumber(data.BankInformation.accountNumber);
+        // setIfscCode(data.BankInformation.IFSCCode);
         setExamData(data.examDetails);
         setTotalNoOfcandidates(data.totalNoOfcandidates);
         setTotalNoOfAssessedCandidates(data.totalNoOfAssessedCandidates);

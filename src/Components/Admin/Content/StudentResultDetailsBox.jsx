@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components(shadcn)/ui/button";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -17,7 +19,7 @@ const StudentResultDetailsBox = ({ id }) => {
     try {
       setLoding(true);
       axios
-        .get(`${server}/mark/student/${id}`, {
+        .get(`${server}/marks/student/${id}`, {
           withCredentials: true,
         })
         .then((response) => {

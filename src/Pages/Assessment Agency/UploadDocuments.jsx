@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 const UploadDocuments = () => {
-  const { examId } = useParams();
+  const { examId, batchId } = useParams();
   const [photos, setPhotos] = useState([]);
   const [photoError, setPhotoError] = useState("");
   const [attendanceFile, setAttendanceFile] = useState(null);
@@ -35,6 +35,10 @@ const UploadDocuments = () => {
       } catch (error) {
         console.error("Error fetching assessors:", error);
         setAssessError("Error fetching assessors. Please try again.");
+      }
+      const storedAttendance = localStorage.getItem(`absentSudent_${batchId}`);
+      if (storedAttendance !== null) {
+        setStudentAttendance(Number(storedAttendance));
       }
     };
 
@@ -214,11 +218,10 @@ const UploadDocuments = () => {
   };
 
   return (
-    <div className="border flex flex-col gap-10 bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-lg shadow-lg max-w-4xl mx-auto mt-10">
-      <h1 className="text-2xl font-semibold text-indigo-800">
+    <div className="border flex flex-col gap-10 bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-lg shadow-lg max-w-xl mx-auto mt-10">
+      <h1 className="text-2xl font-semibold text-center text-indigo-800">
         Exam Status Updation
       </h1>
-
       <form onSubmit={handlePhotoSubmit} className="space-y-4">
         <label className="block text-sm font-medium text-gray-700">
           Upload Photographs{" "}
@@ -293,7 +296,7 @@ const UploadDocuments = () => {
             className="flex items-center justify-center mt-4 p-2 h-10 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             <FaFileUpload className="inline-block mr-2" />
-            Update Student Attendance
+            Confirn
           </button>
         </div>
       </form>

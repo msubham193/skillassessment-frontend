@@ -4,6 +4,7 @@ import { Button } from '@/components(shadcn)/ui/button';
 import { Input } from '@/components(shadcn)/ui/input';
 import { Label } from '@/components(shadcn)/ui/label';
 import { toast } from 'react-toastify';
+import { server } from '@/main';
 
 const ProfilePictureUploader = ({ studentId }) => {
     const [file, setFile] = useState(null);
@@ -25,7 +26,7 @@ const ProfilePictureUploader = ({ studentId }) => {
         formData.append('image', file);
 
         try {
-            const uploadUrl = `http://localhost:8000/api/v1/student/profile/${studentId}`;
+            const uploadUrl = `${server}/student/profile/${studentId}`;
             const response = await axios.put(uploadUrl, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

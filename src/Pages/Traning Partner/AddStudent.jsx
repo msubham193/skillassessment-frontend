@@ -7,6 +7,7 @@ import { Label } from "@/components(shadcn)/ui/label";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { format, differenceInDays, differenceInHours } from "date-fns";
+import { server } from "@/main";
 
 const AddStudent = () => {
   const { id: batchId } = useParams();
@@ -83,7 +84,7 @@ const AddStudent = () => {
 
   const fetchBatchdata = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/batch/${batchId}`, {
+      const response = await fetch(`${server}/batch/${batchId}`, {
         method: 'GET',
         headers: {
           "x-access-token": localStorage.getItem("token"),
@@ -128,7 +129,7 @@ const AddStudent = () => {
     const formattedInputs = { ...studentInputs };
     console.log("formdata", formattedInputs);
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/batch/addstudent/${batchId}`, {
+      const response = await fetch(`${server}/batch/addstudent/${batchId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

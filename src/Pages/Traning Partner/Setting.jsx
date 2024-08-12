@@ -5,30 +5,58 @@ import { Input } from "@/components(shadcn)/ui/input";
 import { Button } from "@/components(shadcn)/ui/button";
 import { Label } from "@/components(shadcn)/ui/label";
 import { toast } from "react-toastify";
+import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components(shadcn)/ui/select"; 
 
-const Setting = ({onClose}) => {
+const Setting = ({ onClose }) => {
   const tpdata = useRecoilValue(tpDataAtoms);
-  const [email, setEmail] = useState(`${tpdata.registeredOfficeEmail}`);
-  const [course, setCourse] = useState(`${tpdata.courses}`);
-  const [sector, setSector] = useState(`${tpdata.sector}`);
-  const [allSectors,setAllSectors]=useState({})
+  const [email, setEmail] = useState(tpdata.registeredOfficeEmail || "");
+  const [course, setCourse] = useState(tpdata.courses || "");
+  const [sector, setSector] = useState(tpdata.sector || "");
+  const [availableSectors, setAvailableSectors] = useState([]);
+  const [availableCourses, setAvailableCourses] = useState([]);
+
   const userId = tpdata._id;
-useEffect(()=>{
-  const fetchSectors = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/api/v1/sector/all", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setAllSectors(data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-},[])
+
+  useEffect(() => {
+    const fetchAllSectors = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/sector/all", {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setAvailableSectors(data.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    const fetchAllCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/course/course", {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Courses fetched:", data.data); // Log the courses data
+        setAvailableCourses(data.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    fetchAllSectors();
+    fetchAllCourses();
+  }, []);
+
   const updateEmail = async () => {
     try {
       const response = await fetch(`http://localhost:8000/api/v1/tp/info/email/${userId}`, {
@@ -89,16 +117,9 @@ useEffect(()=>{
     }
   };
 
-  const handleSaveChanges = async () => {
-    await updateEmail();
-    await updateCourse();
-    await updateSector();
-    onClose();
-  };
-
   return (
     <div className="p-8 space-y-6 relative">
-        <button
+      <button
         onClick={onClose}
         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
       >
@@ -107,44 +128,63 @@ useEffect(()=>{
         </svg>
       </button>
       <h1 className="text-2xl font-semibold text-center">Settings</h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="email">Registered Office Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="course">Course</Label>
-          <Input
-            id="course"
-            value={course}
-            onChange={(e) => setCourse(e.target.value)}
-            className="w-full"
-          />
-        </div>
-      </div>
+      
       <div className="space-y-2">
-        <Label htmlFor="sector">Sector</Label>
+        <Label htmlFor="email">Registered Office Email</Label>
         <Input
-          id="sector"
-          value={sector}
-          onChange={(e) => setSector(e.target.value)}
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full"
         />
+        <Button onClick={updateEmail} className="mt-2">Update Email</Button>
       </div>
-      <div className="flex justify-end mt-4">
-        <Button onClick={handleSaveChanges} className="px-6 py-2 text-white bg-blue-600 rounded-md">
-          Save Changes
-        </Button>
+      
+      <div className="space-y-2">
+        <Label htmlFor="course">Course</Label>
+        <Select value={course} onValueChange={setCourse}>
+          <SelectTrigger className="w-full">
+            {course || "Select a course"}
+          </SelectTrigger>
+          <SelectContent>
+            {availableCourses.length > 0 ? (
+              availableCourses.map((courseItem) => (
+                <SelectItem key={courseItem._id} value={courseItem.courseName}>
+                  {courseItem.courseName}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled>No courses available</SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+        <Button onClick={updateCourse} className="mt-2">Update Course</Button>
       </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="sector">Sector</Label>
+        <Select value={sector} onValueChange={setSector}>
+          <SelectTrigger className="w-full">
+            {sector || "Select a sector"}
+          </SelectTrigger>
+          <SelectContent>
+            {availableSectors.length > 0 ? (
+              availableSectors.map((sectorItem) => (
+                <SelectItem key={sectorItem._id} value={sectorItem.name}>
+                  {sectorItem.name}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled>No sectors available</SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+        <Button onClick={updateSector} className="mt-2">Update Sector</Button>
+      </div>
+      
     </div>
   );
 };
 
 export default Setting;
-

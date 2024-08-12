@@ -8,6 +8,7 @@ import Preinvoice from "@/Components/Traning Partner/ui/invoice/Preinvoice";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
+import { server } from "@/main";
 
 const ManageBatchForm = () => {
   const [batches, setBatches] = useState([]);
@@ -32,7 +33,7 @@ const ManageBatchForm = () => {
     const tpid = localStorage.getItem("trainingPartnerId");
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:8000/api/v1/batch/tp/${tpid}`, { method: "GET" });
+      const response = await fetch(`${server}/batch/tp/${tpid}`, { method: "GET" });
       if (response.ok) {
         const data = await response.json();
         setBatches(data.data);
@@ -149,7 +150,7 @@ const ManageBatchForm = () => {
     formData.append("transactionId", batchTransactionIds[batchId]);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/batch/paymentdetails/${batchId}`, {
+      const response = await fetch(`${server}/batch/paymentdetails/${batchId}`, {
         method: 'PUT',
         body: formData,
       });

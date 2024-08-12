@@ -96,6 +96,7 @@ import NewsNotification from "./Pages/Static/NewsNotification.jsx";
 import Resource from "./Pages/Static/Resource";
 import ContactUs from "./Pages/Static/ContactUs";
 import PortalLogin from "./Pages/Static/PortalLogin";
+import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 
 
 const App = () => {
@@ -313,6 +314,7 @@ const App = () => {
         <Route path="/CreateBatch" exact element={<CreateBatch />} />
         <Route path="/Createcenter" exact element={<CreateCenter />} />
         <Route path="/manageBatch" exact element={<ManageBatch />} />
+        <Route path="/updateCenter" exact element={<UpdateCenter />} />
         <Route path="/transcript" exact element={<Transcript />} />
         <Route path="/trainers" exact element={<AllTrainers />} />
         <Route path="/centers" exact element={<Centers />} />
@@ -391,9 +393,6 @@ const App = () => {
             />
           </Route>
         </Route>
-
-
-
       </Routes>
       <ToastContainer />
     </div>
@@ -401,3 +400,13 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+
+
+
+
+
+

@@ -338,7 +338,7 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        {/* <Route path="login" element={<SNALogin />} />
+        <Route path="login" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/" element={<SNALayout />}>
             <Route path="dashboard" element={<SNADashboard />} />
@@ -347,9 +347,9 @@ const App = () => {
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsforSNA />}
-            /> */}
-          {/* </Route>
-        </Route> */}
+            /> 
+           </Route>
+        </Route>
       </Routes>
       <ToastContainer />
     </div>

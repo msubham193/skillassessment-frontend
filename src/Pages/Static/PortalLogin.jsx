@@ -2,7 +2,7 @@ import React from "react";
 import LoginForm from "../../Components/Static/LoginForm.jsx";
 import { motion } from "framer-motion";
 
-function PortalLogin() {
+function PortalLogin() { 
   return (
     <div className="w-full">
       {/* Hero Section */}

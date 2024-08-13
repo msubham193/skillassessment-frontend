@@ -8,9 +8,15 @@ const LoginForm = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const navigate = useNavigate();
 
+  const roles = [
+    { name: "Training Partner", registerAllowed: true },
+    { name: "Assessment Agency", registerAllowed: true },
+    { name: "SNA", registerAllowed: false },
+  ];
+
   const handleAction = async () => {
     if (!selectedOption) return;
- 
+
     setIsRedirecting(true);
     try {
       const redirectURL = getRedirectURL();
@@ -18,10 +24,7 @@ const LoginForm = () => {
         `${isRegistering ? "Registering" : "Logging in"} as ${selectedOption}`
       );
 
-      // Show "Redirecting..." for 1 second
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Redirect to the appropriate URL
       navigate(redirectURL);
     } catch (error) {
       console.error(
@@ -33,14 +36,15 @@ const LoginForm = () => {
   };
 
   const getRedirectURL = () => {
-    if (isRegistering) {
-      return selectedOption === "Training Partner"
-        ? "/trainingPartner/signup"
-        : "/registration";
-    } else {
-      return selectedOption === "Training Partner"
-        ? "/trainingPartner/signin"
-        : "/login";
+    switch (selectedOption) {
+      case "Training Partner":
+        return isRegistering ? "/trainingPartner/signup" : "/trainingPartner/signin";
+      case "Assessment Agency":
+        return isRegistering ? "/registration" : "/login";
+      case "SNA":
+        return "/snalogin";
+      default:
+        return "/";
     }
   };
 
@@ -49,71 +53,67 @@ const LoginForm = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
-  const optionVariants = {
-    hover: { scale: 1.05, transition: { duration: 0.2 } },
-    tap: { scale: 0.95 },
-  };
-
   return (
     <motion.div
-      className="flex flex-col lg:flex-row shadow-2xl rounded-3xl overflow-hidden mx-auto max-w-7xl my-16 bg-[#004b23]"
+      className="flex flex-col lg:flex-row shadow-2xl rounded-3xl overflow-hidden mx-auto max-w-7xl my-16 bg-white"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
-      {/* Left Section */}
-      <div className="w-full lg:w-1/2 p-12 flex flex-col justify-center items-center text-white">
-        <h2 className="text-5xl font-bold mb-8 text-center">
-          {isRegistering ? "Join Our Platform" : "Welcome Back"}
-        </h2>
-        <p className="mb-10 text-xl text-center">
-          {isRegistering
-            ? "Choose your registration type:"
-            : "Select your account type:"}
+      {/* Left Section - Guidelines */}
+      <div className="w-full lg:w-1/2 p-12 flex flex-col justify-start items-start bg-blue-800 text-white">
+        <h2 className="text-4xl font-bold mb-8 text-start">Necessary Guidelines</h2>
+        <ul className="list-disc space-y-3 ml-6 text-lg">
+          <li>guideline 1</li>
+          <li>guideline 2</li>
+          <li>guideline 3</li>
+          <li>guideline 4</li>
+          <li>guideline 5</li>
+          <li>guideline 6</li>
+        </ul>
+      </div>
+
+      {/* Right Section - Login/Registration */}
+      <div className="w-full lg:w-1/2 p-12 flex flex-col justify-center items-center">
+        <h3 className="text-3xl font-bold mb-6 text-indigo-600">
+          {isRegistering ? "Join Our Platform" : "Login to Dashboard"}
+        </h3>
+        <p className="mb-8 text-lg text-gray-600 text-center">
+          {isRegistering ? "Choose your registration type:" : "Select your account type:"}
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center w-full mb-10 space-y-4 sm:space-y-0 sm:space-x-4">
-          {["Training Partner", "Assessment Agency"].map((option) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-8">
+          {roles.map((role) => (
             <motion.div
-              key={option}
-              className={`flex-1 p-6 rounded-xl flex flex-col items-center justify-center cursor-pointer backdrop-blur-md ${
-                selectedOption === option
-                  ? "bg-white bg-opacity-30 shadow-lg"
-                  : "bg-white bg-opacity-10 hover:bg-opacity-20"
+              key={role.name}
+              className={`p-4 rounded-xl flex flex-col items-center justify-center cursor-pointer ${
+                (!isRegistering || role.registerAllowed) &&
+                `${
+                  selectedOption === role.name
+                    ? "bg-indigo-100 border-2 border-indigo-600"
+                    : "bg-gray-100 hover:bg-gray-200"
+                }`
+              } ${
+                isRegistering && !role.registerAllowed
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               }`}
-              onClick={() => setSelectedOption(option)}
-              variants={optionVariants}
-              whileHover="hover"
-              whileTap="tap"
+              onClick={() => 
+                (!isRegistering || role.registerAllowed) && setSelectedOption(role.name)
+              }
             >
-              <motion.div
-                className="w-16 h-16 mb-4 rounded-full bg-white flex items-center justify-center"
-                whileHover={{ rotate: 360, transition: { duration: 0.5 } }}
-              >
-                <svg
-                  className="w-10 h-10 text-indigo-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </motion.div>
               <span className="font-semibold text-lg text-center">
-                {option}
+                {role.name}
               </span>
             </motion.div>
           ))}
         </div>
+
         <motion.button
-          className={`w-full py-4 px-8 bg-white text-indigo-600 rounded-xl font-bold text-lg transition duration-300 ${
+          className={`w-full py-3 px-8 bg-indigo-600 text-white rounded-xl font-bold text-lg transition duration-300 ${
             !selectedOption || isRedirecting
               ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-opacity-90"
+              : "hover:bg-indigo-700"
           }`}
           disabled={!selectedOption || isRedirecting}
           onClick={handleAction}
@@ -124,26 +124,18 @@ const LoginForm = () => {
             ? "Register Now"
             : "Login Now"}
         </motion.button>
-      </div>
 
-      {/* Right Section */}
-      <div className="w-full lg:w-1/2 bg-white p-12 flex flex-col justify-center items-center">
-        <h3 className="text-3xl font-bold mb-6 text-indigo-600">
-          {isRegistering ? "Already a Member?" : "New to Our Platform?"}
-        </h3>
-        <p className="mb-8 text-lg text-gray-600 text-center">
-          {isRegistering
-            ? "Login to your account and start your journey with us."
-            : "Register now and unlock a world of opportunities!"}
-        </p>
-        <motion.button
-          className="py-3 px-8 bg-indigo-600 text-white rounded-xl font-semibold text-lg transition duration-300 hover:bg-indigo-700"
-          onClick={() => setIsRegistering(!isRegistering)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isRegistering ? "Login Instead" : "Register Instead"}
-        </motion.button>
+        <div className="mt-6 text-center">
+          <span className="text-gray-600">
+            {isRegistering ? "Already a member?" : "New to our platform?"}
+          </span>
+          <motion.button
+            className="ml-2 text-indigo-600 font-semibold hover:underline"
+            onClick={() => setIsRegistering(!isRegistering)}
+          >
+            {isRegistering ? "Login Instead" : "Register Instead"}
+          </motion.button>
+        </div>
       </div>
     </motion.div>
   );

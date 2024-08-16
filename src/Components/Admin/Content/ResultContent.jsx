@@ -47,7 +47,7 @@ const ResultContent = ({ batchId }) => {
           });
           setLoading(false);
           setExam(response.data.data);
-          console.log(response.data.data)
+          // console.log(response.data.data)
           setAttendanceSheet(response.data.data.attendanceSheet);
           setResultSheet(response.data.data.resultSheet);
           setImages(response.data.data.images || []);

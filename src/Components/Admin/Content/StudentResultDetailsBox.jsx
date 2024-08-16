@@ -7,14 +7,16 @@ import { server } from "@/main";
 import axios from "axios";
 import { Download } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components(shadcn)/ui/card";
+import QRCode from "qrcode.react";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components(shadcn)/ui/table";
 
 const StudentResultDetailsBox = ({ id }) => { 
-  // console.log(id)
+  // console.log(id)  
   const [data, setData] = useState({});
   const [loding, setLoding] = useState(false);
 
   //function for retrive the student result by id
-
   useEffect(() => {
     try {
       setLoding(true);
@@ -25,7 +27,7 @@ const StudentResultDetailsBox = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
-          // console.log(response.data.data)
+          console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);
@@ -33,6 +35,7 @@ const StudentResultDetailsBox = ({ id }) => {
       throw error;
     }
   }, []);
+  const displayData = JSON.stringify(data, null, 2);
 
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -138,6 +141,17 @@ const StudentResultDetailsBox = ({ id }) => {
         {" "}
         <Button onClick={downloadPdf}>Download <Download className="ml-2" /></Button>{" "}
       </div>
+
+      <div className="flex flex-col items-center">
+            <Card className="w-96 mb-4">
+                <CardHeader>
+                    <CardTitle>Scan to View Details</CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                    <QRCode value={displayData} size={256} />
+                </CardContent>
+            </Card>
+        </div>
     </>
   );
 };

@@ -2,8 +2,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
-// import image from "../../../assets/poorpeople.png";
 import { Link, useNavigate } from "react-router-dom";
+import { server } from "../../main";
 
 const indianStates = [
   "Andhra Pradesh",
@@ -56,9 +56,7 @@ const SNALogin = () => {
   useEffect(() => {
     const fetchSchemes = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/scheme/`
-        );
+        const response = await axios.get(`${server}/scheme/`);
         console.log(response.data.data);
         setSchemes(response.data.data);
       } catch (error) {
@@ -82,14 +80,11 @@ const SNALogin = () => {
     console.log("Form Data : ", formData);
     localStorage.setItem("scheme", formData.scheme);
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/sna/login",
-        formData
-      );
+      const response = await axios.post(`${server}/sna/login`, formData);
       const { data } = response.data.data;
       console.log(data.state);
       localStorage.setItem("state", data.state);
-      navigate("/snadashboard");
+      navigate("/sna/snadashboard");
     } catch (error) {
       console.log(error);
       setErrorMessage(

@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import { server } from '@/main';
 
 const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();

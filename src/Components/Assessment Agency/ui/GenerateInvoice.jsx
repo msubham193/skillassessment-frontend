@@ -5,6 +5,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
+import { server } from "@/main";
 
 const GenerateInvoice = () => {
   const pdfRef = useRef();
@@ -31,7 +32,7 @@ const GenerateInvoice = () => {
     const fetchBatchDetails = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:8000/api/v1/invoice/${assessmentAgencyId[0]}`
+          `${server}/invoice/${assessmentAgencyId[0]}`
         );
         console.log(response);
         const data = response.data.data;

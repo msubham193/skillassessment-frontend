@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -13,7 +14,7 @@ const TCDetails = () => {
         console.log(state);
         console.log(scheme);
         const response = await axios.get(
-          `http://localhost:8000/api/v1/center/sna/query?state=${state}&scheme=${scheme}`
+          `${server}/center/sna/query?state=${state}&scheme=${scheme}`
         );
         const { data } = response.data;
         console.log(data);
@@ -34,7 +35,7 @@ const TCDetails = () => {
       </p>
       <table className="min-w-full bg-white border rounded-md">
         <thead className="rounded-md">
-          <tr>
+          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th className="py-2 px-4 border-b">Center ID</th>
             <th className="py-2 px-4 border-b">Center Name</th>
             <th className="py-2 px-4 border-b">PRN No.</th>
@@ -43,7 +44,7 @@ const TCDetails = () => {
             <th className="py-2 px-4 border-b">Project</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-gray-800 text-sm">
           {centerDetails.map((center) => (
             <tr key={center._id}>
               <td className="py-2 px-4 border-b text-center">

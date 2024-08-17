@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
+import { server } from "@/main";
 
 const AddAssessorForm = () => {
   // Initialize state for each field
@@ -149,7 +150,7 @@ const AddAssessorForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/assessor",
+        `${server}/v1/assessor`,
         formData
       );
       console.log(response.data);

@@ -39,7 +39,7 @@ const Signin = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          registeredOfficeEmail,
+          registeredOfficeEmail,  
           password,
         }),
       });
@@ -67,7 +67,6 @@ const Signin = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="h-screen flex justify-center items-center p-4 bg-black">
       <div className="bg-black w-[400px] h-[400px] rounded-md pt-8 border border-gray-800">

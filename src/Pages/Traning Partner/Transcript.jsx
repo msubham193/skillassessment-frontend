@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SideNav from '@/Components/Traning Partner/SideNav';
 import TopBar from '@/Components/Traning Partner/TopBar';
 import TranscriptManage from '@/Components/Traning Partner/ui/TranscriptManage';
+import { server } from '@/main';
 const Transcript = () => {
   const [batches, setBatches] = useState([]);
   const trainingPartnerId = localStorage.getItem("trainingPartnerId");

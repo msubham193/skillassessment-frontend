@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, ChevronRight, ChevronLeft, BotMessageSquare, PackagePlus, CirclePlus, SquareGanttChart, Users,Disc2 } from "lucide-react";
+import { LayoutDashboard, ChevronRight, ChevronLeft, BotMessageSquare, PackagePlus, CirclePlus, SquareGanttChart, Users,Disc2,Repeat2 } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
 import { Nav } from "./ui/Nav";
@@ -67,6 +67,13 @@ const SideNav = () => {
             icon: PackagePlus,
             variant: "ghost",
             href: "/transcript",
+          },
+          {
+            title: "Update Center",
+            label: "",
+            icon: Repeat2,
+            variant: "ghost",
+            href: "/updateCenter",
           },
          
           

@@ -75,7 +75,6 @@ const AaAnalysis = ({ data }) => {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'assessment_agency.xlsx');
   };
-
   return (
     <div>
     <h1 className="flex justify-center font-semibold underline text-xl">

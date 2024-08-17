@@ -12,6 +12,7 @@ import {
 import { Skeleton } from "@/components(shadcn)/ui/skeleton"; // Adjust the import path if necessary
 import { useRecoilState, useRecoilValue } from "recoil";
 import { centerAtom } from "../Atoms/centerAtom";
+import { server } from "@/main";
 
 const CenterPageContent = () => {
     const tpid=localStorage.getItem("trainingPartnerId")
@@ -21,7 +22,7 @@ const CenterPageContent = () => {
       // Simulate a fetch call to get centers data
       const fetchCentersData = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/api/v1/center/tp/${tpid}`, { method: "GET" });
+          const response = await fetch(`${server}/center/tp/${tpid}`, { method: "GET" });
           const data = await response.json();
           // Assuming data.centers is the array of centers
           if (data) {

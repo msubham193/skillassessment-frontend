@@ -24,7 +24,7 @@ const GenerateMarksheetPDF = forwardRef(({ data }, ref) => {
     dateOfIssue,
     certificateNo,
   } = data;
-
+ 
   return (
     <div ref={ref} className="max-w-3xl mx-auto p-8 border border-green-600 rounded-lg font-cambria">
       <div className="flex justify-between mb-3">

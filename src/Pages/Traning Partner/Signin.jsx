@@ -33,7 +33,7 @@ const Signin = () => {
   const handleSignin = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${server}/login`, {
+      const response = await fetch(`${server}/tp/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

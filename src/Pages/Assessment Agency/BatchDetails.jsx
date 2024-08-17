@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
+import { server } from "@/main";
 
 const BatchDetails = () => {
   const { batchId, examId } = useParams();
@@ -21,9 +22,7 @@ const BatchDetails = () => {
   useEffect(() => {
     const fetchBatchDetails = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/batch/${batchId}`
-        );
+        const response = await axios.get(`${server}/batch/${batchId}`);
         console.log(response);
         setStudentsLength(response.data.data.students.length);
         setTrainersLength(response.data.data.trainers.length);

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { server } from "@/main";
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const RegistrationForm = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/sector/all`
+          `${server}/sector/all`
         );
         if (response.data.success) {
           const sectorNames = response.data.data.map((sector) => sector.name);
@@ -61,7 +62,7 @@ const RegistrationForm = () => {
       console.log(sectors);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/sector?name=${sectors}`
+          `${server}/sector?name=${sectors}`
         );
         if (
           response.data &&
@@ -208,7 +209,11 @@ const RegistrationForm = () => {
   };
 
   const handleCourseChange = (event) => {
-    setCourses(event.target.value);
+    const selectedOptions = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setCourses(selectedOptions);
     console.log(courses);
   };
 

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { server } from "@/main";
 
 const MarkAbsentStudentList = () => {
   const { batchId } = useParams();
@@ -10,9 +11,7 @@ const MarkAbsentStudentList = () => {
   useEffect(() => {
     const fetchBatchDetails = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/batch/${batchId}`
-        );
+        const response = await axios.get(`${server}/batch/${batchId}`);
         const students = response.data.data.students;
         // Set the initial isAbsent state based on the fetched data
         const updatedStudents = students.map((student) => ({
@@ -31,9 +30,7 @@ const MarkAbsentStudentList = () => {
 
   const markAbsent = async (studentId) => {
     try {
-      const response = await axios.put(
-        `http://localhost:8000/api/v1/student/absent/${studentId}`
-      );
+      const response = await axios.put(`${server}/student/absent/${studentId}`);
       console.log(response);
       if (response.status === 200) {
         setStudentData((prevData) =>

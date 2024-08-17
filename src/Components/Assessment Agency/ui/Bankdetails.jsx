@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../../../state/atom/AssessmentAgencyAtoms";
 import toast, { Toaster } from "react-hot-toast";
+import { server } from "@/main";
 
 const BankDetailsForm = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const BankDetailsForm = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/aa/bdt/${assessmentAgencyId[0]}`,
+        `${server}/aa/bdt/${assessmentAgencyId[0]}`,
         formData
       );
       console.log(response);

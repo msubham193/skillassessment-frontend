@@ -9,6 +9,7 @@ import {
   assessmentAgencyNameState,
   authTokenState,
 } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
+import { server } from "@/main";
 
 function SkillPortal() {
   const navigate = useNavigate();
@@ -34,10 +35,7 @@ function SkillPortal() {
     e.preventDefault();
     console.log("Form Data : ", formData);
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/aa/login",
-        formData
-      );
+      const response = await axios.post(`${server}/aa/login`, formData);
       console.log(response.data);
       const { data } = response.data;
       const authToken = data.token;

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,7 +13,7 @@ const ViewResult = () => {
     const fetchData = async () => {
       try {
         const respone = await axios.get(
-          `http://localhost:8000/api/v1/batch/${batchId}`
+          `${server}/batch/${batchId}`
         );
         console.log(respone.data.data.students);
         const data = respone.data.data.students;
@@ -26,7 +27,7 @@ const ViewResult = () => {
 
   const handleRowClick = (studentId) => {
     console.log(studentId);
-    navigate(`/studentresult/${studentId}`);
+    navigate(`/sna/studentresult/${studentId}`);
   };
 
   return (
@@ -56,7 +57,7 @@ const ViewResult = () => {
             {/* <th className="py-3 px-6 text-left">Training End Date</th> */}
           </tr>
         </thead>
-        <tbody className="text-gray-600 text-sm font-light">
+        <tbody className="text-gray-800 text-sm">
           {students.map((student, index) => (
             <tr
               key={index}
@@ -85,7 +86,7 @@ const ViewResult = () => {
                     student.markUploadStatus ? "bg-green-500" : "bg-red-500"
                   }`}
                 >
-                  {student.markUploadStatus ? "Uploaded" : "Not Uploaded"}
+                  {student.markUploadStatus ? "Uploaded" : "Pending"}
                 </span>
               </td>
               <td className="py-3 px-6 text-left">

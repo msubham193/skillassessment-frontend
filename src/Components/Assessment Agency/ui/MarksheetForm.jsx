@@ -19,6 +19,7 @@ import {
   tpNameState,
 } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
+import { server } from "@/main";
 
 const MarksheetForm = () => {
   const navigate = useNavigate();
@@ -55,9 +56,7 @@ const MarksheetForm = () => {
     const fetchCourseData = async () => {
       try {
         console.log(studentDOB);
-        const response = await axios.get(
-          "http://localhost:8000/api/v1/course/course"
-        );
+        const response = await axios.get(`${server}/course/course`);
         console.log(response.data.data);
         console.log(batchCourseName[0]);
         const course = response.data.data.find(

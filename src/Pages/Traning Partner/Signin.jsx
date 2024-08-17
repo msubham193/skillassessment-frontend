@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 import { Loader } from 'lucide-react';
 import { Eye, EyeOff } from 'lucide-react';
+import { server } from "@/main";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const Signin = () => {
   const handleSignin = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:8000/api/v1/tp/login", {
+      const response = await fetch(`${server}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

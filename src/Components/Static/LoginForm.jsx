@@ -23,7 +23,7 @@ const LoginForm = () => {
       console.log(
         `${isRegistering ? "Registering" : "Logging in"} as ${selectedOption}`
       );
-
+ 
       await new Promise((resolve) => setTimeout(resolve, 1000));
       navigate(redirectURL);
     } catch (error) {

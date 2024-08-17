@@ -6,6 +6,7 @@ import { Button } from "@/components(shadcn)/ui/button";
 import { Label } from "@/components(shadcn)/ui/label";
 import { toast } from "react-toastify";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components(shadcn)/ui/select"; 
+import { server } from "@/main";
 
 const Setting = ({ onClose }) => {
   const tpdata = useRecoilValue(tpDataAtoms);
@@ -20,7 +21,7 @@ const Setting = ({ onClose }) => {
   useEffect(() => {
     const fetchAllSectors = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/sector/all", {
+        const response = await fetch(`${server}/sector/all`, {
           method: "GET",
         });
 
@@ -37,7 +38,7 @@ const Setting = ({ onClose }) => {
 
     const fetchAllCourses = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/course/course", {
+        const response = await fetch(`${server}/course/course`, {
           method: "GET",
         });
 
@@ -59,7 +60,7 @@ const Setting = ({ onClose }) => {
 
   const updateEmail = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tp/info/email/${userId}`, {
+      const response = await fetch(`${server}/tp/info/email/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +80,7 @@ const Setting = ({ onClose }) => {
 
   const updateCourse = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tp/courses/${userId}`, {
+      const response = await fetch(`${server}/tp/courses/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +100,7 @@ const Setting = ({ onClose }) => {
 
   const updateSector = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tp/sectors/${userId}`, {
+      const response = await fetch(`${server}/tp/sectors/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

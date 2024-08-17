@@ -5,6 +5,7 @@ import "chart.js/auto";
 import * as XLSX from "xlsx";
 import axios from "axios";
 import { FaDownload } from "react-icons/fa";
+import { server } from "@/main";
 
 const ViewReports = () => {
   const [data, setData] = useState([]);
@@ -19,7 +20,7 @@ const ViewReports = () => {
       const scheme = localStorage.getItem("scheme");
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/sna/batches/all/query?state=${state}&scheme=${scheme}`
+          `${server}/sna/batches/all/query?state=${state}&scheme=${scheme}`
         );
         console.log(response);
         setData(response.data.data);
@@ -31,7 +32,7 @@ const ViewReports = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/center/sna/query?state=${state}&scheme=${scheme}`
+          `${server}/center/sna/query?state=${state}&scheme=${scheme}`
         );
         console.log(response);
         setCenterData(response.data.data);

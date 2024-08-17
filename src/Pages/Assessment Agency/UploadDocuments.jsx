@@ -7,6 +7,7 @@ import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atom
 import { useParams } from "react-router-dom";
 // import { toast, ToastContainer } from "react-toastify";
 import toast, { Toaster } from "react-hot-toast";
+import { server } from "@/main";
 
 const UploadDocuments = () => {
   const { examId, batchId } = useParams();
@@ -28,7 +29,7 @@ const UploadDocuments = () => {
       console.log(assessmentAgencyId[0]);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/assessor/aa/${assessmentAgencyId[0]}`
+          `${server}/assessor/aa/${assessmentAgencyId[0]}`
         );
         console.log(response.data.data);
         setAssessors(response.data.data);
@@ -114,7 +115,7 @@ const UploadDocuments = () => {
       console.log(examId);
       console.log(formData);
       const response = await axios.put(
-        `http://localhost:8000/api/v1/exam/status/${examId}`,
+        `${server}/exam/status/${examId}`,
         formData,
         {
           headers: {
@@ -147,7 +148,7 @@ const UploadDocuments = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/exam/images/${examId}`,
+        `${server}/exam/images/${examId}`,
         formData,
         {
           headers: {
@@ -178,7 +179,7 @@ const UploadDocuments = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/exam/addassessor/${examId}`,
+        `${server}/exam/addassessor/${examId}`,
         {
           assessorId: selectedAssessor,
         }
@@ -204,7 +205,7 @@ const UploadDocuments = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/exam/attendance/${examId}`,
+        `${server}/exam/attendance/${examId}`,
         {
           totalNoOfAssessedCandidates,
         }

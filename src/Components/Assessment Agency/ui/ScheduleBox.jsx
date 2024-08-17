@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
+import { server } from "@/main";
 
 const ScheduleBox = () => {
   const [batchData, setBatchData] = useState([]); // Initialize as an empty array
@@ -13,7 +14,7 @@ const ScheduleBox = () => {
       try {
         console.log(assessmentAgencyId);
         const response = await axios.get(
-          `http://localhost:8000/api/v1/exam/aa/${assessmentAgencyId}`
+          `${server}/exam/aa/${assessmentAgencyId}`
         );
 
         const data = response.data.data;
@@ -43,7 +44,7 @@ const ScheduleBox = () => {
       <h1 className="text-xl font-semibold text-black mb-2">Scheduled</h1>
       <table className="w-full">
         <thead className="bg-gray-800 text-white">
-          <tr>
+          <tr className="bg-gray-500 text-white uppercase text-sm leading-normal">
             <th className="p-3 text-sm font-semibold tracking-wide text-left">
               Training Institute
             </th>
@@ -61,7 +62,7 @@ const ScheduleBox = () => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white">
+        <tbody className="text-white text-sm">
           {batchData.map((batch) => (
             <tr key={batch._id} className="cursor-pointer hover:bg-gray-200">
               <td className="p-3 text-md text-gray-700">

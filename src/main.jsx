@@ -14,7 +14,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 
-export const server="http://13.200.180.172:8000/api/v1";
+export const server="https://d31os5ub6ca4xs.cloudfront.net/api/v1";
+
 
 // http://13.200.180.172:8000/api/v1
 // http://localhost:8000/api/v1

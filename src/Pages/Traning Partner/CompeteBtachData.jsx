@@ -7,6 +7,7 @@ import { Button } from '@/components(shadcn)/ui/button';
 import { Download } from 'lucide-react';
 import { CompeltebatchDataAtoms } from '@/Components/Traning Partner/Atoms/completeBtachAtom';
 import GenerateMarksheetFrom from '@/Components/Traning Partner/ui/Marksheet/generateMarkFrom';
+import { server } from '@/main';
 
 const CompeteBatchData = () => {
     const batchData = useRecoilValue(CompeltebatchDataAtoms);
@@ -24,7 +25,7 @@ const CompeteBatchData = () => {
         setLoadingStates(prev => ({ ...prev, [studentId]: true }));
         setCurrentStudentId(studentId);
         try {
-            const response = await fetch(`http://localhost:8000/api/v1/student/${studentId}`, {
+            const response = await fetch(`${server}/student/${studentId}`, {
                 method: "GET"
             });
             const data = await response.json();

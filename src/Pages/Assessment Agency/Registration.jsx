@@ -285,7 +285,7 @@ const RegistrationForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/aa/create",
+        `${server}/aa/create`,
         data,
         {
           withCredentials: true,

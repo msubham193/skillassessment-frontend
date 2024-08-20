@@ -13,7 +13,7 @@ const IndividualStudentMarksheet = () => {
         const response = await axios.get(
           `${server}/student/${studentId}`
         );
-        console.log(response.data.data.marks);
+        console.log(response.data.data);
         setStudentData(response.data.data.marks);
       } catch (error) {
         console.log(error);

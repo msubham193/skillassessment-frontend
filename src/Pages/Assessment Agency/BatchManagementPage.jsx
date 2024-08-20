@@ -66,7 +66,7 @@ const BatchManagementPage = () => {
 
   return (
     <div>
-      <div className="overflow-x-auto mt-10 border rounded-lg shadow-lg">
+      <div className="overflow-x-auto mt-1 border rounded-lg shadow-lg">
         <div className="p-2">
           <h1 className="text-2xl font-bold">Batches</h1>
           <p className="text-gray-600 mb-4">Manage and Track Batch Results</p>

@@ -26,7 +26,7 @@ function Header({ isVisible }) {
             </a>
             <div className="text-left flex-1">
               <h1 className="text-xs font-semibold text-[#070F36] sm:text-base md:text-lg lg:text-2xl">
-                Assessment Management System (AMSAY)
+                Awards and Certification Portal (ACP )
               </h1>
               <h2 className="text-2xs font-semibold text-gray-700 sm:text-sm md:text-xl">
                 of Centurion University of Technology & Management (CUTM)

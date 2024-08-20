@@ -3,6 +3,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 
 import SideBar from "./Components/Assessment Agency/ui/SideBar";
+import Footer from "./Components/Static/Footer";
 
 function Layout() {
   return (
@@ -13,7 +14,7 @@ function Layout() {
           <Outlet />
         </main>
       </div>
-      <h1>This is footer</h1>
+      <Footer/>
     </div>
   );
 }

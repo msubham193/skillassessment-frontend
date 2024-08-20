@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { server } from '@/main';
+import { server } from "@/main";
 
 const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();
@@ -14,9 +14,7 @@ const BatchDetailsOfSNA = () => {
   useEffect(() => {
     const fetchBatchDetails = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/batch/${batchId}`
-        );
+        const response = await axios.get(`${server}/batch/${batchId}`);
         console.log(response.data.data);
         const data = response.data.data;
         setBatchDetails(data);
@@ -61,7 +59,7 @@ const BatchDetailsOfSNA = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/sna/batch/approve/${batchId}`
+        `${server}/sna/batch/approve/${batchId}`
       );
       console.log(response);
       toast.success("Batch Approved Successfully");
@@ -75,7 +73,7 @@ const BatchDetailsOfSNA = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/sna/batch/approve/${batchId}`
+        `${server}/sna/batch/approve/${batchId}`
       );
       console.log(response);
       navigate("/trainingbatches");

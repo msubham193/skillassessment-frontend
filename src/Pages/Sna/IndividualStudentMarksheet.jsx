@@ -7,21 +7,32 @@ import { useParams } from "react-router-dom";
 const IndividualStudentMarksheet = () => {
   const { studentId } = useParams();
   const [studentData, setStudentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${server}/student/${studentId}`
-        );
+        const response = await axios.get(`${server}/student/${studentId}`);
         console.log(response.data.data);
         setStudentData(response.data.data.marks);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Display a loader while data is being fetched
+  }
+
+  if (!studentData) {
+    return <div>No data available</div>; // Handle the case when there's no data
+  }
+
   return (
     <div className="max-w-3xl mx-auto p-8 border border-green-600 rounded-lg font-cambria">
       <div className="flex justify-between mb-3">
@@ -56,9 +67,7 @@ const IndividualStudentMarksheet = () => {
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Son/Daughter/Ward of:</td>
-            <td className="flex-1 border px-2">
-             {/* {stude} */}
-            </td>
+            <td className="flex-1 border px-2">{/* {stude} */}</td>
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Qualification Name:</td>
@@ -111,9 +120,9 @@ const IndividualStudentMarksheet = () => {
           <tr className="text-center">
             {/* <td className="border">{studentData.batchId}</td> */}
             {/* <td className="border"> */}
-              {/* {studentData.examDate */}
-                {/* ? new Date(studentData.examDate).toLocaleDateString() */}
-                {/* : "N/A"} */}
+            {/* {studentData.examDate */}
+            {/* ? new Date(studentData.examDate).toLocaleDateString() */}
+            {/* : "N/A"} */}
             {/* </td> */}
           </tr>
         </tbody>

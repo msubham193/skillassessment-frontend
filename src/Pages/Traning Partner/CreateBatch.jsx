@@ -23,6 +23,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components(shadcn)/ui/popover";
+import { server } from "@/main";
 
 
 const CreateBatch = () => {
@@ -91,7 +92,7 @@ const CreateBatch = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:8000/api/v1/sector?name=${batchInputs.sectorName}`
+        `${server}/sector?name=${batchInputs.sectorName}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch courses");

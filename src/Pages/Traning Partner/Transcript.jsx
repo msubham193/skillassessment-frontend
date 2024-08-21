@@ -11,7 +11,7 @@ const Transcript = () => {
     const fetchBatches = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/v1/batch/tp/${trainingPartnerId}`,
+          `${server}/batch/tp/${trainingPartnerId}`,
           {
             method: "GET",
           }

@@ -2,6 +2,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import SideBar from "./Components/Sna/Sidebar";
+import Footer from "./Components/Static/Footer";
 function SnaLayout() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -11,6 +12,7 @@ function SnaLayout() {
           <Outlet />
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

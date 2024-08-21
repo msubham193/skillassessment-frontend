@@ -106,15 +106,12 @@ function SkillPortal() {
               Login
             </button>
           </form>
-          <div className="mt-10 grid grid-cols-3 items-center text-gray-400">
+          <div className="mt-4 grid grid-cols-3 items-center text-gray-400">
             <hr className="border-gray-400" />
             <p className="text-center text-sm">OR</p>
             <hr className="border-gray-400" />
           </div>
-          <button className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm">
-            Login with Google
-          </button>
-          <p className="mt-5 text-xs border-b py-4">Forgot your password</p>
+          {/* <p className="mt-5 text-xs border-b py-4">Forgot your password</p> */}
           <div className="mt-3 text-xs flex justify-between items-center">
             <p>{`Don't have an account`}</p>
             <Link to="/registration">

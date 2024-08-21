@@ -54,7 +54,7 @@ const SideNav = () => {
             href:"/centers"
           },
           {
-            title: "Teachers",
+            title: "Trainers",
             label: "",
             icon: Users,
             variant: "ghost",

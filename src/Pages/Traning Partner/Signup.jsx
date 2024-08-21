@@ -229,9 +229,9 @@ const Signup = () => {
             <SelectValue placeholder="Select scheme" />
           </SelectTrigger>
           <SelectContent>
-          <SelectItem value="Central Governmnet">Central Government</SelectItem>
-                <SelectItem value="State Governmnet">State Goverment</SelectItem>
-                <SelectItem value="Corporate">Corporate</SelectItem>
+            <SelectItem value="Central Governmnet">Central Government</SelectItem>
+            <SelectItem value="State Governmnet">State Goverment</SelectItem>
+            <SelectItem value="Corporate">Corporate</SelectItem>
           </SelectContent>
         </Select>
       );
@@ -262,63 +262,68 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-10 flex flex-col justify-between">
-      <div className="flex justify-center font-extrabold text-lg m-6 text-black">
-        Training-Partner-SignUp
-      </div>
-      <div>
-        {isMobile ? (
-          <div className="grid grid-cols-1 gap-4">
-            {/* Mobile layout */}
-            {[...firstColumn, ...secondColumn].map((labelObj, index) => (
-              <div key={index} className="text-black">
-                <Label>{labelObj.label}</Label>
-                {renderInput(labelObj)}
-                {errors[labelObj.name] && (
-                  <p className="text-red-500">{errors[labelObj.name]}</p>
-                )}
+    <div className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen p-6 md:p-10">
+      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white text-center">
+          <h1 className="text-3xl font-bold">Training Partner Sign Up</h1>
+        </div>
+        <div className="p-6 md:p-10">
+          {isMobile ? (
+            <div className="space-y-6">
+              {/* Mobile layout */}
+              {[...firstColumn, ...secondColumn].map((labelObj, index) => (
+                <div key={index} className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">{labelObj.label}</Label>
+                  {renderInput(labelObj)}
+                  {errors[labelObj.name] && (
+                    <p className="text-red-500 text-xs mt-1">{errors[labelObj.name]}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Desktop layout */}
+              <div className="space-y-6">
+                {firstColumn.map((labelObj, index) => (
+                  <div key={index} className="space-y-2">
+                    <Label className="text-sm font-medium text-gray-700">{labelObj.label}</Label>
+                    {renderInput(labelObj)}
+                    {errors[labelObj.name] && (
+                      <p className="text-red-500 text-xs mt-1">{errors[labelObj.name]}</p>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4">
-            {/* Desktop layout */}
-            <div>
-              {firstColumn.map((labelObj, index) => (
-                <div key={index} className="text-black">
-                  <Label>{labelObj.label}</Label>
-                  {renderInput(labelObj)}
-                  {errors[labelObj.name] && (
-                    <p className="text-red-500">{errors[labelObj.name]}</p>
-                  )}
-                </div>
-              ))}
+              <div className="space-y-6">
+                {secondColumn.map((labelObj, index) => (
+                  <div key={index} className="space-y-2">
+                    <Label className="text-sm font-medium text-gray-700">{labelObj.label}</Label>
+                    {renderInput(labelObj)}
+                    {errors[labelObj.name] && (
+                      <p className="text-red-500 text-xs mt-1">{errors[labelObj.name]}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div>
-              {secondColumn.map((labelObj, index) => (
-                <div key={index} className="text-black">
-                  <Label>{labelObj.label}</Label>
-                  {renderInput(labelObj)}
-                  {errors[labelObj.name] && (
-                    <p className="text-red-500">{errors[labelObj.name]}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="flex justify-between">
-        <Button
-          onClick={handlePreviousPage}
-          className="text-white"
-          disabled={currentPage === 0}
-        >
-          Previous
-        </Button>
-        <Button onClick={handleNextPage} className="text-white">
-          {onSubmit ? "Submit" : "Next"}
-        </Button>
+          )}
+        </div>
+        <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
+          <Button
+            onClick={handlePreviousPage}
+            className="bg-gray-300 text-gray-800 hover:bg-gray-400"
+            disabled={currentPage === 0}
+          >
+            Previous
+          </Button>
+          <Button 
+            onClick={handleNextPage} 
+            className="bg-blue-600 text-white hover:bg-blue-700"
+          >
+            {onSubmit ? "Submit" : "Next"}
+          </Button>
+        </div>
       </div>
     </div>
   );

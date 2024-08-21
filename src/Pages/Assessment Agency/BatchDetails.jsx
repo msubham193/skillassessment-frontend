@@ -70,7 +70,7 @@ const BatchDetails = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/exam/assesmentdate/${examId}`,
+        `${server}/exam/assesmentdate/${examId}`,
         {
           date: formattedDate.toString(),
         }

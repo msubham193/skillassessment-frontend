@@ -48,6 +48,11 @@ const Batch = () => {
       const response = await axios.get(`${server}/batch/all/query`, {
         params: filters,
         withCredentials: true,
+        headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
       });
       setBatch(response.data.data.reverse());
       setIsDataFetched(true);
@@ -82,7 +87,11 @@ const Batch = () => {
 
   useEffect(() => {
     axios
-      .get(`${server}/sector/all`, { withCredentials: true })
+      .get(`${server}/sector/all`, { withCredentials: true ,headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },},)
       .then((response) => {
         setSectors(response.data.data);
       })
@@ -93,7 +102,11 @@ const Batch = () => {
 
   useEffect(() => {
     axios
-      .get(`${server}/course/course`, { withCredentials: true })
+      .get(`${server}/course/course`, { withCredentials: true ,headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },})
       .then((response) => {
         setCourses(response.data.data);
       })
@@ -104,7 +117,11 @@ const Batch = () => {
 
   useEffect(() => {
     axios
-      .get(`${server}/tp`, { withCredentials: true })
+      .get(`${server}/tp`, { withCredentials: true,headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          }, })
       .then((response) => {
         setTrainingOrganizations(response.data.data);
       })

@@ -5,8 +5,6 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
     return <div ref={ref}>Loading...</div>;
   }
 
-
-
   const {
     schemCode,
     name,

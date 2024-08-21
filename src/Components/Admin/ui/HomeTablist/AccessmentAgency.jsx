@@ -15,6 +15,11 @@ const AccessmentAgency = () => {
         setLoading(true);
         axios.get(`${server}/aa/status/approved`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         }).then((response) => {
           setLoading(false);
           setAssessmentAgency(response.data.data.reverse());

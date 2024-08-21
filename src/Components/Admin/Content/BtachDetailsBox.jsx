@@ -18,6 +18,11 @@ const BtachDetailsBox = ({ id }) => {
       axios
         .get(`${server}/batch/${id}`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => { 
           setLoding(false);

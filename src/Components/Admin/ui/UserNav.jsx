@@ -77,10 +77,6 @@ const UserNav = ({ admin }) => {
                 <DropdownMenuShortcut className={"ml-[132px]"}>⇧⌘P</DropdownMenuShortcut>
               </div>
             </MyProfile>
-          <DropdownMenuItem className="hover:cursor-pointer">
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logoutHandler} className="bg-red-400 hover:cursor-pointer">

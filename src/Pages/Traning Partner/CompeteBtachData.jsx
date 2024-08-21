@@ -18,7 +18,7 @@ const CompeteBatchData = () => {
 
     const handleGenerateMarkSheet = useReactToPrint({
         content: () => componentRef.current,
-        documentTitle: 'MarkSheet',
+        documentTitle: 'MarkSheet', 
     });
 
     const getmark = useCallback(async (studentId) => {

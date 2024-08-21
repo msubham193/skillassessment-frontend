@@ -18,6 +18,11 @@ const BatchPaymentDetails = () => {
       try {
         const response = await axios.get(`${server}/batch`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         });
         setBatch(response.data.data.reverse());
         console.log(response.data.data)

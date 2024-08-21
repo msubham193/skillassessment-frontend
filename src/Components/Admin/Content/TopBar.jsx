@@ -99,16 +99,16 @@ const TopBar = () => {
 
     const interval1 = setInterval(() => {
       fetchData1();
-    }, 20 * 1000); // 20 seconds for assessment agency
+    }, 2 * 1000); // 20 seconds for assessment agency
     const interval2 = setInterval(() => {
       fetchData2();
-    }, 20 * 1000); // 20 seconds for training partner
+    }, 2 * 1000); // 20 seconds for training partner
     const interval3 = setInterval(() => {
       fetchData3();
-    }, 20 * 1000);
+    }, 2 * 1000);
     const interval4 = setInterval(() => {
       fetchData4();
-    }, 20 * 1000);
+    }, 2 * 1000);
 
     return () => {
       clearInterval(interval1);
@@ -133,6 +133,8 @@ const TopBar = () => {
     setNotification("No new notification !!");
     localStorage.setItem("notification", "No new notification !!");
   };
+
+  // //make dynamic admin.................
 
   const admin = {
     name: "Rakes Pradhan",
@@ -159,7 +161,8 @@ const TopBar = () => {
         {/* Notification icon */}
         <div className="flex flex-row gap-5">
           {/* Notification stuff */}
-          <Select>
+          
+            <Select>
             <SelectTrigger className="w-[60px] bg-[#f2f9f2] border-none">
               <Bell size={23} className="cursor-pointer mt-[5px]" />
               <span className="absolute top-5 right-[100px]">
@@ -174,8 +177,10 @@ const TopBar = () => {
               </div>
             </SelectContent>
           </Select>
+                <UserNav admin={admin} />
+            
           {/* Profile and dropdown menu for edit and logout */}
-          <UserNav admin={admin} />
+    
         </div>
       </div>
     </nav>

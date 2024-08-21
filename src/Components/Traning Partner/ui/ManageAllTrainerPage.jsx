@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components(shadcn)/ui/input";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components(shadcn)/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components(shadcn)/ui/avatar";
+import { server } from "@/main";
 
 const ManageAllTrainerPage = () => {
     const [teachers, setTeachers] = useState(null);
@@ -17,7 +18,8 @@ const ManageAllTrainerPage = () => {
         const fetchTeachers = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`${server}/trainer/tp/${tpid}`,{method:"GET"});
+                const response = await fetch(`${server
+                    }/trainer/tp/${tpid}`,{method:"GET"});
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data.data);

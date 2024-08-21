@@ -149,8 +149,9 @@ const AddAssessorForm = () => {
     console.log(assessmentAgencyId);
 
     try {
+      console.log(formData)
       const response = await axios.post(
-        `${server}/v1/assessor`,
+        `${server}/assessor`,
         formData
       );
       console.log(response.data);
@@ -430,7 +431,7 @@ const AddAssessorForm = () => {
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700">
               Profile Picture
             </label>
@@ -445,7 +446,7 @@ const AddAssessorForm = () => {
                 <p>Selected file: {profilePic.name}</p>
               </div>
             )}
-          </div>
+          </div> */}
           <div className="mt-6">
             <button
               type="submit"

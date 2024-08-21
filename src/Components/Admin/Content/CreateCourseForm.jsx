@@ -70,7 +70,14 @@ const CreateCourseForm = () => {
   useEffect(() => {
     const fetchSectors = async () => {
       try {
-        const response = await axios.get(`${server}/sector/all`);
+        const response = await axios.get(`${server}/sector/all`,{
+          withCredentials:true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
+        });
         setSectors(response.data.data);
       } catch (error) {
         console.error("Error fetching sectors:", error);

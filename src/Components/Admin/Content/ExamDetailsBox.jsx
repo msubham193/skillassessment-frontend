@@ -19,6 +19,11 @@ const ExamDetailsBox = ({id}) => {
           axios
             .get(`${server}/exam/${id}`, {
               withCredentials: true,
+              headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
             })
             .then((response) => {
               setLoding(false);

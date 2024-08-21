@@ -157,7 +157,7 @@ const App = () => {
           <Route path="partner" element={<Partners />} />
           <Route path="tp" element={<TraningAndAssignment />} />
           <Route path="qualification" element={<Qualification />} />
-          <Route path="notification" element={<NewsNotification />} />
+          <Route path="notification" element={<NewsNotification />} /> 
           <Route path="resource" element={<Resource />} />
           <Route path="contact" element={<ContactUs />} />
           <Route path="portal" element={<PortalLogin />} />
@@ -376,7 +376,7 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        <Route path="snalogin" element={<SNALogin />} />
+        <Route path="snalogin" element={<SNALogin />} /> 
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
             <Route path="snadashboard" element={<SNADashboard />} />

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 const AddfeeInCorporetbatch = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(null);
 
   // Function for fetching batch by id
@@ -22,6 +22,11 @@ const AddfeeInCorporetbatch = () => {
         setLoading(true);
         const response = await axios.get(`${server}/batch/${id}`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         });
         setData(response.data.data);
       } catch (error) {
@@ -41,7 +46,7 @@ const AddfeeInCorporetbatch = () => {
     try {
       const response = await axios.put(
         `${server}/batch/addpayment/${id}`,
-        {amount},
+        { amount },
         {
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +55,7 @@ const AddfeeInCorporetbatch = () => {
         }
       );
       setAmount("");
-    
+
       toast.success("Cost added !!", {
         position: "top-center",
         closeOnClick: true,
@@ -59,7 +64,7 @@ const AddfeeInCorporetbatch = () => {
       });
       setLoading(false);
     } catch (error) {
-        console.log(error)
+      console.log(error);
       toast.error("Something went wrong, try after some time !!!", {
         position: "top-center",
         closeOnClick: true,
@@ -133,29 +138,31 @@ const AddfeeInCorporetbatch = () => {
               {/* createe a form for add mony*/}
               <div className="p-3">
                 <form onSubmit={submitHandler}>
-                <Label htmlFor="name" className="text-left w-40 text-lg">
-                  Add cost per Student for this scheme..
-                </Label>
-                <Input
-                  id="scheme-name"
-                  className="col-span-4 py-6 mt-2"
-                  placeholder="Add amount in rupee"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
+                  <Label htmlFor="name" className="text-left w-40 text-lg">
+                    Add cost per Student for this scheme..
+                  </Label>
+                  <Input
+                    id="scheme-name"
+                    className="col-span-4 py-6 mt-2"
+                    placeholder="Add amount in rupee"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
                 </form>
               </div>
-              
             </div>
-            <div >
-                <Button className="bg-green-600 hover:bg-green-400 w-full md:w-auto ml-3" onClick={submitHandler}>
-                  {loading
-                    ? "Loading..."
-                    : data?.paymentStatus === true
-                    ? "Added"
-                    : "Add amount"}
-                </Button>
-              </div>
+            <div>
+              <Button
+                className="bg-green-600 hover:bg-green-400 w-full md:w-auto ml-3"
+                onClick={submitHandler}
+              >
+                {loading
+                  ? "Loading..."
+                  : data?.paymentStatus === true
+                  ? "Added"
+                  : "Add amount"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

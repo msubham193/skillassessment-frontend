@@ -6,14 +6,14 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue, 
+  SelectValue,
 } from "@/components(shadcn)/ui/select";
 import { cn } from "@/lib/utils";
 import { server } from "@/main";
 import axios from "axios";
 import { RotateCcw, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";  
+import { useLocation } from "react-router-dom";
 
 const TpNotificationBoxContent = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
@@ -44,6 +44,11 @@ const TpNotificationBoxContent = () => {
       const response = await axios.get(`${server}/tp/all/query`, {
         params: filters,
         withCredentials: true,
+        headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
       });
       setTraningPartnerData(response.data.data.reverse());
     } catch (error) {
@@ -81,6 +86,11 @@ const TpNotificationBoxContent = () => {
       axios
         .get(`${server}/sector/all`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
         })
         .then((response) => {
           setSectors(response.data.data);
@@ -95,6 +105,11 @@ const TpNotificationBoxContent = () => {
       axios
         .get(`${server}/course/course`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
         })
         .then((response) => {
           setCourse(response.data.data);
@@ -109,6 +124,11 @@ const TpNotificationBoxContent = () => {
       axios
         .get(`${server}/scheme`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
         })
         .then((response) => {
           setSchemes(response.data.data);
@@ -118,13 +138,11 @@ const TpNotificationBoxContent = () => {
     }
   }, []);
 
-  const hasActiveFilters = Object.values(filters).some(value => value !== "");
-  
-
+  const hasActiveFilters = Object.values(filters).some((value) => value !== "");
 
   return (
     <>
-      <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex"> 
+      <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
@@ -173,7 +191,7 @@ const TpNotificationBoxContent = () => {
               <SelectTrigger className="w-fit border-0">
                 <SelectValue placeholder="Filter by Scheme" />
               </SelectTrigger>
-              <SelectContent> 
+              <SelectContent>
                 {schemes.map((scheme) => (
                   <SelectItem key={scheme.id} value={scheme.name}>
                     {scheme.name}
@@ -203,15 +221,21 @@ const TpNotificationBoxContent = () => {
               </SelectContent>
             </Select>
 
-            {
-              hasActiveFilters && <div className='flex'><span className='font-semibold'>Reset</span><X onClick={resetFilters} className="w-4 cursor-pointer hover:cursor-pointer" /></div>
-            }
+            {hasActiveFilters && (
+              <div className="flex">
+                <span className="font-semibold">Reset</span>
+                <X
+                  onClick={resetFilters}
+                  className="w-4 cursor-pointer hover:cursor-pointer"
+                />
+              </div>
+            )}
           </div>
         </div>
 
         <DataTable
           filter1={"organizationName"}
-          path={path} 
+          path={path}
           columns={columns}
           data={traningPartnerData}
           isLoding={loading}
@@ -225,6 +249,13 @@ const TpNotificationBoxContent = () => {
 export default TpNotificationBoxContent;
 
 const columns = [
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
+  },
   {
     accessorKey: "organizationName",
     header: "Traning Partner Name",

@@ -45,6 +45,11 @@ const AaDetailsBox = ({ id }) => {
       axios
         .get(`${server}/aa/${id}`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setLoding(false);
@@ -424,7 +429,7 @@ const AaDetailsBox = ({ id }) => {
           <Button
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
-            disabled={data?.applicationStatus === "Approved" || percentage===null}
+            disabled={data?.applicationStatus === "Approved" || percentage===null || data?.applicationStatus === "Rejected"}
           >
             {" "}
             {loding
@@ -436,7 +441,7 @@ const AaDetailsBox = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data?.applicationStatus === "Rejected"}
+            disabled={data?.applicationStatus === "Rejected" || data?.applicationStatus === "Approved"}
           >
             {loding
               ? "Loding..."

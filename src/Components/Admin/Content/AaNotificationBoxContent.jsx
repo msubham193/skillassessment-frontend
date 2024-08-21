@@ -41,6 +41,11 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
       const response = await axios.get(`${server}/aa/all/query`, {
         params: filters,
         withCredentials: true,
+        headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
       });
       setAssessmentAgency(response.data.data.reverse());
     } catch (error) {
@@ -73,6 +78,11 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
       axios
         .get(`${server}/sector/all`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setSectors(response.data.data);
@@ -87,6 +97,11 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
       axios
         .get(`${server}/course/course`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setCourse(response.data.data);
@@ -187,6 +202,13 @@ const AaNotificationBoxContent = () => { const [assessmentAgency, setAssessmentA
 export default AaNotificationBoxContent;
 
 const columns = [
+ {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
+  },
   {
     accessorKey: "agencyName",
     header: "Agency Name ",

@@ -198,7 +198,7 @@ const MarksheetForm = () => {
       console.log(token);
       // Submit to backend using Axios
       const response = await axios.post(
-        "http://localhost:8000/api/v1/marks/upload",
+        `${server}/marks/upload`,
         payload,
         {
           Grade: grade,

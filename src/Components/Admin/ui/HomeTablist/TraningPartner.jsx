@@ -8,24 +8,28 @@ import { cn } from "@/lib/utils";
 const TraningPartner = () => {
   const [traningPartnerData, setTraningPartnerData] = useState([]);
   const [loding, setLoding] = useState(false);
-  const [isDataFetched, setIsDataFetched] = useState(false);
   useEffect(() => {
     try {
       setLoding(true);
       axios
         .get(`${server}/tp/status/approved`, { 
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setLoding(false);
           setTraningPartnerData(response.data.data.reverse());
-          setIsDataFetched(true);
+          console.log(response.data.data)
         });
     } catch (error) {
       setLoding(false);
       console.log(error);
     }
-  }, [isDataFetched]);
+  }, []);
   return (
     <div>
       <DataTable

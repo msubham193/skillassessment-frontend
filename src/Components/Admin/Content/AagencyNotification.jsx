@@ -14,6 +14,11 @@ const AagencyNotification = () => {
       axios
         .get(`${server}/aa/status/pending`, { 
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setLoding(false);

@@ -108,7 +108,7 @@ const CreateBatch = () => {
     try {
       const response = await fetch(
 
-        `${server}/scheme/query?schemeType=${selcetdSchemeType}`
+        `${server}/scheme/query?schemeType=${batchInputs.schemeType}`
 
       );
       if (!response.ok) {

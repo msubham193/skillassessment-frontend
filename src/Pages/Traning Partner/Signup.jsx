@@ -125,7 +125,15 @@ const Signup = () => {
   ];
 
   const TimeLabel = ["dateOfIncorporation", "headOwnerDob"];
-
+  const indianStates = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
+    "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
+    "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+    "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
+    "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", 
+    "Lakshadweep", "Puducherry"
+  ];
   const navigate = useNavigate();
 
   // State variables
@@ -305,7 +313,27 @@ const Signup = () => {
           </SelectContent>
         </Select>
       );
-    } else {
+    }
+    else if (name === "registeredOfficeState") {
+      return (
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select state" />
+          </SelectTrigger>
+          <SelectContent>
+            {indianStates.map((state) => (
+              <SelectItem key={state} value={state}>
+                {state}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    }
+    else {
       return (
         <Input
           className="w-full bg-transparent text-black"

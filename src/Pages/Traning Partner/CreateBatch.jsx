@@ -68,7 +68,7 @@ const CreateBatch = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${server}/sna/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
+        `${server}/sna/centers/tp/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch centers");

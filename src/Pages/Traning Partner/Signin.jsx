@@ -3,11 +3,12 @@ import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 import { Loader } from 'lucide-react';
 import { Eye, EyeOff } from 'lucide-react';
 import { server } from "@/main";
+import { tokenAtoms } from "@/Components/Traning Partner/Atoms/tokenAtom";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Signin = () => {
   const [tpStatus, setTpStatus] = useState("");
   const [responseData, setResponseData] = useRecoilState(tpDataAtoms);
   const [isLoading, setIsLoading] = useState(false);
-
+  const setToken = useSetRecoilState(tokenAtoms);
   const handleEmailChange = (e) => {
     setRegisteredOfficeEmail(e.target.value);
   };
@@ -51,6 +52,7 @@ const Signin = () => {
         throw new Error(data.message || 'Invalid credentials');
       }
       setResponseData(data.data.data);
+      setToken(data.data.token);
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("trainingPartnerId", data.data.data._id);
       toast.success(data.message);

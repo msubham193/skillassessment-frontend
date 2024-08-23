@@ -68,7 +68,7 @@ const CreateBatch = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/sna/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
+        `${server}/sna/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch centers");
@@ -107,7 +107,9 @@ const CreateBatch = () => {
     if (!batchInputs.schemeType) return;
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/scheme/query?schemeType=${batchInputs.schemeType}`
+
+        `${server}/scheme/query?schemeType=${selcetdSchemeType}`
+
       );
       if (!response.ok) {
         throw new Error("Failed to fetch schemes");
@@ -171,7 +173,7 @@ const CreateBatch = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/batch/create`,
+        `${server}/batch/create`,
         {
           method: "POST",
           headers: {

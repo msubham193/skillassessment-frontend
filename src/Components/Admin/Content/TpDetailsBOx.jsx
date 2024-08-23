@@ -41,6 +41,11 @@ const TpDetailsBOx = ({ id }) => {
       axios
         .get(`${server}/batch/tp/${id}`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setLoding(false);
@@ -61,6 +66,11 @@ const TpDetailsBOx = ({ id }) => {
       axios
         .get(`${server}/tp/${id}`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setLoding(false);
@@ -666,7 +676,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
-            disabled={data.applicationStatus === "Approved"}
+            disabled={data?.applicationStatus === "Approved" || data?.applicationStatus === "Rejected"}
           > 
             {" "}
             {loding
@@ -678,7 +688,7 @@ const TpDetailsBOx = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data?.applicationStatus === "Rejected" || (data?.scheme==="corporate" && amount===null)}
+            disabled={data?.applicationStatus === "Rejected" ||data?.applicationStatus === "Approved" || (data?.scheme==="corporate" && amount===null)}
           >
             {loding
               ? "Loding..."

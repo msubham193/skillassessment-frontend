@@ -6,6 +6,7 @@ import logo from "../../../assets/logo.png";
 import { useRecoilState } from "recoil";
 import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
+import { server } from "@/main";
 
 const ResultSheetForm = () => {
   const pdfRef = useRef();
@@ -27,7 +28,7 @@ const ResultSheetForm = () => {
       console.log(examId);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/exam/attendance/${examId[0]}`
+          `${server}/exam/attendance/${examId[0]}`
         );
         console.log(response); // Ensure the structure matches your needs
         const data = response.data.data;

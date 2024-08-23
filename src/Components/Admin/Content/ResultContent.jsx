@@ -44,10 +44,15 @@ const ResultContent = ({ batchId }) => {
           setLoading(true);
           const response = await axios.get(`${server}/exam/${examId}`, {
             withCredentials: true,
+            headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
           });
           setLoading(false);
           setExam(response.data.data);
-          console.log(response.data.data)
+          // console.log(response.data.data)
           setAttendanceSheet(response.data.data.attendanceSheet);
           setResultSheet(response.data.data.resultSheet);
           setImages(response.data.data.images || []);

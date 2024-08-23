@@ -15,7 +15,7 @@ import {
 import AccessmentAgency from "../ui/HomeTablist/AccessmentAgency";
 import TraningPartner from "../ui/HomeTablist/TraningPartner";
 import axios from "axios";
-import { server } from "@/main";
+import { server } from "@/main"; 
 import AllExam from "../ui/HomeTablist/AllExam";
 
 const AdminContent = () => {
@@ -29,6 +29,11 @@ const AdminContent = () => {
       axios
         .get(`${server}/tp`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setTotalTp(response.data.data.length);
@@ -40,6 +45,11 @@ const AdminContent = () => {
       axios
         .get(`${server}/aa`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setTotalAa(response.data.data.length);
@@ -51,6 +61,11 @@ const AdminContent = () => {
       axios
         .get(`${server}/exam/all`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setTotalExam(response.data.data.length);
@@ -62,6 +77,11 @@ const AdminContent = () => {
       axios
         .get(`${server}/batch`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         })
         .then((response) => {
           setTotalBatch(response.data.data.length);

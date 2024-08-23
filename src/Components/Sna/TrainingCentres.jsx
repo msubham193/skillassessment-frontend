@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -15,7 +16,7 @@ const TrainingCenters = () => {
         console.log(state);
         console.log(scheme);
         const response = await axios.get(
-          `http://localhost:8000/api/v1/sna/centers/query?state=${state}&schemeName=${scheme}`
+          `${server}/sna/centers/query?state=${state}&schemeName=${scheme}`
         );
         const { data } = response.data;
         console.log(data);
@@ -32,7 +33,7 @@ const TrainingCenters = () => {
   const handleApproval = async (centerId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/sna/center/approve/${centerId}`,
+        `${server}/sna/center/approve/${centerId}`,
         { state, schemeName }
       );
       console.log(response);
@@ -45,7 +46,7 @@ const TrainingCenters = () => {
   const handleRejection = async (centerId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/sna/center/reject/${centerId}`,
+        `${server}/sna/center/reject/${centerId}`,
         { state, schemeName }
       );
       console.log(response);
@@ -63,7 +64,7 @@ const TrainingCenters = () => {
       </p>
       <table className="min-w-full bg-white border rounded-md">
         <thead className="rounded-md">
-          <tr>
+          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th className="py-2 px-4 border-b">Center ID</th>
             <th className="py-2 px-4 border-b">Center Name</th>
             <th className="py-2 px-4 border-b">PRN No.</th>
@@ -72,7 +73,7 @@ const TrainingCenters = () => {
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-gray-800 text-sm">
           {centerDetails.map((center) => (
             <tr key={center._id}>
               <td className="py-2 px-4 border-b text-center">

@@ -14,6 +14,7 @@ import {
   sectorState,
   tpNameState,
 } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
+import { server } from "@/main";
 
 const UploadResult = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const UploadResult = () => {
       try {
         console.log(assessmentAgencyId);
         const response = await axios.get(
-          `http://localhost:8000/api/v1/exam/aa/${assessmentAgencyId}`
+          `${server}/exam/aa/${assessmentAgencyId}`
         );
         console.log(response.data.data); // Ensure the structure matches your needs
         const data = response.data.data;
@@ -79,28 +80,22 @@ const UploadResult = () => {
   };
 
   return (
-    <div className="overflow-x-auto mt-10 mb-60 border rounded-lg shadow-lg">
+    <div className="overflow-x-auto mt-2 mb-60 border rounded-lg shadow-lg">
+      <div className="p-2">
+        <h1 className="text-2xl font-bold">Batches</h1>
+        <p className="text-gray-600 mb-4">Manage and Track Batch Results</p>
+      </div>
       <table className="w-full border-collapse text-sm">
-        <thead className="bg-blue-100">
-          <tr>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-              ABN id
-            </th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-              Course
-            </th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-              Scheme
-            </th>
-            <th className="px-4 py-3 text-center font-medium text-muted-foreground">
+        <thead className="">
+          <tr className="bg-gray-500 text-white uppercase text-sm leading-normal">
+            <th className="px-4 py-3 text-left font-medium">ABN id</th>
+            <th className="px-4 py-3 text-left font-medium">Course</th>
+            <th className="px-4 py-3 text-left font-medium">Scheme</th>
+            <th className="px-4 py-3 text-center font-medium">
               Number of Students
             </th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-              Status
-            </th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-              TP
-            </th>
+            <th className="px-4 py-3 text-left font-medium">Status</th>
+            <th className="px-4 py-3 text-left font-medium">TP</th>
           </tr>
         </thead>
         <tbody>

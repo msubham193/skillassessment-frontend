@@ -18,6 +18,11 @@ const BatchPaymentBox = ({ id }) => {
         setLoading(true);
         const response = await axios.get(`${server}/batch/${id}`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         });
         setData(response.data.data);
         console.log(response.data.data);

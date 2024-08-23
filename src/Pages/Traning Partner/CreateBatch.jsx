@@ -107,7 +107,7 @@ const CreateBatch = () => {
     if (!batchInputs.schemeType) return;
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/scheme/query?schemeType=${batchInputs.schemeType}`
+        `${server}/scheme/query?schemeType=${batchInputs.schemeType}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch schemes");

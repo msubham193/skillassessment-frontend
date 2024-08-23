@@ -17,7 +17,6 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components(shadcn)/ui/select";
-import { centerAtom } from "@/Components/Traning Partner/Atoms/centerAtom";
 import {
   Popover,
   PopoverTrigger,
@@ -25,10 +24,7 @@ import {
 } from "@/components(shadcn)/ui/popover";
 import { server } from "@/main";
 
-
 const CreateBatch = () => {
-  const trainingPartnerData = useRecoilValue(tpDataAtoms);
-  const sectors = trainingPartnerData?.sector || [];
   const navigate = useNavigate();
   const [batchInputs, setBatchInputs] = useState({
     courseName: "",
@@ -43,6 +39,16 @@ const CreateBatch = () => {
     endDate: null,
     centerName: "",
   });
+  const indianStates = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
+    "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
+    "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+    "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
+    "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", 
+    "Lakshadweep", "Puducherry"
+  ];
+  const [selectedCenter, setSelectedCenter] = useState(null);
   const [centers, setCenters] = useState([]);
   const [batchData, setBatchData] = useRecoilState(batchDataAtoms);
   const [courses, setCourses] = useState([]);
@@ -52,32 +58,22 @@ const CreateBatch = () => {
   const tpid = localStorage.getItem("trainingPartnerId");
   const tpData = useRecoilValue(tpDataAtoms);
   const tpcode = tpData.tpCode;
-  const selcetdSchemeType = batchInputs.schemeType;
-  console.log("selecetdscheme", selcetdSchemeType);
 
   const fetchCenters = async () => {
-    if (!tpid) {
-      console.log("No TPID provided");
+    if (!tpid || !batchInputs.scheme || !batchInputs.state) {
+      console.log("Missing required data for fetching centers");
       return;
     }
-    if(!batchInputs.scheme && !batchInputs.state){
-      console.log("scheme and state not seletcted ")
-      return ;
-    }
 
-    console.log("Fetching centers...");
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response = await fetch(
         `http://localhost:8000/api/v1/sna/centers/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
       );
-      console.log("Response received");
       if (!response.ok) {
-        console.error("Response not ok");
         throw new Error("Failed to fetch centers");
       }
       const data = await response.json();
-      console.log("schemss", data.data);
       setCenters(data.data || []);
     } catch (error) {
       console.error("Error fetching centers:", error);
@@ -89,8 +85,8 @@ const CreateBatch = () => {
 
   const fetchCourses = async () => {
     if (!batchInputs.sectorName) return;
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response = await fetch(
         `${server}/sector?name=${batchInputs.sectorName}`
       );
@@ -98,7 +94,6 @@ const CreateBatch = () => {
         throw new Error("Failed to fetch courses");
       }
       const data = await response.json();
-      console.log("course",data)
       setCourses(data.data || []);
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -112,7 +107,7 @@ const CreateBatch = () => {
     if (!batchInputs.schemeType) return;
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/scheme/query?schemeType=${selcetdSchemeType}`
+        `http://localhost:8000/api/v1/scheme/query?schemeType=${batchInputs.schemeType}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch schemes");
@@ -126,7 +121,7 @@ const CreateBatch = () => {
 
   useEffect(() => {
     fetchCenters();
-  }, [tpid,batchInputs.scheme,batchInputs.state]);
+  }, [tpid, batchInputs.scheme, batchInputs.state]);
 
   useEffect(() => {
     fetchCourses();
@@ -138,7 +133,7 @@ const CreateBatch = () => {
 
   const validateForm = () => {
     const requiredFields = [
-      "center",
+      "centerName",
       "courseName",
       "sectorName",
       "trainingOrganization",
@@ -149,22 +144,26 @@ const CreateBatch = () => {
     ];
     for (let field of requiredFields) {
       if (!batchInputs[field]) {
-        setError("Please fill in all required fields");
+        setError(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
         return false;
       }
     }
     setError("");
     return true;
   };
+
   const handleSelectChange = (name, value) => {
     setBatchInputs((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleDateChange = (date, name) => {
     setBatchInputs((prev) => ({ ...prev, [name]: date }));
   };
+
   const handleInputChange = (name, value) => {
     setBatchInputs((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -212,11 +211,13 @@ const CreateBatch = () => {
   };
 
   const handleCenterSelect = (value) => {
-    const selectedCenter = centers.find((center) => center.name === value);
+    const center = centers.find((c) => c.name === value);
+    setSelectedCenter(center);
     setBatchInputs((prev) => ({
       ...prev,
-      center: selectedCenter,
-      centerName: selectedCenter.name,
+      centerName: center.name,
+      CenterCode: center.centerCode,
+      sectorName: "", // Reset sector when center changes
     }));
   };
 
@@ -224,9 +225,6 @@ const CreateBatch = () => {
     const selectedCourse = courses.find(
       (course) => course.courseName === value
     );
-    console.log("course", selectedCourse);
-    console.log("credit", selectedCourse.totalCredit);
-    console.log("code", selectedCourse.courseCode);
     setBatchInputs((prev) => ({
       ...prev,
       courseName: selectedCourse.courseName,
@@ -236,26 +234,115 @@ const CreateBatch = () => {
       courseLevel: selectedCourse.ncrfLevel,
     }));
   };
-  console.log(batchInputs);
+
   return (
-    <div className="mx-auto max-w-2xl space-y-6 py-12 md:py-24">
+    <div className="mx-auto max-w-4xl space-y-8 p-8 bg-white shadow-lg rounded-lg">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Create New Batch</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-bold text-gray-800">Create New Batch</h1>
+        <p className="text-gray-600">
           Fill out the form below to create a new training batch.
         </p>
       </div>
       {error && (
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <strong className="font-bold">Error: </strong>
-          <span className="block sm:inline">{error}</span>
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded" role="alert">
+          <p className="font-bold">Error</p>
+          <p>{error}</p>
         </div>
       )}
       <form className="space-y-6" onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="scheme-type">Scheme Type</Label>
+            <Select
+              value={batchInputs.schemeType}
+              onValueChange={(value) => handleSelectChange("schemeType", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Scheme Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Scheme Types</SelectLabel>
+                  <SelectItem value="Central Government">Central Government</SelectItem>
+                  <SelectItem value="State Government">State Government</SelectItem>
+                  <SelectItem value="Corporate">Corporate</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="scheme">Scheme</Label>
+            <Select
+              value={batchInputs.scheme}
+              onValueChange={(value) => handleSelectChange("scheme", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Scheme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Schemes</SelectLabel>
+                  {schemeData.map((scheme) => (
+                    <SelectItem key={scheme._id} value={scheme.name}>
+                      {scheme.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+        <Label htmlFor="state">State</Label>
+        <Select
+          value={batchInputs.state}
+          onValueChange={(value) => handleSelectChange("state", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a state" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>States</SelectLabel>
+              {indianStates.map((state) => (
+                <SelectItem key={state} value={state}>
+                  {state}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+          <div className="space-y-2">
+            <Label htmlFor="center-name">Center Name</Label>
+            <Select
+              value={batchInputs.centerName}
+              onValueChange={handleCenterSelect}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a center" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Centers</SelectLabel>
+                  {centers.map((center) => (
+                    <SelectItem key={center._id} value={center.name}>
+                      {center.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="center-code">Center Code</Label>
+            <Input
+              id="center-code"
+              name="CenterCode"
+              value={batchInputs.CenterCode}
+              onChange={(e) => handleInputChange("CenterCode", e.target.value)}
+              placeholder="Enter Center Code"
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="sector-name">Sector Name</Label>
             <Select
@@ -267,10 +354,10 @@ const CreateBatch = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Sector</SelectLabel>
-                  {sectors.map((sector, index) => (
-                    <SelectItem key={index} value={sector}>
-                      {sector}
+                  <SelectLabel>Sectors</SelectLabel>
+                  {selectedCenter?.sectors.map((sector) => (
+                    <SelectItem key={sector._id} value={sector.name}>
+                      {sector.name}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -304,42 +391,38 @@ const CreateBatch = () => {
               id="course-code"
               name="courseCode"
               value={batchInputs.courseCode}
-              onChange={(e) => handleInputChange("courseCode", e.target.value)}
-              placeholder="Enter Course Code"
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="course-code">Course Duration</Label>
+            <Label htmlFor="course-duration">Course Duration</Label>
             <Input
               id="courseDuration"
               name="courseDuration"
               value={batchInputs.courseDuration}
-              onChange={(e) =>
-                handleInputChange("courseDuration", e.target.value)
-              }
-              placeholder="Enter Course Duration"
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="course-code">Course Credit</Label>
+            <Label htmlFor="course-credit">Course Credit</Label>
             <Input
               id="courseCredit"
               name="courseCredit"
               value={batchInputs.courseCredit}
-              onChange={(e) =>
-                handleInputChange("courseCredit", e.target.value)
-              }
-              placeholder="Course Credit"
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="course-code">Course Level</Label>
+            <Label htmlFor="course-level">Course Level</Label>
             <Input
               id="courseLevel"
               name="courseLevel"
               value={batchInputs.courseLevel}
-              onChange={(e) => handleInputChange("courseLevel", e.target.value)}
-              placeholder="Course Level"
+              readOnly
+              className="bg-gray-100"
             />
           </div>
           <div className="space-y-2">
@@ -352,92 +435,6 @@ const CreateBatch = () => {
                 handleInputChange("trainingOrganization", e.target.value)
               }
               placeholder="Enter Training Organization"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="scheme-type">Scheme Type</Label>
-            <Select
-              value={batchInputs.schemeType}
-              onValueChange={(value) => handleSelectChange("schemeType", value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Scheme Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Scheme Types</SelectLabel>
-                  <SelectItem value="Central Government">
-                    Central Government
-                  </SelectItem>
-                  <SelectItem value="State Government">
-                    State Government
-                  </SelectItem>
-                  <SelectItem value="Corporate">Corporate</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="scheme">Scheme</Label>
-            <Select
-              value={batchInputs.scheme}
-              onValueChange={(value) => handleSelectChange("scheme", value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Scheme" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Schemes</SelectLabel>
-
-                  {schemeData.map((scheme) => (
-                    <SelectItem key={scheme._id} value={scheme.name}>
-                      {scheme.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="state">State</Label>
-            <Input
-              id="state"
-              name="state"
-              value={batchInputs.state}
-              onChange={(e) => handleInputChange("state", e.target.value)}
-              placeholder="ex:- Odisha"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="center-name">Center Name</Label>
-            <Select
-              value={batchInputs.centerName}
-              onValueChange={handleCenterSelect}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a center" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Centers</SelectLabel>
-                  {centers.map((center) => (
-                      <SelectItem key={center._id} value={center.name}>
-                        {center.name}
-                      </SelectItem>
-                    ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="center-code">Center Code</Label>
-            <Input
-              id="center-code"
-              name="CenterCode"
-              value={batchInputs.CenterCode}
-              onChange={(e) => handleInputChange("CenterCode", e.target.value)}
-              placeholder="Enter Center Code"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">

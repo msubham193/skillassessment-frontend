@@ -13,27 +13,27 @@ import { useNavigate } from "react-router-dom";
 
 const routes = [
   {
-    path: "/dashboard",
+    path: "/sna/snadashboard",
     name: "Dashboard",
     icon: <FaTachometerAlt />,
   },
   {
-    path: "/trainingcenters",
+    path: "/sna/trainingcenters",
     name: "Training Centers",
     icon: <FaBuilding />,
   },
   {
-    path: "/trainingbatches",
+    path: "/sna/trainingbatches",
     name: "Training Batches",
     icon: <FaClipboardList />,
   },
   {
-    path: "/reports",
+    path: "/sna/reports",
     name: "Reports",
     icon: <FaUsers />,
   },
   {
-    path: "/marks",
+    path: "/sna/marks",
     name: "Marks",
     icon: <FaRegFileAlt />,
   },

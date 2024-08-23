@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import StudentTable from "./StudentTable";
+import { server } from "@/main";
 
 const STUDENTS_PER_PAGE = 10;
 
@@ -30,7 +31,7 @@ const AttendanceSheetForm = () => {
       console.log(examId);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/exam/attendance/${examId[0]}`
+          `${server}/exam/attendance/${examId[0]}`
         );
         console.log(response.data.data); // Ensure the structure matches your needs
         const data = response.data.data;

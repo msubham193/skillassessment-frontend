@@ -27,6 +27,7 @@ import {
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { useNavigate } from "react-router-dom";
+import { server } from "@/main";
 
 const Profile = () => {
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
@@ -37,7 +38,7 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/aa/${assessmentAgencyId}`
+          `${server}/aa/${assessmentAgencyId}`
         );
         setProfileData(response.data.data);
       } catch (error) {

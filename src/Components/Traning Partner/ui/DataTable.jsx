@@ -23,6 +23,7 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@/components(shadcn)/ui/avatar";
+import { server } from "@/main";
 const DataTable = () => {
   const batchData = useRecoilValue(batchDataAtoms);
   const [studentData, setStudentData] = useRecoilState(StudentDataAtom);
@@ -31,7 +32,7 @@ const DataTable = () => {
   const fetchStudentData = async (batchid) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/student/${batchid}`,
+        `${server}/student/${batchid}`,
         {
           method: "GET",
         }

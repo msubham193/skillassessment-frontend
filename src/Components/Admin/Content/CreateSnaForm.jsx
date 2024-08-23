@@ -71,6 +71,11 @@ const CreateSnaForm = () => {
           axios
             .get(`${server}/scheme`, {
               withCredentials: true,
+              headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
             })
             .then((response) => {
               setSchemes(response.data.data);

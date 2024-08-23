@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 import { Loader } from 'lucide-react';
 import { Eye, EyeOff } from 'lucide-react';
+import { server } from "@/main";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -32,13 +33,13 @@ const Signin = () => {
   const handleSignin = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:8000/api/v1/tp/login", {
+      const response = await fetch(`${server}/tp/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          registeredOfficeEmail,
+          registeredOfficeEmail,  
           password,
         }),
       });
@@ -66,7 +67,6 @@ const Signin = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div className="h-screen flex justify-center items-center p-4 bg-black">
       <div className="bg-black w-[400px] h-[400px] rounded-md pt-8 border border-gray-800">

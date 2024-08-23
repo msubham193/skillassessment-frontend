@@ -5,6 +5,7 @@ import { Label } from "@/components(shadcn)/ui/label";
 import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { server } from "@/main";
 
 const AddTeacher = () => {
   const { id: batchId } = useParams();
@@ -77,7 +78,7 @@ const AddTeacher = () => {
   const fetchBatchdata = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/batch/${batchId}`,
+        `${server}/batch/${batchId}`,
         {
           method: "GET",
           headers: {
@@ -112,7 +113,7 @@ const AddTeacher = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/batch/addtrainer/${batchId}`,
+        `${server}/batch/addtrainer/${batchId}`,
         {
           method: "POST",
           headers: {

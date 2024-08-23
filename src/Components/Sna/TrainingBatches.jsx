@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +14,7 @@ const TrainingBatches = () => {
         const state = localStorage.getItem("state");
         const scheme = localStorage.getItem("scheme");
         const response = await axios.get(
-          `http://localhost:8000/api/v1/sna/batch/query?state=${state}&scheme=${scheme}`
+          `${server}/sna/batch/query?state=${state}&scheme=${scheme}`
         );
         console.log(response);
         if (response.data && Array.isArray(response.data.data)) {
@@ -32,7 +33,7 @@ const TrainingBatches = () => {
 
   const handleRowClick = (batchId) => {
     console.log(batchId);
-    navigate(`/batchdetails/${batchId}`);
+    navigate(`/sna/batchdetails/${batchId}`);
   };
 
   return (

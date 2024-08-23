@@ -13,6 +13,7 @@ import {
   setStudentProfilePictureState,
 } from "../Atoms/AssessmentAgencyAtoms";
 import { FaArrowRight } from "react-icons/fa";
+import { server } from "@/main";
 
 const StudentList = () => {
   const navigate = useNavigate();
@@ -30,9 +31,7 @@ const StudentList = () => {
     const fetchBatchDetails = async () => {
       console.log(localStorage.getItem(`absentSudent_${batchId}`));
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/batch/${batchId}`
-        );
+        const response = await axios.get(`${server}/batch/${batchId}`);
         const students = response.data.data.students;
         console.log(students);
 
@@ -56,13 +55,11 @@ const StudentList = () => {
     };
 
     fetchBatchDetails();
-  }, [setAbsentCountState]);
+  }, [batchId, setAbsentCount]);
 
   const markAbsent = async (studentId) => {
     try {
-      const response = await axios.put(
-        `http://localhost:8000/api/v1/student/absent/${studentId}`
-      );
+      const response = await axios.put(`${server}/student/absent/${studentId}`);
       console.log(response);
 
       if (response.status === 200) {

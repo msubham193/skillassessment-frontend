@@ -6,6 +6,7 @@ import { Button } from '@/components(shadcn)/ui/button';
 import { Checkbox } from "@/components(shadcn)/ui/checkbox";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components(shadcn)/ui/select";
+import { server } from '@/main';
 
 const Teachers = () => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const Teachers = () => {
 
     const handleAssign = async () => {
       try {
-          const response = await fetch(`http://localhost:8000/api/v1/batch/bulkaddTrainer/${batchIds}`, {
+          const response = await fetch(`${server}/batch/bulkaddTrainer/${batchIds}`, {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",
@@ -48,7 +49,7 @@ const Teachers = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/v1/trainer/tp/${tpid}`, { method: "GET" });
+        const response = await fetch(`${server}/trainer/tp/${tpid}`, { method: "GET" });
         if (response.ok) {
           const data = await response.json();
           console.log(data.data);

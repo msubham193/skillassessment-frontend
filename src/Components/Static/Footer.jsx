@@ -1,3 +1,4 @@
+import { Button } from "@/components(shadcn)/ui/button";
 import React from "react";
 import {
   FaFacebook,
@@ -8,6 +9,7 @@ import {
   FaMobileAlt,
   FaAngleRight,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
   const footerLinks = [
@@ -23,6 +25,12 @@ function Footer() {
     { name: "LinkedIn", icon: <FaLinkedin /> },
     { name: "Twitter", icon: <FaTwitter /> },
   ];
+  const navigate = useNavigate();
+
+  const navigation=()=>
+  {
+    navigate("/adminLogin")
+  }
 
   return (
     <footer className="bg-gradient-to-b from-[#001d3d] to-[#000814] text-white relative">
@@ -121,12 +129,9 @@ function Footer() {
               Privacy Policy
             </a>
           </div>
-          <a
-            href="/admin/dasbord"
-            className="absolute bottom-8 right-4 text-[#001d3d] py-2 px-4 rounded-lg font-bold transition duration-300 hover:bg-[#3f37c9] hover:text-white hidden xl:block"
-          >
-            Admin
-          </a>
+        <Button onClick={navigation}>
+        Admin
+        </Button>
         </div>
       </div>
     </footer>

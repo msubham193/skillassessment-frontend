@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -6,21 +7,32 @@ import { useParams } from "react-router-dom";
 const IndividualStudentMarksheet = () => {
   const { studentId } = useParams();
   const [studentData, setStudentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/v1/student/${studentId}`
-        );
-        console.log(response.data.data.marks);
+        const response = await axios.get(`${server}/student/${studentId}`);
+        console.log(response.data.data);
         setStudentData(response.data.data.marks);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Display a loader while data is being fetched
+  }
+
+  if (!studentData) {
+    return <div>No data available</div>; // Handle the case when there's no data
+  }
+
   return (
     <div className="max-w-3xl mx-auto p-8 border border-green-600 rounded-lg font-cambria">
       <div className="flex justify-between mb-3">
@@ -51,21 +63,19 @@ const IndividualStudentMarksheet = () => {
             <td className="flex-1 border px-2 font-medium">
               Name of Candidate:
             </td>
-            <td className="flex-1 border px-2">{studentData.studentName}</td>
+            {/* <td className="flex-1 border px-2">{studentData.studentName}</td> */}
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Son/Daughter/Ward of:</td>
-            <td className="flex-1 border px-2">
-              {/* Add Parent Name here if available */}
-            </td>
+            <td className="flex-1 border px-2">{/* {stude} */}</td>
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Qualification Name:</td>
-            <td className="flex-1 border px-2">{studentData.courseName}</td>
+            {/* <td className="flex-1 border px-2">{studentData.courseName}</td> */}
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Qualification Code:</td>
-            <td className="flex-1 border px-2">{studentData.batchABN}</td>
+            {/* <td className="flex-1 border px-2">{studentData.batchABN}</td> */}
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">NSQF Level:</td>
@@ -75,7 +85,7 @@ const IndividualStudentMarksheet = () => {
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Sector:</td>
-            <td className="flex-1 border px-2">{studentData.sectorName}</td>
+            {/* <td className="flex-1 border px-2">{studentData.sectorName}</td> */}
           </tr>
           <tr className="flex">
             <td className="flex-1 border px-2">Duration:</td>
@@ -93,9 +103,9 @@ const IndividualStudentMarksheet = () => {
             <td className="border w-1/2">Date of Birth</td>
           </tr>
           <tr className="text-center">
-            <td className="border">{studentData.studentRedgNo}</td>
+            {/* <td className="border">{studentData.studentRedgNo}</td> */}
             <td className="border">
-              {new Date(studentData.studentDOB).toLocaleDateString()}
+              {/* {new Date(studentData.studentDOB).toLocaleDateString()} */}
             </td>
           </tr>
         </tbody>
@@ -108,12 +118,12 @@ const IndividualStudentMarksheet = () => {
             <td className="border w-1/2">Assessment Date</td>
           </tr>
           <tr className="text-center">
-            <td className="border">{studentData.batchId}</td>
-            <td className="border">
-              {studentData.examDate
-                ? new Date(studentData.examDate).toLocaleDateString()
-                : "N/A"}
-            </td>
+            {/* <td className="border">{studentData.batchId}</td> */}
+            {/* <td className="border"> */}
+            {/* {studentData.examDate */}
+            {/* ? new Date(studentData.examDate).toLocaleDateString() */}
+            {/* : "N/A"} */}
+            {/* </td> */}
           </tr>
         </tbody>
       </table>
@@ -128,14 +138,14 @@ const IndividualStudentMarksheet = () => {
           </tr>
         </thead>
         <tbody>
-          {studentData.Nos.map((nos, index) => (
+          {/* {studentData.Nos.map((nos, index) => (
             <tr key={index}>
               <td className="border">{nos._id}</td>
               <td className="border">{nos.name}</td>
               <td className="border">{nos.passMark}</td>
               <td className="border">{nos.MarksObtained}</td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
 
@@ -146,13 +156,13 @@ const IndividualStudentMarksheet = () => {
               Total Marks Obtained
             </td>
             <td className="w-1/2 border px-2 text-center">
-              {studentData.total}
+              {/* {studentData.total} */}
             </td>
           </tr>
           <tr className="flex">
             <td className="w-1/2 border px-2 text-center font-medium">Grade</td>
             <td className="w-1/2 border px-2 text-center">
-              {studentData.Grade}
+              {/* {studentData.Grade} */}
             </td>
           </tr>
           <tr className="flex">
@@ -160,7 +170,7 @@ const IndividualStudentMarksheet = () => {
               Result
             </td>
             <td className="w-1/2 border px-2 text-center">
-              {studentData.Result}
+              {/* {studentData.Result} */}
             </td>
           </tr>
         </tbody>

@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { FaFileUpload } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import { server } from "@/main";
 
 const PaymentStatus = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const PaymentStatus = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/v1/invoice/aa/${assessmentAgencyId[0]}`
+          `${server}/invoice/aa/${assessmentAgencyId[0]}`
         );
         console.log(response.data.data); // Ensure the structure matches your needs
         const data = response.data.data;
@@ -52,7 +53,7 @@ const PaymentStatus = () => {
     console.log(invoiceId);
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/v1/invoice/upload/${invoiceId}`,
+        `${server}/invoice/upload/${invoiceId}`,
         formData,
         {
           headers: {

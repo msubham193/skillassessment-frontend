@@ -23,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { coursesData } from "@/Components/Traning Partner/Atoms/courseAtom";
 import { sectorData } from "@/Components/Traning Partner/Atoms/sectorAtom";
 import { validationSchema } from "@/Components/Traning Partner/utils/validation";
+import { server } from "@/main";
 
 const Signup = () => {
   const inputLabels = [
@@ -170,7 +171,7 @@ const Signup = () => {
   // Function to fetch sectors from API
   const fetchSectors = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/v1/sector/all", {
+      const response = await fetch(`${server}/sector/all`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -229,7 +230,7 @@ const Signup = () => {
       await validationSchema.validate(inputs, { abortEarly: false });
       const jsondata = JSON.stringify(inputs);
 
-      const response = await fetch("http://localhost:8000/api/v1/tp", {
+      const response = await fetch(`${server}/tp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

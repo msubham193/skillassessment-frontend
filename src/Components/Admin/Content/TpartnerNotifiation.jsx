@@ -17,6 +17,11 @@ const TpartnerNotifiation = () => {
         setLoding(true)
         axios.get(`${server}/tp/status/pending`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         }).then((response)=>
         {
           setLoding(false)

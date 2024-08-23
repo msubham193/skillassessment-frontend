@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +14,7 @@ const Marksheet = () => {
         const state = localStorage.getItem("state");
         const scheme = localStorage.getItem("scheme");
         const response = await axios.get(
-          `http://localhost:8000/api/v1/sna/batches/all/query?state=${state}&scheme=${scheme}`
+          `${server}/sna/batches/all/query?state=${state}&scheme=${scheme}`
         );
         console.log(response);
         if (response.data && Array.isArray(response.data.data)) {
@@ -32,7 +33,7 @@ const Marksheet = () => {
 
   const handleRowClick = (batchId) => {
     console.log(batchId);
-    navigate(`/batchresult/${batchId}`);
+    navigate(`/sna/batchresult/${batchId}`);
   };
   return (
     <div className="overflow-x-auto p-2 rounded-md shadow-sm">
@@ -42,7 +43,7 @@ const Marksheet = () => {
       </p>
       <table className="min-w-full bg-white border">
         <thead>
-          <tr>
+          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             <th className="py-2 px-4 border-b">TP Name</th>
             <th className="py-2 px-4 border-b">Batch ABN</th>
             <th className="py-2 px-4 border-b">Center</th>
@@ -52,7 +53,7 @@ const Marksheet = () => {
             <th className="py-2 px-4 border-b">Result Published</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-gray-800 text-sm">
           {batchData.map((batch) => (
             <tr key={batch._id} onClick={() => handleRowClick(batch._id)}>
               <td className="py-2 px-4 border-b text-center">

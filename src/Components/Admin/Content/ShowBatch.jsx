@@ -12,6 +12,11 @@ const ShowBatch = ({ setBatch }) => {
         setLoading(true);
         axios.get(`${server}/batch`, {
           withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
         }).then((response) => {
           setLoading(false);
           setBatchdata(response.data.data.reverse());

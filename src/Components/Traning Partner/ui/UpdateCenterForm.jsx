@@ -16,8 +16,8 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
     const fetchSectorsAndSchemes = async () => {
       try {
         const [sectorsResponse, schemesResponse] = await Promise.all([
-          fetch("http://localhost:8000/api/v1/sector/all"),
-          fetch("http://localhost:8000/api/v1/scheme")
+          fetch(`${server}/sector/all`),
+          fetch(`${server}/scheme`)
         ]);
 
         const sectorsData = await sectorsResponse.json();

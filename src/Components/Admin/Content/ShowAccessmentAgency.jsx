@@ -23,6 +23,11 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state,setassess
                       course
                   },
                   withCredentials: true,
+                  headers: {
+            "Cache-Control": "no-cache",
+            'Pragma': "no-cache",
+            'Expires': "0",
+          },
               });
               // console.log(response.data.data)
               setAssessmentAgency(response.data.data.reverse());

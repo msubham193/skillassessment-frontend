@@ -15,6 +15,7 @@ import { Button } from "@/components(shadcn)/ui/button";
 import { Checkbox } from "@/components(shadcn)/ui/checkbox";
 import { useRecoilValue } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
+import { server } from "@/main";
 export default function CreateCenter() {
   const navigate = useNavigate();
 
@@ -82,7 +83,7 @@ export default function CreateCenter() {
   useEffect(() => {
     const fetchAllSectors = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/sector/all", {
+        const response = await fetch(`${server}/sector/all`, {
           method: "GET",
         });
 
@@ -104,7 +105,7 @@ export default function CreateCenter() {
   useEffect(() => {
     const fetchAllSchemes = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/scheme", {
+        const response = await fetch(`${server}/scheme`, {
           method: "GET",
         });
 
@@ -151,7 +152,7 @@ export default function CreateCenter() {
         formDataToSend.append(`sectors[${index}]`, sector);
       });
 
-      const response = await fetch("http://localhost:8000/api/v1/center", {
+      const response = await fetch(`${server}/center`, {
         method: "POST",
         headers: {
           "x-access-token": localStorage.getItem("token"),

@@ -70,7 +70,7 @@ import AssessmentSchedule from "./Pages/Assessment Agency/AssessmentSchedule";
 import BatchManagementPage from "./Pages/Assessment Agency/BatchManagementPage";
 import AddAssessorForm from "./Components/Assessment Agency/ui/AddAssessorForm";
 import PaymentStatus from "./Pages/Assessment Agency/PaymentStatus";
-import BankDetailsForm from "./Pages/Assessment Agency/BatchDetails";
+import BankDetailsForm from "./Components/Assessment Agency/ui/Bankdetails";
 import UploadDocuments from "./Pages/Assessment Agency/UploadDocuments";
 import GenerateInvoice from "./Components/Assessment Agency/ui/GenerateInvoice";
 import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
@@ -97,6 +97,7 @@ import Resource from "./Pages/Static/Resource";
 import ContactUs from "./Pages/Static/ContactUs";
 import PortalLogin from "./Pages/Static/PortalLogin";
 import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
+import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
 
 
 const App = () => {
@@ -156,7 +157,7 @@ const App = () => {
           <Route path="partner" element={<Partners />} />
           <Route path="tp" element={<TraningAndAssignment />} />
           <Route path="qualification" element={<Qualification />} />
-          <Route path="notification" element={<NewsNotification />} />
+          <Route path="notification" element={<NewsNotification />} /> 
           <Route path="resource" element={<Resource />} />
           <Route path="contact" element={<ContactUs />} />
           <Route path="portal" element={<PortalLogin />} />
@@ -352,6 +353,7 @@ const App = () => {
             <Route path="paymentstatus" element={<PaymentStatus />} />
             <Route path="invoices" element={<TrackInvoices />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="assessors" element={<AssessorsPage />} />
             <Route path="students/:batchId" element={<StudentList />} />
             <Route
               path="markabsent/:batchId"
@@ -363,7 +365,7 @@ const App = () => {
               element={<BatchDetailsofAA />}
             />
             <Route path="bankdetails" element={<BankDetailsForm />} />
-            <Route path="uploaddetails/:examId" element={<UploadDocuments />} />
+            <Route path="uploaddetails/:examId/:batchId" element={<UploadDocuments />} />
           </Route>
           <Route path="generateinvoice" element={<GenerateInvoice />} />
           <Route
@@ -374,9 +376,9 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        <Route path="snalogin" element={<SNALogin />} />
+        <Route path="snalogin" element={<SNALogin />} /> 
         <Route element={<SNAProtectedRoutes />}>
-          <Route path="/" element={<SNALayout />}>
+          <Route path="/sna" element={<SNALayout />}>
             <Route path="snadashboard" element={<SNADashboard />} />
             <Route path="trainingcenters" element={<TCDetails />} />
             <Route path="trainingbatches" element={<TBDetails />} />

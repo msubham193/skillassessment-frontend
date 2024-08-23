@@ -300,7 +300,7 @@ const App = () => {
         {/* traning partner routs */}
         <Route
           path="/trainingPartner/dashboard"
-          // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}
+          // element={<ProtectedRoute  applicationStatus={tpData.applicationStatus} element={<Dashboard />} />}
           element={<Dashboard />}
         />
         <Route path="/trainingPartner/signup" exact element={<Signup />} />

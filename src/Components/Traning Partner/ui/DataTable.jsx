@@ -10,11 +10,6 @@ import {
 import { useRecoilValue, useRecoilState } from "recoil";
 import { batchDataAtoms } from "../Atoms/batchatom";
 import { Button } from "@/components(shadcn)/ui/button";
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import { StudentDataAtom } from "../Atoms/studentAtom";
 import ProfilePictureUploader from "./ProfilePictureUploader";

@@ -64,20 +64,32 @@ const CreateBatch = () => {
       console.log("Missing required data for fetching centers");
       return;
     }
-
+  
     setIsLoading(true);
+    setError(null); // Clear any previous errors
+  
     try {
       const response = await fetch(
-        `${server}/sna/centers/tp/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`
+        `${server}/sna/centers/tp/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`,
+        { method: "GET" }
       );
+  
       if (!response.ok) {
         throw new Error("Failed to fetch centers");
       }
+  
       const data = await response.json();
-      setCenters(data.data || []);
+  
+      if (data.data && data.data.length > 0) {
+        setCenters(data.data);
+      } else {
+        setCenters([]); 
+        setError("No centers found for the selected criteria.");
+      }
     } catch (error) {
       console.error("Error fetching centers:", error);
       setError("Failed to fetch centers. Please try again.");
+      setCenters([]); 
     } finally {
       setIsLoading(false);
     }

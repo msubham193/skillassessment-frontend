@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import { Route, Routes,useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import TpDetails from "./Pages/Admin/TpDetails";
 import AaDetails from "./Pages/Admin/AaDetails";
 import AaNotification from "./Pages/Admin/AccessmentAgeencyDAta";
@@ -70,7 +70,7 @@ import AssessmentSchedule from "./Pages/Assessment Agency/AssessmentSchedule";
 import BatchManagementPage from "./Pages/Assessment Agency/BatchManagementPage";
 import AddAssessorForm from "./Components/Assessment Agency/ui/AddAssessorForm";
 import PaymentStatus from "./Pages/Assessment Agency/PaymentStatus";
-import BankDetailsForm from "./Pages/Assessment Agency/BatchDetails";
+import BankDetailsForm from "./Components/Assessment Agency/ui/Bankdetails";
 import UploadDocuments from "./Pages/Assessment Agency/UploadDocuments";
 import GenerateInvoice from "./Components/Assessment Agency/ui/GenerateInvoice";
 import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
@@ -97,7 +97,7 @@ import Resource from "./Pages/Static/Resource";
 import ContactUs from "./Pages/Static/ContactUs";
 import PortalLogin from "./Pages/Static/PortalLogin";
 import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
-
+import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
 
 const App = () => {
   //code for admin
@@ -116,8 +116,6 @@ const App = () => {
       });
     }
   }, [setAuthState]);
-
-
 
   //code for traning partner
 
@@ -147,22 +145,21 @@ const App = () => {
   return (
     <div>
       <Routes>
-      
         {/* Static Pages */}
-        
+
         <Route path="/" element={<StaticLayout />}>
           <Route path="" element={<Home />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="partner" element={<Partners />} />
           <Route path="tp" element={<TraningAndAssignment />} />
           <Route path="qualification" element={<Qualification />} />
-          <Route path="notification" element={<NewsNotification />} /> 
+          <Route path="notification" element={<NewsNotification />} />
           <Route path="resource" element={<Resource />} />
           <Route path="contact" element={<ContactUs />} />
           <Route path="portal" element={<PortalLogin />} />
         </Route>
 
-         {/* Admin routs... */}
+        {/* Admin routs... */}
         <Route path="/adminLogin" exact element={<AdminLogin />} />
         <Route element={<ProtectedRout />}>
           {isAdmin?.email === specificEmail ? (
@@ -297,49 +294,49 @@ const App = () => {
           )}
         </Route>
         {/* traning partner routs */}
-        <Route
-          path="/trainingPartner/dashboard"
-          // element={<ProtectedRoute applicationStatus={tpData.applicationStatus}
-          element={<Dashboard />}
-        />
+        <Route path="/trainingPartner/signin" exact element={<Signin />} />
         <Route path="/trainingPartner/signup" exact element={<Signup />} />
         <Route path="/statusFail" exact element={<ApllicationStatusFail />} />
-        <Route path="/trainingPartner/signin" exact element={<Signin />} />
-        <Route path="/profile" exact element={<ProfilePopup />} />
-        <Route
-          path="/trainingPartner/dashboard/Teachers"
-          exact
-          element={<Teachers batchid={batchId} />}
-        />
-        <Route path="/CreateBatch" exact element={<CreateBatch />} />
-        <Route path="/Createcenter" exact element={<CreateCenter />} />
-        <Route path="/manageBatch" exact element={<ManageBatch />} />
-        <Route path="/updateCenter" exact element={<UpdateCenter />} />
-        <Route path="/transcript" exact element={<Transcript />} />
-        <Route path="/trainers" exact element={<AllTrainers />} />
-        <Route path="/centers" exact element={<Centers />} />
-        <Route
-          path="/completeBatchData/:completebatchId"
-          exact
-          element={<CompeteBtachData />}
-        />
-        <Route
-          path="/trainingPartner/dashboard/CreateBatch/addteacher/:id"
-          exact
-          element={<AddTeacher />}
-        />
-        <Route
-          path="/trainingPartner/dashboard/CreateBatch/addstudent/:id"
-          exact
-          element={<AddStudent>{"Add Student"}</AddStudent>}
-        />
-        <Route path="/trainingPartner/dashboard/:batchId" element={<Batch />} />
-        <Route
-          path="/trainingPartner/dashboard/student/:Id"
-          element={<Student />}
-        />
-        <Route path="//trainingPartner/setting" exact element={<Setting />} />
-
+        <Route element={<ProtectedRoute />}>
+          <Route path="/trainingPartner/dashboard" element={<Dashboard />} />
+          <Route path="/profile" exact element={<ProfilePopup />} />
+          <Route
+            path="/trainingPartner/dashboard/Teachers"
+            exact
+            element={<Teachers batchid={batchId} />}
+          />
+          <Route path="/CreateBatch" exact element={<CreateBatch />} />
+          <Route path="/Createcenter" exact element={<CreateCenter />} />
+          <Route path="/manageBatch" exact element={<ManageBatch />} />
+          <Route path="/updateCenter" exact element={<UpdateCenter />} />
+          <Route path="/transcript" exact element={<Transcript />} />
+          <Route path="/trainers" exact element={<AllTrainers />} />
+          <Route path="/centers" exact element={<Centers />} />
+          <Route
+            path="/completeBatchData/:completebatchId"
+            exact
+            element={<CompeteBtachData />}
+          />
+          <Route
+            path="/trainingPartner/dashboard/CreateBatch/addteacher/:id"
+            exact
+            element={<AddTeacher />}
+          />
+          <Route
+            path="/trainingPartner/dashboard/CreateBatch/addstudent/:id"
+            exact
+            element={<AddStudent>{"Add Student"}</AddStudent>}
+          />
+          <Route
+            path="/trainingPartner/dashboard/:batchId"
+            element={<Batch />}
+          />
+          <Route
+            path="/trainingPartner/dashboard/student/:Id"
+            element={<Student />}
+          />
+          <Route path="//trainingPartner/setting" exact element={<Setting />} />
+        </Route>
         {/* Routes for Assessment Agency */}
         <Route path="registration" element={<RegistrationForm />} />
         <Route path="login" element={<Assessorlogin />} />
@@ -352,6 +349,7 @@ const App = () => {
             <Route path="paymentstatus" element={<PaymentStatus />} />
             <Route path="invoices" element={<TrackInvoices />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="assessors" element={<AssessorsPage />} />
             <Route path="students/:batchId" element={<StudentList />} />
             <Route
               path="markabsent/:batchId"
@@ -363,7 +361,10 @@ const App = () => {
               element={<BatchDetailsofAA />}
             />
             <Route path="bankdetails" element={<BankDetailsForm />} />
-            <Route path="uploaddetails/:examId" element={<UploadDocuments />} />
+            <Route
+              path="uploaddetails/:examId/:batchId"
+              element={<UploadDocuments />}
+            />
           </Route>
           <Route path="generateinvoice" element={<GenerateInvoice />} />
           <Route
@@ -374,7 +375,7 @@ const App = () => {
         </Route>
 
         {/* SNA Routes */}
-        <Route path="snalogin" element={<SNALogin />} /> 
+        <Route path="snalogin" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
             <Route path="snadashboard" element={<SNADashboard />} />
@@ -400,13 +401,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
-
-
-
-
-

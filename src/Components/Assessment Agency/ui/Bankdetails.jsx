@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { assessmentAgencyIdState } from "../../../state/atom/AssessmentAgencyAtoms";
+import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import toast, { Toaster } from "react-hot-toast";
 import { server } from "@/main";
 

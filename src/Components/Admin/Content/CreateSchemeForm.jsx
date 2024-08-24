@@ -84,7 +84,7 @@ const CreateSchemeForm = () => {
             </SelectTrigger>
             <SelectContent>
             
-              <SelectItem value="corporate">Corporate</SelectItem>
+              <SelectItem value="Corporate">Corporate</SelectItem>
               <SelectItem value="State Government">State Government</SelectItem>
               <SelectItem value="Central Government">Central Government</SelectItem>
             </SelectContent>

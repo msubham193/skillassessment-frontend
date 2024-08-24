@@ -37,26 +37,30 @@ const CreateCertificate = ({children}) => {
             {/* For now  there is nothing to add in fecture if there some data  thenn we will put there */}
           </div>
         </div>
-          <Tabs defaultValue="AaCertificate" className="space-y-4">
+          <Tabs defaultValue="AaMarkSheet" className="space-y-4">
           <TabsList>
-            <TabsTrigger
+         {/*
+             <TabsTrigger
               onClick={() => setSelectedTab("AaCertificate")}
               value="AaCertificate"
             >
               Assessment Agency Certificate
             </TabsTrigger>
+          */}
             <TabsTrigger
               onClick={() => setSelectedTab("AaMarkSheet")}
               value="AaMarkSheet"
             >
             Assessment Agency MarkSheet
             </TabsTrigger>
-            <TabsTrigger
+           {/*
+             <TabsTrigger
               onClick={() => setSelectedTab("TpCertificate")}
               value="TpCertificate"
             >
               Training Partner Certificate
             </TabsTrigger>
+            */}
             <TabsTrigger
               onClick={() => setSelectedTab("TpMarkSheet")}
               value="TpMarkSheet"

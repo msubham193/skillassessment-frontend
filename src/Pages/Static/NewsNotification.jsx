@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { server } from "@/main";
 
 const NewsNotification = () => {
   const [notifications, setNotifications] = useState([]);
@@ -8,10 +9,16 @@ const NewsNotification = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8001/api/notifications/all"
-        );
-        setNotifications(response.data);
+        const response = await axios.get(`${server}/admin/notifications`, {
+          withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        });
+        setNotifications(response.data.data);
+        console.log(response.data.data)
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
@@ -60,7 +67,7 @@ const NewsNotification = () => {
                 <tr key={notification._id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {notification.heading}
+                      {notification.title}
                     </div>
                   </td>
                   <td className="px-6 py-4">

@@ -54,7 +54,7 @@ const Signup = () => {
       label: "Regional State Office District",
     },
     { name: "regionalStateOfficeCity", label: "Regional State Office City" },
-    { name: "regionalStateOfficeState", label: "Regional State Office State" },
+    { name: "regionalStateOfficeState", label: "Regional Office State" },
     { name: "regionalStateOfficePin", label: "Regional State Office PIN" },
     {
       name: "regionalStateOfficeTelephone",
@@ -229,7 +229,6 @@ const Signup = () => {
     try {
       await validationSchema.validate(inputs, { abortEarly: false });
       const jsondata = JSON.stringify(inputs);
-
       const response = await fetch(`${server}/tp`, {
         method: "POST",
         headers: {
@@ -237,28 +236,31 @@ const Signup = () => {
         },
         body: jsondata,
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         toast.success("Form submitted successfully!");
         setInputs({});
         navigate("/trainingPartner/signin");
       } else {
-        console.log(data);
+        console.log("Server Error: ", data);
         throw new Error(data.message || "Failed to submit form");
       }
     } catch (error) {
+      console.log("Submission error: ", error); // Debugging line
       const newError = {};
       if (error.inner) {
         error.inner.forEach((err) => {
           newError[err.path] = err.message;
         });
         setErrors(newError);
+        toast.error("Please fill out all required fields correctly.");
       } else {
-        console.log(error);
+        toast.error(error.message);
       }
     }
   };
+  
 
   // Render input based on input type
   const renderInput = (labelObj) => {
@@ -295,7 +297,31 @@ const Signup = () => {
           </SelectContent>
         </Select>
       );
-    } else if (name === "sector") {
+    }
+    else if (name === "organizationCategory") {
+      return (
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Organization Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="•	Institute set up by Govt">
+            Institute set up by Govt
+            </SelectItem>
+            <SelectItem value="Institute set up by Corporate">Institute set up by Corporate</SelectItem>
+            <SelectItem value="Institute set up by Trust / NGO / Society">Institute set up by Trust / NGO / Society</SelectItem>
+            <SelectItem value="Institute set up by Govt.">Institute set up by Govt.</SelectItem>
+            <SelectItem value="Corporate">Corporate</SelectItem>
+            <SelectItem value="Standalone Training Institute">Standalone Training Institute</SelectItem>
+            <SelectItem value="Others">Others</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+    }
+    else if (name === "sector") {
       return (
         <Select
           onValueChange={(value) => handleChange(name, value)}
@@ -315,6 +341,25 @@ const Signup = () => {
       );
     }
     else if (name === "registeredOfficeState") {
+      return (
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select state" />
+          </SelectTrigger>
+          <SelectContent>
+            {indianStates.map((state) => (
+              <SelectItem key={state} value={state}>
+                {state}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    }
+    else if (name === "regionalStateOfficeState") {
       return (
         <Select
           onValueChange={(value) => handleChange(name, value)}
@@ -425,3 +470,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

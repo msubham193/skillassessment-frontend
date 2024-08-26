@@ -8,6 +8,16 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { format, differenceInDays, differenceInHours } from "date-fns";
 import { server } from "@/main";
+import { StudentvalidationSchema } from "@/Components/Traning Partner/utils/StudentValidation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components(shadcn)/ui/select";
+
+
 
 const AddStudent = () => {
   const { id: batchId } = useParams();
@@ -20,7 +30,67 @@ const AddStudent = () => {
     "traininstartdate", "trainingenddate", "trainingHours", "totalhours",
     "totaldays", "cenid", "redg_No","MPR_Id","SNA_Id"
   ];
-
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
+  const labelMap = {
+    name: "Full Name",
+    fathername: "Father's Name",
+    mothername: "Mother's Name",
+    dob: "Date of Birth",
+    gender: "Gender",
+    religion: "Religion",
+    category: "Category",
+    nationality: "Nationality",
+    generalqualification: "General Qualification",
+    address: "Address",
+    state: "State",
+    district: "District",
+    city: "City",
+    pincode: "PIN Code",
+    mobile: "Mobile Number",
+    email: "Email Address",
+    sector_name: "Sector Name",
+    course: "Course",
+    module: "Module",
+    uid: "UID",
+    traininstartdate: "Training Start Date",
+    trainingenddate: "Training End Date",
+    trainingHours: "Training Hours",
+    totalhours: "Total Hours",
+    totaldays: "Total Days",
+    cenid: "Center ID",
+    redg_No: "Registration Number",
+    MPR_Id: "MPR ID",
+    SNA_Id: "SNA ID"
+  };
   const dateFields = ["dob", "traininstartdate", "trainingenddate"];
   const [batchdata, setbatchdata] = useState({});
   const [studentInputs, setStudentInputs] = useState(
@@ -29,6 +99,9 @@ const AddStudent = () => {
       return acc;
     }, {})
   );
+  console.log(studentInputs)
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,6 +109,7 @@ const AddStudent = () => {
       ...prevState,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
   };
 
   const calculateTrainingDuration = (startDate, endDate) => {
@@ -80,6 +154,7 @@ const AddStudent = () => {
 
       return newState;
     });
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
   };
 
   const fetchBatchdata = async () => {
@@ -126,9 +201,13 @@ const AddStudent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formattedInputs = { ...studentInputs };
-    console.log("formdata", formattedInputs);
+    setIsLoading(true);
+    setErrors({}); // Clear previous errors
     try {
+      await StudentvalidationSchema.validate(studentInputs, { abortEarly: false });
+      const formattedInputs = { ...studentInputs };
+      console.log("formdata", formattedInputs);
+      
       const response = await fetch(`${server}/batch/addstudent/${batchId}`, {
         method: "POST",
         headers: {
@@ -154,8 +233,19 @@ const AddStudent = () => {
         toast.error(data.message || "Failed to add student");
       }
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to add student");
+      if (error.name === 'ValidationError') {
+        const validationErrors = {};
+        error.inner.forEach((err) => {
+          validationErrors[err.path] = err.message;
+        });
+        setErrors(validationErrors);
+        toast.error("Please correct the errors in the form");
+      } else {
+        console.error("Error:", error);
+        toast.error("Failed to add student");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -166,26 +256,34 @@ const AddStudent = () => {
           <h1 className="text-xl font-semibold">Add Student</h1>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
-          {studentFields.map((field, index) => (
+        {studentFields.map((field, index) => (
             <div key={index} className="flex flex-col gap-2">
-              <Label htmlFor={field}>{field}</Label>
-              {['sector_name', 'course'].includes(field) ? (
-                <Input
-                  type="text"
-                  name={field}
-                  id={field}
-                  onChange={handleChange}
-                  value={studentInputs[field]}
-                  readOnly
-                />
-              ) : dateFields.includes(field) ? (
+              <Label htmlFor={field} className={errors[field] ? "text-red-500" : ""}>
+                {labelMap[field]}
+              </Label>
+              {field === 'state' ? (
+                <Select
+                  onValueChange={(value) => handleChange({ target: { name: 'state', value } })}
+                  value={studentInputs.state}
+                >
+                  <SelectTrigger className={errors.state ? "border-red-500" : ""}>
+                    <SelectValue placeholder="Select a state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {indianStates.map((state, idx) => (
+                      <SelectItem key={idx} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>)
+                 : dateFields.includes(field) ? (
                 <DatePicker
-                
                   selected={studentInputs[field] ? new Date(studentInputs[field]) : null}
                   onChange={(date) => handleDateChange(field, date)}
                   showYearDropdown
                   dateFormat="dd/MM/yyyy"
-                  className="w-full p-2 rounded-md"
+                  className={`w-full p-2 rounded-md ${errors[field] ? "border-red-500" : ""}`}
                 />
               ) : ['totalhours', 'totaldays', 'trainingHours'].includes(field) ? (
                 <Input
@@ -194,6 +292,7 @@ const AddStudent = () => {
                   id={field}
                   value={studentInputs[field]}
                   readOnly
+                  className={errors[field] ? "border-red-500" : ""}
                 />
               ) : (
                 <Input
@@ -202,11 +301,15 @@ const AddStudent = () => {
                   id={field}
                   onChange={handleChange}
                   value={studentInputs[field]}
+                  className={errors[field] ? "border-red-500" : ""}
                 />
               )}
+              {errors[field] && <p className="text-red-500 text-sm">{errors[field]}</p>}
             </div>
           ))}
-          <Button type="submit">Add Student</Button>
+          <Button type="submit" disabled={isLoading} className={Object.keys(errors).length > 0 ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"}>
+            {isLoading ? 'Adding Student...' : 'Add Student'}
+          </Button>
         </form>
       </div>
     </div>
@@ -214,4 +317,3 @@ const AddStudent = () => {
 };
 
 export default AddStudent;
-

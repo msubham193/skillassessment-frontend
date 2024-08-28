@@ -17,7 +17,7 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
       try {
         const [sectorsResponse, schemesResponse] = await Promise.all([
           fetch(`${server}/sector/all`),
-          fetch(`${server}/scheme`)
+          fetch(`${server}/scheme`),
         ]);
 
         const sectorsData = await sectorsResponse.json();
@@ -36,14 +36,14 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
   };
 
   const handleSchemeChange = (schemeName, isChecked) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       schemes: isChecked
         ? [...prevData.schemes, { schemeName }]
@@ -52,7 +52,7 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
   };
 
   const handleSectorChange = (sectorId, isChecked) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       sectors: isChecked
         ? [...prevData.sectors, sectorId]
@@ -88,7 +88,9 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
       }
     } catch (error) {
       console.error("Error in handleSubmit:", error);
-      toast.error(error.message || "An error occurred while updating the center");
+      toast.error(
+        error.message || "An error occurred while updating the center"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -126,6 +128,7 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
               value={formData.PRN_NO}
               onChange={handleInputChange}
               required
+              readOnly
             />
           </div>
 
@@ -156,10 +159,16 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
                 <div key={scheme._id} className="flex items-center">
                   <Checkbox
                     id={`scheme-${scheme._id}`}
-                    checked={formData.schemes.some(s => s.schemeName === scheme.name)}
-                    onCheckedChange={(checked) => handleSchemeChange(scheme.name, checked)}
+                    checked={formData.schemes.some(
+                      (s) => s.schemeName === scheme.name
+                    )}
+                    onCheckedChange={(checked) =>
+                      handleSchemeChange(scheme.name, checked)
+                    }
                   />
-                  <Label htmlFor={`scheme-${scheme._id}`} className="ml-2">{scheme.name}</Label>
+                  <Label htmlFor={`scheme-${scheme._id}`} className="ml-2">
+                    {scheme.name}
+                  </Label>
                 </div>
               ))}
             </div>
@@ -173,16 +182,22 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
                   <Checkbox
                     id={`sector-${sector._id}`}
                     checked={formData.sectors.includes(sector._id)}
-                    onCheckedChange={(checked) => handleSectorChange(sector._id, checked)}
+                    onCheckedChange={(checked) =>
+                      handleSectorChange(sector._id, checked)
+                    }
                   />
-                  <Label htmlFor={`sector-${sector._id}`} className="ml-2">{sector.name}</Label>
+                  <Label htmlFor={`sector-${sector._id}`} className="ml-2">
+                    {sector.name}
+                  </Label>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="flex justify-end space-x-4 mt-6">
-            <Button type="button" onClick={onClose} variant="outline">Cancel</Button>
+            <Button type="button" onClick={onClose} variant="outline">
+              Cancel
+            </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Updating..." : "Update Center"}
             </Button>

@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
  <App />
  </RecoilRoot>
   </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 )
 
 export const server="https://d31os5ub6ca4xs.cloudfront.net/api/v1";

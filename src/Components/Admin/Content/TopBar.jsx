@@ -99,16 +99,19 @@ const TopBar = () => {
 
     const interval1 = setInterval(() => {
       fetchData1();
-    }, 2 * 1000); // 20 seconds for assessment agency
+    }, 30 * 1000); // 30 seconds for assessment agency
+  
     const interval2 = setInterval(() => {
       fetchData2();
-    }, 2 * 1000); // 20 seconds for training partner
+    }, 30 * 1000); // 30 seconds for training partner
+  
     const interval3 = setInterval(() => {
       fetchData3();
-    }, 2 * 1000);
+    }, 30 * 1000); // 30 seconds for fetchData3
+  
     const interval4 = setInterval(() => {
       fetchData4();
-    }, 2 * 1000);
+    }, 30 * 1000);
 
     return () => {
       clearInterval(interval1);

@@ -269,7 +269,7 @@ const App = () => {
                 path="/admin/dasbord/Batch/payment/update/:id"
                 exact
                 element={<UpdateBatchBox />}
-              />
+              /> 
               <Route
                 path="/admin/dasbord/Aa/invoice/payment/update/:id"
                 exact

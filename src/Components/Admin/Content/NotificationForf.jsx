@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 const NotificationForf = () => {
   const [showButton, setShowButton] = useState(false);
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(""); 
   const [expiredAt, setExpiredAt] = useState(""); // Add state for expiredAt
   const [pdf, setPdf] = useState(null);
 
@@ -38,21 +38,23 @@ const NotificationForf = () => {
     setShowButton(true);
   
     // Create a FormData object to send file and form data
-    // const formData = new FormData();
-    // formData.append("title", title);
-    // formData.append("description", description);
-    // formData.append("expiredAt", expiredAt); // Add expiredAt to formData
-    // if (pdf) {
-    //   formData.append("pdf", pdf); // Make sure to append the selected file
-    // }
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("expiredAt", expiredAt);
+    if (pdf) {
+      formData.append("pdf", pdf); 
+    }
   
     try {
       // Send a POST request to your backend
-      // console.log(formData)
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+    }
       const response = await axios({
         method: 'post',
         url: `${server}/admin/notification`,
-        data: {title,description,expiredAt,pdf}
+        data: formData
       });
       toast.success("Notification created successfully!", {
         position: "top-center",
@@ -62,7 +64,6 @@ const NotificationForf = () => {
       });
       setTitle("");
       setDescription("");
-      setPdf("");
       setExpiredAt("");
     } catch (error) {
       toast.error("Something went wrong, try again later!", {

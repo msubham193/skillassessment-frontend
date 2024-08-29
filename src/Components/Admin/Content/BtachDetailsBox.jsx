@@ -117,7 +117,10 @@ const BtachDetailsBox = ({ id }) => {
               variant={"default"}
               className={"bg-green-700"}
             >
-              {"Assign to Agency"}
+            {
+             data?.isAssigned?"Already Assigned ":data?.paymentStatus===false?"Batch Payment Not Completed":"Assign to Agency"
+            }
+            
             </Button>
           </CreateExam>
           {/* here admin can see the result of the  student */}

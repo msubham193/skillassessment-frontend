@@ -169,15 +169,15 @@ const columns = [
     header: "Redg No",
   },
   {
-    accessorKey: "Theory",
+    accessorKey: "totalTheorymark",
     header: "Theory mark",
   },
   {
-    accessorKey: "practical",
+    accessorKey: "totalPracticalMark",
     header: "Practical mark",
   },
   {
-    accessorKey: "viva",
+    accessorKey: "totalVivaMark",
     header: "Viva mark",
   },
   {

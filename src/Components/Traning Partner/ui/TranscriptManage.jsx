@@ -178,56 +178,64 @@ const TranscriptManage = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
-      {batches.length > 0 ? (
-        batches.map((batch) => (
-          batch.paymentStatus === true && (
+<div className="bg-gray-100 shadow-md rounded-lg overflow-hidden p-4">
+  {batches.length > 0 ? (
+    batches
+      .filter(batch => batch.paymentStatus === true)
+      .map(batch => (
+        <div
+          key={batch._id}
+          className="py-4 px-6 bg-white border border-gray-300 shadow-md rounded-lg mb-4 cursor-pointer transition-transform transform hover:scale-105"
+          onClick={() => handleClick(batch._id)}
+        >
+          <div className="flex justify-between items-center gap-3">
+            <div className="text-gray-800 font-semibold w-1/4">{batch.courseName}</div>
+            <div className="text-gray-600 w-1/4">{batch.ABN_Number}</div>
+            <div className="text-gray-600 w-1/4 text-center">{batch.students.length}</div>
             <div
-              key={batch._id}
-              className="py-5 px-5 bg-transparent gap-2 cursor-pointer"
-              onClick={() => handleClick(batch._id)}
+              className={`w-1/4 text-center py-1 px-2 rounded-md ${getStatusClass(batch.status)} text-white`}
             >
-              <div className="flex justify-between font-bold w-full items-center gap-3">
-                <div className="text-black w-full">{batch.courseName}</div>
-                <div className="text-black w-full">{batch.ABN_Number}</div>
-                <div className="text-black w-full">{batch.students.length}</div>
-                <div
-                  className={`w-full items-center bg-opacity-25 rounded-md p-1 ${getStatusClass(
-                    batch.status
-                  )}`}
-                >
-                  {batch.status}
-                </div>
-                <div className="flex gap-2">
-                  {/* <Button 
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      handleMarkSheetDownload(batch._id); 
-                    }}
-                    disabled={loadingStates[batch._id]}
-                  >
-                    {loadingStates[batch._id] ? 'Loading...' : <><Download /> MarkSheet</>}
-                  </Button>
-                  <Button onClick={(e) => { e.stopPropagation(); handleCertificateDownload(batch._id); }}>
-                    <Download /> Certificate
-                  </Button> */}
-                </div>
-              </div>
+              {batch.status}
             </div>
-          )
-        ))
-      ) : (
-        <div>No completed batches found</div>
-      )}
-      
-      <div style={{ display: 'none' }}>
-        <GenerateMarksheetFrom 
-          ref={componentRef} 
-          data={currentStudentId && studentData ? generateDummyData(studentData) : null} 
-          isGeneratingPDF={true} // Pass the prop indicating PDF generation
-        />
-      </div>
-    </div>
+          </div>
+          <div className="flex justify-end gap-2 mt-4">
+            {/* Uncomment and adjust buttons as needed */}
+            {/* <Button 
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                handleMarkSheetDownload(batch._id); 
+              }}
+              disabled={loadingStates[batch._id]}
+              className="bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
+            >
+              {loadingStates[batch._id] ? 'Loading...' : <><Download /> MarkSheet</>}
+            </Button>
+            <Button
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                handleCertificateDownload(batch._id); 
+              }}
+              className="bg-green-500 text-white hover:bg-green-600"
+            >
+              <Download /> Certificate
+            </Button> */}
+          </div>
+        </div>
+      ))
+  ) : (
+    <div className="text-center text-gray-600 py-4">No completed batches found</div>
+  )}
+  
+  <div style={{ display: 'none' }}>
+    <GenerateMarksheetFrom 
+      ref={componentRef} 
+      data={currentStudentId && studentData ? generateDummyData(studentData) : null} 
+      isGeneratingPDF={true} // Pass the prop indicating PDF generation
+    />
+  </div>
+</div>
+
+
   );
 };
 

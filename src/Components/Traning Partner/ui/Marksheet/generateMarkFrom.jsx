@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-
+import QRCode from 'qrcode.react';
 const GenerateMarksheetFrom = forwardRef((props, ref) => {
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
@@ -24,6 +24,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
     result,
     dateOfIssue,
     certificateNo,
+    studentId
   } = props.data;
 
   return (
@@ -147,7 +148,9 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
 
       <div className="flex justify-between items-end mt-4">
         <div>
-          <img src="/placeholder.svg" alt="QR Code" className="w-16 h-16 mb-2" />
+        <div className='mb-6'>
+        <QRCode value={`https://student-details-by-qr-scan.vercel.app/${studentId}`} size={60} />
+        </div>
           <div className="text-sm">
             <p>Date of Issue: <span>{dateOfIssue}</span></p>
             <p>Certificate No: <span>{certificateNo}</span></p>

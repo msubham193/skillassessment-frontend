@@ -288,6 +288,12 @@ const Signup = () => {
             className="w-full p-2 pl-10 border rounded text-left font-normal"
             placeholderText="Pick a date"
             dateFormat="PPP"
+            showYearDropdown
+           showMonthDropdown
+            dropdownMode="select" 
+            yearDropdownItemNumber={5} 
+            scrollableYearDropdown 
+            scrollableMonthYearDropdown 
           />
           <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         </div>

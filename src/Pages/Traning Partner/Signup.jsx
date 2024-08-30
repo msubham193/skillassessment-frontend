@@ -249,12 +249,25 @@ const Signup = () => {
     } catch (error) {
       console.log("Submission error: ", error); // Debugging line
       const newError = {};
+      let firstErrorField = null;
       if (error.inner) {
         error.inner.forEach((err) => {
           newError[err.path] = err.message;
+          if (!firstErrorField) {
+            firstErrorField = err.path;
+          }
         });
         setErrors(newError);
         toast.error("Please fill out all required fields correctly.");
+        
+        // Redirect to the page with the first error
+        if (firstErrorField) {
+          const errorFieldIndex = inputLabels.findIndex(
+            (input) => input.name === firstErrorField
+          );
+          const errorPage = Math.floor(errorFieldIndex / inputsPerPage);
+          setCurrentPage(errorPage);
+        }
       } else {
         toast.error(error.message);
       }

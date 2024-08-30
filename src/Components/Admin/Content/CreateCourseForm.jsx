@@ -18,7 +18,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const CreateCourseForm = () => {
-  const [nos, setNos] = useState([
+  const [nos, setNos] = useState([ 
     {
       description: "",
       code: "",
@@ -136,10 +136,7 @@ const CreateCourseForm = () => {
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Create Course!</h2>
-          <p className="text-muted-foreground">
-            Here&apos;you can create Course or Sector for trainingPartner!
-          </p>
+        
         </div>
       </div>
       {/* Form for creating course and selecting sector */}
@@ -153,7 +150,7 @@ const CreateCourseForm = () => {
             className="flex-1 py-6"
           />
           <Select onValueChange={handleSectorSelect}>
-            <SelectTrigger className="w-[40px] h-[40px] border-none absolute right-[445px]"></SelectTrigger>
+            <SelectTrigger className="w-[40px] h-[40px] border-none absolute right-[473px] bg-purple-400"></SelectTrigger>
             <SelectContent>
               {sectors.map((sector) => (
                 <SelectItem key={sector.id} value={sector.name}>

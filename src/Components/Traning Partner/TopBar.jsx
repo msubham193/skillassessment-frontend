@@ -16,7 +16,6 @@ import {
 } from "@/components(shadcn)/ui/avatar";
 import ProfilePopup from "@/Pages/Traning Partner/ProfilePopup";
 import Setting from "@/Pages/Traning Partner/Setting";
-import NotificationPopver from "./ui/NotificationPopver";
 import logo from "./images/logo.png";
 
 function TopBar() {
@@ -52,7 +51,7 @@ function TopBar() {
           Training Partner Dashboard
         </span>
         <div className="flex items-center justify-center gap-4">
-          <NotificationPopver />
+          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

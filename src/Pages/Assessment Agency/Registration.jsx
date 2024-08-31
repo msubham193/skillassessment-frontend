@@ -39,13 +39,16 @@ const RegistrationForm = () => {
   const [courseOptions, setCourseOptions] = useState([]);
   const [sectorsOption, setSectorsOption] = useState([]);
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${server}/sector/all`
-        );
+        const response = await axios.get(`${server}/sector/all`);
         if (response.data.success) {
           const sectorNames = response.data.data.map((sector) => sector.name);
           setSectorsOption(sectorNames);
@@ -61,9 +64,7 @@ const RegistrationForm = () => {
     const fetchCourses = async () => {
       console.log(sectors);
       try {
-        const response = await axios.get(
-          `${server}/sector?name=${sectors}`
-        );
+        const response = await axios.get(`${server}/sector?name=${sectors}`);
         if (
           response.data &&
           response.data.data &&
@@ -80,6 +81,21 @@ const RegistrationForm = () => {
     };
     fetchCourses();
   }, [sectors]);
+
+  const validatePasswords = (value, fieldName) => {
+    let newErrors = { ...errors };
+
+    if (fieldName === "password" && value !== confirmPassword) {
+      newErrors.password = "Passwords do not match";
+    } else if (fieldName === "confirmPassword" && value !== password) {
+      newErrors.confirmPassword = "Passwords do not match";
+    } else {
+      delete newErrors.password;
+      delete newErrors.confirmPassword;
+    }
+
+    setErrors(newErrors);
+  };
 
   const validatePAN = (pan) => {
     const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
@@ -147,9 +163,15 @@ const RegistrationForm = () => {
         break;
       case "SPOC_EMAIL":
         setSPOC_EMAIL(value);
+        if (!validateEmail(value))
+          newErrors.SPOC_EMAIL = "Invalid email format";
+        else delete newErrors.SPOC_EMAIL;
         break;
       case "SPOC_CONTACT_NO":
         setSPOC_CONTACT_NO(value);
+        if (!validatePhoneNumber(value))
+          newErrors.SPOC_CONTACT_NO = "Invalid phone number";
+        else delete newErrors.SPOC_CONTACT_NO;
         break;
       case "legalStatusOfTheOrganization":
         setLegalStatusOfTheOrganization(value);
@@ -181,22 +203,13 @@ const RegistrationForm = () => {
       case "total_no_of_certified_Assessor":
         setTotal_no_of_certified_Assessor(value);
         break;
-      // case "LETTER_OF_NCVET":
-      //   if (files && files[0]) {
-      //     const file = files[0];
-      //     if (file.type === "application/pdf") {
-      //       setLETTER_OF_NCVET(file);
-      //     } else {
-      //       newErrors.LETTER_OF_NCVET = "Please select a valid PDF file.";
-      //     }
-      //   }
-      //   break;
       case "availability":
         setAvailability(value === "true");
         break;
       default:
         break;
     }
+    validatePasswords(value, name);
     setErrors(newErrors);
   };
 
@@ -284,14 +297,10 @@ const RegistrationForm = () => {
     console.log(LETTER_OF_NCVET);
 
     try {
-      const response = await axios.post(
-        `${server}/aa/create`,
-        data,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post(`${server}/aa/create`, data, {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log(response.data);
       navigate("/login");
     } catch (error) {
@@ -345,30 +354,6 @@ const RegistrationForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={handleChange}
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={confirmPassword}
-                onChange={handleChange}
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
                 Application Status
               </label>
               <input
@@ -381,6 +366,48 @@ const RegistrationForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={handleChange}
+                  className="mt-1 block w-full h-10 p-2 pr-16 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-2 mt-2 mb-2 flex items-center text-xs font-semibold p-2 bg-[#A41034] text-white hover:bg-[#8b0d2b] rounded-md"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={handleChange}
+                  className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-2 mt-2 mb-2 flex items-center text-xs font-semibold p-2 bg-[#A41034] text-white hover:bg-[#8b0d2b] rounded-md"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
               <input
@@ -390,6 +417,11 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
+              {errors.phoneNumber && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.phoneNumber}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -402,6 +434,9 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -450,6 +485,9 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
+              {errors.SPOC_EMAIL && (
+                <p className="mt-1 text-sm text-red-500">{errors.SPOC_EMAIL}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -462,6 +500,11 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
+              {errors.SPOC_CONTACT_NO && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.SPOC_CONTACT_NO}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -522,6 +565,7 @@ const RegistrationForm = () => {
                 name="NO_OF_BRANCHES"
                 value={NO_OF_BRANCHES}
                 onChange={handleChange}
+                min="1"
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
             </div>
@@ -570,6 +614,7 @@ const RegistrationForm = () => {
                 name="total_no_of_certified_Assessor"
                 value={total_no_of_certified_Assessor}
                 onChange={handleChange}
+                min="1"
                 className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
               />
             </div>

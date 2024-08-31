@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
+import toast from "react-hot-toast";
 
 const AddAssessorForm = () => {
   // Initialize state for each field
@@ -26,29 +27,105 @@ const AddAssessorForm = () => {
   const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
   const [certifiedInAnyCourse, setCertifiedInAnyCourse] = useState("");
-  const [courseCode, setCourseCode] = useState("");
-  const [sector, setSector] = useState("");
+  const [courseCode, setCourseCode] = useState([]);
+  const [sector, setSector] = useState([]);
   const [
     enrolledInAnyOtherAssesmentAgency,
     setEnrolledInAnyOtherAssesmentAgency,
   ] = useState("No");
   const [enrolledInAnyOtherSSC, setEnrolledInAnyOtherSSC] = useState("Yes");
   const [profilePic, setProfilePic] = useState(null);
-
+  const [courseOptions, setCourseOptions] = useState([]);
+  const [sectorsOption, setSectorsOption] = useState([]);
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
+  const [errors, setErrors] = useState({});
+
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${server}/sector/all`);
+        if (response.data.success) {
+          const sectorNames = response.data.data.map((sector) => sector.name);
+          setSectorsOption(sectorNames);
+        }
+      } catch (error) {
+        console.log("Error fetching data : ", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${server}/sector?name=${sector}`);
+        if (
+          response.data &&
+          response.data.data &&
+          response.data.data.length > 0
+        ) {
+          const courseNames = response.data.data.map((item) => item.courseName);
+          setCourseOptions(courseNames);
+          console.log(courseNames);
+        } else {
+          setCourseOptions([]);
+        }
+      } catch (error) {
+        console.log("Error fetching courses: ", error);
+      }
+    };
+    fetchCourses();
+  }, [sector]);
 
   // Handle change for input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let newErrors = { ...errors };
     switch (name) {
       case "name":
         setName(value);
         break;
       case "phoneNumber":
         setPhoneNumber(value);
+        if (!validatePhoneNumber(value))
+          newErrors.phoneNumber = "Invalid phone number";
+        else delete newErrors.phoneNumber;
         break;
       case "email":
         setEmail(value);
+        if (!validateEmail(value)) newErrors.email = "Invalid email format";
+        else delete newErrors.email;
         break;
       case "education_qualification_1":
         setEducation_qualification_1(value);
@@ -67,18 +144,20 @@ const AddAssessorForm = () => {
         break;
       case "adharNumber":
         setAdharNumber(value);
+        if (!validateAadhaar(value))
+          newErrors.adharNumber = "Invalid Aadhar number";
+        else delete newErrors.adharNumber;
         break;
       case "panNumber":
         setPanNumber(value);
+        if (!validatePAN(value)) newErrors.panNumber = "Invalid PAN number";
+        else delete newErrors.panNumber;
         break;
       case "assesoraId":
         setAssesoraId(value);
         break;
       case "dist":
         setDist(value);
-        break;
-      case "state":
-        setState(value);
         break;
       case "city":
         setCity(value);
@@ -89,24 +168,17 @@ const AddAssessorForm = () => {
       case "certifiedInAnyCourse":
         setCertifiedInAnyCourse(value);
         break;
-      case "courseCode":
-        setCourseCode(value);
-        break;
-      case "sector":
-        setSector(value);
-        break;
       case "enrolledInAnyOtherAssesmentAgency":
         setEnrolledInAnyOtherAssesmentAgency(value);
         break;
       case "enrolledInAnyOtherSSC":
         setEnrolledInAnyOtherSSC(value);
         break;
-      // case "profilePic":
-      //   setProfilePic(value);
-      //   break;
+
       default:
         break;
     }
+    setErrors(newErrors);
   };
 
   const handleFileChange = (e) => {
@@ -116,9 +188,53 @@ const AddAssessorForm = () => {
     }
   };
 
+  const validatePAN = (pan) => {
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    return panPattern.test(pan);
+  };
+
+  const validateAadhaar = (aadhaar) => {
+    const aadhaarPattern = /^[0-9]{12}$/;
+    return aadhaarPattern.test(aadhaar);
+  };
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const validatePhoneNumber = (phone) => {
+    const phonePattern = /^[0-9]{10}$/;
+    return phonePattern.test(phone);
+  };
+
+  const handleSectorChange = (event) => {
+    const selectedOptions = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setSector(selectedOptions);
+  };
+
+  const handleCourseChange = (event) => {
+    const selectedOptions = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setCourseCode(selectedOptions);
+    console.log(courseCode);
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (Object.keys(errors).length > 0) {
+      console.log(Object.keys(errors));
+      console.log("Please fix the errors before submitting");
+      return;
+    }
+
     const formData = {
       name,
       phoneNumber,
@@ -149,13 +265,11 @@ const AddAssessorForm = () => {
     console.log(assessmentAgencyId);
 
     try {
-      console.log(formData)
-      const response = await axios.post(
-        `${server}/assessor`,
-        formData
-      );
+      console.log(formData);
+      const response = await axios.post(`${server}/assessor`, formData);
       console.log(response.data);
-      alert("Assessor Added");
+      // alert("Assessor Added");
+      toast.success(response.data.message);
 
       // Reset all input fields
       setName("");
@@ -181,11 +295,12 @@ const AddAssessorForm = () => {
       setProfilePic("");
     } catch (error) {
       console.log(error.response ? error.response.data : error.message);
+      toast.error(error.message);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8 bg-white rounded-md shadow-md">
+    <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8 bg-gray-300 rounded-md shadow-md">
       <form onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold text-center text-[#A41034]">
           Add Assessor
@@ -214,6 +329,9 @@ const AddAssessorForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
+            {errors.phoneNumber && (
+              <p className="mt-1 text-sm text-red-500">{errors.phoneNumber}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -226,6 +344,9 @@ const AddAssessorForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -298,6 +419,9 @@ const AddAssessorForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
+            {errors.adharNumber && (
+              <p className="mt-1 text-sm text-red-500">{errors.adharNumber}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -310,6 +434,9 @@ const AddAssessorForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
+            {errors.panNumber && (
+              <p className="mt-1 text-sm text-red-500">{errors.panNumber}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -339,13 +466,19 @@ const AddAssessorForm = () => {
             <label className="block text-sm font-medium text-gray-700">
               State
             </label>
-            <input
-              type="text"
-              name="state"
+            <select
+              id="state"
               value={state}
-              onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+              onChange={(e) => setState(e.target.value)}
+              className="p-1 text-sm rounded-md border w-full"
+            >
+              <option value="">Select State</option>
+              {indianStates.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -385,27 +518,39 @@ const AddAssessorForm = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Course Code
+              Sector
             </label>
-            <input
-              type="text"
-              name="courseCode"
-              value={courseCode}
-              onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+            <select
+              name="sectors"
+              value={sector.join(",")}
+              onChange={handleSectorChange}
+              className="mt-1 block w-full h-8 p-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+            >
+              <option value="">Select a sector</option>
+              {sectorsOption.map((sector, index) => (
+                <option key={index} value={sector}>
+                  {sector}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Sector
+              Course
             </label>
-            <input
-              type="text"
-              name="sector"
-              value={sector}
-              onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+            <select
+              name="courses"
+              value={courseCode.join(",")}
+              onChange={handleCourseChange}
+              className="mt-1 block w-full h-8 p-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+            >
+              <option value="">Select a Course</option>
+              {courseOptions.map((course, index) => (
+                <option key={index} value={course}>
+                  {course}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">

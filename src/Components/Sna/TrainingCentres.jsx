@@ -101,12 +101,12 @@ const TrainingCenters = () => {
                 >
                   Approve
                 </button>
-                <button
+                {/* <button
                   onClick={() => handleRejection(center._id)}
                   className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-300 ml-2"
                 >
                   Reject
-                </button>
+                </button> */}
               </td>
             </tr>
           ))}

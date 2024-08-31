@@ -8,6 +8,7 @@ import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import StudentTable from "./StudentTable";
 import { server } from "@/main";
+import StudentTable10 from "./StudentTable10";
 
 const STUDENTS_PER_PAGE = 10;
 
@@ -24,6 +25,7 @@ const AttendanceSheetForm = () => {
   const [courseCode, setCourseCode] = useState("");
   const [examDate, setExamDate] = useState("");
   const [batchNo, setBatchNo] = useState("");
+  const [aaLogo, setAaLogo] = useState(null);
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ const AttendanceSheetForm = () => {
         );
         console.log(response.data.data); // Ensure the structure matches your needs
         const data = response.data.data;
+        setAaLogo(data.assesmentAgencyId.logo);
         setTpName(data.TrainingOrganization);
         setAaName(data.assesmentAgency);
         setCenterName(data.batchId.centerName);
@@ -387,15 +390,13 @@ const AttendanceSheetForm = () => {
     });
   };
 
-  const totalPages = Math.ceil(newStudents.length / STUDENTS_PER_PAGE);
-
   return (
     <div className="p-12 h-full">
       <div className="" ref={pdfRef}>
         <div className="pdf-section p-12 h-full">
           <div className="flex justify-between items-center mb-4">
             <div className="flex gap-16">
-              <div className="mr-10">
+              <div className="mr-14">
                 <img
                   src={logo}
                   alt="Centurion University Logo"
@@ -409,10 +410,12 @@ const AttendanceSheetForm = () => {
                 <p className="text-lg">(NCVET Recognized Awarding Body)</p>
                 <h3 className="text-xl font-bold mt-10">ATTENDANCE SHEET</h3>
               </div>
-              <div>
-                <div className="h-48 w-48 bg-blue-500 ml-30 text-white text-center flex items-center justify-center rounded-xl">
-                  <p>Assessment Agency Logo</p>
-                </div>
+              <div className="ml-20">
+                <img
+                  src={aaLogo}
+                  alt="Centurion University Logo"
+                  className="h-48 w-36"
+                />
               </div>
             </div>
           </div>
@@ -551,19 +554,21 @@ const AttendanceSheetForm = () => {
 
           <StudentTable students={students.slice(0, 5)} />
 
-          {/* Dynamically render student tables based on pages */}
-          {Array.from({ length: totalPages }).map((_, index) => {
-            const start = index * STUDENTS_PER_PAGE;
-            const end = start + STUDENTS_PER_PAGE;
-            const studentsToShow = students.slice(start, end);
-            if (studentsToShow.length >= 10) {
+          {/* Dynamically render StudentTable10 for the remaining students in groups of 10 */}
+          {Array.from({ length: Math.ceil((students.length - 5) / 10) }).map(
+            (_, index) => {
+              const start = 5 + index * 10; // Start after the first 5 students
+              const end = start + 10;
+              const studentsToShow = students.slice(start, end);
+
               return (
                 <div className="pdf-section p-12 h-full" key={index}>
-                  <StudentTable students={studentsToShow} />
+                  <StudentTable10 students={studentsToShow} />
                 </div>
               );
             }
-          })}
+          )}
+
           <div className="flex justify-between mt-32 gap-60">
             <div className="border-t border-black p-2 w-1/2 text-center">
               Signature of Centre head

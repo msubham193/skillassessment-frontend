@@ -16,7 +16,7 @@ const AllBAtch = ({children}) => {
  
        {/* main page */}
  
-       <AllBatchTabs>{children}</AllBatchTabs> 
+       <AllBatchTabs>{children}</AllBatchTabs>  
      </div>
    </div>
    </>

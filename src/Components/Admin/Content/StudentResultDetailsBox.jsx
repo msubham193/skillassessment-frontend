@@ -145,6 +145,7 @@ const generateDummyData = useCallback((student) => {
     result: student?.marks?.Result || 'N/A',
     dateOfIssue: new Date().toISOString().split('T')[0], 
     certificateNo: `CERT${student?.redg_No || 'N/A'}`,
+    studentId:id,
   
   };
 }, []);

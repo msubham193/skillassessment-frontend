@@ -82,6 +82,12 @@ const ViewSectorAndCourse = () => {
         <div className="text-3xl font-semibold flex">Loding...</div>
     )
   }
+  if(sectors.length==0)
+  {
+    return(
+      <div className="text-3xl font-semibold flex justify-center mt-44 text-purple-800">Oops no sector and course avable yet !!</div>
+  )
+  }
 
   return (
     <div className="container mx-auto p-4">

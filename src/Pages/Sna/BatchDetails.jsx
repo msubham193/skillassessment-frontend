@@ -63,7 +63,7 @@ const BatchDetailsOfSNA = () => {
       );
       console.log(response);
       toast.success("Batch Approved Successfully");
-      navigate("/trainingbatches");
+      // navigate("/trainingbatches");
     } catch (error) {
       console.log(error);
     }

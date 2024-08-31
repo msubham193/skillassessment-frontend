@@ -249,12 +249,25 @@ const Signup = () => {
     } catch (error) {
       console.log("Submission error: ", error); // Debugging line
       const newError = {};
+      let firstErrorField = null;
       if (error.inner) {
         error.inner.forEach((err) => {
           newError[err.path] = err.message;
+          if (!firstErrorField) {
+            firstErrorField = err.path;
+          }
         });
         setErrors(newError);
         toast.error("Please fill out all required fields correctly.");
+        
+        // Redirect to the page with the first error
+        if (firstErrorField) {
+          const errorFieldIndex = inputLabels.findIndex(
+            (input) => input.name === firstErrorField
+          );
+          const errorPage = Math.floor(errorFieldIndex / inputsPerPage);
+          setCurrentPage(errorPage);
+        }
       } else {
         toast.error(error.message);
       }
@@ -275,6 +288,12 @@ const Signup = () => {
             className="w-full p-2 pl-10 border rounded text-left font-normal"
             placeholderText="Pick a date"
             dateFormat="PPP"
+            showYearDropdown
+           showMonthDropdown
+            dropdownMode="select" 
+            yearDropdownItemNumber={5} 
+            scrollableYearDropdown 
+            scrollableMonthYearDropdown 
           />
           <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         </div>

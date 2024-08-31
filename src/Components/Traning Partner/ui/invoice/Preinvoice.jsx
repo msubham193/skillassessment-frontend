@@ -18,42 +18,45 @@ const Preinvoice = ({ batch }) => {
       style={{
         fontFamily: "Arial, sans-serif",
         width: "210mm",
-        padding: "10mm 20mm",
+        minHeight: "297mm",
+        padding: "10mm",
         margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
     >
-      <div className="text-center mb-2">
-        <img src={logo} alt="Logo" className="w-16 mx-auto" />
+      <div className="text-center mb-4" style={{ marginTop: "0mm" }}>
+        <img src={logo} alt="Logo" className="w-20 mx-auto" style={{ marginBottom: "10mm" }} />
+        <h1 className="text-xl font-bold mt-1">INVOICE</h1>
       </div>
-      <div className="text-center mb-3">
-        <h1 className="text-2xl font-bold">INVOICE</h1>
-      </div>
-      <div className="mb-3">
+      <div className="flex-grow mb-4">
         <table className="w-full border-collapse text-sm">
           <tbody>
             <tr>
-              <td className="w-1/2 border border-black p-1">
+              <td className="w-1/2 border border-black p-2 align-middle">
                 Invoice No: {invoiceNo}
               </td>
-              <td className="w-1/2 border border-black p-1">
+              <td className="w-1/2 border border-black p-2 align-middle">
                 Date: {currentDate}
               </td>
             </tr>
             <tr>
-              <td className="w-1/2 border border-black p-1">To: CUTM</td>
-              <td className="w-1/2 border border-black p-1">
-                From: {batch.trainingOrganization}
+              <td className="w-1/2 border font-bold border-black p-2 text-center">From: CUTM</td>
+              <td className="w-1/2 border font-bold border-black p-2 text-center">
+                To: {batch.trainingOrganization}
               </td>
             </tr>
             <tr>
-              <td className="w-1/2 border border-black p-1 align-top">
+              <td className="w-1/2 border border-black p-2 align-top">
                 <p className="font-semibold">CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT</p>
                 <p>CT Campus</p>
                 <p>Paralakhemundi, Gajapati</p>
                 <p>Pin: 761211, Odisha</p>
-                <p>Contact Person: Subrat Kumar Sahu - +91-7008810321</p>
+                <p>Contact Person: Subrat Kumar Sahu</p>
+                <p>Contact No : +91-7008810321</p>
               </td>
-              <td className="w-1/2 border border-black p-1 align-top">
+              <td className="w-1/2 border border-black p-2 align-top">
                 <p className="font-semibold">{tpdata.organizationName}</p>
                 <p>{tpdata.registeredOfficeAddres}</p>
                 <p>City: {tpdata.registeredOfficeCity}</p>
@@ -63,51 +66,52 @@ const Preinvoice = ({ batch }) => {
               </td>
             </tr>
             <tr>
-              <td colSpan="2" className="border border-black p-1">
-                Dear Sir, Kindly arrange to pay the below amount towards
-                assessment fee.
+              <td colSpan="2" className="border border-black p-2 text-center ">
+                Dear Sir, Kindly arrange to pay the below amount towards assessment fee.
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <table className="w-full border-collapse mb-3 text-center text-sm">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-black p-1">S.No</th>
-            <th className="border border-black p-1">Description</th>
-            <th className="border border-black p-1">No of candidates</th>
-            <th className="border border-black p-1">Photo</th>
-            <th className="border border-black p-1">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border border-black p-1">01</td>
-            <td className="border border-black p-1 text-left">
-              Center name: Assessment of Batch No: {batch.ABN_Number}
-            </td>
-            <td className="border border-black p-1">{batch.students.length}</td>
-            <td className="border border-black p-1"></td>
-            <td className="border border-black p-1">
-              {(batch.amountToPaid / batch.students.length).toFixed(2)}
-            </td>
-          </tr>
-          <tr className="font-semibold">
-            <td colSpan="4" className="border border-black p-1 text-right">
-              Total
-            </td>
-            <td className="border border-black p-1">{batch.amountToPaid.toFixed(2)}</td>
-          </tr>
-          <tr>
-            <td colSpan="5" className="border border-black p-1 text-left">
-              Total Amount in Words: {numberToWords(batch.amountToPaid)} Rupees Only
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="mb-3">
-        <p className="font-semibold mb-1 text-sm">Please note the following details for the transfer of funds</p>
+      <div className="flex-grow mb-4">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border border-black p-2 text-center align-middle">S.No</th>
+              <th className="border border-black p-2 text-center align-middle">Description</th>
+              <th className="border border-black p-2 text-center align-middle">No of candidates</th>
+              <th className="border border-black p-2 text-center align-middle">Price</th>
+              <th className="border border-black p-2 text-center align-middle">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-black p-2 text-center align-middle">01</td>
+              <td className="border border-black p-2 text-center align-middle">
+                Center name: Assessment of Batch No: {batch.ABN_Number}
+              </td>
+              <td className="border border-black p-2 text-center align-middle">{batch.students.length}</td>
+              <td className="border border-black p-2 text-center align-middle">
+                {(batch.amountToPaid / batch.students.length).toFixed(2)}
+              </td>
+              <td className="border border-black p-2 text-center align-middle">{batch.amountToPaid.toFixed(2)}</td>
+            </tr>
+            <tr className="font-semibold">
+              <td colSpan="4" className="border border-black p-2 text-right align-middle">
+                Total
+              </td>
+              <td className="border border-black p-2 text-center align-middle">{batch.amountToPaid.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="border border-black p-2 text-center align-middle">
+                Total Amount in Words: {numberToWords(batch.amountToPaid)} Rupees Only
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div className="flex-grow mb-2">
+        <p className="font-semibold mb-3 text-sm">Please note the following details for the transfer of funds</p>
         <table className="w-full border-collapse text-sm">
           <tbody>
             {[
@@ -122,20 +126,21 @@ const Preinvoice = ({ batch }) => {
               ["GST No", "21AAAJC0251B1ZB"],
             ].map(([key, value], index) => (
               <tr key={index}>
-                <td className="border border-black p-1 font-semibold w-1/3">{key}</td>
-                <td className="border border-black p-1">{value}</td>
+                <td className="border border-black p-2 font-semibold w-1/3 align-middle">{key}</td>
+                <td className="border border-black p-2 align-middle">{value}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="text-right text-sm">
-        <p>For Centurion University of Technology and Management</p>
-        <p className="mt-4">Authorized Signature</p>
+      <div className=" text-right" style={{ marginTop: "5mm", pageBreakInside: 'avoid' }}>
+        <p>Form Centurion University of Technology and Management</p>
+        <p className="mt-[50px] mb-4">Authorized Signature</p>
       </div>
     </div>
   );
 };
+
 // Helper function to convert number to words
 function numberToWords(num) {
   const ones = [
@@ -196,3 +201,4 @@ function numberToWords(num) {
 }
 
 export default Preinvoice;
+

@@ -61,86 +61,44 @@ const ManageBatchForm = () => {
   const generatePDF = async (batch) => {
     setSelectedBatch(batch);
     setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: true }));
-
-    // Wait for the next render cycle to ensure the invoice content is updated
+  
     await new Promise(resolve => setTimeout(resolve, 0));
-
+  
     const input = invoiceRef.current;
     if (!input) {
       console.error("Invoice ref is null");
       setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: false }));
       return;
     }
-
+  
     try {
-      const canvas = await html2canvas(input, { scale: 2 });
-      const imgData = canvas.toDataURL("image/png");
-
+      const canvas = await html2canvas(input, { scale: 1 }); // Adjust scale if necessary
+      const imgData = canvas.toDataURL("image/jpeg", 0.7);
+  
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
       });
-
+  
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 30; // Add some top margin
-
-      pdf.addImage(imgData, "PNG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      const imgY = 0; // Set to 0 to start at the top of the page
+  
+      pdf.addImage(imgData, "JPEG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save(`preinvoice_${batch.ABN_Number}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast.error("Failed to generate PDF");
     } finally {
       setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: false }));
-    }const generatePDF = async (batch) => {
-      setSelectedBatch(batch);
-      setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: true }));
-  
-      // Wait for the next render cycle to ensure the invoice content is updated
-      await new Promise(resolve => setTimeout(resolve, 0));
-  
-      const input = invoiceRef.current;
-      if (!input) {
-        console.error("Invoice ref is null");
-        setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: false }));
-        return;
-      }
-  
-      try {
-        // Reduce scale to lower the resolution and file size
-        const canvas = await html2canvas(input, { scale: 1.5 });  // Lower scale for less resolution
-        const imgData = canvas.toDataURL("image/jpeg", 0.7);  // Use JPEG format and set quality to 0.7
-  
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-        });
-  
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const imgX = (pdfWidth - imgWidth * ratio) / 2;
-        const imgY = 30; // Add some top margin
-  
-        pdf.addImage(imgData, "JPEG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-        pdf.save(`preinvoice_${batch.ABN_Number}.pdf`);
-      } catch (error) {
-        console.error("Error generating PDF:", error);
-        toast.error("Failed to generate PDF");
-      } finally {
-        setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: false }));
-      }
-    };
-  
+    }
   };
+  
 
   const handleUploadData = async (batchId) => {
     setUploading((prev) => ({ ...prev, [batchId]: true }));
@@ -160,7 +118,6 @@ const ManageBatchForm = () => {
         console.log(data);
         toast.success("Data uploaded successfully");
 
-        // Reset the fields
         setBatchFiles((prev) => ({
           ...prev,
           [batchId]: { preInvoice: null, postInvoice: null },
@@ -192,47 +149,60 @@ const ManageBatchForm = () => {
   return (
     <Card className="w-full mx-auto mt-8">
       <CardHeader>
-        <CardTitle>Manage Batches</CardTitle>
+        <CardTitle className="text-2xl font-bold">Manage Batches</CardTitle>
       </CardHeader>
       <CardContent>
         <Input
           placeholder="Filter batches..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="mb-4"
+          className="mb-6 max-w-md"
         />
         {isLoading ? (
-          <div className="text-center py-4">Loading...</div>
+          <div className="text-center py-8">Loading...</div>
         ) : (
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Course Name</TableHead>
-                <TableHead>ABN</TableHead>
-                <TableHead>Generate PreInvoice</TableHead>
-                <TableHead>Payment Mode</TableHead>
-                <TableHead>Transaction ID</TableHead>
-                <TableHead>PreInvoice</TableHead>
-                <TableHead>PostInvoice</TableHead>
-                <TableHead>Actions</TableHead>
+              <TableRow className="bg-gray-100">
+                <TableHead className="font-semibold">Course Name</TableHead>
+                <TableHead className="font-semibold">ABN</TableHead>
+                <TableHead className="font-semibold">Generate PreInvoice</TableHead>
+                <TableHead className="font-semibold">Payment Mode</TableHead>
+                <TableHead className="font-semibold">Transaction ID</TableHead>
+                <TableHead className="font-semibold">PreInvoice</TableHead>
+                <TableHead className="font-semibold">PostInvoice</TableHead>
+                <TableHead className="font-semibold">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredBatches.map((batch) => (
-                <TableRow key={batch._id}>
-                  <TableCell>{batch.courseName}</TableCell>
-                  <TableCell>{batch.ABN_Number}</TableCell>
-                  <TableCell>
-                    <Button onClick={() => generatePDF(batch)} disabled={generatingInvoices[batch._id]}>
+              {filteredBatches.map((batch, index) => (
+                <TableRow 
+                  key={batch._id}
+                  className={`
+                    ${batch.paymentStatus 
+                      ? 'bg-green-200 hover:bg-green-100' 
+                      : 'hover:bg-gray-50'}
+                    ${index !== filteredBatches.length - 1 ? 'border-b' : ''}
+                    transition-colors
+                  `}
+                >
+                  <TableCell className="py-4">{batch.courseName}</TableCell>
+                  <TableCell className="py-4">{batch.ABN_Number}</TableCell>
+                  <TableCell className="py-4">
+                    <Button 
+                      onClick={() => generatePDF(batch)} 
+                      disabled={generatingInvoices[batch._id]}
+                      className="w-full max-w-[120px]"
+                    >
                       {generatingInvoices[batch._id] ? "Generating..." : "Generate"}
                     </Button>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Select
                       defaultValue="offline"
                       onValueChange={(value) => handleStatusChange(value, batch._id)}
                     >
-                      <SelectTrigger className="w-[100px]">
+                      <SelectTrigger className="w-[120px]">
                         <SelectValue placeholder="Select mode" />
                       </SelectTrigger>
                       <SelectContent>
@@ -241,7 +211,7 @@ const ManageBatchForm = () => {
                       </SelectContent>
                     </Select>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Input
                       placeholder="Transaction ID"
                       value={batchTransactionIds[batch._id] || ""}
@@ -249,25 +219,28 @@ const ManageBatchForm = () => {
                         ...prev,
                         [batch._id]: e.target.value,
                       }))}
+                      className="max-w-[150px]"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Input
                       type="file"
                       onChange={(e) => handleFileChange(e, batch._id, "preInvoice")}
+                      className="max-w-[200px]"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Input
                       type="file"
                       onChange={(e) => handleFileChange(e, batch._id, "postInvoice")}
+                      className="max-w-[200px]"
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Button
                       onClick={() => handleUploadData(batch._id)}
                       disabled={uploading[batch._id] || !batchFiles[batch._id]?.preInvoice || !batchFiles[batch._id]?.postInvoice}
-                      className="ml-2"
+                      className="w-full max-w-[140px]"
                     >
                       {uploading[batch._id] ? "Uploading..." : "Upload Invoices"}
                     </Button>

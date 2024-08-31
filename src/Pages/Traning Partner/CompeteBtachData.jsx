@@ -42,7 +42,7 @@ const CompeteBatchData = () => {
             handleGenerateMarkSheet();
         }
     }, [currentStudentId, studentData, handleGenerateMarkSheet]);
-
+    console.log("studnet data",studentData)
     const generateDummyData = useCallback((student) => {
         if (!student) return null;
 
@@ -71,9 +71,10 @@ const CompeteBatchData = () => {
             result: student.marks.Result,
             dateOfIssue: new Date().toISOString().split('T')[0], 
             certificateNo: `CERT${student.redg_No}`,
+            studentId:student._id
         };
     }, []);
-
+   
     return (
         <div className="flex h-screen bg-gray-100">
             <SideNav />

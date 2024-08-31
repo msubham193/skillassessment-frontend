@@ -2,16 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
-import { format } from "date-fns";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { CalendarIcon } from "lucide-react";
 
 // shadcn components
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
-import { Calendar } from "@/components(shadcn)/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components(shadcn)/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components(shadcn)/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components(shadcn)/ui/select";
 
 // Custom imports
 import "react-toastify/dist/ReactToastify.css";
@@ -40,13 +45,25 @@ const Signup = () => {
     { name: "registeredOfficeFax", label: "Registered Office Fax" },
     { name: "registeredOfficeEmail", label: "Registered Office Email" },
     { name: "registeredOfficeGst", label: "Registered Office GST" },
-    { name: "regionalStateOfficeAddress", label: "Regional State Office Address" },
-    { name: "regionalStateOfficeDistrict", label: "Regional State Office District" },
+    {
+      name: "regionalStateOfficeAddress",
+      label: "Regional State Office Address",
+    },
+    {
+      name: "regionalStateOfficeDistrict",
+      label: "Regional State Office District",
+    },
     { name: "regionalStateOfficeCity", label: "Regional State Office City" },
-    { name: "regionalStateOfficeState", label: "Regional State Office State" },
+    { name: "regionalStateOfficeState", label: "Regional Office State" },
     { name: "regionalStateOfficePin", label: "Regional State Office PIN" },
-    { name: "regionalStateOfficeTelephone", label: "Regional State Office Telephone" },
-    { name: "regionalStateOfficeMobile", label: "Regional State Office Mobile" },
+    {
+      name: "regionalStateOfficeTelephone",
+      label: "Regional State Office Telephone",
+    },
+    {
+      name: "regionalStateOfficeMobile",
+      label: "Regional State Office Mobile",
+    },
     { name: "regionalStateOfficeFax", label: "Regional State Office Fax" },
     { name: "regionalStateOfficeEmail", label: "Regional State Office Email" },
     { name: "regionalStateOfficeGst", label: "Regional State Office GST" },
@@ -56,8 +73,14 @@ const Signup = () => {
     { name: "headOwnerName", label: "Head Owner Name" },
     { name: "headOwnerDob", label: "Head Owner DOB" },
     { name: "headOwnerCity", label: "Head Owner City" },
-    { name: "headOwnerResidenceAddress", label: "Head Owner Residence Address" },
-    { name: "headOwnerPermanentAddress", label: "Head Owner Permanent Address" },
+    {
+      name: "headOwnerResidenceAddress",
+      label: "Head Owner Residence Address",
+    },
+    {
+      name: "headOwnerPermanentAddress",
+      label: "Head Owner Permanent Address",
+    },
     { name: "headOwnerMobile", label: "Head Owner Mobile" },
     { name: "headOwnerAlternateMobile", label: "Head Owner Alternate Mobile" },
     { name: "headOwnerEmail", label: "Head Owner Email" },
@@ -69,35 +92,70 @@ const Signup = () => {
     { name: "headOwnerPromoter2", label: "Head Owner Promoter 2" },
     { name: "headOwnerPromoter3", label: "Head Owner Promoter 3" },
     { name: "projectContactPersonName", label: "Project Contact Person Name" },
-    { name: "projectContactPersonDesignation", label: "Project Contact Person Designation" },
+    {
+      name: "projectContactPersonDesignation",
+      label: "Project Contact Person Designation",
+    },
     { name: "projectContactPersonCity", label: "Project Contact Person City" },
-    { name: "projectContactPersonMobile", label: "Project Contact Person Mobile" },
-    { name: "projectContactPersonAlternateMobile", label: "Project Contact Person Alternate Mobile" },
-    { name: "projectContactPersonResidenceAddress", label: "Project Contact Person Residence Address" },
-    { name: "projectContactPersonPermanentAddress", label: "Project Contact Person Permanent Address" },
-    { name: "projectContactPersonEmail", label: "Project Contact Person Email" },
-    { name: "projectContactPersonAlternateEmail", label: "Project Contact Person Alternate Email" },
+    {
+      name: "projectContactPersonMobile",
+      label: "Project Contact Person Mobile",
+    },
+    {
+      name: "projectContactPersonAlternateMobile",
+      label: "Project Contact Person Alternate Mobile",
+    },
+    {
+      name: "projectContactPersonResidenceAddress",
+      label: "Project Contact Person Residence Address",
+    },
+    {
+      name: "projectContactPersonPermanentAddress",
+      label: "Project Contact Person Permanent Address",
+    },
+    {
+      name: "projectContactPersonEmail",
+      label: "Project Contact Person Email",
+    },
+    {
+      name: "projectContactPersonAlternateEmail",
+      label: "Project Contact Person Alternate Email",
+    },
     { name: "sector", label: "Sector" },
   ];
 
   const TimeLabel = ["dateOfIncorporation", "headOwnerDob"];
+  const indianStates = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
+    "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
+    "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
+    "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
+    "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", 
+    "Lakshadweep", "Puducherry"
+  ];
   const navigate = useNavigate();
 
+  // State variables
   const [currentPage, setCurrentPage] = useState(0);
   const [inputs, setInputs] = useState({});
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 789);
-  const inputsPerPage = 20;
-  const totalPages = Math.ceil(inputLabels.length / inputsPerPage);
   const [onSubmit, setOnSubmit] = useState(false);
   const [errors, setErrors] = useState({});
   const [courses, setCourses] = useRecoilState(coursesData);
   const [sectors, setSectors] = useRecoilState(sectorData);
   const [selectedSector, setSelectedSector] = useState("");
 
+  // Constants for pagination
+  const inputsPerPage = 20;
+  const totalPages = Math.ceil(inputLabels.length / inputsPerPage);
+
+  // Effect to update onSubmit state based on current page
   useEffect(() => {
     setOnSubmit(currentPage === totalPages - 1);
   }, [currentPage, totalPages]);
 
+  // Effect to handle window resize for mobile/desktop view
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 786);
@@ -110,6 +168,7 @@ const Signup = () => {
     };
   }, []);
 
+  // Function to fetch sectors from API
   const fetchSectors = async () => {
     try {
       const response = await fetch(`${server}/sector/all`, {
@@ -125,10 +184,12 @@ const Signup = () => {
     }
   };
 
+  // Effect to fetch sectors on component mount
   useEffect(() => {
     fetchSectors();
   }, []);
 
+  // Calculate current inputs to display based on pagination
   const currentInputs = inputLabels.slice(
     currentPage * inputsPerPage,
     (currentPage + 1) * inputsPerPage
@@ -136,6 +197,7 @@ const Signup = () => {
   const firstColumn = currentInputs.slice(0, 10);
   const secondColumn = currentInputs.slice(10, 20);
 
+  // Handle input change
   const handleChange = (name, value) => {
     setInputs((prevState) => ({
       ...prevState,
@@ -146,6 +208,7 @@ const Signup = () => {
     }
   };
 
+  // Handle next page
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
@@ -154,17 +217,18 @@ const Signup = () => {
     }
   };
 
+  // Handle previous page
   const handlePreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
     try {
       await validationSchema.validate(inputs, { abortEarly: false });
       const jsondata = JSON.stringify(inputs);
-
       const response = await fetch(`${server}/tp`, {
         method: "POST",
         headers: {
@@ -172,72 +236,116 @@ const Signup = () => {
         },
         body: jsondata,
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         toast.success("Form submitted successfully!");
         setInputs({});
         navigate("/trainingPartner/signin");
       } else {
-        console.log(data);
+        console.log("Server Error: ", data);
         throw new Error(data.message || "Failed to submit form");
       }
     } catch (error) {
+      console.log("Submission error: ", error); // Debugging line
       const newError = {};
+      let firstErrorField = null;
       if (error.inner) {
         error.inner.forEach((err) => {
           newError[err.path] = err.message;
+          if (!firstErrorField) {
+            firstErrorField = err.path;
+          }
         });
         setErrors(newError);
+        toast.error("Please fill out all required fields correctly.");
+        
+        // Redirect to the page with the first error
+        if (firstErrorField) {
+          const errorFieldIndex = inputLabels.findIndex(
+            (input) => input.name === firstErrorField
+          );
+          const errorPage = Math.floor(errorFieldIndex / inputsPerPage);
+          setCurrentPage(errorPage);
+        }
       } else {
-        console.log(error);
+        toast.error(error.message);
       }
     }
   };
+  
 
+  // Render input based on input type
   const renderInput = (labelObj) => {
     const { name, label } = labelObj;
 
     if (TimeLabel.includes(name)) {
       return (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={`w-full justify-start text-left font-normal ${
-                !inputs[name] && "text-muted-foreground"
-              }`}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {inputs[name] ? format(inputs[name], "PPP") : <span>Pick a date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={inputs[name]}
-              onSelect={(date) => handleChange(name, date)}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+        <div className="relative">
+          <DatePicker
+            selected={inputs[name] || null}
+            onChange={(date) => handleChange(name, date)}
+            className="w-full p-2 pl-10 border rounded text-left font-normal"
+            placeholderText="Pick a date"
+            dateFormat="PPP"
+            showYearDropdown
+           showMonthDropdown
+            dropdownMode="select" 
+            yearDropdownItemNumber={5} 
+            scrollableYearDropdown 
+            scrollableMonthYearDropdown 
+          />
+          <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        </div>
       );
     } else if (name === "scheme") {
       return (
-        <Select onValueChange={(value) => handleChange(name, value)}>
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select scheme" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Central Governmnet">Central Government</SelectItem>
+            <SelectItem value="Central Governmnet">
+              Central Government
+            </SelectItem>
             <SelectItem value="State Governmnet">State Goverment</SelectItem>
             <SelectItem value="Corporate">Corporate</SelectItem>
           </SelectContent>
         </Select>
       );
-    } else if (name === "sector") {
+    }
+    else if (name === "organizationCategory") {
       return (
-        <Select onValueChange={(value) => handleChange(name, value)}>
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Organization Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="•	Institute set up by Govt">
+            Institute set up by Govt
+            </SelectItem>
+            <SelectItem value="Institute set up by Corporate">Institute set up by Corporate</SelectItem>
+            <SelectItem value="Institute set up by Trust / NGO / Society">Institute set up by Trust / NGO / Society</SelectItem>
+            <SelectItem value="Institute set up by Govt.">Institute set up by Govt.</SelectItem>
+            <SelectItem value="Corporate">Corporate</SelectItem>
+            <SelectItem value="Standalone Training Institute">Standalone Training Institute</SelectItem>
+            <SelectItem value="Others">Others</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+    }
+    else if (name === "sector") {
+      return (
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select sector" />
           </SelectTrigger>
@@ -250,7 +358,46 @@ const Signup = () => {
           </SelectContent>
         </Select>
       );
-    } else {
+    }
+    else if (name === "registeredOfficeState") {
+      return (
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select state" />
+          </SelectTrigger>
+          <SelectContent>
+            {indianStates.map((state) => (
+              <SelectItem key={state} value={state}>
+                {state}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    }
+    else if (name === "regionalStateOfficeState") {
+      return (
+        <Select
+          onValueChange={(value) => handleChange(name, value)}
+          value={inputs[name] || ""}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select state" />
+          </SelectTrigger>
+          <SelectContent>
+            {indianStates.map((state) => (
+              <SelectItem key={state} value={state}>
+                {state}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    }
+    else {
       return (
         <Input
           className="w-full bg-transparent text-black"
@@ -273,10 +420,14 @@ const Signup = () => {
               {/* Mobile layout */}
               {[...firstColumn, ...secondColumn].map((labelObj, index) => (
                 <div key={index} className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700">{labelObj.label}</Label>
+                  <Label className="text-sm font-medium text-gray-700">
+                    {labelObj.label}
+                  </Label>
                   {renderInput(labelObj)}
                   {errors[labelObj.name] && (
-                    <p className="text-red-500 text-xs mt-1">{errors[labelObj.name]}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors[labelObj.name]}
+                    </p>
                   )}
                 </div>
               ))}
@@ -287,10 +438,14 @@ const Signup = () => {
               <div className="space-y-6">
                 {firstColumn.map((labelObj, index) => (
                   <div key={index} className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">{labelObj.label}</Label>
+                    <Label className="text-sm font-medium text-gray-700">
+                      {labelObj.label}
+                    </Label>
                     {renderInput(labelObj)}
                     {errors[labelObj.name] && (
-                      <p className="text-red-500 text-xs mt-1">{errors[labelObj.name]}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors[labelObj.name]}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -298,10 +453,14 @@ const Signup = () => {
               <div className="space-y-6">
                 {secondColumn.map((labelObj, index) => (
                   <div key={index} className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">{labelObj.label}</Label>
+                    <Label className="text-sm font-medium text-gray-700">
+                      {labelObj.label}
+                    </Label>
                     {renderInput(labelObj)}
                     {errors[labelObj.name] && (
-                      <p className="text-red-500 text-xs mt-1">{errors[labelObj.name]}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors[labelObj.name]}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -317,8 +476,8 @@ const Signup = () => {
           >
             Previous
           </Button>
-          <Button 
-            onClick={handleNextPage} 
+          <Button
+            onClick={handleNextPage}
             className="bg-blue-600 text-white hover:bg-blue-700"
           >
             {onSubmit ? "Submit" : "Next"}
@@ -330,3 +489,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

@@ -25,7 +25,7 @@ const CompeteBatchData = () => {
         setLoadingStates(prev => ({ ...prev, [studentId]: true }));
         setCurrentStudentId(studentId);
         try {
-            const response = await fetch(`${server}/student/${studentId}`, {
+            const response = await fetch(`${server}/student/${studentId}`, { 
                 method: "GET"
             });
             const data = await response.json();

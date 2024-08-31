@@ -10,7 +10,7 @@ const GenerateMarksheetPDF = forwardRef(({ data }, ref) => {
     ward,
     qualificationName,
     qualificationCode,
-    nsqfLevel,
+    nsqfLevel, 
     sector,
     duration,
     assessorRegNo,

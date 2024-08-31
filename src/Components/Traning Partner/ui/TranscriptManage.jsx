@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { CompeltebatchDataAtoms } from '../Atoms/completeBtachAtom';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
-import GenerateMarksheetFrom from './Marksheet/generateMarkFrom';
+import GenerateMarksheetFrom from './Marksheet/generateMarkFrom'; 
 import { server } from '@/main';
 
 const TranscriptManage = () => {

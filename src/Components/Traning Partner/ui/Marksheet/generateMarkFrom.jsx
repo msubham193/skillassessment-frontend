@@ -93,7 +93,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
         </tbody>
       </table>
 
-      <table className="w-full mb-2 border-collapse">
+      <table className="w-full mb-2 border-collapse"> 
         <tbody>
           <tr className="text-center">
             <td className="border px-1 py-1 w-1/2">Assessment Batch No.</td>

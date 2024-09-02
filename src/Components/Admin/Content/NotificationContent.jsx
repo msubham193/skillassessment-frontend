@@ -75,7 +75,7 @@ const NotificationContent = () => {
       </TabsContent>
       </Tabs>
     </div>
-  );
+  ); 
 };
 
 export default NotificationContent;

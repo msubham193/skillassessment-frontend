@@ -3,8 +3,8 @@
 import React from "react";
 import image from "/profile.jpg";
 
-const StudentTable = ({ students }) => {
-  const rows = Array.from({ length: 5 }).map(
+const StudentTable10 = ({ students }) => {
+  const rows = Array.from({ length: 10 }).map(
     (_, index) => students[index] || {}
   );
 
@@ -73,4 +73,4 @@ const StudentTable = ({ students }) => {
   );
 };
 
-export default StudentTable;
+export default StudentTable10;

@@ -12,7 +12,9 @@ import { Label } from "@/components(shadcn)/ui/label";
 import { Button } from "@/components(shadcn)/ui/button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuthentication } from "./Atoms/Authentiation";
+import { useNavigate } from "react-router-dom";
 const AdminLogin = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showbuttion, setShowbuttion] = useState(false);
@@ -20,6 +22,10 @@ const AdminLogin = () => {
   const { loginAdmin } = useAuthentication();
 
   // console.log(useAuthentication());
+
+  const handleClick = () => {
+    navigate('/'); // Replace with your desired endpoint
+  };
 
   const handelSubmit = async (e) => {
     e.preventDefault();
@@ -78,6 +84,9 @@ const AdminLogin = () => {
         <CardFooter className="flex justify-between">
           <Button disabled={showbuttion} onClick={handelSubmit}>
             {showbuttion ? "Loding...." : "Enter Dashboard"}
+          </Button>
+          <Button disabled={showbuttion} onClick={handleClick} >
+            {"Back"}
           </Button>
         </CardFooter>
       </Card>

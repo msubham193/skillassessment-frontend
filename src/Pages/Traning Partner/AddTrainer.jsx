@@ -8,21 +8,44 @@ import { toast } from "react-toastify";
 import { server } from "@/main";
 import axios from "axios";
 import * as Yup from 'yup';
+import { fileURLToPath } from "url";
 
 const stateOptions = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
-  "Telangana", "Tripura", "Uttarakhand", "Uttar Pradesh", "West Bengal"
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttarakhand",
+  "Uttar Pradesh",
+  "West Bengal",
 ];
 
 const AddTeacher = () => {
   const { id: batchId } = useParams();
   const navigate = useNavigate();
   const [batchData, setBatchData] = useState({});
-  const [loading, setLoading] = useState(false);
-
+ const [loading ,setLoading]=useState(false)
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -45,7 +68,7 @@ const AddTeacher = () => {
   const [image, setImage] = useState(null);
   const [PRN_NO, setPRNNo] = useState("");
 
-  const fetchBatchData = async () => {
+  const fetchBatchdata = async () => {
     try {
       const response = await fetch(`${server}/batch/${batchId}`, {
         method: "GET",
@@ -70,7 +93,7 @@ const AddTeacher = () => {
   };
 
   useEffect(() => {
-    fetchBatchData();
+    fetchBatchdata();
   }, [batchId]);
 
   const validationSchema = Yup.object().shape({
@@ -85,18 +108,21 @@ const AddTeacher = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoading(true)
 
     try {
-      await validationSchema.validate({
-        name,
-        phoneNumber,
-        email,
-        state,
-        city,
-        district,
-        pincode,
-      }, { abortEarly: false });
+      await validationSchema.validate(
+        {
+          name,
+          phoneNumber,
+          email,
+          state,
+          city,
+          district,
+          pincode,
+        },
+        { abortEarly: false }
+      );
 
       const formData = new FormData();
       formData.append("name", name);
@@ -123,7 +149,10 @@ const AddTeacher = () => {
         formData.append("image", image);
       }
 
-      const response = await axios.post(`${server}/trainer`, formData, {
+      const response = await axios({
+        method: 'post',
+        url: `${server}/trainer`,
+        data: formData,
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
@@ -133,7 +162,6 @@ const AddTeacher = () => {
         toast.success("Teacher added successfully");
         navigate("/trainingPartner/dashboard");
       } else {
-        console.error("Failed to add teacher:", response.data);
         toast.error(response.data.message || "Failed to add teacher");
       }
     } catch (error) {
@@ -144,10 +172,13 @@ const AddTeacher = () => {
       } else {
         toast.error("Failed to add teacher");
       }
-    } finally {
-      setLoading(false); 
+    }
+    finally {
+      setIsLoading(false); 
     }
   };
+
+
 
   return (
     <div className="flex justify-center p-8 bg-gray-100">
@@ -161,10 +192,11 @@ const AddTeacher = () => {
             Add existing Teacher
           </Link>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4" encType="multipart/form-data">
-          {/* Input fields */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4" enctype="multipart/form-data">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="name" className="text-sm font-medium text-gray-700">Name</Label>
+            <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+              Name
+            </Label>
             <Input
               type="text"
               name="name"
@@ -175,7 +207,9 @@ const AddTeacher = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="phoneNumber" className="text-sm font-medium text-gray-700">Phone Number</Label>
+            <Label htmlFor="phoneNumber" className="text-sm font-medium text-gray-700">
+              Phone Number
+            </Label>
             <Input
               type="text"
               name="phoneNumber"
@@ -186,7 +220,9 @@ const AddTeacher = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+              Email
+            </Label>
             <Input
               type="text"
               name="email"
@@ -197,22 +233,145 @@ const AddTeacher = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="state" className="text-sm font-medium text-gray-700">State</Label>
+            <Label htmlFor="educationQualification_1" className="text-sm font-medium text-gray-700">
+              Education Qualification 1
+            </Label>
+            <Input
+              type="text"
+              name="educationQualification_1"
+              id="educationQualification_1"
+              onChange={(e) => setEducationQualification1(e.target.value)}
+              value={educationQualification_1}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="educationQualification_2" className="text-sm font-medium text-gray-700">
+              Education Qualification 2
+            </Label>
+            <Input
+              type="text"
+              name="educationQualification_2"
+              id="educationQualification_2"
+              onChange={(e) => setEducationQualification2(e.target.value)}
+              value={educationQualification_2}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="educationQualification_3" className="text-sm font-medium text-gray-700">
+              Education Qualification 3
+            </Label>
+            <Input
+              type="text"
+              name="educationQualification_3"
+              id="educationQualification_3"
+              onChange={(e) => setEducationQualification3(e.target.value)}
+              value={educationQualification_3}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="educationQualification_4" className="text-sm font-medium text-gray-700">
+              Education Qualification 4
+            </Label>
+            <Input
+              type="text"
+              name="educationQualification_4"
+              id="educationQualification_4"
+              onChange={(e) => setEducationQualification4(e.target.value)}
+              value={educationQualification_4}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="certification_course" className="text-sm font-medium text-gray-700">
+              Certification Course
+            </Label>
+            <Input
+              type="text"
+              name="certification_course"
+              id="certification_course"
+              onChange={(e) => setCertificationCourse(e.target.value)}
+              value={certification_course}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="relevant_industryExperience" className="text-sm font-medium text-gray-700">
+              Relevant Industry Experience
+            </Label>
+            <Input
+              type="text"
+              name="relevant_industryExperience"
+              id="relevant_industryExperience"
+              onChange={(e) => setRelevantIndustryExperience(e.target.value)}
+              value={relevant_industryExperience}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="other_experience" className="text-sm font-medium text-gray-700">
+              Other Experience
+            </Label>
+            <Input
+              type="text"
+              name="other_experience"
+              id="other_experience"
+              onChange={(e) => setOtherExperience(e.target.value)}
+              value={other_experience}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="PAN_CARD_NO" className="text-sm font-medium text-gray-700">
+              PAN Card No.
+            </Label>
+            <Input
+              type="text"
+              name="PAN_CARD_NO"
+              id="PAN_CARD_NO"
+              onChange={(e) => setPANCardNo(e.target.value)}
+              value={PAN_CARD_NO}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="AADHAR_NO" className="text-sm font-medium text-gray-700">
+              Aadhar No.
+            </Label>
+            <Input
+              type="text"
+              name="AADHAR_NO"
+              id="AADHAR_NO"
+              onChange={(e) => setAadharNo(e.target.value)}
+              value={AADHAR_NO}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="state" className="text-sm font-medium text-gray-700">
+              State
+            </Label>
             <select
               name="state"
               id="state"
-              onChange={(e) => setState(e.target.value)}
               value={state}
-              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+              onChange={(e) => setState(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="" disabled>Select state</option>
-              {stateOptions.map((state, index) => (
-                <option key={index} value={state}>{state}</option>
+              <option value="">Select a state</option>
+              {stateOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
               ))}
             </select>
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="city" className="text-sm font-medium text-gray-700">City</Label>
+            <Label htmlFor="city" className="text-sm font-medium text-gray-700">
+              City
+            </Label>
             <Input
               type="text"
               name="city"
@@ -223,7 +382,9 @@ const AddTeacher = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="district" className="text-sm font-medium text-gray-700">District</Label>
+            <Label htmlFor="district" className="text-sm font-medium text-gray-700">
+              District
+            </Label>
             <Input
               type="text"
               name="district"
@@ -234,7 +395,9 @@ const AddTeacher = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="pincode" className="text-sm font-medium text-gray-700">Pincode</Label>
+            <Label htmlFor="pincode" className="text-sm font-medium text-gray-700">
+              Pincode
+            </Label>
             <Input
               type="text"
               name="pincode"
@@ -244,11 +407,79 @@ const AddTeacher = () => {
               className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          <div className="flex items-center gap-4">
-            <Button type="submit" className="bg-indigo-600 text-white hover:bg-indigo-700" disabled={loading}>
-              {loading ? "Adding..." : "Add Teacher"}
-            </Button>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="certifiedIn" className="text-sm font-medium text-gray-700">
+              Certified In
+            </Label>
+            <Input
+              type="text"
+              name="certifiedIn"
+              id="certifiedIn"
+              onChange={(e) => setCertifiedIn(e.target.value)}
+              value={certifiedIn}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
           </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="coursecode" className="text-sm font-medium text-gray-700">
+              Course Code
+            </Label>
+            <Input
+              type="text"
+              name="coursecode"
+              id="coursecode"
+              onChange={(e) => setCoursecode(e.target.value)}
+              value={coursecode}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="sector" className="text-sm font-medium text-gray-700">
+              Sector
+            </Label>
+            <Input
+              type="text"
+              name="sector"
+              id="sector"
+              onChange={(e) => setSector(e.target.value)}
+              value={sector}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="image" className="text-sm font-medium text-gray-700">
+              Profile Picture
+            </Label>
+            <Input
+              type="file"
+              name="image"
+              id="image"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="PRN_NO" className="text-sm font-medium text-gray-700">
+              PRN No.
+            </Label>
+            <Input
+              type="text"
+              name="PRN_NO"
+              id="PRN_NO"
+              onChange={(e) => setPRNNo(e.target.value)}
+              value={PRN_NO}
+              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <Button
+        type="submit"
+        className={`mt-4 ${
+          loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
+        } text-white font-bold py-2 px-4 rounded transition-colors`}
+        disabled={loading}
+      >
+        {loading ? "Adding..." : "Add Trainer"}
+      </Button>
         </form>
       </div>
     </div>

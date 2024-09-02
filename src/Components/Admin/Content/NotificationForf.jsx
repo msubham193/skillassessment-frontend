@@ -47,14 +47,14 @@ const NotificationForf = () => {
     }
   
     try {
-      // Send a POST request to your backend
-      for (const pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-    }
+    // Send a POST request to your backend
+    //   for (const pair of formData.entries()) {
+    //     console.log(`${pair[0]}: ${pair[1]}`);
+    // }
       const response = await axios({
         method: 'post',
         url: `${server}/admin/notification`,
-        data: formData
+        data: formData  
       });
       toast.success("Notification created successfully!", {
         position: "top-center",

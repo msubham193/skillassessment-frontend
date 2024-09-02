@@ -174,7 +174,7 @@ const AddTeacher = () => {
       }
     }
     finally {
-      setIsLoading(false); 
+      setLoading(false); 
     }
   };
 

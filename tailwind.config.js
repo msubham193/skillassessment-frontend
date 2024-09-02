@@ -73,8 +73,11 @@ module.exports = {
       },
       fontFamily: {
         cambria: ['Cambria', 'serif'],
+        "crimson-text": "'Crimson Text'",
+        calistoga: "Calistoga",
       },
     },
+    
   },
   plugins: [require("tailwindcss-animate")],
 }

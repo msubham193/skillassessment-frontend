@@ -20,6 +20,7 @@ import {
 } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";
+import toast, { Toaster } from "react-hot-toast";
 
 const MarksheetForm = () => {
   const navigate = useNavigate();
@@ -197,22 +198,20 @@ const MarksheetForm = () => {
       console.log(payload.totalVivaMark);
       console.log(token);
       // Submit to backend using Axios
-      const response = await axios.post(
-        `${server}/marks/upload`,
-        payload,
-        {
-          Grade: grade,
-        }
-      );
+      const response = await axios.post(`${server}/marks/upload`, payload, {
+        Grade: grade,
+      });
 
       if (response.data.success) {
         console.log("Marks uploaded successfully:", response.data);
+        toast.success("Marks uploaded successfully");
         // navigate("/dashboard/students", { state: { studentId: studentId[0] } });
       } else {
         console.error("Error uploading marks:", response.data.message);
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error(error);
     }
   };
 
@@ -492,6 +491,7 @@ const MarksheetForm = () => {
           </button>
         </div>
       </form>
+      <Toaster />
     </div>
   );
 };

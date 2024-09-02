@@ -7,7 +7,7 @@ const AaMarksheet = forwardRef(({ data }, ref) => {
     schemCode,
     name,
     ward,
-    qualificationName,
+    qualificationName, 
     qualificationCode,
     nsqfLevel,
     sector,

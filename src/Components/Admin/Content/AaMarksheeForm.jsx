@@ -210,7 +210,7 @@ const AaMarksheeForm = () => {
                 onChange={(e) => handleNosChange(index, e)}
                 placeholder="NOS Name"
                 className="p-2 border border-gray-300 rounded"
-              />
+              /> 
               <input
                 type="text"
                 name="type"

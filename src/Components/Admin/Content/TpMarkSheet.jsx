@@ -1,14 +1,13 @@
-import React from "react";
+import React, { forwardRef } from 'react';
 
-const TpMarkSheet = ({ data }) => {
+const AaMarksheet = forwardRef(({ data }, ref) => {
   if (!data) return null;
-//   console.log(data)
-
+  
   const {
     schemCode,
     name,
     ward,
-    qualificationName,
+    qualificationName, 
     qualificationCode,
     nsqfLevel,
     sector,
@@ -24,22 +23,19 @@ const TpMarkSheet = ({ data }) => {
     dateOfIssue,
     certificateNo,
   } = data;
+  
   return (
-    <div className="max-w-3xl mx-auto p-8 border border-green-600 rounded-lg font-cambria">
-      <div className="flex justify-between  mb-4">
-        <img
-          src="/cutm.jpg"
-          alt="Centurion University Logo"
-          className="w-16 h-24"
-        />
+    <div ref={ref} className="max-w-3xl mx-auto p-8 border border-green-600 rounded-lg font-cambria">
+      <div className="flex justify-between  mb-3">
+        <img src="/cutm.jpg" alt="Centurion University Logo" className="w-16 h-24" />
         <div className="text-center">
           <h1 className="text-2xl font-bold">
             Centurion University of Technology and
             <br /> Management
           </h1>
           <p className="text-xl">(NCVET recognized Awarding Body)</p>
-          <p className="mt-6 text-xl">Scheme- <span>{schemCode}</span></p>
-          <h2 className="text-2xl font-bold text-green-600 mt-6 border-t-2 border-b-2 border-green-600 w-[210px] ml-28 ">
+          <p className="my-4 text-xl">Scheme- <span>{schemCode}</span></p>
+          <h2 className="text-2xl font-bold text-green-600  border-t-2 border-b-2 border-green-600 w-[210px] ml-28 ">
             M A R K S H E E T
           </h2>
         </div>
@@ -48,83 +44,77 @@ const TpMarkSheet = ({ data }) => {
       <table className="w-full mb-4 border-collapse">
         <tbody>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px] font-medium">
-              Name of Trainer:
-            </td>
-            <td className="flex-1 border px-2 py-1">{name}</td>
+            <td className="flex-1 border px-2   font-medium">Name of Assessor:</td>
+            <td className="flex-1 border px-2 ">{name}</td>
           </tr>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px]">
-              Son/Daughter/Ward of:
-            </td>
-            <td className="flex-1 border px-2 py-1" >{ward}</td>
+            <td className="flex-1 border px-2  ">Son/Daughter/Ward of:</td>
+            <td className="flex-1 border px-2 ">{ward}</td>
           </tr>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px]">Qualification Name:</td>
-            <td className="flex-1 border px-2 py-1" >{qualificationName}</td>
+            <td className="flex-1 border px-2 ">Qualification Name:</td>
+            <td className="flex-1 border px-2  ">{qualificationName}</td>
           </tr>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px]">Qualification Code:</td>
-            <td className="flex-1 border px-2 py-1" >{qualificationCode}</td>
+            <td className="flex-1 border px-2  ">Qualification Code:</td>
+            <td className="flex-1 border px-2  ">{qualificationCode}</td>
           </tr>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px]">NSQF Level:</td>
-            <td className="flex-1 border px-2 py-1">{nsqfLevel}</td>
+            <td className="flex-1 border px-2 ">NSQF Level:</td>
+            <td className="flex-1 border px-2 ">{nsqfLevel}</td>
           </tr>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px]">Sector:</td>
-            <td className="flex-1 border px-2 py-1">{sector}</td>
+            <td className="flex-1 border px-2 ">Sector:</td>
+            <td className="flex-1 border px-2 ">{sector}</td>
           </tr>
           <tr className="flex">
-            <td className="flex-1 border px-2 py-[2px]">Duration:</td>
-            <td className="flex-1 border px-2 py-1">{duration}</td>
+            <td className="flex-1 border px-2 ">Duration:</td>
+            <td className="flex-1 border px-2 ">{duration}</td>
           </tr>
         </tbody>
       </table>
       <table className="w-full mb-4 border-collapse">
         <tbody>
           <tr className="text-center">
-            <td className="border p-1  w-1/2">Trainer Registration No.</td>
-            <td className="border p-1  w-1/2">Date of Birth</td>
+            <td className="border    w-1/2">Tranner Registration No.</td>
+            <td className="border    w-1/2">Date of Birth</td>
           </tr>
           <tr className="text-center">
-            <td className="border p-1">{trainerRegNo}</td>
-            <td className="border p-1">{dob}</td>
+            <td className="border  ">{trainerRegNo}</td>
+            <td className="border  ">{dob}</td>
           </tr>
         </tbody>
       </table>
-
-      {/* Second Table */}
       <table className="w-full mb-4 border-collapse">
         <tbody>
           <tr className="text-center">
-            <td className="border p-1  w-1/2">Assessment Batch No.</td>
-            <td className="border p-1  w-1/2">Assessment Date</td>
+            <td className="border    w-1/2">Assessment Batch No.</td>
+            <td className="border   w-1/2">Assessment Date</td>
           </tr>
           <tr className="text-center">
-            <td className="border p-1">{assessmentBatchNo}</td>
-            <td className="border p-1">{assessmentDate}</td>
+            <td className="border ">{assessmentBatchNo}</td>
+            <td className="border ">{assessmentDate}</td>
           </tr>
         </tbody>
       </table>
       <table className="w-full mb-4 border-collapse">
         <thead>
           <tr>
-            <th className="border p-2 font-medium">NOS Code</th>
-            <th className="border p-2 font-medium">NOS Name</th>
-            <th className="border p-2 font-medium">NOS Type</th>
-            <th className="border p-2 font-medium">Maximum Marks</th>
-            <th className="border p-2 font-medium">Marks Obtained</th>
+            <th className="border  font-medium">NOS Code</th>
+            <th className="border  font-medium">NOS Name</th>
+            <th className="border  font-medium">NOS Type</th>
+            <th className="border  font-medium">Maximum Marks</th>
+            <th className="border  font-medium">Marks Obtained</th>
           </tr>
         </thead>
         <tbody>
           {nosMarks.map((nos, index) => (
             <tr key={index}>
-              <td className="border p-2">{nos.code}</td>
-              <td className="border p-2">{nos.name}</td>
-              <td className="border p-2">{nos.type}</td>
-              <td className="border p-2">{nos.maxMarks}</td>
-              <td className="border p-2" >{nos.marksObtained}</td>
+              <td className="border">{nos.code}</td>
+              <td className="border">{nos.name}</td>
+              <td className="border">{nos.type}</td>
+              <td className="border">{nos.maxMarks}</td>
+              <td className="border" >{nos.marksObtained}</td>
             </tr>
           ))}
         </tbody>
@@ -132,27 +122,21 @@ const TpMarkSheet = ({ data }) => {
       <table className="w-full mb-4 border-collapse">
         <tbody>
           <tr className="flex">
-            <td className="w-1/2 border px-2 py-1 text-center font-medium">
-              Total Marks Obtained
-            </td>
-            <td className="w-1/2 border px-2 py-1 text-center" >{totalMarks}</td>
+            <td className="w-1/2 border px-2   text-center font-medium">Total Marks Obtained</td>
+            <td className="w-1/2 border px-2  text-center" >{totalMarks}</td>
           </tr>
           <tr className="flex">
-            <td className="w-1/2 border px-2 py-1 text-center font-medium">
-              Grade
-            </td>
-            <td className="w-1/2 border px-2 py-1 text-center">{grade}</td>
+            <td className="w-1/2 border px-2   text-center font-medium">Grade</td>
+            <td className="w-1/2 border px-2   text-center">{grade}</td>
           </tr>
           <tr className="flex">
-            <td className="w-1/2 border px-2 py-1 text-center font-medium">
-              Result
-            </td>
-            <td className="w-1/2 border px-2 py-1 text-center">{result}</td>
+            <td className="w-1/2 border px-2   text-center font-medium">Result</td>
+            <td className="w-1/2 border px-2   text-center">{result}</td>
           </tr>
         </tbody>
       </table>
       <img src="/placeholder.svg" alt="QR Code" className="w-24 h-24" />
-      <div className="flex justify-between  font-semibold items-center mt-1 mb-7">
+      <div className="flex justify-between font-semibold items-center mt-1 mb-7">
         <div className="text-center text-sm">
           <p>Date of Issue: <span>{dateOfIssue}</span></p>
           <p>Certificate No: <span>{certificateNo}</span></p>
@@ -164,6 +148,6 @@ const TpMarkSheet = ({ data }) => {
       </div>
     </div>
   );
-};
+});
 
-export default TpMarkSheet;
+export default AaMarksheet;

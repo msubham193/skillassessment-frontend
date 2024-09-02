@@ -20,4 +20,4 @@ export const server="https://d31os5ub6ca4xs.cloudfront.net/api/v1";
 // http://13.200.180.172:8000/api/v1
 // http://localhost:8000/api/v1
 
-// 
+// https://d31os5ub6ca4xs.cloudfront.net/api/v1

@@ -94,6 +94,7 @@ export default function CreateCenter() {
         }
 
         const data = await response.json();
+        console.log("scheme",data)
         setAllSchemes(data.data);
       } catch (error) {
         console.log(error.message);
@@ -113,7 +114,8 @@ export default function CreateCenter() {
       "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
     ]);
   }, []);
-
+  console.log("Schemes:", formData.schemes);
+  console.log("Sectors:", formData.sectors);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -134,11 +136,10 @@ export default function CreateCenter() {
           formData.sanction_order_letter.name
         );
       }
-
+   
       formData.schemes.forEach((scheme, index) => {
-        formDataToSend.append(`schemes[${index}][schemeName]`, scheme.schemeName);
+        formDataToSend.append(`schemes[${index}][schemeName]`, scheme);
       });
-
       formData.sectors.forEach((sector, index) => {
         formDataToSend.append(`sectors[${index}]`, sector);
       });

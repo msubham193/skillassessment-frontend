@@ -7,6 +7,7 @@ import { server } from "@/main";
 const RegistrationForm = () => {
   const navigate = useNavigate();
   const [agencyName, setAgencyName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [officeAddress, setOfficeAddress] = useState("");
   const [communicationAddress, setCommunicationAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -257,9 +258,10 @@ const RegistrationForm = () => {
     }
   };
 
+  //here is the function for create a assessment agency...
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
     if (Object.keys(errors).length > 4) {
       console.log(Object.keys(errors));
       console.log("Please fix the errors before submitting");
@@ -297,6 +299,7 @@ const RegistrationForm = () => {
     console.log(LETTER_OF_NCVET);
 
     try {
+      setLoading(true);
       const response = await axios.post(`${server}/aa/create`, data, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
@@ -305,6 +308,9 @@ const RegistrationForm = () => {
       navigate("/login");
     } catch (error) {
       console.log(error.response ? error.response.data : error.message);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -712,7 +718,10 @@ const RegistrationForm = () => {
               type="submit"
               className="px-4 py-2 bg-[#A41034] text-white font-medium rounded-md shadow-md hover:bg-[#87112d]"
             >
-              Submit
+            {
+              loading?"Submiting....":"Submit"
+            }
+              
             </button>
           </div>
         </form>

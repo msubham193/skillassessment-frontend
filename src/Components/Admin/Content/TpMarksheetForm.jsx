@@ -1,42 +1,149 @@
-import React, { useRef, useState } from 'react';
-import { Button } from '@/components(shadcn)/ui/button';
-import TpMarkSheet from './TpMarkSheet';
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/components(shadcn)/ui/button";
+import TpMarkSheet from "./TpMarkSheet";
+import axios from "axios";
+import { server } from "@/main";
 
 const TpMarksheetForm = () => {
   const [formData, setFormData] = useState({
-    schemCode: '',
-    name: '',
-    ward: '',
-    qualificationName: '',
-    qualificationCode: '',
-    nsqfLevel: '',
-    sector: '',
-    duration: '',
-    trainerRegNo: '',
-    dob: '',
-    assessmentBatchNo: '',
-    assessmentDate: '',
-    nosMarks: Array(7).fill({ code: '', name: '', type: '', maxMarks: '', marksObtained: '' }),
-    totalMarks: '',
-    grade: '',
-    result: '',
-    dateOfIssue: '',
-    certificateNo: '',
+    schemCode: "",
+    name: "",
+    ward: "",
+    qualificationName: "",
+    qualificationCode: "",
+    nsqfLevel: "",
+    sector: "",
+    course: "",
+    duration: "",
+    trainerRegNo: "",
+    dob: "",
+    assessmentBatchNo: "",
+    assessmentDate: "",
+    nosMarks: [], // This will be dynamically set
+    totalMarks: "",
+    grade: "",
+    result: "",
+    dateOfIssue: "",
+    certificateNo: "",
   });
 
+  const [courseOptions, setCourseOptions] = useState([]);
+  const [sectorsOption, setSectorsOption] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
   const marksheetRef = useRef();
+
+  // Fetching all sectors on component mount
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        const response = await axios.get(`${server}/sector/all`);
+        if (response.data.success) {
+          const sectorNames = response.data.data.map((sector) => sector.name);
+          setSectorsOption(sectorNames); // Update available sector options
+        }
+      } catch (error) {
+        console.log("Error fetching sectors: ", error);
+      }
+    };
+    fetchSectors();
+  }, []);
+
+  // Fetching courses based on the selected sector
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (formData.sector) {
+        try {
+          const response = await axios.get(
+            `${server}/sector?name=${formData.sector}`
+          );
+          if (
+            response.data &&
+            response.data.data &&
+            response.data.data.length > 0
+          ) {
+            const courseNames = response.data.data.map(
+              (item) => item.courseName
+            );
+            setCourseOptions(courseNames); // Update available course options
+          } else {
+            setCourseOptions([]);
+          }
+        } catch (error) {
+          console.log("Error fetching courses: ", error);
+        }
+      }
+    };
+    fetchCourses();
+  }, [formData.sector]); // Trigger fetchCourses when the selected sector changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Sector change handler
+  const handleSectorChange = (event) => {
+    const selectedSector = event.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      sector: selectedSector, // Update the sector in formData
+      course: "", // Reset course when sector changes
+      nosMarks: [], // Reset NOS marks when sector changes
+    }));
+  };
+
+  // Course change handler
+  const handleCourseChange = async (event) => {
+    const selectedCourse = event.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      course: selectedCourse, // Update the course in formData
+    }));
+
+    // Fetch NOS data after the course is selected
+    await fetchNosData(selectedCourse);
+  };
+
+  // Function to fetch NOS data based on the selected course
+  const fetchNosData = async (selectedCourse) => {
+    try {
+      const response = await axios.get(`${server}/course/course`);
+      const course = response.data.data.find(
+        (course) => course.courseName === selectedCourse
+      );
+
+      if (course) {
+        const numberOfNos = course.Nos.length;
+        setFormData((prevData) => ({
+          ...prevData,
+          nosMarks: Array(numberOfNos).fill({
+            code: "",
+            name: "",
+            type: "",
+            maxMarks: "",
+            marksObtained: "",
+          }),
+        }));
+      } else {
+        console.log("Course not found");
+      }
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleNosChange = (index, e) => {
     const { name, value } = e.target;
-    const newNosMarks = formData.nosMarks.map((nos, i) =>
+    const updatedNosMarks = formData.nosMarks.map((nos, i) =>
       i === index ? { ...nos, [name]: value } : nos
     );
-    setFormData({ ...formData, nosMarks: newNosMarks });
+    setFormData({ ...formData, nosMarks: updatedNosMarks });
   };
 
   const handleSubmit = (e) => {
@@ -46,21 +153,22 @@ const TpMarksheetForm = () => {
       useCORS: true, // Enable cross-origin images
       logging: true, // Enable console logging for debugging
       allowTaint: true, // Allow tainting for cross-origin images
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'px',
-        format: [canvas.width, canvas.height],
+    })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "px",
+          format: [canvas.width, canvas.height],
+        });
+        pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+        pdf.save("marksheet.pdf");
+      })
+      .catch((error) => {
+        console.error("Error generating PDF:", error);
+        alert("An error occurred while generating the PDF. Please try again.");
       });
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save('marksheet.pdf');
-    }).catch(error => {
-      console.error('Error generating PDF:', error);
-      alert('An error occurred while generating the PDF. Please try again.');
-    });
   };
-
 
   return (
     <div className="max-w-4xl mx-auto p-4 bg-white shadow-md">
@@ -128,14 +236,37 @@ const TpMarksheetForm = () => {
           </div>
           <div>
             <label className="block font-semibold">Sector:</label>
-            <input
-              type="text"
+            <select
               name="sector"
               value={formData.sector}
-              onChange={handleChange}
+              onChange={handleSectorChange}
               className="w-full p-2 border border-gray-300 rounded"
-            />
+            >
+              <option value="">Select a Sector</option>
+              {sectorsOption.map((sector, index) => (
+                <option key={index} value={sector}>
+                  {sector}
+                </option>
+              ))}
+            </select>
           </div>
+          <div>
+            <label className="block font-semibold">Course:</label>
+            <select
+              name="course"
+              value={formData.course}
+              onChange={handleCourseChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              <option value="">Select a Course</option>
+              {courseOptions.map((course, index) => (
+                <option key={index} value={course}>
+                  {course}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div>
             <label className="block font-semibold">Duration:</label>
             <input
@@ -178,16 +309,6 @@ const TpMarksheetForm = () => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <div>
-            <label className="block font-semibold">Assessment Date:</label>
-            <input
-              type="date"
-              name="assessmentDate"
-              value={formData.assessmentDate}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
         </div>
         <div className="mt-4">
           <label className="block font-semibold">NOS Marks:</label>
@@ -208,7 +329,7 @@ const TpMarksheetForm = () => {
                 onChange={(e) => handleNosChange(index, e)}
                 placeholder="NOS Name"
                 className="p-2 border border-gray-300 rounded"
-              /> 
+              />
               <input
                 type="text"
                 name="type"
@@ -237,6 +358,16 @@ const TpMarksheetForm = () => {
           ))}
         </div>
         <div className="grid grid-cols-2 gap-4 mt-4">
+          <div>
+            <label className="block font-semibold">Assessment Date:</label>
+            <input
+              type="date"
+              name="assessmentDate"
+              value={formData.assessmentDate}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
           <div>
             <label className="block font-semibold">Total Marks Obtained:</label>
             <input

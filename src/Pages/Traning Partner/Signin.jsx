@@ -109,6 +109,14 @@ const Signin = () => {
             {isLoading ? <Loader /> : "Submit"}
           </Button>
         </div>
+        <div className="flex justify-between pt-8">
+          <Button className="w-[48%] m-3 bg-violet-700" onClick={() => navigate('/trainingPartner/signup')}>
+            Back to Signup
+          </Button>
+          <Button className="w-[48%] m-3 bg-violet-700" onClick={() => navigate('/')}>
+            Back to Home
+          </Button>
+        </div>
       </div>
     </div>
   );

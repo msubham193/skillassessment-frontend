@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Label } from "@/components(shadcn)/ui/label";
 import { Input } from "@/components(shadcn)/ui/input";
+import { Button } from "@/components(shadcn)/ui/button";
+import { CheckboxDropdown } from "@/Components/Traning Partner/ui/CheckBoxDropdown";
 import {
   Select,
   SelectTrigger,
@@ -11,11 +12,8 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components(shadcn)/ui/select";
-import { Button } from "@/components(shadcn)/ui/button";
-import { Checkbox } from "@/components(shadcn)/ui/checkbox";
-import { useRecoilValue } from "recoil";
-import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
 import { server } from "@/main";
+
 export default function CreateCenter() {
   const navigate = useNavigate();
 
@@ -31,9 +29,9 @@ export default function CreateCenter() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [courses, setCourses] = useState([]);
   const [availableSectors, setAvailableSectors] = useState([]);
   const [allSchemes, setAllSchemes] = useState([]);
+  const [states, setStates] = useState([]);
 
   useEffect(() => {
     console.log("Available Sectors:", availableSectors);
@@ -59,24 +57,6 @@ export default function CreateCenter() {
     setFormData((prevData) => ({
       ...prevData,
       letter: file,
-    }));
-  };
-
-  const handleSchemeChange = (schemeName, isChecked) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      schemes: isChecked
-        ? [...prevData.schemes, { schemeName }]
-        : prevData.schemes.filter((scheme) => scheme.schemeName !== schemeName),
-    }));
-  };
-
-  const handleSectorChange = (sectorId, isChecked) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      sectors: isChecked
-        ? [...prevData.sectors, sectorId]
-        : prevData.sectors.filter((id) => id !== sectorId),
     }));
   };
 
@@ -114,6 +94,7 @@ export default function CreateCenter() {
         }
 
         const data = await response.json();
+        console.log("scheme",data)
         setAllSchemes(data.data);
       } catch (error) {
         console.log(error.message);
@@ -123,6 +104,18 @@ export default function CreateCenter() {
     fetchAllSchemes();
   }, []);
 
+  useEffect(() => {
+    // This is a mock list of Indian states. Replace with actual API call if needed.
+    setStates([
+      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+      "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+      "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+      "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
+      "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
+    ]);
+  }, []);
+  console.log("Schemes:", formData.schemes);
+  console.log("Sectors:", formData.sectors);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -143,14 +136,14 @@ export default function CreateCenter() {
           formData.sanction_order_letter.name
         );
       }
-
+   
       formData.schemes.forEach((scheme, index) => {
-        formDataToSend.append(`schemes[${index}][schemeName]`, scheme.schemeName);
+        formDataToSend.append(`schemes[${index}][schemeName]`, scheme);
       });
-
       formData.sectors.forEach((sector, index) => {
         formDataToSend.append(`sectors[${index}]`, sector);
       });
+
 
       const response = await fetch(`${server}/center`, {
         method: "POST",
@@ -182,7 +175,9 @@ export default function CreateCenter() {
       setIsLoading(false);
     }
   };
-  console.log(formData)
+
+  console.log(formData);
+
   return (
     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 min-h-screen py-12">
       <div className="container mx-auto max-w-4xl px-6">
@@ -208,14 +203,21 @@ export default function CreateCenter() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="state" className="text-indigo-600">State of Operation</Label>
-                <Input
-                  id="state"
-                  placeholder="Enter state of operation"
+                <Select
+                  onValueChange={(value) => handleSelectChange("state", value)}
                   value={formData.state}
-                  onChange={handleInputChange}
-                  required
-                  className="border-indigo-200 focus:ring-indigo-500"
-                />
+                >
+                  <SelectTrigger className="border-indigo-200 focus:ring-indigo-500">
+                    <SelectValue placeholder="Select a state" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[200px] overflow-y-auto">
+                    {states.map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             
@@ -233,23 +235,12 @@ export default function CreateCenter() {
               </div>
               <div className="space-y-2">
                 <Label className="text-indigo-600">Schemes</Label>
-                <div className="bg-gray-50 p-3 rounded-md space-y-2 max-h-40 overflow-y-auto">
-                  {allSchemes.map((scheme) => (
-                    <div key={scheme._id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`scheme-${scheme._id}`}
-                        checked={formData.schemes.some(
-                          (s) => s.schemeName === scheme.name
-                        )}
-                        onCheckedChange={(checked) =>
-                          handleSchemeChange(scheme.name, checked)
-                        }
-                        className="text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <Label htmlFor={`scheme-${scheme._id}`} className="text-sm">{scheme.name}</Label>
-                    </div>
-                  ))}
-                </div>
+                <CheckboxDropdown
+                  options={allSchemes.map(scheme => ({ value: scheme.name, label: scheme.name }))}
+                  selectedValues={formData.schemes}
+                  onChange={(values) => setFormData(prev => ({ ...prev, schemes: values }))}
+                  placeholder="Select schemes"
+                />
               </div>
             </div>
   
@@ -290,21 +281,12 @@ export default function CreateCenter() {
   
             <div className="space-y-2">
               <Label className="text-indigo-600">Sectors</Label>
-              <div className="bg-gray-50 p-3 rounded-md grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
-                {availableSectors.map((sector) => (
-                  <div key={sector._id} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`sector-${sector._id}`}
-                      checked={formData.sectors.includes(sector._id)}
-                      onCheckedChange={(checked) =>
-                        handleSectorChange(sector._id, checked)
-                      }
-                      className="text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <Label htmlFor={`sector-${sector._id}`} className="text-sm">{sector.name}</Label>
-                  </div>
-                ))}
-              </div>
+              <CheckboxDropdown
+                options={availableSectors.map(sector => ({ value: sector._id, label: sector.name }))}
+                selectedValues={formData.sectors}
+                onChange={(values) => setFormData(prev => ({ ...prev, sectors: values }))}
+                placeholder="Select sectors"
+              />
             </div>
          
             <div className="pt-4">

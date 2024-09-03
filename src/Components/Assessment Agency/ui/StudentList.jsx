@@ -12,7 +12,7 @@ import {
   setStudentNameState,
   setStudentProfilePictureState,
 } from "../Atoms/AssessmentAgencyAtoms";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa"; 
 import { server } from "@/main";
 
 const StudentList = () => {

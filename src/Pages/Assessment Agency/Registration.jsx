@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { server } from "@/main";
+import { toast } from "react-toastify";
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
   const [agencyName, setAgencyName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const [officeAddress, setOfficeAddress] = useState("");
   const [communicationAddress, setCommunicationAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -304,10 +305,22 @@ const RegistrationForm = () => {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response.data);
+      // console.log(response.data);
       navigate("/login");
+      toast.success("Assessment agency created !!", {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+    });
     } catch (error) {
       console.log(error.response ? error.response.data : error.message);
+      toast.error("Somthing went wrong please check the form and try again !!", {
+        position: "bottom-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+    });
     }
     finally{
       setLoading(false);

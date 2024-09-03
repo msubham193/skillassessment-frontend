@@ -7,12 +7,45 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { server } from "@/main";
 import axios from "axios";
+import * as Yup from 'yup';
+import { fileURLToPath } from "url";
+
+const stateOptions = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttarakhand",
+  "Uttar Pradesh",
+  "West Bengal",
+];
 
 const AddTeacher = () => {
   const { id: batchId } = useParams();
   const navigate = useNavigate();
   const [batchData, setBatchData] = useState({});
-
+ const [loading ,setLoading]=useState(false)
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -63,11 +96,34 @@ const AddTeacher = () => {
     fetchBatchdata();
   }, [batchId]);
 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    phoneNumber: Yup.string().required("Phone number is required"),
+    email: Yup.string().email("Invalid email address").required("Email is required"),
+    state: Yup.string().required("State is required"),
+    city: Yup.string().required("City is required"),
+    district: Yup.string().required("District is required"),
+    pincode: Yup.string().required("Pincode is required"),
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     try {
-      console.log("enter  in to try block")
+      await validationSchema.validate(
+        {
+          name,
+          phoneNumber,
+          email,
+          state,
+          city,
+          district,
+          pincode,
+        },
+        { abortEarly: false }
+      );
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("phoneNumber", phoneNumber);
@@ -92,11 +148,6 @@ const AddTeacher = () => {
       if (image) {
         formData.append("image", image);
       }
-      console.log("append the form data")
-//this for loop for print the form data in frontend....
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-      }
 
       const response = await axios({
         method: 'post',
@@ -106,21 +157,28 @@ const AddTeacher = () => {
           "x-access-token": localStorage.getItem("token"),
         },
       });
-      console.log("everithing working finr",response)
 
       if (response.status === 201) {
-        console.log(response.data);
         toast.success("Teacher added successfully");
         navigate("/trainingPartner/dashboard");
       } else {
-        console.error("Failed to add teacher:", response.data);
         toast.error(response.data.message || "Failed to add teacher");
       }
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to add teacher");
+      if (error.inner) {
+        error.inner.forEach((validationError) => {
+          toast.error(validationError.message);
+        });
+      } else {
+        toast.error("Failed to add teacher");
+      }
+    }
+    finally {
+      setLoading(false); 
     }
   };
+
+
 
   return (
     <div className="flex justify-center p-8 bg-gray-100">
@@ -295,14 +353,20 @@ const AddTeacher = () => {
             <Label htmlFor="state" className="text-sm font-medium text-gray-700">
               State
             </Label>
-            <Input
-              type="text"
+            <select
               name="state"
               id="state"
-              onChange={(e) => setState(e.target.value)}
               value={state}
-              className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-            />
+              onChange={(e) => setState(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Select a state</option>
+              {stateOptions.map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="city" className="text-sm font-medium text-gray-700">
@@ -408,11 +472,14 @@ const AddTeacher = () => {
             />
           </div>
           <Button
-            type="submit"
-            className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors"
-          >
-            Add Trainer
-          </Button>
+        type="submit"
+        className={`mt-4 ${
+          loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
+        } text-white font-bold py-2 px-4 rounded transition-colors`}
+        disabled={loading}
+      >
+        {loading ? "Adding..." : "Add Trainer"}
+      </Button>
         </form>
       </div>
     </div>

@@ -22,7 +22,7 @@ function SkillPortal() {
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -33,7 +33,8 @@ function SkillPortal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data : ", formData);
+    // console.log("Form Data : ", formData);
+    setLoading(true);
     try {
       const response = await axios.post(`${server}/aa/login`, formData);
       console.log(response.data);
@@ -67,8 +68,11 @@ function SkillPortal() {
     } catch (error) {
       console.log(error);
       setErrorMessage(
-        "Login failed. Please check your credentials and try again."
+        "Login failed. Please check your email or password and try again."
       );
+    }
+    finally{
+      setLoading(false);
     }
   };
   return (
@@ -103,7 +107,9 @@ function SkillPortal() {
               type="submit"
               className="bg-green-800 rounded-2xl text-white py-2"
             >
-              Login
+              {
+                loading?"Loading...":"Login"
+              }
             </button>
           </form>
           <div className="mt-4 grid grid-cols-3 items-center text-gray-400">

@@ -98,6 +98,7 @@ import ContactUs from "./Pages/Static/ContactUs";
 import PortalLogin from "./Pages/Static/PortalLogin";
 import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
+import StudentDetails from "./Pages/Sna/StudentsDetails";
 
 const App = () => {
   //code for admin
@@ -385,6 +386,7 @@ const App = () => {
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
             />
+             <Route path="batchstudents/:batchId" element={<StudentDetails />} />
             <Route path="reports" element={<ViewReports />} />
             <Route path="marks" element={<Marksheet />} />
             <Route path="batchresult/:batchId" element={<ViewResult />} />

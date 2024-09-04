@@ -71,7 +71,7 @@ const Profile = () => {
           </div>
           <div>
             <img
-              src="/placeholder.svg"
+              src={profileData.logo}
               width={120}
               height={60}
               alt="Agency Logo"

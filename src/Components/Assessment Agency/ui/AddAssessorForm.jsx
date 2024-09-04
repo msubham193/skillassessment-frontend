@@ -6,7 +6,6 @@ import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
 import { toast } from "react-toastify";
 
-
 const AddAssessorForm = () => {
   // Initialize state for each field
   const [name, setName] = useState("");
@@ -29,13 +28,13 @@ const AddAssessorForm = () => {
   const [pincode, setPincode] = useState("");
   const [certifiedInAnyCourse, setCertifiedInAnyCourse] = useState("");
   const [courseCode, setCourseCode] = useState("");
-  const [sector, setSector] = useState([]);
+  const [sector, setSector] = useState("");
   const [
     enrolledInAnyOtherAssesmentAgency,
     setEnrolledInAnyOtherAssesmentAgency,
   ] = useState("No");
   const [enrolledInAnyOtherSSC, setEnrolledInAnyOtherSSC] = useState("Yes");
-  const [profilePic, setProfilePic] = useState(null);
+  const [image, setImage] = useState(null);
   const [courseOptions, setCourseOptions] = useState([]);
   const [sectorsOption, setSectorsOption] = useState([]);
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
@@ -83,6 +82,12 @@ const AddAssessorForm = () => {
         }
       } catch (error) {
         console.log("Error fetching data : ", error);
+        toast.error("Failed to fetch sectors", {
+          position: "bottom-right",
+          closeOnClick: true,
+          draggable: true,
+          theme: "colored",
+        });
       }
     };
     fetchData();
@@ -90,21 +95,33 @@ const AddAssessorForm = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
+      if (!sector) {
+        setCourseOptions([]);
+        return;
+      }
       try {
         const response = await axios.get(`${server}/sector?name=${sector}`);
+        console.log(response.data.data);
         if (
           response.data &&
           response.data.data &&
           response.data.data.length > 0
         ) {
-          const courseNames = response.data.data.map((item) => item.courseName);
-          setCourseOptions(courseNames);
-          console.log(courseNames);
+          const courseNames = response.data.data.map(
+            (item) => item
+          );
+          setCourseOptions(courseNames); //change some items here #####################
         } else {
           setCourseOptions([]);
         }
       } catch (error) {
         console.log("Error fetching courses: ", error);
+        toast.error("Failed to fetch courses", {
+          position: "bottom-right",
+          closeOnClick: true,
+          draggable: true,
+          theme: "colored",
+        });
       }
     };
     fetchCourses();
@@ -117,6 +134,8 @@ const AddAssessorForm = () => {
     switch (name) {
       case "name":
         setName(value);
+        if (!value.trim()) newErrors.name = "Name is required";
+        else delete newErrors.name;
         break;
       case "phoneNumber":
         setPhoneNumber(value);
@@ -160,12 +179,23 @@ const AddAssessorForm = () => {
         break;
       case "dist":
         setDist(value);
+        if (!value.trim()) newErrors.dist = "District is required";
+        else delete newErrors.dist;
+        break;
+      case "state":
+        setState(value);
+        if (!value) newErrors.state = "State is required";
+        else delete newErrors.state;
         break;
       case "city":
         setCity(value);
+        if (!value.trim()) newErrors.city = "City is required";
+        else delete newErrors.city;
         break;
       case "pincode":
         setPincode(value);
+        if (!value.trim()) newErrors.pincode = "Pincode is required";
+        else delete newErrors.pincode;
         break;
       case "certifiedInAnyCourse":
         setCertifiedInAnyCourse(value);
@@ -186,7 +216,18 @@ const AddAssessorForm = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfilePic(file);
+      setImage(file);
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors.image;
+        return newErrors;
+      });
+    } else {
+      setImage(null);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        image: "Profile picture is required",
+      }));
     }
   };
 
@@ -210,22 +251,38 @@ const AddAssessorForm = () => {
     return phonePattern.test(phone);
   };
 
-  const handleSectorChange = (event) => {
-    const selectedOptions = Array.from(
-      event.target.selectedOptions,
-      (option) => option.value
-    );
-    setSector(selectedOptions);
+  const handleSectorChange = (e) => {
+    const value = e.target.value;
+    setSector(value);
+    if (!value) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        sector: "Sector is required",
+      }));
+    } else {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors.sector;
+        return newErrors;
+      });
+    }
   };
 
-  const handleCourseChange = (event) => {
-    const selectedOptions = Array.from(
-      event.target.selectedOptions,
-      (option) => option.value
-    );
-    console.log(selectedOptions);
-    setCourseCode("");
-    console.log(courseCode);
+  const handleCourseChange = (e) => { 
+    const value = e.target.value;
+    setCourseCode(value);
+    if (!value) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        courseCode: "Course Code is required",
+      }));
+    } else {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors.courseCode;
+        return newErrors;
+      });
+    }
   };
 
   // Handle form submission
@@ -235,98 +292,136 @@ const AddAssessorForm = () => {
 
     // Validate fields
     const newErrors = {};
-    if (!name) newErrors.name = "Name is required";
-    if (!phoneNumber) newErrors.phoneNumber = "Phone number is required";
-    else if (!validatePhoneNumber(phoneNumber))
-        newErrors.phoneNumber = "Invalid phone number";
-    if (!email) newErrors.email = "Email is required";
-    else if (!validateEmail(email)) newErrors.email = "Invalid email format";
-    if (!adharNumber) newErrors.adharNumber = "Aadhar number is required";
-    else if (!validateAadhaar(adharNumber))
-        newErrors.adharNumber = "Invalid Aadhar number";
-    if (!panNumber) newErrors.panNumber = "PAN number is required";
-    else if (!validatePAN(panNumber)) newErrors.panNumber = "Invalid PAN number";
-    if (!dist) newErrors.dist = "District is required";
+    if (!name.trim()) newErrors.name = "Name is required";
+    if (!phoneNumber) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!validatePhoneNumber(phoneNumber)) {
+      newErrors.phoneNumber = "Invalid phone number";
+    }
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!adharNumber) {
+      newErrors.adharNumber = "Aadhar number is required";
+    } else if (!validateAadhaar(adharNumber)) {
+      newErrors.adharNumber = "Invalid Aadhar number";
+    }
+    if (!panNumber) {
+      newErrors.panNumber = "PAN number is required";
+    } else if (!validatePAN(panNumber)) {
+      newErrors.panNumber = "Invalid PAN number";
+    }
+    if (!dist.trim()) newErrors.dist = "District is required";
     if (!state) newErrors.state = "State is required";
-    if (!city) newErrors.city = "City is required";
-    if (!pincode) newErrors.pincode = "Pincode is required";
+    if (!city.trim()) newErrors.city = "City is required";
+    if (!pincode.trim()) newErrors.pincode = "Pincode is required";
+    if (!sector) newErrors.sector = "Sector is required";
+    if (!courseCode) newErrors.courseCode = "Course Code is required";
+    if (!image) newErrors.image = "Profile picture is required";
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-        setLoading(false);
-        console.log("Please fix the errors before submitting");
-        return;
+      setLoading(false);
+      toast.error("Please fix the errors before submitting", {
+        position: "bottom-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      return;
     }
 
-    // Prepare form data
-    const formData = {
-        name,
-        phoneNumber,
-        email,
-        education_qualification_1,
-        education_qualification_2,
-        education_qualification_3,
-        experience,
-        other_experience,
-        adharNumber,
-        panNumber,
-        assesoraId,
-        dist,
-        state,
-        city,
-        pincode,
-        certifiedInAnyCourse,
-        courseCode,
-        sector,
-        enrolledInAnyOtherAssesmentAgency,
-        enrolledInAnyOtherSSC,
-        profilePic,
-        AssesmentAgency: `${assessmentAgencyId}`,
-    };
+    // Prepare FormData
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", name);
+    formDataToSend.append("phoneNumber", phoneNumber);
+    formDataToSend.append("email", email);
+    formDataToSend.append("education_qualification_1", education_qualification_1);
+    formDataToSend.append("education_qualification_2", education_qualification_2);
+    formDataToSend.append("education_qualification_3", education_qualification_3);
+    formDataToSend.append("experience", experience);
+    formDataToSend.append("other_experience", other_experience);
+    formDataToSend.append("adharNumber", adharNumber);
+    formDataToSend.append("panNumber", panNumber);
+    formDataToSend.append("assesoraId", assesoraId);
+    formDataToSend.append("dist", dist);
+    formDataToSend.append("state", state);
+    formDataToSend.append("city", city);
+    formDataToSend.append("pincode", pincode);
+    formDataToSend.append("certifiedInAnyCourse", certifiedInAnyCourse);
+    formDataToSend.append("courseCode", courseCode);
+    formDataToSend.append("sector", sector);
+    formDataToSend.append(
+      "enrolledInAnyOtherAssesmentAgency",
+      enrolledInAnyOtherAssesmentAgency
+    );
+    formDataToSend.append(
+      "enrolledInAnyOtherSSC",
+      enrolledInAnyOtherSSC
+    );
+    formDataToSend.append("image", image);
+    formDataToSend.append("AssesmentAgency", `${assessmentAgencyId}`);
+
+    //rint the form data...
+    for (const key in formDataToSend) {
+      if (Object.hasOwnProperty.call(formDataToSend, key)) {
+          console.log(`${key}: ${formData[key]}`);
+      }
+  }
 
     try {
-        const response = await axios.post(`${server}/assessor`, formData);
-        toast.success(response.data.message, {
-            position: "top-right",
-            closeOnClick: true,
-            draggable: true,
-            theme: "colored",
-        });
+      const response = await axios.post(`${server}/assessor`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success(response.data.message, {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
 
-        // Reset all input fields
-        setName("");
-        setPhoneNumber("");
-        setEmail("");
-        setEducation_qualification_1("");
-        setEducation_qualification_2("");
-        setEducation_qualification_3("");
-        setExperience("");
-        setOther_experience("");
-        setAdharNumber("");
-        setPanNumber("");
-        setAssesoraId("");
-        setDist("");
-        setState("");
-        setCity("");
-        setPincode("");
-        setCertifiedInAnyCourse("");
-        setCourseCode([]);
-        setSector([]);
-        setEnrolledInAnyOtherAssesmentAgency("No");
-        setEnrolledInAnyOtherSSC("Yes");
-        setProfilePic(null);
+      // Reset all input fields
+      setName("");
+      setPhoneNumber("");
+      setEmail("");
+      setEducation_qualification_1("");
+      setEducation_qualification_2("");
+      setEducation_qualification_3("");
+      setExperience("");
+      setOther_experience("");
+      setAdharNumber("");
+      setPanNumber("");
+      setAssesoraId("");
+      setDist("");
+      setState("");
+      setCity("");
+      setPincode("");
+      setCertifiedInAnyCourse("");
+      setCourseCode("");
+      setSector("");
+      setEnrolledInAnyOtherAssesmentAgency("No");
+      setEnrolledInAnyOtherSSC("Yes");
+      setImage(null);
+      setErrors({});
     } catch (error) {
-        toast.error(error.message, {
-            position: "bottom-right",
-            closeOnClick: true,
-            draggable: true,
-            theme: "colored",
-        });
+      console.error("Error submitting form:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to create assessor";
+      toast.error(errorMessage, {
+        position: "bottom-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8 bg-gray-300 rounded-md shadow-md">
@@ -335,51 +430,67 @@ const AddAssessorForm = () => {
           Add Assessor
         </h2>
         <div className="flex flex-col gap-4">
+          {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Name of the Assessor
+              Name of the Assessor<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="name"
               value={name}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
             {errors.name && (
-        <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-    )}
+              <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+            )}
           </div>
+
+          {/* Phone Number */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Phone Number
+              Phone Number<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="phoneNumber"
               value={phoneNumber}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              maxLength="10"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.phoneNumber ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
             {errors.phoneNumber && (
-              <p className="mt-1 text-sm text-red-500">{errors.phoneNumber}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.phoneNumber}
+              </p>
             )}
           </div>
+
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Email ID
+              Email ID<span className="text-red-500">*</span>
             </label>
             <input
               type="email"
               name="email"
               value={email}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">{errors.email}</p>
             )}
           </div>
+
+          {/* Educational Qualifications */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Educational Qualification 1
@@ -416,15 +527,18 @@ const AddAssessorForm = () => {
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
+
+          {/* Experience */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Relevant Industry Experience (Years)
             </label>
             <input
-              type="text"
+              type="number"
               name="experience"
               value={experience}
               onChange={handleChange}
+              min="0"
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
@@ -440,36 +554,52 @@ const AddAssessorForm = () => {
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
+
+          {/* Aadhar Number */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Aadhar Number
+              Aadhar Number<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="adharNumber"
               value={adharNumber}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              maxLength="12"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.adharNumber ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
             {errors.adharNumber && (
-              <p className="mt-1 text-sm text-red-500">{errors.adharNumber}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.adharNumber}
+              </p>
             )}
           </div>
+
+          {/* PAN Number */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              PAN Number
+              PAN Number<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="panNumber"
               value={panNumber}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              maxLength="10"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.panNumber ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
             {errors.panNumber && (
-              <p className="mt-1 text-sm text-red-500">{errors.panNumber}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.panNumber}
+              </p>
             )}
           </div>
+
+          {/* Assessor ID */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Assessor ID
@@ -482,60 +612,92 @@ const AddAssessorForm = () => {
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
+
+          {/* District */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              District
+              District<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="dist"
               value={dist}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.dist ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
+            {errors.dist && (
+              <p className="mt-1 text-sm text-red-500">{errors.dist}</p>
+            )}
           </div>
+
+          {/* State */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              State
+              State<span className="text-red-500">*</span>
             </label>
             <select
               id="state"
+              name="state"
               value={state}
-              onChange={(e) => setState(e.target.value)}
-              className="p-1 text-sm rounded-md border w-full"
+              onChange={handleChange}
+              className={`p-1 text-sm rounded-md border w-full ${
+                errors.state ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             >
               <option value="">Select State</option>
-              {indianStates.map((state) => (
-                <option key={state} value={state}>
-                  {state}
+              {indianStates.map((stateName) => (
+                <option key={stateName} value={stateName}>
+                  {stateName}
                 </option>
               ))}
             </select>
+            {errors.state && (
+              <p className="mt-1 text-sm text-red-500">{errors.state}</p>
+            )}
           </div>
+
+          {/* City */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              City
+              City<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="city"
               value={city}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.city ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
+            {errors.city && (
+              <p className="mt-1 text-sm text-red-500">{errors.city}</p>
+            )}
           </div>
+
+          {/* Pincode */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Pincode
+              Pincode<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="pincode"
               value={pincode}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              maxLength="6"
+              className={`mt-1 block w-full h-8 p-2 rounded-md border ${
+                errors.pincode ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
+            {errors.pincode && (
+              <p className="mt-1 text-sm text-red-500">{errors.pincode}</p>
+            )}
           </div>
+
+          {/* Certified In Any Course */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Certified In Any Course
@@ -548,91 +710,128 @@ const AddAssessorForm = () => {
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
           </div>
+
+          {/* Sector */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Sector
+              Sector<span className="text-red-500">*</span>
             </label>
             <select
               name="sectors"
-              value={sector.join(",")}
+              value={sector}
               onChange={handleSectorChange}
-              className="mt-1 block w-full h-8 p-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+              className={`mt-1 block w-full h-8 p-1 text-sm rounded-md border ${
+                errors.sector ? "border-red-500" : "border-gray-300"
+              } shadow-sm focus:border-[#A41034] focus:ring-[#A41034]`}
             >
               <option value="">Select a sector</option>
-              {sectorsOption.map((sector, index) => (
-                <option key={index} value={sector}>
-                  {sector}
+              {sectorsOption.map((sectorName, index) => (
+                <option key={index} value={sectorName}>
+                  {sectorName}
                 </option>
               ))}
             </select>
+            {errors.sector && (
+              <p className="mt-1 text-sm text-red-500">{errors.sector}</p>
+            )}
           </div>
-          {/* <div>
+
+          {/* Course Code */}
+          <div>
             <label className="block text-sm font-medium text-gray-700">
-              Course
+              Course Code<span className="text-red-500">*</span>
             </label>
             <select
-              name="courses"
-              value={courseCode.join(",")}
+              name="courseCode"
+              value={courseCode}
               onChange={handleCourseChange}
-              className="mt-1 block w-full h-8 p-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+              className={`mt-1 block w-full h-8 p-1 text-sm rounded-md border ${
+                errors.courseCode ? "border-red-500" : "border-gray-300"
+              } shadow-sm focus:border-[#A41034] focus:ring-[#A41034]`}
             >
               <option value="">Select a Course</option>
               {courseOptions.map((course, index) => (
-                <option key={index} value={course}>
-                  {course}
+                <option key={index} value={course.courseCode}>
+                  {course.courseName}
                 </option>
               ))}
             </select>
-          </div> */}
+            {errors.courseCode && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.courseCode}
+              </p>
+            )}
+          </div>
+
+          {/* Enrolled In Any Other Assessment Agency */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Enrolled In Any Other Assesment Agency
+              Enrolled In Any Other Assessment Agency
             </label>
-            <input
-              type="text"
+            <select
               name="enrolledInAnyOtherAssesmentAgency"
               value={enrolledInAnyOtherAssesmentAgency}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+              className="mt-1 block w-full h-8 p-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
           </div>
+
+          {/* Enrolled In Any Other SSC */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Enrolled In Any Other SSC
             </label>
-            <input
-              type="text"
+            <select
               name="enrolledInAnyOtherSSC"
               value={enrolledInAnyOtherSSC}
               onChange={handleChange}
-              className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+              className="mt-1 block w-full h-8 p-1 text-sm rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
           </div>
-          {/* <div>
+
+          {/* Profile Picture */}
+          <div>
             <label className="block text-sm font-medium text-gray-700">
-              Profile Picture
+              Profile Picture<span className="text-red-500">*</span>
             </label>
             <input
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="mt-1 block w-full h-10 p-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className={`mt-1 block w-full h-10 p-1 rounded-md border ${
+                errors.image ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
             />
-            {profilePic && (
+            {errors.image && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.image}
+              </p>
+            )}
+            {image && (
               <div className="mt-2">
-                <p>Selected file: {profilePic.name}</p>
+                <p>Selected file: {image.name}</p>
               </div>
             )}
-          </div> */}
+          </div>
+
+          {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#A41034] hover:bg-[#A41034]-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#A41034] hover:bg-[#A41034]-dark"
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             >
-            {
-              loading?"Creating Assessor":"Add Assessor"
-            }
-             
+              {loading ? "Creating Assessor..." : "Add Assessor"}
             </button>
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
   authTokenState,
 } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
+import { Eye, EyeOff } from "lucide-react";
 
 function SkillPortal() {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ function SkillPortal() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -31,19 +34,20 @@ function SkillPortal() {
     }));
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Form Data : ", formData);
     setLoading(true);
     try {
       const response = await axios.post(`${server}/aa/login`, formData);
-      console.log(response.data);
       const { data } = response.data;
       const authToken = data.token;
       const applicationStatus = data.data.applicationStatus;
       const id = data.data._id;
       const name = data.data.agencyName;
-      console.log(applicationStatus);
 
       if (applicationStatus !== "Approved") {
         setErrorMessage("Your application is not approved by the admin.");
@@ -70,11 +74,11 @@ function SkillPortal() {
       setErrorMessage(
         "Login failed. Please check your email or password and try again."
       );
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
+
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5">
@@ -95,21 +99,28 @@ function SkillPortal() {
               onChange={handleChange}
               className="p-2 mt-8 rounded-xl border"
             />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="p-2 rounded-xl border"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="p-2 rounded-xl border w-full"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-2 text-gray-500"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             <button
               type="submit"
               className="bg-green-800 rounded-2xl text-white py-2"
             >
-              {
-                loading?"Loading...":"Login"
-              }
+              {loading ? "Loading..." : "Login"}
             </button>
           </form>
           <div className="mt-4 grid grid-cols-3 items-center text-gray-400">

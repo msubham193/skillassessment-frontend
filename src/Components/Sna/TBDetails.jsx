@@ -66,7 +66,7 @@ const TBDetails = () => {
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {batch.courseName}
-              </td>
+              </td>   
               <td className="py-2 px-4 border-b text-center">
                 {batch.students.length}
               </td>

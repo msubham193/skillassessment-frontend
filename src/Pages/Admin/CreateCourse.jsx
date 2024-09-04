@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import ViewSectorAndCourse from '@/Components/Admin/Content/ViewSectorAndCourse';
 
 const CreateCourse = ({children}) => {
-  const location = useLocation();
+  const location = useLocation(); 
   const query = new URLSearchParams(location.search);
   const defaultTab = query.get("tab") || "overview"; 
   const [selectedTab, setSelectedTab] = useState(defaultTab);

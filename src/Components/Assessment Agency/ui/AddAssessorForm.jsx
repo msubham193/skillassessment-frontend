@@ -28,7 +28,7 @@ const AddAssessorForm = () => {
   const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
   const [certifiedInAnyCourse, setCertifiedInAnyCourse] = useState("");
-  const [courseCode, setCourseCode] = useState([]);
+  const [courseCode, setCourseCode] = useState("");
   const [sector, setSector] = useState([]);
   const [
     enrolledInAnyOtherAssesmentAgency,
@@ -223,7 +223,8 @@ const AddAssessorForm = () => {
       event.target.selectedOptions,
       (option) => option.value
     );
-    setCourseCode(selectedOptions);
+    console.log(selectedOptions);
+    setCourseCode("");
     console.log(courseCode);
   };
 
@@ -570,7 +571,7 @@ const AddAssessorForm = () => {
               ))}
             </select>
           </div>
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700">
               Course
             </label>
@@ -587,7 +588,7 @@ const AddAssessorForm = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Enrolled In Any Other Assesment Agency

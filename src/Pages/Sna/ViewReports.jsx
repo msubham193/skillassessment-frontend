@@ -52,7 +52,7 @@ const ViewReports = () => {
   }
 
   if (!data.length) {
-    return <div>No data available.</div>;
+    return <div className="text-3xl flex justify-center mt-16 font-sans text-red-900">No data available.</div>;
   }
 
   // Process data for charts

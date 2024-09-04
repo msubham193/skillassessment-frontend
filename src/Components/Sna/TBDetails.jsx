@@ -16,9 +16,9 @@ const TBDetails = () => {
         const response = await axios.get(
           `${server}/sna/batches/all/query?state=${state}&scheme=${scheme}`
         );
-        console.log(response);
+        console.log(response.data.data[0].approvedByGovernmentBody);
         if (response.data && Array.isArray(response.data.data)) {
-          setBatchData(response.data.data); // Ensure response data is an array
+          setBatchData(response.data.data); 
         } else {
           console.error("Unexpected response format", response.data);
           setBatchData([]);
@@ -66,19 +66,19 @@ const TBDetails = () => {
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {batch.courseName}
-              </td>
+              </td>   
               <td className="py-2 px-4 border-b text-center">
                 {batch.students.length}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 <span
                   className={`inline-block px-2 py-1 text-white ${
-                    batch.approvedByGovernmentBody === "true"
+                    batch.approvedByGovernmentBody === true
                       ? "bg-green-500"
                       : "bg-red-500"
                   } rounded-full`}
                 >
-                  {batch.resultPublished === "true" ? "Completed" : "On-Going"}
+                  {batch.approvedByGovernmentBody === true ? "Approved" : "Pending"}
                 </span>
               </td>
             </tr>

@@ -379,9 +379,9 @@ const App = () => {
         <Route path="snalogin" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
-            <Route path="snadashboard" element={<SNADashboard />} />
-            <Route path="trainingcenters" element={<TCDetails />} />
-            <Route path="trainingbatches" element={<TBDetails />} />
+            <Route path="snadashboard" element={<SNADashboard/>} />
+            <Route path="trainingcenters" element={<TCDetails/>} />
+            <Route path="trainingbatches" element={<TBDetails/>} />
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}

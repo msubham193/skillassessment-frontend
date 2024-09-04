@@ -385,7 +385,7 @@ const AddStudent = () => {
                     handleChange({ target: { name: "district", value } })
                   }
                   value={studentInputs.district}
-                  disabled={!studentInputs.state} // Disable district dropdown if no state is selected
+                  disabled={!studentInputs.state} 
                 >
                   <SelectTrigger
                     className={errors.district ? "border-red-500" : ""}

@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components(shadcn)/ui/select";
+import data from "../../utils/stateData.json";
 
 const AddStudent = () => {
   const { id: batchId } = useParams();
@@ -52,36 +53,7 @@ const AddStudent = () => {
     "MPR_Id",
     "SNA_Id",
   ];
-  const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-  ];
+
   const labelMap = {
     name: "Full Name",
     fathername: "Father's Name",
@@ -113,15 +85,20 @@ const AddStudent = () => {
     MPR_Id: "MPR ID",
     SNA_Id: "SNA ID",
   };
+
   const dateFields = ["dob", "traininstartdate", "trainingenddate"];
-  const [batchdata, setbatchdata] = useState({});
+
+  const genderOptions = ["Male", "Female", "Other"];
+  const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Other"];
+  const categoryOptions = ["OBC", "General", "SC", "ST"];
+  const nationalityOptions = ["Indian", "Other"];
+
   const [studentInputs, setStudentInputs] = useState(
     studentFields.reduce((acc, field) => {
       acc[field] = "";
       return acc;
     }, {})
   );
-  console.log(studentInputs);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -132,6 +109,29 @@ const AddStudent = () => {
       [name]: value,
     }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
+  };
+
+  const handleDateChange = (field, date) => {
+    setStudentInputs((prevState) => {
+      const newState = {
+        ...prevState,
+        [field]: date,
+      };
+
+      if (field === "traininstartdate" || field === "trainingenddate") {
+        const { totaldays, totalhours, trainingHours } =
+          calculateTrainingDuration(
+            newState.traininstartdate,
+            newState.trainingenddate
+          );
+        newState.totaldays = totaldays;
+        newState.totalhours = totalhours;
+        newState.trainingHours = trainingHours;
+      }
+
+      return newState;
+    });
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
   };
 
   const calculateTrainingDuration = (startDate, endDate) => {
@@ -160,29 +160,6 @@ const AddStudent = () => {
     return {};
   };
 
-  const handleDateChange = (field, date) => {
-    setStudentInputs((prevState) => {
-      const newState = {
-        ...prevState,
-        [field]: date,
-      };
-
-      if (field === "traininstartdate" || field === "trainingenddate") {
-        const { totaldays, totalhours, trainingHours } =
-          calculateTrainingDuration(
-            newState.traininstartdate,
-            newState.trainingenddate
-          );
-        newState.totaldays = totaldays;
-        newState.totalhours = totalhours;
-        newState.trainingHours = trainingHours;
-      }
-
-      return newState;
-    });
-    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
-  };
-
   const fetchBatchdata = async () => {
     try {
       const response = await fetch(`${server}/batch/${batchId}`, {
@@ -194,7 +171,6 @@ const AddStudent = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setbatchdata(data.data);
         setStudentInputs((prevState) => {
           const newState = {
             ...prevState,
@@ -281,6 +257,15 @@ const AddStudent = () => {
     }
   };
 
+  // Update district options based on selected state
+  const handleStateChange = (value) => {
+    setStudentInputs((prevState) => ({
+      ...prevState,
+      state: value,
+      district: "", // Reset district when state changes
+    }));
+  };
+
   return (
     <div className="flex justify-center p-8">
       <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
@@ -296,11 +281,89 @@ const AddStudent = () => {
               >
                 {labelMap[field]}
               </Label>
-              {field === "state" ? (
+              {field === "gender" ? (
                 <Select
                   onValueChange={(value) =>
-                    handleChange({ target: { name: "state", value } })
+                    handleChange({ target: { name: "gender", value } })
                   }
+                  value={studentInputs.gender}
+                >
+                  <SelectTrigger
+                    className={errors.gender ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select Gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {genderOptions.map((option, idx) => (
+                      <SelectItem key={idx} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : field === "religion" ? (
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "religion", value } })
+                  }
+                  value={studentInputs.religion}
+                >
+                  <SelectTrigger
+                    className={errors.religion ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select Religion" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {religionOptions.map((option, idx) => (
+                      <SelectItem key={idx} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : field === "category" ? (
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "category", value } })
+                  }
+                  value={studentInputs.category}
+                >
+                  <SelectTrigger
+                    className={errors.category ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categoryOptions.map((option, idx) => (
+                      <SelectItem key={idx} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : field === "nationality" ? (
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "nationality", value } })
+                  }
+                  value={studentInputs.nationality}
+                >
+                  <SelectTrigger
+                    className={errors.nationality ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select Nationality" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {nationalityOptions.map((option, idx) => (
+                      <SelectItem key={idx} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : field === "state" ? (
+                <Select
+                  onValueChange={(value) => handleStateChange(value)}
                   value={studentInputs.state}
                 >
                   <SelectTrigger
@@ -309,11 +372,35 @@ const AddStudent = () => {
                     <SelectValue placeholder="Select a state" />
                   </SelectTrigger>
                   <SelectContent>
-                    {indianStates.map((state, idx) => (
-                      <SelectItem key={idx} value={state}>
-                        {state}
+                    {data.states.map((state, idx) => (
+                      <SelectItem key={idx} value={state.state}>
+                        {state.state}
                       </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              ) : field === "district" ? (
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "district", value } })
+                  }
+                  value={studentInputs.district}
+                  disabled={!studentInputs.state} // Disable district dropdown if no state is selected
+                >
+                  <SelectTrigger
+                    className={errors.district ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder="Select a district" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {studentInputs.state &&
+                      data.states
+                        .find((s) => s.state === studentInputs.state)
+                        .districts.map((district, idx) => (
+                          <SelectItem key={idx} value={district}>
+                            {district}
+                          </SelectItem>
+                        ))}
                   </SelectContent>
                 </Select>
               ) : dateFields.includes(field) ? (

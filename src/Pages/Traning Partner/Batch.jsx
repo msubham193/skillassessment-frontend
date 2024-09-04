@@ -10,7 +10,7 @@ import { Book } from "lucide-react";
 import DataTable from "@/Components/Traning Partner/ui/DataTable";
 import { columns } from "@/Components/Traning Partner/ui/coulmns";
 const Batch = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const batchData = useRecoilValue(batchDataAtoms);
   console.log("batch details", batchData);
   const [students, setStudents] = useState([]);

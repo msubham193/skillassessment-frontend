@@ -283,6 +283,11 @@ const AddAssessorForm = () => {
         profilePic,
         AssesmentAgency: `${assessmentAgencyId}`,
     };
+    for (const key in formData) {
+      if (Object.hasOwnProperty.call(formData, key)) {
+          console.log(`${key}: ${formData[key]}`);
+      }
+  }
 
     try {
         const response = await axios.post(`${server}/assessor`, formData);

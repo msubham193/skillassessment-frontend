@@ -4,7 +4,8 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+
 
 const AddAssessorForm = () => {
   // Initialize state for each field
@@ -39,6 +40,7 @@ const AddAssessorForm = () => {
   const [sectorsOption, setSectorsOption] = useState([]);
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const indianStates = [
     "Andhra Pradesh",
@@ -229,76 +231,102 @@ const AddAssessorForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    if (Object.keys(errors).length > 0) {
-      console.log(Object.keys(errors));
-      console.log("Please fix the errors before submitting");
-      return;
+    // Validate fields
+    const newErrors = {};
+    if (!name) newErrors.name = "Name is required";
+    if (!phoneNumber) newErrors.phoneNumber = "Phone number is required";
+    else if (!validatePhoneNumber(phoneNumber))
+        newErrors.phoneNumber = "Invalid phone number";
+    if (!email) newErrors.email = "Email is required";
+    else if (!validateEmail(email)) newErrors.email = "Invalid email format";
+    if (!adharNumber) newErrors.adharNumber = "Aadhar number is required";
+    else if (!validateAadhaar(adharNumber))
+        newErrors.adharNumber = "Invalid Aadhar number";
+    if (!panNumber) newErrors.panNumber = "PAN number is required";
+    else if (!validatePAN(panNumber)) newErrors.panNumber = "Invalid PAN number";
+    if (!dist) newErrors.dist = "District is required";
+    if (!state) newErrors.state = "State is required";
+    if (!city) newErrors.city = "City is required";
+    if (!pincode) newErrors.pincode = "Pincode is required";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+        setLoading(false);
+        console.log("Please fix the errors before submitting");
+        return;
     }
 
+    // Prepare form data
     const formData = {
-      name,
-      phoneNumber,
-      email,
-      education_qualification_1,
-      education_qualification_2,
-      education_qualification_3,
-      experience,
-      other_experience,
-      adharNumber,
-      panNumber,
-      assesoraId,
-      dist,
-      state,
-      city,
-      pincode,
-      certifiedInAnyCourse,
-      courseCode,
-      sector,
-      enrolledInAnyOtherAssesmentAgency,
-      enrolledInAnyOtherSSC,
-      profilePic,
-      // Assign AssessmentAgency ID from localStorage or any other source
-      AssesmentAgency: `${assessmentAgencyId}`,
-      // localStorage.getItem("assessmentAgencyId") || "defaultAssessmentAgencyId",
+        name,
+        phoneNumber,
+        email,
+        education_qualification_1,
+        education_qualification_2,
+        education_qualification_3,
+        experience,
+        other_experience,
+        adharNumber,
+        panNumber,
+        assesoraId,
+        dist,
+        state,
+        city,
+        pincode,
+        certifiedInAnyCourse,
+        courseCode,
+        sector,
+        enrolledInAnyOtherAssesmentAgency,
+        enrolledInAnyOtherSSC,
+        profilePic,
+        AssesmentAgency: `${assessmentAgencyId}`,
     };
-    console.log(formData);
-    console.log(assessmentAgencyId);
 
     try {
-      console.log(formData);
-      const response = await axios.post(`${server}/assessor`, formData);
-      console.log(response.data);
-      // alert("Assessor Added");
-      toast.success(response.data.message);
+        const response = await axios.post(`${server}/assessor`, formData);
+        toast.success(response.data.message, {
+            position: "top-right",
+            closeOnClick: true,
+            draggable: true,
+            theme: "colored",
+        });
 
-      // Reset all input fields
-      setName("");
-      setPhoneNumber("");
-      setEmail("");
-      setEducation_qualification_1("");
-      setEducation_qualification_2("");
-      setEducation_qualification_3("");
-      setExperience("");
-      setOther_experience("");
-      setAdharNumber("");
-      setPanNumber("");
-      setAssesoraId("");
-      setDist("");
-      setState("");
-      setCity("");
-      setPincode("");
-      setCertifiedInAnyCourse("");
-      setCourseCode("");
-      setSector("");
-      setEnrolledInAnyOtherAssesmentAgency("No");
-      setEnrolledInAnyOtherSSC("Yes");
-      setProfilePic("");
+        // Reset all input fields
+        setName("");
+        setPhoneNumber("");
+        setEmail("");
+        setEducation_qualification_1("");
+        setEducation_qualification_2("");
+        setEducation_qualification_3("");
+        setExperience("");
+        setOther_experience("");
+        setAdharNumber("");
+        setPanNumber("");
+        setAssesoraId("");
+        setDist("");
+        setState("");
+        setCity("");
+        setPincode("");
+        setCertifiedInAnyCourse("");
+        setCourseCode([]);
+        setSector([]);
+        setEnrolledInAnyOtherAssesmentAgency("No");
+        setEnrolledInAnyOtherSSC("Yes");
+        setProfilePic(null);
     } catch (error) {
-      console.log(error.response ? error.response.data : error.message);
-      toast.error(error.message);
+        toast.error(error.message, {
+            position: "bottom-right",
+            closeOnClick: true,
+            draggable: true,
+            theme: "colored",
+        });
+    } finally {
+        setLoading(false);
     }
-  };
+};
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8 bg-gray-300 rounded-md shadow-md">
@@ -318,6 +346,9 @@ const AddAssessorForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full h-8 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
+            {errors.name && (
+        <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+    )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -598,7 +629,10 @@ const AddAssessorForm = () => {
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#A41034] hover:bg-[#A41034]-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Add Assessor
+            {
+              loading?"Creating Assessor":"Add Assessor"
+            }
+             
             </button>
           </div>
         </div>

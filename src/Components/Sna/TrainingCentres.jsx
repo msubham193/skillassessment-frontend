@@ -20,7 +20,7 @@ const TrainingCenters = () => {
         );
         const { data } = response.data;
         console.log(data);
-        setCenterDetails(data);
+        setCenterDetails(data.reverse());
         console.log(data);
       } catch (error) {
         console.log(error);

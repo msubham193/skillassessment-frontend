@@ -98,7 +98,7 @@ const AaDetailsBox = ({ id }) => {
       setData(responce.data.data);
     } catch (error) {
       setLoding(false);
-      toast.success("Somthing went wrong", {
+      toast.error("Somthing went wrong", {
         position: "bottom-right",
         closeOnClick: true,
         draggable: true,
@@ -137,7 +137,7 @@ const AaDetailsBox = ({ id }) => {
       setData(responce.data.data);
     } catch (error) {
       setLoding(false);
-      toast.success("Somthing went wrong", {
+      toast.error("Somthing went wrong", {
         position: "bottom-right",
         closeOnClick: true,
         draggable: true,

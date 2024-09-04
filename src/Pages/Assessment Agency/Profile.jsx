@@ -31,7 +31,7 @@ import { server } from "@/main";
 
 const Profile = () => {
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
-  const [profileData, setProfileData] = useState(null);
+  const [profileData, setProfileData] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const Profile = () => {
         const response = await axios.get(
           `${server}/aa/${assessmentAgencyId}`
         );
+        // console.log(response.data.data)logo
         setProfileData(response.data.data);
       } catch (error) {
         console.log(error);
@@ -71,7 +72,7 @@ const Profile = () => {
           </div>
           <div>
             <img
-              src={profileData.logo}
+              src={profileData?.logo}
               width={120}
               height={60}
               alt="Agency Logo"

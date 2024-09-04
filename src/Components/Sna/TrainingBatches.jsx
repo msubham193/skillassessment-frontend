@@ -18,7 +18,7 @@ const TrainingBatches = () => {
         );
         console.log(response);
         if (response.data && Array.isArray(response.data.data)) {
-          setBatchData(response.data.data); // Ensure response data is an array
+          setBatchData(response.data.data.reverse()); // Ensure response data is an array
         } else {
           console.error("Unexpected response format", response.data);
           setBatchData([]);

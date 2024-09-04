@@ -55,6 +55,10 @@ const BatchDetailsOfSNA = () => {
     );
   };
 
+  const handleStudentTable = () => {
+    navigate(`/sna/batchstudents/${batchId}`);
+  };
+
   const handleApproval = async (e) => {
     e.preventDefault();
     try {
@@ -176,6 +180,12 @@ const BatchDetailsOfSNA = () => {
               {renderDetailItem("Number of Trainers", batchDetails.trainers)}
             </div>
           </div>
+          <button
+            onClick={handleStudentTable}
+            className="px-6 py-2 text-white rounded-lg transition duration-300 mr-4 bg-blue-700"
+          >
+            View Students{" "}
+          </button>
         </div>
         <div className="flex justify-end mt-8">
           <button

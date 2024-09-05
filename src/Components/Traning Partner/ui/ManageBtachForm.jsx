@@ -72,8 +72,8 @@ const ManageBatchForm = () => {
     }
   
     try {
-      const canvas = await html2canvas(input, { scale: 1 }); // Adjust scale if necessary
-      const imgData = canvas.toDataURL("image/jpeg", 0.7);
+      const canvas = await html2canvas(input, { scale: 2 }); // Increased scale for better quality
+      const imgData = canvas.toDataURL("image/jpeg", 1.0); // Increased quality to 1.0
   
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -87,7 +87,7 @@ const ManageBatchForm = () => {
       const imgHeight = canvas.height;
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 0; // Set to 0 to start at the top of the page
+      const imgY = 0;
   
       pdf.addImage(imgData, "JPEG", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save(`preinvoice_${batch.ABN_Number}.pdf`);
@@ -98,9 +98,13 @@ const ManageBatchForm = () => {
       setGeneratingInvoices((prev) => ({ ...prev, [batch._id]: false }));
     }
   };
-  
 
   const handleUploadData = async (batchId) => {
+    if (batches.find(batch => batch._id === batchId).paymentStatus) {
+      toast.error("Sorry, the invoice has already been uploaded.");
+      return;
+    }
+
     setUploading((prev) => ({ ...prev, [batchId]: true }));
     const formData = new FormData();
     formData.append("preInvoice", batchFiles[batchId]?.preInvoice);
@@ -126,11 +130,17 @@ const ManageBatchForm = () => {
           ...prev,
           [batchId]: '',
         }));
+
+        // Update the batch's paymentStatus in the local state
+        setBatches(prevBatches => 
+          prevBatches.map(batch => 
+            batch._id === batchId ? { ...batch, paymentStatus: true } : batch
+          )
+        );
       } else {
         console.error("Failed to upload data");
         toast.error("Failed to upload data");
       }
-
     } catch (error) {
       console.error("Error uploading data:", error);
       toast.error("Error uploading data");
@@ -191,7 +201,7 @@ const ManageBatchForm = () => {
                   <TableCell className="py-4">
                     <Button 
                       onClick={() => generatePDF(batch)} 
-                      disabled={generatingInvoices[batch._id]}
+                      disabled={generatingInvoices[batch._id] || batch.paymentStatus}
                       className="w-full max-w-[120px]"
                     >
                       {generatingInvoices[batch._id] ? "Generating..." : "Generate"}
@@ -201,6 +211,7 @@ const ManageBatchForm = () => {
                     <Select
                       defaultValue="offline"
                       onValueChange={(value) => handleStatusChange(value, batch._id)}
+                      disabled={batch.paymentStatus}
                     >
                       <SelectTrigger className="w-[120px]">
                         <SelectValue placeholder="Select mode" />
@@ -220,6 +231,7 @@ const ManageBatchForm = () => {
                         [batch._id]: e.target.value,
                       }))}
                       className="max-w-[150px]"
+                      disabled={batch.paymentStatus}
                     />
                   </TableCell>
                   <TableCell className="py-4">
@@ -227,6 +239,7 @@ const ManageBatchForm = () => {
                       type="file"
                       onChange={(e) => handleFileChange(e, batch._id, "preInvoice")}
                       className="max-w-[200px]"
+                      disabled={batch.paymentStatus}
                     />
                   </TableCell>
                   <TableCell className="py-4">
@@ -234,12 +247,13 @@ const ManageBatchForm = () => {
                       type="file"
                       onChange={(e) => handleFileChange(e, batch._id, "postInvoice")}
                       className="max-w-[200px]"
+                      disabled={batch.paymentStatus}
                     />
                   </TableCell>
                   <TableCell className="py-4">
                     <Button
                       onClick={() => handleUploadData(batch._id)}
-                      disabled={uploading[batch._id] || !batchFiles[batch._id]?.preInvoice || !batchFiles[batch._id]?.postInvoice}
+                      disabled={uploading[batch._id] || !batchFiles[batch._id]?.preInvoice || !batchFiles[batch._id]?.postInvoice || batch.paymentStatus}
                       className="w-full max-w-[140px]"
                     >
                       {uploading[batch._id] ? "Uploading..." : "Upload Invoices"}

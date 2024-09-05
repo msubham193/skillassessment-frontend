@@ -5,12 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components(shadcn)/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components(shadcn)/ui/avatar';
+import { batchDataAtoms } from '@/Components/Traning Partner/Atoms/batchatom';
+import { batchIdAtoms } from '@/Components/Traning Partner/Atoms/BatchId';
 
 const Student = () => {
     const navigate = useNavigate();
     const studentData = useRecoilValue(StudentDataAtom);
+    
     const defaultUserPhoto = './image/user.png';
-
+   const batchId=useRecoilValue(batchIdAtoms)
+   console.log("allal",batchId)
     const InfoSection = ({ title, data }) => (
         <Card className="mb-6">
             <CardHeader>
@@ -35,10 +39,11 @@ const Student = () => {
                 <div className='flex justify-between items-center mb-8'>
                     <h1 className='text-3xl font-bold text-gray-800'>Student Profile</h1>
                     <Button 
-                        variant="outline"
-                        onClick={() => navigate("/trainingPartner/dashboard")}
+                    className="bg-blue-500"
+                        variant=""
+                        onClick={() => navigate(`/trainingPartner/dashboard/${batchId}`)}
                     >
-                        Back to Dashboard
+                        Back to Students
                     </Button>
                 </div>
 

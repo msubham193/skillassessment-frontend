@@ -143,7 +143,7 @@ const AdminContent = () => {
             >
               Assessment Agency
             </TabsTrigger>
-            <TabsTrigger className="text-gray-700"
+            <TabsTrigger
               onClick={() => setSelectedTab("traningPartner")}
               value="traningPartner"
             >

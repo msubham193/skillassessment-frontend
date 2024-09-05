@@ -1,56 +1,87 @@
-import React from 'react'
+import React from "react";
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components(shadcn)/ui/dialog";
-  import { Button } from "@/components(shadcn)/ui/button";
-  import { Avatar, AvatarImage } from "@/components(shadcn)/ui/avatar";
-import EditProfile from './EditProfile';
-import EditPassword from './EditPassword';
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components(shadcn)/ui/dialog";
+import { Button } from "@/components(shadcn)/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components(shadcn)/ui/card";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components(shadcn)/ui/avatar";
+import { User, Mail, Calendar } from "lucide-react";
+import EditProfile from "./EditProfile";
+import EditPassword from "./EditPassword";
 const MyProfile = ({ children, admin }) => {
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
   return (
     <Dialog>
-    <DialogTrigger>{children}</DialogTrigger>
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Profile</DialogTitle>
-      </DialogHeader>
-      <div className="flex flex-col items-center gap-4 p-4 ">
-        <Avatar className={"h-24 w-24"}>
-          <AvatarImage src={admin && admin.profile} className="w-full h-full object-cover" />
-        </Avatar>
+      <DialogTrigger>{children}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Profile</DialogTitle>
+        </DialogHeader>
         <div>
-          <span className="font-bold">Name : </span>
-          {admin && admin.name}
+          <Card className="max-w-md mx-auto">
+            <CardHeader className="flex flex-col items-center space-y-4">
+              <Avatar className="w-24 h-24">
+                <AvatarImage src={admin?.avatarUrl} alt={admin?.name} />
+                <AvatarFallback>{admin?.name?.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <CardTitle className="text-2xl font-bold">
+                {admin?.name ?? "N/A"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <User className="w-5 h-5 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Name</p>
+                  <p className="text-sm">{admin?.name ?? "N/A"}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Mail className="w-5 h-5 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Email</p>
+                  <p className="text-sm">{admin?.email ?? "N/A"}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Calendar className="w-5 h-5 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium text-gray-500">
+                    Created At
+                  </p>
+                  <p className="text-sm">
+                    {admin?.createdAt ? formatDate(admin?.createdAt) : "N/A"}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        <div>
-          <span className="font-bold">Email : </span>
-          {admin && admin.email}
-        </div>
-        <div>
-          <span className="font-bold">CreatedAt :</span>
-          {admin && admin.createdAt}
-        </div>
-      </div>
-      <DialogFooter className="sm:justify-end">
-        <EditProfile admin={admin && admin}>
-          <Button type="submit">
-            Edit profile
-          </Button>
-        </EditProfile>
-        <EditPassword>
-          <Button type="submit" >
-            Change password
-          </Button>
-        </EditPassword>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-  )
-}
+      </DialogContent>
+    </Dialog>
+  );
+};
 
-export default MyProfile
+export default MyProfile;

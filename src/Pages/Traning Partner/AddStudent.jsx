@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components(shadcn)/ui/select";
+import data from "../../utils/stateData.json";
 
 const AddStudent = () => {
   const { id: batchId } = useParams();
@@ -54,36 +55,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     "MPR_Id",
     "SNA_Id",
   ];
-  const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-  ];
+
   const labelMap = {
     name: "Full Name",
     fathername: "Father's Name",
@@ -115,15 +87,20 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     MPR_Id: "MPR ID",
     SNA_Id: "SNA ID",
   };
+
   const dateFields = ["dob", "traininstartdate", "trainingenddate"];
-  const [batchdata, setbatchdata] = useState({});
+
+  const genderOptions = ["Male", "Female", "Other"];
+  const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Other"];
+  const categoryOptions = ["OBC", "General", "SC", "ST"];
+  const nationalityOptions = ["Indian", "Other"];
+
   const [studentInputs, setStudentInputs] = useState(
     studentFields.reduce((acc, field) => {
       acc[field] = "";
       return acc;
     }, {})
   );
-  console.log(studentInputs);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -134,6 +111,29 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
       [name]: value,
     }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
+  };
+
+  const handleDateChange = (field, date) => {
+    setStudentInputs((prevState) => {
+      const newState = {
+        ...prevState,
+        [field]: date,
+      };
+
+      if (field === "traininstartdate" || field === "trainingenddate") {
+        const { totaldays, totalhours, trainingHours } =
+          calculateTrainingDuration(
+            newState.traininstartdate,
+            newState.trainingenddate
+          );
+        newState.totaldays = totaldays;
+        newState.totalhours = totalhours;
+        newState.trainingHours = trainingHours;
+      }
+
+      return newState;
+    });
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
   };
 
   const calculateTrainingDuration = (startDate, endDate) => {
@@ -161,6 +161,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     }
     return {};
   };
+
   const handleSelectChange = (field, value) => {
     setStudentInputs((prevState) => ({
       ...prevState,
@@ -191,6 +192,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
   };
 
+
   const fetchBatchdata = async () => {
     try {
       const response = await fetch(`${server}/batch/${batchId}`, {
@@ -202,7 +204,6 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
 
       if (response.ok) {
         const data = await response.json();
-        setbatchdata(data.data);
         setStudentInputs((prevState) => {
           const newState = {
             ...prevState,
@@ -289,6 +290,15 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     }
   };
 
+  // Update district options based on selected state
+  const handleStateChange = (value) => {
+    setStudentInputs((prevState) => ({
+      ...prevState,
+      state: value,
+      district: "", // Reset district when state changes
+    }));
+  };
+
   return (
     <div className="flex justify-center p-8">
       <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
@@ -304,6 +314,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
               >
                 {labelMap[field]}
               </Label>
+
               {field === "state" || field === "gender" || field === "nationality" || field === "religion" ? (
   <Select
     onValueChange={(value) => handleSelectChange(field, value)}
@@ -326,6 +337,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     </SelectContent>
   </Select>
 ) : dateFields.includes(field) ? (
+
                 <DatePicker
                   selected={
                     studentInputs[field] ? new Date(studentInputs[field]) : null

@@ -15,7 +15,7 @@ import DataTable from "@/Components/Traning Partner/ui/StudentDataTable";
 import TrainersTable from "@/Components/Traning Partner/ui/TrainersTable";
 
 const Batch = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const batchData = useRecoilValue(batchDataAtoms);
 const{batchId}=useParams();
 

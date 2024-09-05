@@ -3,11 +3,8 @@ import { Input } from "@/components(shadcn)/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
-  SelectValue,
 } from "@/components(shadcn)/ui/select";
 import React, { useEffect, useState } from "react";
 import AddSector from "./AddSector";
@@ -18,7 +15,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const CreateCourseForm = () => {
-  const [nos, setNos] = useState([ 
+  const [nos, setNos] = useState([
     {
       description: "",
       code: "",
@@ -31,7 +28,7 @@ const CreateCourseForm = () => {
     },
   ]);
 
-  const [sectors, setSectors] = useState([]); //state for dropdown menue...
+  const [sectors, setSectors] = useState([]);
   const [sectorName, setSectorName] = useState("");
   const [courseName, setCourseName] = useState("");
   const [courseCode, setCourseCode] = useState("");
@@ -40,9 +37,8 @@ const CreateCourseForm = () => {
   const [totalCredit, setTotalCredit] = useState("");
   const [ncrfLevel, setNcrfLevel] = useState("");
   const [aggregate, setAggregate] = useState("");
-  const [showbuttion, setShowbuttion] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
-  //function for store the value in an array...
   const handleAddField = () => {
     setNos([
       ...nos,
@@ -59,23 +55,21 @@ const CreateCourseForm = () => {
     ]);
   };
 
-  //function for change field of array of field
   const handleFieldChange = (index, event) => {
     const values = [...nos];
     values[index][event.target.name] = event.target.value;
     setNos(values);
   };
 
-  //function for find all the sector
   useEffect(() => {
     const fetchSectors = async () => {
       try {
-        const response = await axios.get(`${server}/sector/all`,{
-          withCredentials:true,
+        const response = await axios.get(`${server}/sector/all`, {
+          withCredentials: true,
           headers: {
             "Cache-Control": "no-cache",
-            'Pragma': "no-cache",
-            'Expires': "0",
+            Pragma: "no-cache",
+            Expires: "0",
           },
         });
         setSectors(response.data.data);
@@ -86,17 +80,43 @@ const CreateCourseForm = () => {
 
     fetchSectors();
   }, []);
-  //function for celect valu from dropdown...
-  const handleSectorSelect = (sectoreName) => {
-    setSectorName(sectoreName);
+
+  const handleSectorSelect = (sectorName) => {
+    setSectorName(sectorName);
   };
 
-  //function for create course
-  const handleCreateCOurse = async (e) => {
+  const handleCreateCourse = async (e) => {
     e.preventDefault();
-    setShowbuttion(true);
+    setShowButton(true);
+
+    // Validation checks
+    if (!courseName || !courseCode || !sectorName || !duration || !ncrfLevel || !totalCredit || !aggregate) {
+      toast.error("Please fill out all required fields.", {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setShowButton(false);
+      return;
+    }
+
+    for (let i = 0; i < nos.length; i++) {
+      const field = nos[i];
+      if (!field.description || !field.code || !field.credit || !field.theoryMarks || !field.practicalMarks || !field.vivaMarks || !field.totalMarks || !field.nosWisePassPercentage) {
+        toast.error(`Please fill out all NOS fields for entry ${i + 1}.`, {
+          position: "top-center",
+          closeOnClick: true,
+          draggable: true,
+          theme: "colored",
+        });
+        setShowButton(false);
+        return;
+      }
+    }
+
     try {
-      const response = await axios.post(
+      await axios.post(
         `${server}/course/course`,
         {
           courseName,
@@ -121,7 +141,7 @@ const CreateCourseForm = () => {
         draggable: true,
         theme: "colored",
       });
-      setShowbuttion(false);
+      setShowButton(false);
     } catch (error) {
       toast.error(error.response.data, {
         position: "top-center",
@@ -129,18 +149,13 @@ const CreateCourseForm = () => {
         draggable: true,
         theme: "colored",
       });
-      setShowbuttion(false);
+      setShowButton(false);
     }
   };
+
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-        
-        </div>
-      </div>
-      {/* Form for creating course and selecting sector */}
-      <form onSubmit={handleCreateCOurse} >
+      <form onSubmit={handleCreateCourse}>
         <div className="flex items-center space-x-4 mx-60">
           <Input
             type="text"
@@ -148,6 +163,7 @@ const CreateCourseForm = () => {
             value={sectorName}
             placeholder="Select sector"
             className="flex-1 py-6"
+            readOnly
           />
           <Select onValueChange={handleSectorSelect}>
             <SelectTrigger className="w-[40px] h-[40px] border-none absolute right-[473px] bg-purple-400"></SelectTrigger>
@@ -166,9 +182,8 @@ const CreateCourseForm = () => {
             </AddSector>
           </div>
         </div>
-        {/* create a form for course */}
         <div className="mx-60">
-          <Label htmlFor="name" className="text-left  w-40 ">
+          <Label htmlFor="coursename" className="text-left w-40">
             Course Name
           </Label>
           <Input
@@ -180,7 +195,7 @@ const CreateCourseForm = () => {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
             <div>
-              <Label htmlFor="name" className="text-left  w-40">
+              <Label htmlFor="courscode" className="text-left w-40">
                 Course Code
               </Label>
               <Input
@@ -192,43 +207,43 @@ const CreateCourseForm = () => {
               />
             </div>
             <div>
-              <Label htmlFor="name" className="text-left  w-40">
+              <Label htmlFor="coursduration" className="text-left w-40">
                 Course duration in hours
               </Label>
               <Input
                 id="coursduration"
                 className="col-span-4 py-6"
-                placeholder="Add Course suration in hours"
+                placeholder="Add Course duration in hours"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
               />
             </div>
             <div>
-              <Label htmlFor="name" className="text-left  w-40">
+              <Label htmlFor="ncrflevel" className="text-left w-40">
                 NCRF LEVEL
               </Label>
               <Input
                 id="ncrflevel"
                 className="col-span-4 py-6"
-                placeholder="Add NCRF LEVEL "
+                placeholder="Add NCRF LEVEL"
                 value={ncrfLevel}
                 onChange={(e) => setNcrfLevel(e.target.value)}
               />
             </div>
             <div>
-              <Label htmlFor="name" className="text-left  w-40">
-                Total credit
+              <Label htmlFor="totalcredit" className="text-left w-40">
+                Total Credit
               </Label>
               <Input
-                id="ncrflevel"
+                id="totalcredit"
                 className="col-span-4 py-6"
-                placeholder="Add Total credit "
+                placeholder="Add Total Credit"
                 value={totalCredit}
                 onChange={(e) => setTotalCredit(e.target.value)}
               />
             </div>
             <div>
-              <Label htmlFor="name" className="text-left  w-40">
+              <Label htmlFor="aggregate" className="text-left w-40">
                 Course Aggregate %
               </Label>
               <Input
@@ -240,17 +255,17 @@ const CreateCourseForm = () => {
               />
             </div>
           </div>
-          {/* add  Nos */}
           {nos.map((field, index) => (
             <div
               key={index}
               className="mt-4 border-[1px] border-gray-300 rounded-md"
             >
               <div className="p-3">
-                <Label htmlFor="description" className="text-left w-40">
+                <Label htmlFor={`description-${index}`} className="text-left w-40">
                   Add NOS
                 </Label>
                 <Input
+                  id={`description-${index}`}
                   type="text"
                   name="description"
                   value={field.description}
@@ -260,139 +275,130 @@ const CreateCourseForm = () => {
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
                   <div>
-                    <Label htmlFor="code" className="text-left w-40">
+                    <Label htmlFor={`code-${index}`} className="text-left w-40">
                       NOS CODE
                     </Label>
                     <Input
+                      id={`code-${index}`}
                       type="text"
                       name="code"
                       value={field.code}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
+                      className="flex-1 py-5"
                       placeholder="Add Subject Code"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="credit" className="text-left w-40">
-                      CREDIT
+                    <Label htmlFor={`credit-${index}`} className="text-left w-40">
+                      Credit
                     </Label>
                     <Input
+                      id={`credit-${index}`}
                       type="text"
                       name="credit"
                       value={field.credit}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
-                      placeholder="Add Subject Credit"
+                      className="flex-1 py-5"
+                      placeholder="Add Credit"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="theoryMark" className="text-left w-40">
-                      THEORY MARK
+                    <Label htmlFor={`theoryMarks-${index}`} className="text-left w-40">
+                      Theory Marks
                     </Label>
                     <Input
+                      id={`theoryMarks-${index}`}
                       type="text"
                       name="theoryMarks"
                       value={field.theoryMarks}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
-                      placeholder="Add Subject Theory Mark"
+                      className="flex-1 py-5"
+                      placeholder="Add Theory Marks"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="practicalMark" className="text-left w-40">
-                      PRACTICAL MARK
+                    <Label htmlFor={`practicalMarks-${index}`} className="text-left w-40">
+                      Practical Marks
                     </Label>
                     <Input
+                      id={`practicalMarks-${index}`}
                       type="text"
                       name="practicalMarks"
                       value={field.practicalMarks}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
-                      placeholder="Add Subject Practical Mark"
+                      className="flex-1 py-5"
+                      placeholder="Add Practical Marks"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="vivaMark" className="text-left w-40">
-                      VIVA MARK
+                    <Label htmlFor={`vivaMarks-${index}`} className="text-left w-40">
+                      Viva Marks
                     </Label>
                     <Input
+                      id={`vivaMarks-${index}`}
                       type="text"
                       name="vivaMarks"
                       value={field.vivaMarks}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
-                      placeholder="Add Subject Viva Mark"
+                      className="flex-1 py-5"
+                      placeholder="Add Viva Marks"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="totalMark" className="text-left w-40">
-                      TOTAL MARK
+                    <Label htmlFor={`totalMarks-${index}`} className="text-left w-40">
+                      Total Marks
                     </Label>
                     <Input
+                      id={`totalMarks-${index}`}
                       type="text"
                       name="totalMarks"
                       value={field.totalMarks}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
-                      placeholder="Add Subject Total Mark"
+                      className="flex-1 py-5"
+                      placeholder="Add Total Marks"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="passPercentage" className="text-left w-40">
-                      NOS WISE PASS %
+                    <Label htmlFor={`nosWisePassPercentage-${index}`} className="text-left w-40">
+                      NOS wise pass %
                     </Label>
                     <Input
+                      id={`nosWisePassPercentage-${index}`}
                       type="text"
                       name="nosWisePassPercentage"
                       value={field.nosWisePassPercentage}
                       onChange={(e) => handleFieldChange(index, e)}
-                      className="col-span-4 py-5"
-                      placeholder="Add Subject wise pass %"
+                      className="flex-1 py-5"
+                      placeholder="Add Pass %"
                     />
                   </div>
                 </div>
               </div>
             </div>
           ))}
+          <div className="flex justify-center mt-4">
+            <Button
+              type="button"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              onClick={handleAddField}
+            >
+              <PlusIcon className="w-5 h-5" />
+              Add Another NOS
+            </Button>
+          </div>
+        </div>
+        <div className="flex justify-center mt-8">
+          <Button
+            type="submit"
+            disabled={showButton}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            {showButton ? "Creating..." : "Create Course"}
+          </Button>
         </div>
       </form>
-      <div className="flex justify-between mt-4 mx-60">
-        <Button
-          onClick={handleAddField}
-          className="flex items-center space-x-1"
-        >
-          <PlusIcon className="h-5 w-5" />
-          <span>Add Field</span>
-        </Button>
-        <Button onClick={handleCreateCOurse} className="flex items-center space-x-1">
-          Create course
-        </Button>
-      </div>
     </div>
   );
 };
 
 export default CreateCourseForm;
-
-{
-  /*
-  <h3 className="text-lg font-medium mb-2">Add Fields</h3>
-      {fields.map((field, index) => (
-        <div key={index} className="flex items-center space-x-2 mb-2">
-          <Input
-            type="text"
-            value={field.value}
-            onChange={(e) => handleFieldChange(index, e)}
-            className="flex-1"
-            placeholder={`Field ${index + 1}`}
-          />
-        </div>
-      ))}
-      <Button onClick={handleAddField} className="flex items-center space-x-1">
-        <PlusIcon className="h-5 w-5" />
-        <span>Add Field</span>
-      </Button>
-      <Button onClick={handleAddField}>addd</Button>
-
-      */
-}

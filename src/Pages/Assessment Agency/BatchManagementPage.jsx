@@ -14,6 +14,7 @@ import { server } from "@/main";
 
 const BatchManagementPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [batchData, setBatchData] = useState([]); // Initialize as an empty array
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
   const setExamId = useSetRecoilState(examIdState);
@@ -51,6 +52,7 @@ const BatchManagementPage = () => {
   };
 
   const handleInvoiceGenerate = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${server}/invoice/${assessmentAgencyId}`
@@ -61,6 +63,9 @@ const BatchManagementPage = () => {
     } catch (error) {
       console.error("Error", error);
       toast.error("Error generating invoice. Please try again.");
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -123,7 +128,9 @@ const BatchManagementPage = () => {
           className={"bg-blue-700 ml-4 p-2 rounded-md text-white font-semibold"}
           onClick={handleInvoiceGenerate}
         >
-          Generate Monthly Invoice
+        {
+          loading?"Generating..":"Generate Monthly Invoice"
+        }   
         </button>
         <ToastContainer />
       </div>

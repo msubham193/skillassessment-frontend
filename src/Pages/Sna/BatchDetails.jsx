@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { server } from "@/main";
+import { Loader2 } from "lucide-react";
 
 const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();
   const navigate = useNavigate();
   const [batchDetails, setBatchDetails] = useState([]);
   const [isApproaved, setIsApproaved] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
@@ -55,7 +57,12 @@ const BatchDetailsOfSNA = () => {
     );
   };
 
+  const handleStudentTable = () => {
+    navigate(`/sna/batchstudents/${batchId}`);
+  };
+
   const handleApproval = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const response = await axios.put(
@@ -67,10 +74,14 @@ const BatchDetailsOfSNA = () => {
     } catch (error) {
       console.log(error);
     }
+    finally{
+      setLoading(false);
+    }
   };
 
   const handleRejection = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const response = await axios.put(
         `${server}/sna/batch/approve/${batchId}`
@@ -79,6 +90,9 @@ const BatchDetailsOfSNA = () => {
       navigate("/trainingbatches");
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -176,6 +190,12 @@ const BatchDetailsOfSNA = () => {
               {renderDetailItem("Number of Trainers", batchDetails.trainers)}
             </div>
           </div>
+          <button
+            onClick={handleStudentTable}
+            className="px-6 py-2 text-white rounded-lg transition duration-300 mr-4 bg-blue-700"
+          >
+            View Students{" "}
+          </button>
         </div>
         <div className="flex justify-end mt-8">
           <button
@@ -185,7 +205,7 @@ const BatchDetailsOfSNA = () => {
               isApproaved ? "bg-green-300" : "bg-green-600 hover:bg-green-700"
             }`}
           >
-            Approve
+          {loading ? <Loader2 size={20} className="animate-spin" /> : "Approve"}
           </button>
           <button
             onClick={handleRejection}
@@ -194,7 +214,8 @@ const BatchDetailsOfSNA = () => {
               isApproaved ? "bg-red-300" : "bg-red-600 hover:bg-red-700"
             }`}
           >
-            Reject
+          {loading ? <Loader2 size={20} className="animate-spin" /> : "Reject"}
+            
           </button>
         </div>
       </div>

@@ -22,7 +22,7 @@ const SummaryCard = ({ title, value, bgColor }) => {
 };
 
 const SNADashboard = () => {
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState([]); 
   const state = localStorage.getItem("state");
   const scheme = localStorage.getItem("scheme");
 

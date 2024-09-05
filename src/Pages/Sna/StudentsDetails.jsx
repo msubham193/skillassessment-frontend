@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const ViewResult = () => {
+const StudentDetails = () => {
   const { batchId } = useParams();
   const [students, setStudents] = useState([]);
   const navigate = useNavigate();
@@ -42,18 +42,18 @@ const ViewResult = () => {
             <th className="py-3 px-6 text-left">Phone</th>
             <th className="py-3 px-6 text-left">Profile</th>
             {/* <th className="py-3 px-6 text-left">Address</th> */}
-            {/* <th className="py-3 px-6 text-left">Category</th> */}
+            <th className="py-3 px-6 text-left">Category</th>
             {/* <th className="py-3 px-6 text-left">Course</th> */}
-            <th className="py-3 px-6 text-left">Marks Upload Status</th>
-            <th className="py-3 px-6 text-left">Absent</th>
-            <th className="py-3 px-6 text-left">Grade</th>
-            {/* <th className="py-3 px-6 text-left">Father's Name</th> */}
-            {/* <th className="py-3 px-6 text-left">Mother's Name</th> */}
+            {/* <th className="py-3 px-6 text-left">Marks Upload Status</th> */}
+            {/* <th className="py-3 px-6 text-left">Absent</th> */}
+            {/* <th className="py-3 px-6 text-left">Grade</th> */}
+            <th className="py-3 px-6 text-left">Father's Name</th>
+            <th className="py-3 px-6 text-left">Mother's Name</th>
             {/* <th className="py-3 px-6 text-left">Sector</th> */}
-            {/* <th className="py-3 px-6 text-left">State</th> */}
+            <th className="py-3 px-6 text-left">State</th>
             {/* <th className="py-3 px-6 text-left">Nationality</th> */}
-            {/* <th className="py-3 px-6 text-left">Training Start Date</th> */}
-            {/* <th className="py-3 px-6 text-left">Training End Date</th> */}
+            <th className="py-3 px-6 text-left">Training Start Date</th>
+            <th className="py-3 px-6 text-left">Training End Date</th>
           </tr>
         </thead>
         <tbody className="text-gray-800 text-sm">
@@ -80,9 +80,9 @@ const ViewResult = () => {
                 <img src={student.profilepic} />
               </td>
               {/* <td className="py-3 px-6 text-left">{`${student.address}, ${student.city}, ${student.district}, ${student.state}, ${student.pincode}`}</td> */}
-              {/* <td className="py-3 px-6 text-left">{student.category}</td> */}
+              <td className="py-3 px-6 text-left">{student.category}</td>
               {/* <td className="py-3 px-6 text-left">{student.course}</td> */}
-              <td className="py-3 px-6 text-left">
+              {/* <td className="py-3 px-6 text-left">
                 <span
                   className={`inline-block px-2 py-1 rounded-full text-white ${
                     student.markUploadStatus ? "bg-green-500" : "bg-red-500"
@@ -93,19 +93,19 @@ const ViewResult = () => {
               </td>
               <td className="py-3 px-6 text-left">
                 {student.absent ? "Yes" : "No"}
-              </td>
-              <td className="py-3 px-6 text-left">{student.Grade}</td>
-              {/* <td className="py-3 px-6 text-left">{student.fathername}</td> */}
-              {/* <td className="py-3 px-6 text-left">{student.mothername}</td> */}
+              </td> */}
+              {/* <td className="py-3 px-6 text-left">{student.Grade}</td> */}
+              <td className="py-3 px-6 text-left">{student.fathername}</td>
+              <td className="py-3 px-6 text-left">{student.mothername}</td>
               {/* <td className="py-3 px-6 text-left">{student.sector_name}</td> */}
-              {/* <td className="py-3 px-6 text-left">{student.state}</td> */}
+              <td className="py-3 px-6 text-left">{student.state}</td>
               {/* <td className="py-3 px-6 text-left">{student.nationality}</td> */}
-              {/* <td className="py-3 px-6 text-left">
+              <td className="py-3 px-6 text-left">
                 {new Date(student.traininstartdate).toLocaleDateString()}
               </td>
               <td className="py-3 px-6 text-left">
                 {new Date(student.trainingenddate).toLocaleDateString()}
-              </td> */}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -114,4 +114,4 @@ const ViewResult = () => {
   );
 };
 
-export default ViewResult;
+export default StudentDetails;

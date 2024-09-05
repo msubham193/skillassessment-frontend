@@ -99,6 +99,8 @@ import PortalLogin from "./Pages/Static/PortalLogin";
 import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
 import TrainerDetails from "./Components/Traning Partner/ui/TrainersDetails";
+import StudentDetails from "./Pages/Sna/StudentsDetails";
+
 
 const App = () => {
   //code for admin
@@ -382,13 +384,14 @@ const App = () => {
         <Route path="snalogin" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
-            <Route path="snadashboard" element={<SNADashboard />} />
-            <Route path="trainingcenters" element={<TCDetails />} />
-            <Route path="trainingbatches" element={<TBDetails />} />
+            <Route path="snadashboard" element={<SNADashboard/>} />
+            <Route path="trainingcenters" element={<TCDetails/>} />
+            <Route path="trainingbatches" element={<TBDetails/>} />
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
             />
+             <Route path="batchstudents/:batchId" element={<StudentDetails />} />
             <Route path="reports" element={<ViewReports />} />
             <Route path="marks" element={<Marksheet />} />
             <Route path="batchresult/:batchId" element={<ViewResult />} />

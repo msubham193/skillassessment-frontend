@@ -25,9 +25,8 @@ const StudentTable = ({ students }) => {
           <tr>
             <th className="border border-black p-2">SL. NO</th>
             <th className="border border-black p-2">CANDIDATE PHOTO</th>
-            <th className="border border-black p-2">
-              REGD. NO. CANDIDATE NAME
-            </th>
+            <th className="border border-black p-2">REGD. NO.</th>
+            <th className="border border-black p-2">CANDIDATE NAME</th>
             <th className="border border-black p-2">{`FATHER'S NAME`}</th>
             <th className="border border-black p-2">GENDER</th>
             <th className="border border-black p-2">DATE OF BIRTH</th>
@@ -41,9 +40,9 @@ const StudentTable = ({ students }) => {
                 {index + 1}
               </td>
               <td className="border border-black px-6 py-2">
-                {student.image ? (
+                {student.profilepic ? (
                   <img
-                    src={student.image}
+                    src={student.profilepic}
                     alt="Candidate Photo"
                     className="h-32 w-32"
                   />
@@ -53,6 +52,8 @@ const StudentTable = ({ students }) => {
               </td>
               <td className="border border-black p-2 text-center">
                 {student.redg_No || ""}
+              </td>
+              <td className="border border-black p-2 text-center">
                 {student.name ? ` / ${student.name}` : ""}
               </td>
               <td className="border border-black p-2 text-center">
@@ -62,7 +63,7 @@ const StudentTable = ({ students }) => {
                 {student.gender || ""}
               </td>
               <td className="border border-black p-2 text-center">
-                {formatDate(student.dob, "DD-MM-YYYY") || ""}
+                {student.dob ? `${formatDate(student.dob, "DD-MM-YYYY")}` : ""}
               </td>
               <td className="border border-black p-2"></td>
             </tr>

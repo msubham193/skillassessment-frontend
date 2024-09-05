@@ -10,11 +10,11 @@ function Layout() {
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-grow">
         <SideBar />
-        <main className="flex-grow p-4 bg-gray-100">
+        <main className="flex-grow sm:ml-64 ml-20 p-4 bg-gray-100">
           <Outlet />
         </main>
       </div>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   );
 }

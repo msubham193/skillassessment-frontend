@@ -8,6 +8,20 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import GenerateMarksheetFrom from './Marksheet/generateMarkFrom'; 
 import { server } from '@/main';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components(shadcn)/ui/table";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components(shadcn)/ui/card";
 
 const TranscriptManage = () => {
   const navigate = useNavigate();
@@ -22,11 +36,11 @@ const TranscriptManage = () => {
   const getStatusClass = (status) => {
     switch (status) {
       case "Completed":
-        return "text-green-700";
+        return "text-green-700 bg-green-100";
       case "onGoing":
-        return "text-yellow-500";
+        return "text-yellow-700 bg-yellow-100";
       case "Not Started":
-        return "text-red-500";
+        return "text-red-700 bg-red-100";
       default:
         return "";
     }
@@ -79,164 +93,59 @@ const TranscriptManage = () => {
     }
   };
 
-  const getmark = useCallback(async (studentId) => {
-    setLoadingStates(prev => ({ ...prev, [studentId]: true }));
-    setCurrentStudentId(studentId);
-    try {
-      const response = await fetch(`${server}/student/${studentId}`, {
-        method: "GET"
-      });
-      const data = await response.json();
-      setStudentData(data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingStates(prev => ({ ...prev, [studentId]: false }));
-    }
-  }, []);
-
-  const generateDummyData = (student) => {
-    return {
-      schemCode: CompleteBatchData.scheme,
-      name: student.name,
-      ward: `${student.fathername} / ${student.mothername}`,
-      qualificationName: CompleteBatchData.courseName,
-      qualificationCode: CompleteBatchData.courseCode,
-      nsqfLevel: CompleteBatchData.courseLevel,
-      sector: CompleteBatchData.sectorName,
-      duration: `${CompleteBatchData.courseDuration} hours`,
-      assessorRegNo: student.redg_No,
-      dob: new Date(student.dob).toLocaleDateString(),
-      assessmentBatchNo: CompleteBatchData.ABN_Number,
-      assessmentDate: new Date(CompleteBatchData.endDate).toLocaleDateString(),
-      nosMarks: student.marks ? student.marks.nosMarks : [],
-      totalMarks: student.marks ? student.marks.totalMarks : 'N/A',
-      grade: student.Grade || 'N/A',
-      result: student.Grade ? 'PASS' : 'FAIL',
-      dateOfIssue: new Date().toLocaleDateString(),
-      certificateNo: `CERT-${student._id}`,
-    };
-  };
-
-  const generatePDF = async (student) => {
-    await getmark(student._id);
-
-    // Wait for the state to update and component to render
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const input = componentRef.current;
-    if (!input) {
-      console.error("Component ref is null");
-      return;
-    }
-
-    try {
-      const canvas = await html2canvas(input, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL('image/png');
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${student.name}_MarkSheet.pdf`);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
-
-    // Reset the state
-    setCurrentStudentId(null);
-    setStudentData(null);
-  };
-
-  const handleMarkSheetDownload = async (batchId) => {
-    try {
-      const response = await fetch(`${server}/batch/${batchId}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch batch data");
-      }
-
-      const data = await response.json();
-      const batchData = data.data;
-
-      for (const student of batchData.students) {
-        await generatePDF(student);
-        // Add a small delay between downloads to prevent overwhelming the browser
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-
-    } catch (error) {
-      console.error("Error downloading mark sheets:", error);
-    }
-  };
-
-  const handleCertificateDownload = (batchId) => {
-    // Implement the logic to handle certificate download
-    console.log(`Downloading certificate for batch ${batchId}`);
-  };
-
-  return (
-<div className="bg-gray-100 shadow-md rounded-lg overflow-hidden p-4">
-  {batches.length > 0 ? (
-    batches
-      .filter(batch => batch.paymentStatus === true)
-      .map(batch => (
-        <div
-          key={batch._id}
-          className="py-4 px-6 bg-white border border-gray-300 shadow-md rounded-lg mb-4 cursor-pointer transition-transform transform hover:scale-105"
-          onClick={() => handleClick(batch._id)}
-        >
-          <div className="flex justify-between items-center gap-3">
-            <div className="text-gray-800 font-semibold w-1/4">{batch.courseName}</div>
-            <div className="text-gray-600 w-1/4">{batch.ABN_Number}</div>
-            <div className="text-gray-600 w-1/4 text-center">{batch.students.length}</div>
-            <div
-              className={`w-1/4 text-center py-1 px-2 rounded-md ${getStatusClass(batch.status)} text-white`}
-            >
-              {batch.status}
-            </div>
-          </div>
-          <div className="flex justify-end gap-2 mt-4">
-            {/* Uncomment and adjust buttons as needed */}
-            {/* <Button 
-              onClick={(e) => { 
-                e.stopPropagation(); 
-                handleMarkSheetDownload(batch._id); 
-              }}
-              disabled={loadingStates[batch._id]}
-              className="bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50"
-            >
-              {loadingStates[batch._id] ? 'Loading...' : <><Download /> MarkSheet</>}
-            </Button>
-            <Button
-              onClick={(e) => { 
-                e.stopPropagation(); 
-                handleCertificateDownload(batch._id); 
-              }}
-              className="bg-green-500 text-white hover:bg-green-600"
-            >
-              <Download /> Certificate
-            </Button> */}
-          </div>
+    return (
+      <Card className="w-full  mx-auto p-4">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg font-semibold">Batch Transcripts</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {batches.length > 0 ? (
+            <Table className="w-full table-auto">
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="text-left px-4 py-2">Course Name</TableHead>
+                  <TableHead className="text-left px-4 py-2">ABN Number</TableHead>
+                  <TableHead className="text-center px-4 py-2">Students</TableHead>
+                  <TableHead className="text-center px-4 py-2">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {batches
+                  .filter(batch => batch.paymentStatus === true)
+                  .map(batch => (
+                    <TableRow
+                      key={batch._id}
+                      className="cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleClick(batch._id)}
+                    >
+                      <TableCell className="font-medium px-4 py-2">{batch.courseName}</TableCell>
+                      <TableCell className="px-4 py-2">{batch.ABN_Number}</TableCell>
+                      <TableCell className="text-center px-4 py-2">{batch.students.length}</TableCell>
+                      <TableCell className="text-center px-4 py-2">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusClass(batch.status)}`}
+                        >
+                          {batch.status}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="text-center text-gray-600 py-4">No completed batches found</div>
+          )}
+        </CardContent>
+        
+        {/* Hidden component for PDF generation */}
+        <div style={{ display: 'none' }}>
+          <GenerateMarksheetFrom 
+            ref={componentRef} 
+            data={currentStudentId && studentData ? generateDummyData(studentData) : null} 
+            isGeneratingPDF={true}
+          />
         </div>
-      ))
-  ) : (
-    <div className="text-center text-gray-600 py-4">No completed batches found</div>
-  )}
-  
-  <div style={{ display: 'none' }}>
-    <GenerateMarksheetFrom 
-      ref={componentRef} 
-      data={currentStudentId && studentData ? generateDummyData(studentData) : null} 
-      isGeneratingPDF={true} // Pass the prop indicating PDF generation
-    />
-  </div>
-</div>
-
-
-  );
-};
-
-export default TranscriptManage;
+      </Card>
+    );
+  };
+  export default TranscriptManage;

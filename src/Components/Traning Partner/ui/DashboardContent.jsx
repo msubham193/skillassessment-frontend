@@ -28,12 +28,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { batchDataAtoms } from "../Atoms/batchatom";
 import TopBar from "../TopBar";
 import { toast } from "react-toastify";
 import { centerAtom } from "../Atoms/centerAtom";
 import { server } from "@/main";
+import { batchIdAtoms } from "../Atoms/BatchId";
 
 const Content = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Content = () => {
   const [totalTrainers, setTotalTrainers] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-
+  const [batchID,setBATCHID]=useRecoilState(batchIdAtoms)
   const setBatchData = useSetRecoilState(batchDataAtoms);
   const trainingPartnerId = localStorage.getItem("trainingPartnerId");
   const totalCenter = useRecoilValue(centerAtom);
@@ -55,6 +56,7 @@ const Content = () => {
   }, [totalCenter]);
 
   const handelView = async (batchId) => {
+    setBATCHID(batchId)
     try {
       const response = await fetch(
         `${server}/batch/${batchId}`,

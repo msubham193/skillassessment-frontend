@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Button } from '@/components(shadcn)/ui/button';
 import { Input } from '@/components(shadcn)/ui/input';
-import { Label } from '@/components(shadcn)/ui/label';
 import { toast } from 'react-toastify';
 import { server } from '@/main';
 
@@ -11,16 +10,9 @@ const ProfilePictureUploader = ({ studentId }) => {
     const [isUploading, setIsUploading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
 
-    useEffect(() => {
-        // Check if the profile picture has already been uploaded
-        const uploaded = localStorage.getItem(`profile-uploaded-${studentId}`);
-        if (uploaded) {
-            setIsUploaded(true);
-        }
-    }, [studentId]);
-
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
+        setIsUploaded(false);
     };
 
     const handleUpload = async () => {
@@ -45,7 +37,6 @@ const ProfilePictureUploader = ({ studentId }) => {
             toast.success(response.data.message);
             setFile(null);
             setIsUploaded(true);
-            localStorage.setItem(`profile-uploaded-${studentId}`, true); // Save the upload state
         } catch (error) {
             console.error('Error uploading file:', error);
             toast.error('Failed to upload profile picture');
@@ -56,29 +47,21 @@ const ProfilePictureUploader = ({ studentId }) => {
 
     return (
         <div className="space-y-2">
-            <Label htmlFor={`file-upload-${studentId}`} className="block text-sm font-medium text-gray-700">
-                Upload Profile Picture
-            </Label>
             <div className="flex items-center space-x-2">
-                <Input 
-                    type="file" 
-                    id={`file-upload-${studentId}`} 
+                <Input
+                    type="file"
+                    id={`file-upload-${studentId}`}
                     onChange={handleFileChange}
                     accept="image/*"
-                    disabled={isUploaded || isUploading}
-                    className={`w-full px-4 py-2 border rounded-md ${isUploaded ? 'cursor-not-allowed' : ''}`}
+                    disabled={isUploaded}
                 />
-                <Button 
-                    onClick={handleUpload} 
+                <Button
+                    onClick={handleUpload}
                     disabled={!file || isUploading || isUploaded}
-                    className={`px-4 py-2 ${isUploaded ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
                 >
-                    {isUploaded ? 'Image Uploaded' : isUploading ? 'Uploading...' : 'Upload Image'} 
+                    {isUploading ? 'Uploading...' : isUploaded ? 'Uploaded' : 'Upload Image'}
                 </Button>
             </div>
-            {isUploaded && (
-                <p className="text-sm text-green-500">Profile picture has been uploaded. You cannot upload again.</p>
-            )}
         </div>
     );
 };

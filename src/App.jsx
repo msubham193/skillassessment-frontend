@@ -32,7 +32,7 @@ import Signup from "./Pages/Traning Partner/Signup";
 import ApllicationStatusFail from "./Pages/Traning Partner/ApllicationStatusFail";
 import Signin from "./Pages/Traning Partner/Signin";
 import ProfilePopup from "./Pages/Traning Partner/ProfilePopup";
-import Teachers from "./Pages/Traning Partner/Teachers";
+import Teachers from "./Pages/Traning Partner/BulkTrainerAdd";
 import CreateBatch from "./Pages/Traning Partner/CreateBatch";
 import AddTeacher from "./Pages/Traning Partner/AddTrainer";
 import AddStudent from "./Pages/Traning Partner/AddStudent";
@@ -98,7 +98,9 @@ import ContactUs from "./Pages/Static/ContactUs";
 import PortalLogin from "./Pages/Static/PortalLogin";
 import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
+import TrainerDetails from "./Components/Traning Partner/ui/TrainersDetails";
 import StudentDetails from "./Pages/Sna/StudentsDetails";
+
 
 const App = () => {
   //code for admin
@@ -318,6 +320,7 @@ const App = () => {
             exact
             element={<CompeteBtachData />}
           />
+           <Route path="batchstudents/:batchId" element={<StudentDetails />} />
           <Route
             path="/trainingPartner/dashboard/CreateBatch/addteacher/:id"
             exact
@@ -336,7 +339,10 @@ const App = () => {
             path="/trainingPartner/dashboard/student/:Id"
             element={<Student />}
           />
-          <Route path="//trainingPartner/setting" exact element={<Setting />} />
+           <Route path="/trainer/:teacherId"
+            element={<TrainerDetails />}
+          />
+          <Route path="/trainingPartner/setting" exact element={<Setting />} />
         </Route>
         {/* Routes for Assessment Agency */}
         <Route path="registration" element={<RegistrationForm />} />
@@ -386,7 +392,6 @@ const App = () => {
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
             />
-             <Route path="batchstudents/:batchId" element={<StudentDetails />} />
             <Route path="reports" element={<ViewReports />} />
             <Route path="marks" element={<Marksheet />} />
             <Route path="batchresult/:batchId" element={<ViewResult />} />

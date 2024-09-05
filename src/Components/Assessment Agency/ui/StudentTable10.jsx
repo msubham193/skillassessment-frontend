@@ -4,7 +4,7 @@ import React from "react";
 import image from "/profile.jpg";
 
 const StudentTable10 = ({ students }) => {
-  const rows = Array.from({ length: 10 }).map(
+  const rows = Array.from({ length: students.length}).map(
     (_, index) => students[index] || {}
   );
 

@@ -180,7 +180,7 @@ const Signup = () => {
       const data = await response.json();
       setSectors(data.data);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 

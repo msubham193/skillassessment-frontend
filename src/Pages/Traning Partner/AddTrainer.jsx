@@ -184,7 +184,7 @@ const AddTeacher = () => {
     <div className="flex justify-center p-8 bg-gray-100">
       <div className="p-6 w-[600px] overflow-y-auto bg-white rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-indigo-600">Add Teacher</h1>
+          <h1 className="text-2xl font-bold text-indigo-600">Add Trainer</h1>
           <Link
             className="text-indigo-600 hover:text-indigo-800 transition-colors"
             to={`/trainingPartner/dashboard/Teachers?batchId=${batchId}`}

@@ -59,7 +59,7 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col p-6 min-h-[100vh]">
-      <header className="bg-blue-50 rounded-lg shadow-md py-6 px-6 md:px-6">
+      <header className="bg-white rounded-lg shadow-md py-6 px-6 md:px-6">
         <div className="container max-w-5xl flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">
@@ -75,13 +75,13 @@ const Profile = () => {
               src={profileData?.logo}
               width={120}
               height={60}
-              alt="Agency Logo"
-              className="rounded-md"
+              alt="Agency Logo "
+              className="rounded-md "
             />
           </div>
         </div>
       </header>
-      <main className="flex-1 p-6 mt-4 rounded-lg shadow-md bg-blue-50">
+      <main className="flex-1 p-6 mt-4 rounded-lg shadow-md bg-white">
         <div className="container max-w-5xl space-y-12">
           <section>
             <h2 className="text-2xl font-bold mb-4">General Information</h2>

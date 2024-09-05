@@ -53,7 +53,7 @@ const ProfilePictureUploader = ({ studentId }) => {
             localStorage.setItem(`profile-uploaded-${studentId}`, true); // Save the upload state
         } catch (error) {
             console.error('Error uploading file:', error);
-            toast.error('Failed to upload profile picture');
+            toast.error(error.message);
         } finally {
             setIsUploading(false);
         }

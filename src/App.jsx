@@ -320,6 +320,7 @@ const App = () => {
             exact
             element={<CompeteBtachData />}
           />
+           <Route path="batchstudents/:batchId" element={<StudentDetails />} />
           <Route
             path="/trainingPartner/dashboard/CreateBatch/addteacher/:id"
             exact
@@ -391,7 +392,6 @@ const App = () => {
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
             />
-             <Route path="batchstudents/:batchId" element={<StudentDetails />} />
             <Route path="reports" element={<ViewReports />} />
             <Route path="marks" element={<Marksheet />} />
             <Route path="batchresult/:batchId" element={<ViewResult />} />

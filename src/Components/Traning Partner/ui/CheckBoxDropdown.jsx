@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Checkbox } from "@/components(shadcn)/ui/checkbox";
 import { Label } from "@/components(shadcn)/ui/label";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 export const CheckboxDropdown = ({ options, selectedValues, onChange, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleToggle = () => setIsOpen(!isOpen);
 
@@ -15,8 +16,21 @@ export const CheckboxDropdown = ({ options, selectedValues, onChange, placeholde
     onChange(updatedValues);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <div
         className="flex items-center justify-between p-2 border rounded-md cursor-pointer"
         onClick={handleToggle}
@@ -29,7 +43,7 @@ export const CheckboxDropdown = ({ options, selectedValues, onChange, placeholde
         {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-40 overflow-y-auto">
           {options.map((option) => (
             <div key={option.value} className="flex items-center p-2 hover:bg-gray-100">
               <Checkbox
@@ -47,3 +61,5 @@ export const CheckboxDropdown = ({ options, selectedValues, onChange, placeholde
     </div>
   );
 };
+
+export default CheckboxDropdown;

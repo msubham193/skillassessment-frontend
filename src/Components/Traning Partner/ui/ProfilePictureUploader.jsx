@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button } from '@/components(shadcn)/ui/button';
 import { Input } from '@/components(shadcn)/ui/input';
-import { Label } from '@/components(shadcn)/ui/label';
 import { toast } from 'react-toastify';
 import { server } from '@/main';
 
 const ProfilePictureUploader = ({ studentId }) => {
     const [file, setFile] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [isUploaded, setIsUploaded] = useState(false);
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
+        setIsUploaded(false);
     };
 
     const handleUpload = async () => {
@@ -35,6 +36,7 @@ const ProfilePictureUploader = ({ studentId }) => {
 
             toast.success(response.data.message);
             setFile(null);
+            setIsUploaded(true);
         } catch (error) {
             console.error('Error uploading file:', error);
             toast.error('Failed to upload profile picture');
@@ -46,17 +48,18 @@ const ProfilePictureUploader = ({ studentId }) => {
     return (
         <div className="space-y-2">
             <div className="flex items-center space-x-2">
-                <Input 
-                    type="file" 
-                    id={`file-upload-${studentId}`} 
+                <Input
+                    type="file"
+                    id={`file-upload-${studentId}`}
                     onChange={handleFileChange}
                     accept="image/*"
+                    disabled={isUploaded}
                 />
-                <Button 
-                    onClick={handleUpload} 
-                    disabled={!file || isUploading}
+                <Button
+                    onClick={handleUpload}
+                    disabled={!file || isUploading || isUploaded}
                 >
-                    {isUploading ? 'Uploading...' : 'Upload Image'}
+                    {isUploading ? 'Uploading...' : isUploaded ? 'Uploaded' : 'Upload Image'}
                 </Button>
             </div>
         </div>

@@ -20,7 +20,9 @@ import {
 const AddStudent = () => {
   const { id: batchId } = useParams();
   const navigate = useNavigate();
-
+  const genderOptions = ["Male", "Female", "Other"];
+const nationalityOptions = ["Indian", "Other"];
+const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Jain", "Other"];
   const studentFields = [
     "name",
     "fathername",
@@ -159,7 +161,13 @@ const AddStudent = () => {
     }
     return {};
   };
-
+  const handleSelectChange = (field, value) => {
+    setStudentInputs((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
+  };
   const handleDateChange = (field, date) => {
     setStudentInputs((prevState) => {
       const newState = {
@@ -274,7 +282,7 @@ const AddStudent = () => {
         toast.error("Please correct the errors in the form");
       } else {
         console.error("Error:", error);
-        toast.error("Failed to add student");
+        toast.error(error.message);
       }
     } finally {
       setIsLoading(false);
@@ -296,27 +304,28 @@ const AddStudent = () => {
               >
                 {labelMap[field]}
               </Label>
-              {field === "state" ? (
-                <Select
-                  onValueChange={(value) =>
-                    handleChange({ target: { name: "state", value } })
-                  }
-                  value={studentInputs.state}
-                >
-                  <SelectTrigger
-                    className={errors.state ? "border-red-500" : ""}
-                  >
-                    <SelectValue placeholder="Select a state" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {indianStates.map((state, idx) => (
-                      <SelectItem key={idx} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : dateFields.includes(field) ? (
+              {field === "state" || field === "gender" || field === "nationality" || field === "religion" ? (
+  <Select
+    onValueChange={(value) => handleSelectChange(field, value)}
+    value={studentInputs[field]}
+  >
+    <SelectTrigger
+      className={errors[field] ? "border-red-500" : ""}
+    >
+      <SelectValue placeholder={`Select ${labelMap[field]}`} />
+    </SelectTrigger>
+    <SelectContent>
+      {(field === "state" ? indianStates :
+        field === "gender" ? genderOptions :
+        field === "nationality" ? nationalityOptions :
+        religionOptions).map((option, idx) => (
+        <SelectItem key={idx} value={option}>
+          {option}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+) : dateFields.includes(field) ? (
                 <DatePicker
                   selected={
                     studentInputs[field] ? new Date(studentInputs[field]) : null

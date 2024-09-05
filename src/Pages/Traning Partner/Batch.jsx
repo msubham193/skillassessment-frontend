@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { Building2, BarChart, Calendar, Book } from "lucide-react";
 import { batchDataAtoms } from "@/Components/Traning Partner/Atoms/batchatom";
 import { Button } from "@/components(shadcn)/ui/button";
-import { useNavigate } from "react-router-dom";
-import { Building2 } from "lucide-react";
-import { BarChart } from "lucide-react";
-import { Calendar } from "lucide-react";
-import { Book } from "lucide-react";
-import DataTable from "@/Components/Traning Partner/ui/DataTable";
-import { columns } from "@/Components/Traning Partner/ui/coulmns";
+import { useParams } from 'react-router-dom';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components(shadcn)/ui/tabs";
+import DataTable from "@/Components/Traning Partner/ui/StudentDataTable";
+import TrainersTable from "@/Components/Traning Partner/ui/TrainersTable";
+
 const Batch = () => {
   const navigate = useNavigate();
   const batchData = useRecoilValue(batchDataAtoms);
-  console.log("batch details", batchData);
-  const [students, setStudents] = useState([]);
-  const [Trainers, setTrainers] = useState([]);
+const{batchId}=useParams();
+
   const getStatusClass = (status) => {
     switch (status) {
       case "Completed":
@@ -29,75 +33,71 @@ const Batch = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-[#1A1C21] py-3 px-5 ">
-      {/* upper navbar section */}
-      <div className="w-full h-12  flex justify-end items-center">
+    <div className="w-full min-h-screen bg-gray-900 text-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+      {/* Upper navbar section */}
+      <div className="w-full flex justify-end items-center mb-6">
         <Button
-          className="bg-blue-600"
+          className="bg-blue-600 hover:bg-blue-700 transition-colors"
           onClick={() => navigate("/trainingPartner/dashboard")}
         >
           Back to Dashboard
         </Button>
       </div>
-      <hr className="bg-white h-[1px] border-none my-4" />
-      {/* batch details section */}
-      <div className="w-full h-auto flex flex-row ">
+      <hr className="border-gray-700 my-6" />
+      
+      {/* Batch details section */}
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Batch Details */}
-        <div className="w-[25%] flex flex-col gap-4">
-          <h1 className="text-xl text-white font-semibold mb-5">
+        <div className="w-full lg:w-1/4 flex flex-col gap-6">
+          <h1 className="text-2xl font-semibold mb-4">
             Batch Description & Details
           </h1>
-          <div>
+          <div className="flex items-center gap-3">
+            <Building2 className="text-gray-400" size={24} />
+            <h2 className="text-xl">{batchData.courseName}</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <BarChart className="text-gray-400" size={24} />
+            <span
+              className={`font-semibold ${getStatusClass(
+                batchData.status
+              )} px-2 py-1 rounded bg-opacity-25`}
+            >
+              {batchData.status}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Book className="text-gray-400" size={24} />
+            <h2 className="text-xl">{batchData.sectorName}</h2>
+          </div>
+          <div className="flex flex-col gap-4 mt-4">
             <div className="flex items-center gap-3">
-              <Building2 className="text-gray-300" size={30} />
-              <h1 className="text-gray-400 font-semibold text-xl">
-                {batchData.courseName}
-              </h1>
+              <Calendar className="text-gray-400" size={20} />
+              <span>Start Date: {new Date(batchData?.startDate).toLocaleDateString()}</span>
             </div>
-          </div>
-          <div>
-            <div className="flex gap-2">
-              <BarChart className="text-gray-300 mt-1" size={30} />
-              <h1
-                className={`font-semibold ${getStatusClass(
-                  batchData.status
-                )} p-1 rounded bg-opacity-25 `}
-              >
-                {batchData.status}
-              </h1>
-            </div>
-          </div>
-          <div className=" flex gap-2">
-            <Book className="text-gray-300 mt-1" size={30} />
-            <h1 className="text-gray-400 font-semibold text-xl">
-              {batchData.sectorName}
-            </h1>
-          </div>
-          <div className="mt-6 flex flex-col gap-4">
-            <div className="flex items-center gap-4 ">
-              <Calendar className="text-white" />
-              <h1 className="text-white">Start Date - </h1>
-              <p className="text-gray-400">
-                {new Date(batchData?.startDate).toLocaleDateString()}
-              </p>
-            </div>
-            <div className="flex items-center gap-4 ">
-              <Calendar className="text-white" />
-              <h1 className="text-white">End Date - </h1>
-              <p className="text-gray-400">
-                {new Date(batchData?.endDate).toLocaleDateString()}
-              </p>
+            <div className="flex items-center gap-3">
+              <Calendar className="text-gray-400" size={20} />
+              <span>End Date: {new Date(batchData?.endDate).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
-        <div className="bg-white w-[1px] h-screen mt-[-16px]"></div>
-        {/* students and students Details */}
-        <div className="w-[70%] ml-5 flex  flex-col gap-4">
-          <div className="text-xl text-white  font-semibold"> Students</div>
-          <div className="p-4">
-            {/* tableeee */}
-            <DataTable columns={columns}  />
-          </div>
+        
+        <div className="hidden lg:block w-px bg-gray-700 self-stretch mx-4"></div>
+        
+        {/* Students and trainers Details */}
+        <div className="w-full lg:w-3/4">
+          <Tabs defaultValue="student" className="w-full">
+            <TabsList className="mb-4">
+              <TabsTrigger value="student">Students</TabsTrigger>
+              <TabsTrigger value="trainer">Trainers</TabsTrigger>
+            </TabsList>
+            <TabsContent value="student">
+              <DataTable batchId={batchId} />
+            </TabsContent>
+            <TabsContent value="trainer">
+              <TrainersTable batchId={batchId} />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
@@ -105,11 +105,3 @@ const Batch = () => {
 };
 
 export default Batch;
-
-const data = {
-  name: "ajit",
-  MPR_Id: "13345",
-  SNA_Id: "92002",
-  ViewProfile: "dhbhd",
-  UploadImage: " ",
-};

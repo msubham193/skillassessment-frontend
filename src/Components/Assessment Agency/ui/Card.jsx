@@ -65,7 +65,7 @@ const Card = () => {
       title: "Total Assigned",
       icon: <FaClipboardList />,
       value: `${examsAssigned}`,
-      bgColor: "bg-blue-500",
+      bgColor: "bg-white",
     },
     {
       title: "Conducted",
@@ -88,11 +88,11 @@ const Card = () => {
   ];
 
   return (
-    <div className="flex flex-wrap gap-3 mt-8 justify-start xl:justify-normal">
+    <div className="flex flex-wrap gap-3 mt-8 justify-start xl:justify-between">
       {stats.map((item, index) => (
         <div
           key={index}
-          className={`w-full sm:w-1/2 md:w-1/3 lg:w-1/4 ${item.bgColor} xl:w-1/5 p-5 rounded-lg shadow-md flex flex-col items-center gap-1 transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer`}
+          className={`w-full sm:w-1/2 md:w-1/3 lg:w-1/4 shadow-md border border-teal-100 bg-white xl:w-1/5 p-5 rounded-lg flex flex-col items-center gap-1 transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer`}
         >
           <div className="flex flex-col items-center w-full mb-3">
             <h2 className="text-md font-semibold text-gray-800 whitespace-nowrap">

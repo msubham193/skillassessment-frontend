@@ -104,7 +104,7 @@ const LoginForm = () => {
               {isRegistering ? <div>Join Our Platform as <span className="text-green-700">{selectedOption}</span></div>: <div>Login to <span className="text-red-700">{selectedOption}</span> Dashboard</div>}
             </h3>
             <p className="mb-8 text-lg text-gray-600 text-center">
-              {isRegistering ? "Choose your registration type:" : "Select your account type:"}
+              {isRegistering ? "Choose your registration type:" : "Select your account type:"} 
             </p>
 
             {/* Toggle Register/Login */}

@@ -84,6 +84,13 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     "Uttarakhand",
     "West Bengal",
   ];
+  const stateDistrictMapping = {
+    Odisha: ["Khordha", "Cuttack", "Bhubaneswar"],
+
+    "Andhra Pradesh": ["Anantapur", "Chittoor", "Guntur"],
+    "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+    // Add more states and districts here
+  };
   const labelMap = {
     name: "Full Name",
     fathername: "Father's Name",

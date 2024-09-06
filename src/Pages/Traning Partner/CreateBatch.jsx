@@ -251,9 +251,17 @@ const CreateBatch = () => {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 p-8 bg-white shadow-lg rounded-lg">
+      <Button
+        onClick={() => navigate("/trainingPartner/dashboard")}
+        className="mb-4 ml-[20px] bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
+      >
+        Back to Dashboard
+      </Button>
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold text-gray-800">Create New Batch</h1>
-        <p className="text-gray-600">
+      
+        <h1 className="text-3xl font-bold text-blue-800">Create New Batch</h1>
+        
+        <p className="text-blue-600">
           Fill out the form below to create a new training batch.
         </p>
       </div>

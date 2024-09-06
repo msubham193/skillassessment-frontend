@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Import Link
 import { server } from "../../main";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
@@ -175,6 +175,11 @@ const SNALogin = () => {
               {loading ? <Loader2 size={20} className="animate-spin" /> : "Login"}
             </button>
           </form>
+          <div className="mt-4">
+            <Link to="/" className="text-green-800 underline">
+              Go to Home
+            </Link>
+          </div>
         </div>
       </div>
     </section>

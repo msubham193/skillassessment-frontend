@@ -100,6 +100,9 @@ import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
 import TrainerDetails from "./Components/Traning Partner/ui/TrainersDetails";
 import StudentDetails from "./Pages/Sna/StudentsDetails";
+import TrainingBatches from "./Components/Sna/TrainingBatches";
+import TrainingCenters from "./Components/Sna/TrainingCentres";
+import CenterDetailsofSNA from "./Pages/Sna/CenterDetailsofSNA";
 
 
 const App = () => {
@@ -231,7 +234,7 @@ const App = () => {
               <Route
                 path="/admin/dasbord/AssessmentAgency/:id"
                 exact
-                element={<AaDetails />}
+                element={<AaDetails />} 
               />
               <Route
                 path="/admin/dasbord/Notification/aa/:id"
@@ -386,11 +389,15 @@ const App = () => {
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
             <Route path="snadashboard" element={<SNADashboard/>} />
-            <Route path="trainingcenters" element={<TCDetails/>} />
-            <Route path="trainingbatches" element={<TBDetails/>} />
+            <Route path="trainingcenters" element={<TrainingCenters/>} />
+            <Route path="trainingbatches" element={<TrainingBatches/>} />
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
+              />
+              <Route
+              path="centerDetails/:centerId"
+              element={<CenterDetailsofSNA />}
             />
             <Route path="reports" element={<ViewReports />} />
             <Route path="marks" element={<Marksheet />} />

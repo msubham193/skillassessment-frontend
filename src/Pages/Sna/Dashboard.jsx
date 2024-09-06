@@ -6,7 +6,15 @@ import { FaBuilding, FaCalendar, FaRegBuilding } from "react-icons/fa"; // Examp
 import TrainingCenters from "../../Components/Sna/TrainingCentres";
 import TrainingBatches from "../../Components/Sna/TrainingBatches";
 import { server } from "@/main";
-
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components(shadcn)/ui/tabs";
+import { useLocation } from "react-router-dom";
+import TBDetails from "@/Components/Sna/TBDetails";
+import TCDetails from "@/Components/Sna/TCDetails";
 
 const SummaryCard = ({ title, value, bgColor }) => {
   return (
@@ -22,7 +30,7 @@ const SummaryCard = ({ title, value, bgColor }) => {
 };
 
 const SNADashboard = () => {
-  const [details, setDetails] = useState([]); 
+  const [details, setDetails] = useState([]);
   const state = localStorage.getItem("state");
   const scheme = localStorage.getItem("scheme");
 
@@ -54,15 +62,24 @@ const SNADashboard = () => {
     (batch) => !batch.paymentStatus
   ).length;
 
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const defaultTab = query.get("tab") || "overview";
+  const [selectedTab, setSelectedTab] = useState(defaultTab);
+
+  useEffect(() => {
+    setSelectedTab(defaultTab);
+  }, [defaultTab]);
+
   return (
     <>
       <h2 className="text-2xl font-bold mb-6">Dashboard Overview</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
         <SummaryCard
           title="Total Batches"
           value={totalBatches}
-          bgColor="bg-blue-500"
+          bgColor="bg-blue-500 p-8"
         />
         <SummaryCard
           title="Completed Batches"
@@ -77,17 +94,31 @@ const SNADashboard = () => {
         <SummaryCard
           title="Pending Payments"
           value={pendingPayments}
-          bgColor="bg-red-500"  
+          bgColor="bg-red-500"
         />
       </div>
-
-      <div className="overflow-x-auto rounded-lg shadow-lg bg-white mt-4 p-4">
-        <TrainingCenters />
-      </div>
-
-      <div className="bg-white rounded-lg shadow-lg mt-4 p-4">
-        <TrainingBatches />
-      </div>
+      <Tabs defaultValue={selectedTab} className="space-y-4">
+        <TabsList>
+          <TabsTrigger
+            onClick={() => setSelectedTab("overview")}
+            value="overview"
+          >
+            Traning Batches
+          </TabsTrigger>
+          <TabsTrigger
+            onClick={() => setSelectedTab("updateBatchgov")}
+            value="updateBatchgov"
+          >
+            Traning Centers
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          {selectedTab === "overview" && <TBDetails />}
+        </TabsContent>
+        <TabsContent value="updateBatchgov">
+          {selectedTab === "updateBatchgov" && <TCDetails />}
+        </TabsContent>
+      </Tabs>
     </>
   );
 };

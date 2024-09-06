@@ -77,7 +77,7 @@ const BtachDetailsBox = ({ id }) => {
     }
 
   const handleViewResult = () => {
-    navigate(`/admin/dasbord/batch/mark/students/${id}`);
+    navigate(`/admin/dasbord/batch/mark/students/${id}`); 
   };
 
   

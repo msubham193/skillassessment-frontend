@@ -2,25 +2,30 @@
 import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { DataTable } from "../Admin/ui/notiification/DataTable";
 
 const TCDetails = () => {
   const [centerDetails, setCenterDetails] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const state = localStorage.getItem("state"); 
+  const scheme = localStorage.getItem("scheme");
 
   useEffect(() => {
     const fetchData = async () => {
+    
       try {
-        const state = localStorage.getItem("state");
-        const scheme = localStorage.getItem("scheme");
-        console.log(state);
-        console.log(scheme);
+        setLoading(true)
+   
         const response = await axios.get(
           `${server}/center/sna/query?state=${state}&scheme=${scheme}`
         );
-        const { data } = response.data;
-        console.log(data);
-        setCenterDetails(data);
+        setCenterDetails(response.data.data);
       } catch (error) {
         console.log(error);
+      }
+      finally
+      {
+        setLoading(false);
       }
     };
 
@@ -33,68 +38,82 @@ const TCDetails = () => {
       <p className="text-gray-600 mb-4">
         View and manage the training batches submitted by the Training Agency.
       </p>
-      <table className="min-w-full bg-white border rounded-md">
-        <thead className="rounded-md">
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-            <th className="py-2 px-4 border-b">Center ID</th>
-            <th className="py-2 px-4 border-b">Center Name</th>
-            <th className="py-2 px-4 border-b">PRN No.</th>
-            <th className="py-2 px-4 border-b">Sanction Letter</th>
-            <th className="py-2 px-4 border-b">Scheme</th>
-            <th className="py-2 px-4 border-b">Project</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-800 text-sm">
-          {centerDetails.map((center) => (
-            <tr key={center._id}>
-              <td className="py-2 px-4 border-b text-center">
-                {center.centerId}
-              </td>
-              <td className="py-2 px-4 border-b text-center">{center.name}</td>
-              <td className="py-2 px-4 border-b text-center">
-                {center.PRN_NO}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                <a
-                  href={center.sanction_order_letter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View Letter
-                </a>
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {center.schemes.map((scheme, index) => (
-                  <span key={index}>
-                    {scheme.schemeName}
-                    {index < center.schemes.length - 1 && ", "}
-                  </span>
-                ))}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {center.projectId}
-              </td>
-              {/* <td className="py-2 px-4 border-b text-center">
-                <button
-                  // onClick={() => handleApproval(center._id)}
-                  className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-blue-600 transition duration-300"
-                >
-                  Approve
-                </button>
-                <button
-                  // onClick={() => handleRejection(center._id)}
-                  className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 transition duration-300 ml-2"
-                >
-                  Reject
-                </button>
-              </td> */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+      filter1={"name"}
+      columns={batchColumns}
+      data={centerDetails}
+      isLoading={loading}
+    />
     </div>
   );
 };
 
 export default TCDetails;
+
+const schemeNameToCheck =localStorage.getItem("scheme"); 
+
+const batchColumns = [
+  {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "PRN_NO",
+    header: "PRN No",
+  },
+  {
+    accessorKey: "centerId",
+    header: "Center ID ",
+  },
+  {
+    accessorKey: "projectId",
+    header: "Project ID",
+  },
+  {
+    accessorKey: "state",
+    header: "State",
+  },
+  {
+    accessorKey: "schemes",
+    header: "No of Scheme",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.schemes.length}
+        </div>
+      );
+    },
+  },
+ {
+    accessorKey: "approveStatus",
+    header: "Approve Status",
+    cell: ({ row }) => {
+      // Find the scheme by name in the schemes array
+      const scheme = row.original.schemes.find(
+        (s) => s.schemeName === schemeNameToCheck
+      );
+
+      // Check if scheme exists and get approval status
+      const isApproved = scheme ? scheme.approveStatus : null;
+
+      // Return status based on approval status
+      return (
+        <span
+          className={`font-medium w-fit px-4 py-2 rounded-lg ${
+            isApproved === true
+              ? "bg-green-200 text-green-800"
+              : isApproved === false
+              ? "bg-yellow-200 text-yellow-800"
+              : "bg-red-200 text-red-800"
+          }`}
+        >
+          {isApproved === true
+            ? "Approved"
+            : isApproved === false
+            ? "Pending"
+            : "Not Found"}
+        </span>
+      );
+    },
+  },
+];

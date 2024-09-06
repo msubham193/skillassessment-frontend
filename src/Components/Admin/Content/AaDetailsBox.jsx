@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components(shadcn)/ui/table";
 
 import {
   Tooltip,

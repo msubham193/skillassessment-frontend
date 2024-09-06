@@ -12,7 +12,6 @@ function SnaLayout() {
           <Outlet />
         </main>
       </div>
-      <Footer />
     </div>
   );
 }

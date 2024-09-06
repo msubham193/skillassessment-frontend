@@ -19,7 +19,7 @@ const DataTabs = ({ cardData }) => {
                 <CardTitle className="text-sm font-medium text-gray-200">
                   {carddata.titel}
                 </CardTitle>
-                <div className="text-orange-700">
+                <div className="text-orange-700"> 
                   <carddata.logo />
                 </div>
               </CardHeader>

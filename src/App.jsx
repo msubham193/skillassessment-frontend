@@ -100,14 +100,14 @@ import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
 import TrainerDetails from "./Components/Traning Partner/ui/TrainersDetails";
 import StudentDetails from "./Pages/Sna/StudentsDetails";
-<<<<<<< HEAD
+
 import Invoice from "./Pages/Assessment Agency/Invoice";
-=======
+
 import TrainingBatches from "./Components/Sna/TrainingBatches";
 import TrainingCenters from "./Components/Sna/TrainingCentres";
 import CenterDetailsofSNA from "./Pages/Sna/CenterDetailsofSNA";
 
->>>>>>> 18ec8e83806711b29552028f4fd33e7c18141bde
+
 
 const App = () => {
   //code for admin
@@ -391,15 +391,12 @@ const App = () => {
         <Route path="snalogin" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
-<<<<<<< HEAD
             <Route path="snadashboard" element={<SNADashboard />} />
             <Route path="trainingcenters" element={<TCDetails />} />
             <Route path="trainingbatches" element={<TBDetails />} />
-=======
             <Route path="snadashboard" element={<SNADashboard/>} />
             <Route path="trainingcenters" element={<TrainingCenters/>} />
             <Route path="trainingbatches" element={<TrainingBatches/>} />
->>>>>>> 18ec8e83806711b29552028f4fd33e7c18141bde
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}

@@ -13,6 +13,7 @@ import {
 import { FaLayerGroup } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ReceiptText } from "lucide-react";
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
     path: "/dashboard/paymentstatus",
     name: "Payment Status",
     icon: <FaCreditCard />,
+  },
+  {
+    path: "/dashboard/invoice",
+    name: "Invoice",
+    icon: <ReceiptText />,
   },
   {
     path: "/dashboard/invoices",
@@ -89,7 +95,9 @@ const SideBar = () => {
               onClick={() => navigate(route.path)}
             >
               <span className="mr-2">{route.icon}</span>
-              <span className={`${isOpen ? "block" : "hidden"} lg:block text-base`}>
+              <span
+                className={`${isOpen ? "block" : "hidden"} lg:block text-base`}
+              >
                 {route.name}
               </span>
             </div>

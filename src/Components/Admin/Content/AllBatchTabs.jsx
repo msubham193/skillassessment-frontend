@@ -4,7 +4,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components(shadcn)/ui/tabs";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; 
 import { useLocation } from "react-router-dom";
 import Batch from "../ui/HomeTablist/Batch";
 import UpdateBatch from "./UpdateBatch";

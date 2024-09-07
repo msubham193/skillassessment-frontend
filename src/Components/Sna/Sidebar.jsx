@@ -18,25 +18,26 @@ const routes = [
     icon: <FaTachometerAlt />,
   },
   {
-    path: "/sna/trainingcenters",
-    name: "Training Centers",
-    icon: <FaBuilding />,
-  },
-  {
     path: "/sna/trainingbatches",
-    name: "Training Batches",
+    name: "Pending Batches",
     icon: <FaClipboardList />,
   },
+  {
+    path: "/sna/trainingcenters",
+    name: "Pending Centers",
+    icon: <FaBuilding />,
+  },
+ 
   {
     path: "/sna/reports",
     name: "Reports",
     icon: <FaUsers />,
   },
-  {
-    path: "/sna/marks",
-    name: "Marks",
-    icon: <FaRegFileAlt />,
-  },
+  // {
+  //   path: "/sna/marks",
+  //   name: "Marks",
+  //   icon: <FaRegFileAlt />,
+  // },
 ];
 
 const SideBar = () => {
@@ -52,7 +53,7 @@ const SideBar = () => {
 
   return (
     <div
-      className={`lg:flex flex-col bg-gray-800 text-white transition-width duration-300 ${
+      className={`sticky left-0 top-0 lg:flex flex-col bg-gray-800 text-white transition-width duration-300 ${
         isOpen ? "w-64" : "w-16"
       } lg:w-64 min-h-screen`}
     >

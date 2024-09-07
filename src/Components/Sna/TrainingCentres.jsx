@@ -3,6 +3,9 @@ import { server } from "@/main";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { DataTable } from "../Admin/ui/notiification/DataTable";
+
+//this page handel all the center approval
 
 const TrainingCenters = () => {
   const [centerDetails, setCenterDetails] = useState([]);
@@ -67,57 +70,84 @@ const TrainingCenters = () => {
       <p className="text-gray-600 mb-4">
         View and manage the training batches submitted by the Training Agency.
       </p>
-      {centerDetails.length === 0 ? (
-        <p className="text-center text-gray-500 text-2xl mt-5">There are no pending training centers.</p>
-      ) : (
-        <table className="min-w-full bg-white border rounded-md">
-          <thead className="rounded-md">
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th className="py-2 px-4 border-b">Center ID</th>
-              <th className="py-2 px-4 border-b">Center Name</th>
-              <th className="py-2 px-4 border-b">PRN No.</th>
-              <th className="py-2 px-4 border-b">Sanction Letter</th>
-              <th className="py-2 px-4 border-b">Status</th>
-              <th className="py-2 px-4 border-b">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-800 text-sm">
-            {centerDetails.map((center) => (
-              <tr key={center._id}>
-                <td className="py-2 px-4 border-b text-center">
-                  {center.centerId}
-                </td>
-                <td className="py-2 px-4 border-b text-center">{center.name}</td>
-                <td className="py-2 px-4 border-b text-center">
-                  {center.PRN_NO}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  <a
-                    href={center.sanction_order_letter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    View Letter
-                  </a>
-                </td>
-                <td className="py-2 px-4 border-b text-center">{center.state}</td>
-                <td className="py-2 px-4 border-b text-center">
-                  <button
-                    onClick={() => handleApproval(center._id)}
-                    className="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-blue-600 transition duration-300"
-                    disabled={loading}
-                  >
-                    {loading ? <Loader2 size={20} className="animate-spin" /> : "Approve"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      
+      <DataTable
+      path={"/sna/centerDetails"}
+      filter1={"name"}
+      columns={batchColumns}
+      data={centerDetails}
+      isLoading={loading}
+    />
     </div>
   );
 };
 
 export default TrainingCenters;
+const schemeNameToCheck =localStorage.getItem("scheme"); 
+
+const batchColumns = [
+  {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "PRN_NO",
+    header: "PRN No",
+  },
+  {
+    accessorKey: "centerId",
+    header: "Center ID ",
+  },
+  {
+    accessorKey: "projectId",
+    header: "Project ID",
+  },
+  {
+    accessorKey: "state",
+    header: "State",
+  },
+  {
+    accessorKey: "schemes",
+    header: "No of Scheme",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.schemes.length}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "approveStatus",
+    header: "Approve Status",
+    cell: ({ row }) => {
+      // Find the scheme by name in the schemes array
+      const scheme = row.original.schemes.find(
+        (s) => s.schemeName === schemeNameToCheck
+      );
+
+      // Check if scheme exists and get approval status
+      const isApproved = scheme ? scheme.approveStatus : null;
+
+      // Return status based on approval status
+      return (
+        <span
+          className={`font-medium w-fit px-4 py-2 rounded-lg ${
+            isApproved === true
+              ? "bg-green-200 text-green-800"
+              : isApproved === false
+              ? "bg-yellow-200 text-yellow-800"
+              : "bg-red-200 text-red-800"
+          }`}
+        >
+          {isApproved === true
+            ? "Approved"
+            : isApproved === false
+            ? "Pending"
+            : "Not Found"}
+        </span>
+      );
+    },
+  },
+];
+

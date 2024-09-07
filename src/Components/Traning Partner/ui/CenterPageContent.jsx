@@ -19,12 +19,12 @@ const CenterPageContent = () => {
     const [loading, setLoading] = useState(true);
     const [centersData,setCentersData]=useRecoilState(centerAtom)
     useEffect(() => {
-      // Simulate a fetch call to get centers data
+     
       const fetchCentersData = async () => {
         try {
           const response = await fetch(`${server}/center/tp/${tpid}`, { method: "GET" });
           const data = await response.json();
-          // Assuming data.centers is the array of centers
+         
           if (data) {
             setCentersData(data.data);
             setLoading(false);

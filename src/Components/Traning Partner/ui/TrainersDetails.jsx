@@ -11,6 +11,7 @@ import { Badge } from "@/components(shadcn)/ui/badge";
 import { Button } from '@/components(shadcn)/ui/button';
 import { useRecoilValue } from 'recoil';
 import { batchIdAtoms } from '../Atoms/BatchId';
+import { server } from '@/main';
 useNavigation
 // TrainerDetails component
 const TrainerDetails = () => {
@@ -25,7 +26,7 @@ const TrainerDetails = () => {
     const fetchTrainerDetails = async () => {
       try {
         // Fetch data from the API using the trainer ID
-        const response = await fetch(`http://localhost:8000/api/v1/trainer/${teacherId}`);
+        const response = await fetch(`${server}/trainer/${teacherId}`);
         
         // Check if the response is okay, otherwise throw an error
         if (!response.ok) {

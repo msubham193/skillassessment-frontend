@@ -2,7 +2,7 @@ import BtachDetailsBox from "@/Components/Admin/Content/BtachDetailsBox";
 import SideNav from "@/Components/Admin/Content/SideNav";
 import TopBar from "@/Components/Admin/Content/TopBar";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"; 
 import { Tabs,
   TabsList,
   TabsTrigger,

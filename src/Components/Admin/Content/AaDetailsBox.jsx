@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components(shadcn)/ui/table";
 
 import {
   Tooltip,
@@ -26,6 +20,25 @@ import {
 } from "@/components(shadcn)/ui/popover";
 import { Label } from "@/components(shadcn)/ui/label";
 import { Input } from "@/components(shadcn)/ui/input";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components(shadcn)/ui/card";
+import { Badge } from "@/components(shadcn)/ui/badge";
+import { Separator } from "@/components(shadcn)/ui/separator";
+import {
+  MapPin,
+  Globe,
+  Phone,
+  Mail,
+  Building,
+  Users,
+  BookOpen,
+  Calendar,
+  DollarSign,
+} from "lucide-react";
 
 const AaDetailsBox = ({ id }) => {
   const [referesh, setReferesh] = useState(false);
@@ -37,7 +50,6 @@ const AaDetailsBox = ({ id }) => {
   //  const data=useRecoilValue(trainingPartnerByID(id))
   //  console.log(data)
 
-
   //function for grt all the detail about the assessmment agency...
   useEffect(() => {
     try {
@@ -47,14 +59,14 @@ const AaDetailsBox = ({ id }) => {
           withCredentials: true,
           headers: {
             "Cache-Control": "no-cache",
-            'Pragma': "no-cache",
-            'Expires': "0",
+            Pragma: "no-cache",
+            Expires: "0",
           },
         })
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
-          console.log(response.data.data)
+          // console.log(response.data.data);
           setReferesh((prev) => !prev);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sectors);
@@ -80,7 +92,7 @@ const AaDetailsBox = ({ id }) => {
     try {
       const responce = await axios.put(
         `${server}/aa/approve/${id}`,
-        {percentage},
+        { percentage },
         {
           headers: {
             "x-access-token": token,
@@ -107,7 +119,7 @@ const AaDetailsBox = ({ id }) => {
     }
   };
 
-    //this is the function for reject the accessment agency
+  //this is the function for reject the accessment agency
 
   const applicationReject = async () => {
     setLoding(true);
@@ -142,7 +154,7 @@ const AaDetailsBox = ({ id }) => {
         closeOnClick: true,
         draggable: true,
         theme: "colored",
-      }); 
+      });
     }
   };
 
@@ -154,256 +166,175 @@ const AaDetailsBox = ({ id }) => {
   return (
     <TooltipProvider>
       <div className="m-4 md:m-10">
-        <div className="flex flex-col md:flex-row justify-between mx-4 md:mx-10">
-          <div className="w-full md:w-3/4">
-            <Table>
-              <TableBody>
-                <TableRow className="text-lg border-none h-[5px]">
-                  <TableCell className="font-medium">AgencyName*</TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.agencyName ?? "Unknown"}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">
-                    HeadOfTheOrganization*
-                  </TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.headOfTheOrganization ?? "Unknown"}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">Email*</TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.email ?? "Unknown"}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">Phone No*</TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.phoneNumber ?? "Unknown"}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">Course*</TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.subject ?? "Unknown"}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">WebsiteLink *</TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    {data?.websiteLink ?? "Unknown"}
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">
-                    Courses Provided By Traning Partner *
-                  </TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline">Show Course</Button>
-                      </PopoverTrigger>
-
-                      {course &&
-                        course.map((courses, index) => (
-                          <PopoverContent key={index} className="bg-green-300">
-                            {courses}
-                          </PopoverContent>
-                        ))}
-                    </Popover>
-                  </TableCell>
-                </TableRow>
-                <TableRow className="text-lg border-none">
-                  <TableCell className="font-medium">
-                    Available Sector*
-                  </TableCell>
-                  <TableCell className="pl-4 md:pl-24 text-lg">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline">Show Sector</Button>
-                      </PopoverTrigger>
-
-                      {sector &&
-                        sector.map((sectors, index) => (
-                          <PopoverContent key={index} className="bg-green-300">
-                            {sectors}
-                          </PopoverContent>
-                        ))}
-                    </Popover>
-                  </TableCell>
-                </TableRow> 
-              </TableBody>
-            </Table>
-            {/* table for office Address */}
-            <div className="w-full mt-5">
-              <p className="text-xl font-semibold underline">OFFICE ADDRESS</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">State*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.state ?? "Unknown"}
+        <div className="container mx-auto space-y-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center space-x-4 pb-2">
+              {data.logo && (
+                <img
+                  src={data.logo}
+                  alt="Agency Logo"
+                  className="w-16 h-16 rounded-full"
+                />
+              )}
+              <div>
+                <CardTitle>{data.agencyName ?? "N/A"}</CardTitle>
+                <Badge
+                  style={{
+                    backgroundColor:
+                      data.applicationStatus === "Approved"
+                        ? "green"
+                        : data.applicationStatus === "Pending"
+                        ? "orange"
+                        : "gray",
+                    color: "white",
+                    fontSize: "14px",
+                    padding: "6px 10px",
+                    borderRadius: "20px",
+                  }}
+                >
+                  {data.applicationStatus ?? "N/A"}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="grid sm:grid-cols-2 gap-4 mt-3">
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg">Contact Information</h3>
+                  <p className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    {data.phoneNumber ?? "N/A"}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    {data.email ?? "N/A"}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <Globe className="w-4 h-4" />
+                    <a
+                      href={data.websiteLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {data.websiteLink ?? "N/A"}
+                    </a>
                   </p>
                 </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Street*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.street ?? "Unknown"}
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-lg">Addresses</h3>
+                  <p className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    Office: {data.officeAddress ?? "N/A"}
                   </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">City*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.city ?? "Unknown"}
-                  </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Zip code*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.pin ?? "Unknown"}
-                  </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Country*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.country ?? "Unknown"}
-                  </p>
+                  <p>Communication: {data.communicationAddress ?? "N/A"}</p>
+                  <p>Branch: {data.BRANCH_ADDRESS ?? "N/A"}</p>
                 </div>
               </div>
-            </div>
-            {/* table for  communicationAddress */}
-            <div className="w-full mt-5">
-              <p className="text-xl font-semibold underline">
-                COMMUNICATION ADDRESS
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">State*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.officeAddress?.state ?? "Unknown"}
+              <Separator />
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg">Company Details</h3>
+                  <p>GST No: {data.COMPANY_GST_NO ?? "N/A"}</p>
+                  <p>PAN No: {data.COMPANY_PAN_NO ?? "N/A"}</p>
+                  <p>
+                    Legal Status: {data.legalStatusOfTheOrganization ?? "N/A"}
+                  </p>
+                  <p>Role: {data.role ?? "N/A"}</p>
+                  <p>
+                    Head of Organization: {data.headOfTheOrganization ?? "N/A"}
                   </p>
                 </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Street*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.street ?? "Unknown"}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg">Agency Information</h3>
+                  <p className="flex items-center gap-2">
+                    <Building className="w-4 h-4" />
+                    Branches: {data.NO_OF_BRANCHES ?? "N/A"}
                   </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">City*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.city ?? "Unknown"}
+                  <p className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    Certified Assessors:{" "}
+                    {data.total_no_of_certified_Assessor ?? "N/A"}
                   </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Zip code*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.pin ?? "Unknown"}
+                  <p className="flex items-center gap-2">
+                    <DollarSign className="w-4 h-4" />
+                    Payment Percentage: {data.paymentPercentage ?? "N/A"}%
                   </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">Country*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.communicationAddress?.country ?? "Unknown"}
-                  </p>
+                  <p>Availability: {data.availability ? "Yes" : "No"}</p>
                 </div>
               </div>
-            </div>
-            {/* About Spoc */}
-            <div className="w-full mt-5">
-              <p className="text-xl font-semibold underline">ABOUT SPOC</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">SPOC NAME*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.SPOC_NAME ?? "Unknown"}
-                  </p>
+              <Separator />
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">SPOC Details</h3>
+                <p>Name: {data.SPOC_NAME ?? "N/A"}</p>
+                <p>Contact: {data.SPOC_CONTACT_NO ?? "N/A"}</p>
+                <p>Email: {data.SPOC_EMAIL ?? "N/A"}</p>
+              </div>
+              <Separator />
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Geographical Information</h3>
+                <p>Region: {data.geographical_region ?? "N/A"}</p>
+                <p>State: {data.state_Under_geographicalRegion ?? "N/A"}</p>
+              </div>
+              <Separator />
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Courses and Sectors</h3>
+                <div className="flex flex-wrap gap-2">
+                  {data.courses?.map((course, index) => (
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      style={{
+                        fontSize: "14px",
+                        padding: "6px 10px",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      {course}
+                    </Badge>
+                  ))}
                 </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">SPOC EMAIL*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.SPOC_EMAIL ?? "Unknown"}
-                  </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg font-medium mb-2">SPOC CONTACT NO*</h3>
-                  <p className="text-lg border-b-[1px]">
-                    {data?.SPOC_CONTACT_NO ?? "Unknown"}
-                  </p>
+                <div className="flex flex-wrap gap-2">
+                  {data.sectors?.map((sector, index) => (
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      style={{
+                        fontSize: "14px",
+                        padding: "6px 10px",
+                        borderRadius: "20px",
+                      }}
+                    >
+                      {sector}
+                    </Badge>
+                  ))}
                 </div>
               </div>
-            </div>
-            <Table className="mt-5">
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  Legal Status Of The Organization*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  <p className="flex justify-between">
-                    <div>{data?.legalStatusOfTheOrganization ?? "Unknown"}</div>
-                    {/* <TbFileCertificate /> */}
+              <Separator />
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Additional Information</h3>
+                {data.LETTER_OF_NCVET && (
+                  <p>
+                    <a
+                      href={data.LETTER_OF_NCVET}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline text-lg"
+                    >
+                      View NCVET Letter
+                    </a>
                   </p>
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  PAN NO OF COMPANY*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.COMPANY_PAN_NO ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  GST NO OF COMPANY*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.COMPANY_GST_NO ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">NO OF BRANCHES*</TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.NO_OF_BRANCHES ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  State Under GeographicalRegion*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.state_Under_geographicalRegion ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  Total no of certified Assessor*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.total_no_of_certified_Assessor ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">LETTER OF NCVET*</TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  <a href={data?.LETTER_OF_NCVET} target="_blank">{data?.LETTER_OF_NCVET ?? "Unknown"}</a>
-                </TableCell>
-              </TableRow>
-              {/* location maybe edit later */}
-              <TableRow className="text-lg border-none">
-                <TableCell className="font-medium">
-                  geographical region*
-                </TableCell>
-                <TableCell className="pl-4 md:pl-24 text-lg">
-                  {data?.geographical_region ?? "Unknown"}
-                </TableCell>
-              </TableRow>
-            </Table>
-          </div>
-        </div>
-        <div>
-     
+                )}
+                <p className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Created: {new Date(data.createdAt ?? "").toLocaleString()}
+                </p>
+                <p className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Updated: {new Date(data.updatedAt ?? "").toLocaleString()}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
         {/* field for add amount for tp according to scheme */}
         {data?.applicationStatus === "Pending" ? (
@@ -429,7 +360,11 @@ const AaDetailsBox = ({ id }) => {
           <Button
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
-            disabled={data?.applicationStatus === "Approved" || percentage===null || data?.applicationStatus === "Rejected"}
+            disabled={
+              data?.applicationStatus === "Approved" ||
+              percentage === null ||
+              data?.applicationStatus === "Rejected"
+            }
           >
             {" "}
             {loding
@@ -441,7 +376,10 @@ const AaDetailsBox = ({ id }) => {
           <Button
             onClick={applicationApproved}
             className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={data?.applicationStatus === "Rejected" || data?.applicationStatus === "Approved"}
+            disabled={
+              data?.applicationStatus === "Rejected" ||
+              data?.applicationStatus === "Approved"
+            }
           >
             {loding
               ? "Loding..."
@@ -456,4 +394,3 @@ const AaDetailsBox = ({ id }) => {
 };
 
 export default AaDetailsBox;
- 

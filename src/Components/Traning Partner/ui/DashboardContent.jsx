@@ -39,14 +39,15 @@ import { batchIdAtoms } from "../Atoms/BatchId";
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(null);
   const [totalBatches, setTotalBatches] = useState(0);
   const [totalCenters, setTotalCenters] = useState(0);
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalTrainers, setTotalTrainers] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [batchID,setBATCHID]=useRecoilState(batchIdAtoms)
+  const [batchID, setBATCHID] = useRecoilState(batchIdAtoms);
   const setBatchData = useSetRecoilState(batchDataAtoms);
   const trainingPartnerId = localStorage.getItem("trainingPartnerId");
   const totalCenter = useRecoilValue(centerAtom);
@@ -56,14 +57,11 @@ const Content = () => {
   }, [totalCenter]);
 
   const handelView = async (batchId) => {
-    setBATCHID(batchId)
+    setBATCHID(batchId);
     try {
-      const response = await fetch(
-        `${server}/batch/${batchId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${server}/batch/${batchId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -97,11 +95,12 @@ const Content = () => {
           setTotalBatches(batchesData.data.length);
           setTotalTrainers(trainersData.data.length);
 
-          // Calculate total students
-          const totalStudents = batchesData.data.reduce((sum, batch) => sum + batch.students.length, 0);
+          const totalStudents = batchesData.data.reduce(
+            (sum, batch) => sum + batch.students.length,
+            0
+          );
           setTotalStudents(totalStudents);
 
-          // Sort batches by creation date
           const sortedBatches = batchesData.data.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
@@ -133,28 +132,35 @@ const Content = () => {
   };
 
   const handelBatchReady = async (batchId) => {
+    setSubmitLoading(batchId);
     try {
-      const response = await fetch(
-        `${server}/batch/active/${batchId}`,
-        {
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`${server}/batch/active/${batchId}`, {
+        method: "PUT",
+      });
 
       if (response.ok) {
         const data = await response.json();
         console.log("batch submitted", data);
         toast.success("Batch Submitted Successfully");
+        setAllBatch((prevBatches) =>
+          prevBatches.map((batch) =>
+            batch._id === batchId
+              ? { ...batch, batchActivePermission: true, status: "onGoing" }
+              : batch
+          )
+        );
       } else {
         const errorData = await response.json();
         console.error("Failed to submit batch:", errorData);
         toast.error(
-          "Failed to submit batch: " + (errorData.message || "Unknown error")
+          "Failed to submit batch: " + (errorData.error || "Unknown error")
         );
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error submitting batch: " + error.message);
+    } finally {
+      setSubmitLoading(null);
     }
   };
 
@@ -295,9 +301,9 @@ const Content = () => {
                             <Button
                               className="text-xs text-white px-4 py-1 bg-purple-600 hover:bg-purple-700"
                               onClick={() => handelBatchReady(batch._id)}
-                              disabled={batch.batchActivePermission === true}
+                              disabled={batch.batchActivePermission === true || submitLoading === batch._id}
                             >
-                              Submit Batch
+                              {submitLoading === batch._id ? "Submitting..." : "Submit Batch"}
                             </Button>
                           </div>
                         </TableCell>

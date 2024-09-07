@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { format, differenceInDays, differenceInHours } from "date-fns";
 import { server } from "@/main";
 import { StudentvalidationSchema } from "@/Components/Traning Partner/utils/StudentValidation";
+import { stateDistrictMapping } from "@/Components/Traning Partner/utils/stateDistrictMapping";
 import {
   Select,
   SelectContent,
@@ -21,8 +22,8 @@ const AddStudent = () => {
   const { id: batchId } = useParams();
   const navigate = useNavigate();
   const genderOptions = ["Male", "Female", "Other"];
-const nationalityOptions = ["Indian", "Other"];
-const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Jain", "Other"];
+  const nationalityOptions = ["Indian", "Other"];
+  const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Jain", "Other"];
   const studentFields = [
     "name",
     "fathername",
@@ -84,13 +85,6 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     "Uttarakhand",
     "West Bengal",
   ];
-  const stateDistrictMapping = {
-    Odisha: ["Khordha", "Cuttack", "Bhubaneswar"],
-
-    "Andhra Pradesh": ["Anantapur", "Chittoor", "Guntur"],
-    "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
-    // Add more states and districts here
-  };
   const labelMap = {
     name: "Full Name",
     fathername: "Father's Name",
@@ -130,7 +124,6 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
       return acc;
     }, {})
   );
-  console.log(studentInputs);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -168,13 +161,23 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
     }
     return {};
   };
+
   const handleSelectChange = (field, value) => {
     setStudentInputs((prevState) => ({
       ...prevState,
       [field]: value,
     }));
     setErrors((prevErrors) => ({ ...prevErrors, [field]: undefined }));
+
+    // Reset district when state changes
+    if (field === "state") {
+      setStudentInputs((prevState) => ({
+        ...prevState,
+        district: "",
+      }));
+    }
   };
+
   const handleDateChange = (field, date) => {
     setStudentInputs((prevState) => {
       const newState = {
@@ -247,7 +250,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setErrors({}); // Clear previous errors
+    setErrors({});
     try {
       await StudentvalidationSchema.validate(studentInputs, {
         abortEarly: false,
@@ -297,12 +300,18 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
   };
 
   return (
-    <div className="flex justify-center p-8">
-      <div className="p-6 w-[600px] overflow-y-auto bg-slate-300 rounded-md">
+    <div className="flex justify-center p-8 bg-gray-100">
+      <div className="p-6 w-[600px] overflow-y-auto bg-white rounded-lg shadow-md">
+        <Button
+          onClick={() => navigate("/trainingPartner/dashboard")}
+          className="mb-4 bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
+        >
+          Back to Dashboard
+        </Button>
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold">Add Student</h1>
+          <h1 className="text-xl font-semibold text-blue-500">Add Student</h1>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4 text-black">
           {studentFields.map((field, index) => (
             <div key={index} className="flex flex-col gap-2">
               <Label
@@ -311,28 +320,29 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
               >
                 {labelMap[field]}
               </Label>
-              {field === "state" || field === "gender" || field === "nationality" || field === "religion" ? (
-  <Select
-    onValueChange={(value) => handleSelectChange(field, value)}
-    value={studentInputs[field]}
-  >
-    <SelectTrigger
-      className={errors[field] ? "border-red-500" : ""}
-    >
-      <SelectValue placeholder={`Select ${labelMap[field]}`} />
-    </SelectTrigger>
-    <SelectContent>
-      {(field === "state" ? indianStates :
-        field === "gender" ? genderOptions :
-        field === "nationality" ? nationalityOptions :
-        religionOptions).map((option, idx) => (
-        <SelectItem key={idx} value={option}>
-          {option}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-) : dateFields.includes(field) ? (
+              {field === "state" || field === "district" || field === "gender" || field === "nationality" || field === "religion" ? (
+                <Select
+                  onValueChange={(value) => handleSelectChange(field, value)}
+                  value={studentInputs[field]}
+                >
+                  <SelectTrigger
+                    className={errors[field] ? "border-red-500" : ""}
+                  >
+                    <SelectValue placeholder={`Select ${labelMap[field]}`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(field === "state" ? indianStates :
+                      field === "district" ? (stateDistrictMapping[studentInputs.state] || []) :
+                      field === "gender" ? genderOptions :
+                      field === "nationality" ? nationalityOptions :
+                      religionOptions).map((option, idx) => (
+                      <SelectItem key={idx} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : dateFields.includes(field) ? (
                 <DatePicker
                   selected={
                     studentInputs[field] ? new Date(studentInputs[field]) : null
@@ -345,7 +355,7 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
                   yearDropdownItemNumber={5}
                   scrollableYearDropdown
                   scrollableMonthYearDropdown
-                  className={`w-full p-2 rounded-md ${
+                  className={`w-full p-2 rounded-md bg-gray-200 ${
                     errors[field] ? "border-red-500" : ""
                   }`}
                 />
@@ -380,8 +390,8 @@ const religionOptions = ["Hindu", "Muslim", "Christian", "Sikh", "Buddhist", "Ja
             disabled={isLoading}
             className={
               Object.keys(errors).length > 0
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-blue-500 hover:bg-blue-600"
+                ? "bg-red-500 hover:bg-red-600":
+                "bg-blue-500 hover:bg-blue-600"
             }
           >
             {isLoading ? "Adding Student..." : "Add Student"}

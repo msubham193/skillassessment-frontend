@@ -26,14 +26,14 @@ const GenerateCertificate = forwardRef((props, ref) => {
   } = props.data;
 
   return (
-    <div className="max-w-7xl m-auto ml-[200px]">
-      <div className="w-[1000px] h-[690px] border relative" ref={ref}>
-        <div className="w-full h-full absolute">
-          <img src="/Certificate.png" alt="Certificate Background" />
-        </div>
-        <div className="absolute w-full h-full">
-          {/* Student Image */}
-          <div className="w-[103px] border ml-[82%] mt-[58px]">
+    <div className="max-w-7xl mx-auto">
+    <div className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto" ref={ref}>
+      <div className="w-full h-full absolute">
+        <img src="/Certificate.png" alt="Certificate Background" className="w-full h-full object-cover" />
+      </div>
+      <div className="absolute w-full h-full">
+        {/* Student Image */}
+        <div className="w-[103px] border ml-[82.4%] mt-[59px]">
             <img
               className="h-28 w-24 object-cover"
               src={studentImageUrl}
@@ -51,11 +51,11 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className="text-[#117EC3] ml-[120px] text-[15px] font-semibold">{enrollmentNumber}</p>
           </div>
           {/* Subject Name */}
-          <div className="mt-[15px] ml-[50%]">
+          <div className="mt-[16px] ml-[50%]">
             <p className="text-[#117EC3] text-[15px] font-semibold">{subject}</p>
           </div>
           {/* Duration, Credit, Level */}
-          <div className="mt-[18px] ml-[25%] flex items-center">
+          <div className="mt-[20px] ml-[25%] flex items-center">
             <p className="text-[#117EC3] text-[15px] font-semibold">{duration}</p>
             <p className="text-[#117EC3] ml-[300px] text-[15px] font-semibold">{credit}</p>
             <p className="text-[#117EC3] ml-[230px] text-[12px] mt-2 font-semibold">{level}</p>
@@ -79,15 +79,16 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className="text-[#117EC3] text-[13px] font-semibold">{dateOfIssue}</p>
           </div>
           {/* QR Code */}
-          <div className="absolute bottom-[53px] left-[80.5px]">
-            <QRCode value={studentId || "N/A"} size={40} />
+          <div className="absolute bottom-[45px] left-[75px] bg-white">
+           <div className=" w-[45px] h-[45px]"></div>
           </div>
-        </div>
+          <div className="absolute bottom-[45px] left-[75px]">
+            <QRCode value={`https://student-details-by-qr-scan.vercel.app/${studentId}`} size={42} />
+          </div>
       </div>
     </div>
+  </div>
   );
 });
 
 export default GenerateCertificate;
-
-

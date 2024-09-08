@@ -148,7 +148,7 @@ const TopBar = () => {
   };
 
   return (
-    <nav className="bg-[#f2f9f2] w-full h-16 border-b border-gray-200 dark:bg-gray-900">
+    <nav className="bg-[#e6e6fa] w-full h-16 border-b border-[#8B0000] dark:bg-gray-900">
       <div className="w-full h-full flex flex-row items-center justify-between m-auto px-5">
         {/* Avatar logo and name */}
         <a href="#about-me" className="h-auto w-auto flex flex-row items-center">
@@ -166,7 +166,7 @@ const TopBar = () => {
           {/* Notification stuff */}
           
             <Select>
-            <SelectTrigger className="w-[60px] bg-[#f2f9f2] border-none">
+            <SelectTrigger className="w-[60px] bg-[#e6e6fa] border-none">
               <Bell size={23} className="cursor-pointer mt-[5px]" />
               <span className="absolute top-5 right-[100px]">
                 {notification === "No new notification !!" ? "" : (

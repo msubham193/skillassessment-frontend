@@ -3,20 +3,25 @@ import { server } from "@/main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DataTable } from "../Admin/ui/notiification/DataTable";
+import { cn } from "@/lib/utils";
 
 const TBDetails = () => {
   const [batchData, setBatchData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
         const state = localStorage.getItem("state");
         const scheme = localStorage.getItem("scheme");
         const response = await axios.get(
           `${server}/sna/batches/all/query?state=${state}&scheme=${scheme}`
         );
-        console.log(response.data.data[0].approvedByGovernmentBody);
+        console.log(response.data.data[0]);
         if (response.data && Array.isArray(response.data.data)) {
           setBatchData(response.data.data); 
         } else {
@@ -25,7 +30,11 @@ const TBDetails = () => {
         }
       } catch (error) {
         console.error(error);
+      } finally
+      {
+        setLoading(true)
       }
+      
     };
 
     fetchData();
@@ -41,52 +50,63 @@ const TBDetails = () => {
       <p className="text-gray-600 mb-4">
         View and manage the training batches submitted by the Training Agency.
       </p>
-      <table className="min-w-full bg-white border">
-        <thead>
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-            <th className="py-2 px-4 border-b">TP Name</th>
-            <th className="py-2 px-4 border-b">Batch ABN</th>
-            <th className="py-2 px-4 border-b">Center</th>
-            <th className="py-2 px-4 border-b">Course</th>
-            <th className="py-2 px-4 border-b">Students</th>
-            <th className="py-2 px-4 border-b">Approval Status</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-800 text-sm">
-          {batchData.map((batch) => (
-            <tr key={batch._id} onClick={() => handleRowClick(batch._id)}>
-              <td className="py-2 px-4 border-b text-center">
-                {batch.trainingOrganization}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {batch.ABN_Number}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {batch.centerName}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {batch.courseName}
-              </td>   
-              <td className="py-2 px-4 border-b text-center">
-                {batch.students.length}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                <span
-                  className={`inline-block px-2 py-1 text-white ${
-                    batch.approvedByGovernmentBody === true
-                      ? "bg-green-500"
-                      : "bg-red-500"
-                  } rounded-full`}
-                >
-                  {batch.approvedByGovernmentBody === true ? "Approved" : "Pending"}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+      filter1={"ABN_Number"}
+      columns={batchColumns}
+      data={batchData}
+      isLoading={loading}
+    />
     </div>
   );
 };
 
 export default TBDetails;
+
+const batchColumns = [
+  {
+    accessorKey: "ABN_Number",
+    header: "Abn no",
+  },
+  {
+    accessorKey: "schemeType",
+    header: "Scheme Type",
+  },
+  {
+    accessorKey: "courseName",
+    header: "Course ",
+  },
+  {
+    accessorKey: "trainingOrganization",
+    header: "Created By",
+  },
+  {
+    accessorKey: "students",
+    header: "No of Student",
+    cell: ({ row }) => {
+      return (
+        <div className="font-medium w-fit px-4 py-2 rounded-lg">
+          {row.original.students.length}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "approvedByGovernmentBody",
+    header: "Status",
+    cell: ({ row }) => {
+      const isApproved = row.getValue("approvedByGovernmentBody");
+  
+      return (
+        <div
+          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+            "bg-yellow-200 text-yellow-800": !isApproved, // If `approvedByGovernmentBody` is false
+            "bg-green-200 text-green-800": isApproved,    // If `approvedByGovernmentBody` is true
+          })}
+        >
+          {isApproved ? "Approved" : "Pending"}
+        </div>
+      );
+    },
+  }
+];
+

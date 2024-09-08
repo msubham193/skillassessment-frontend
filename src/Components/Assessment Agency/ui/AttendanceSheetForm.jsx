@@ -7,6 +7,7 @@ import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";
 
+
 const AttendanceSheetForm = () => {
   const pdfRef = useRef();
   const [examId] = useRecoilState(examIdState);
@@ -26,6 +27,7 @@ const AttendanceSheetForm = () => {
     aaLogo: null,
     students: []
   });
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,21 +57,6 @@ const AttendanceSheetForm = () => {
     fetchData();
   }, [examId]);
     
-
-  const fetchAssessor=async()=>{
-    
-     try {
-      const response=await axios.get(`${server}/assessor/aa/${assesorId}`)
-      const data=response.data.data 
-      console.log(data)
-
-     } catch (error) {
-      console.log(error)
-     }
-  }
-  useEffect(()=>{
-    fetchAssessor()
-  },[])
   const loadImages = () => {
     const images = pdfRef.current.querySelectorAll("img");
     return Promise.all(Array.from(images).map(img => {
@@ -82,6 +69,7 @@ const AttendanceSheetForm = () => {
   };
 
   const downloadPDF = async () => {
+    setDownloading(true);
     const input = pdfRef.current;
     const buttons = document.querySelectorAll(".download-button");
 
@@ -103,7 +91,9 @@ const AttendanceSheetForm = () => {
       pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save("attendance-sheet.pdf");
 
+
       buttons.forEach(button => button.style.display = "block");
+
     });
   };
 
@@ -131,6 +121,7 @@ const AttendanceSheetForm = () => {
 
   return (
     <div className="p-12 h-full">
+
       <div ref={pdfRef}>
         <div className="pdf-section p-12 h-full">
           <div className="flex justify-between items-center mb-4">
@@ -176,12 +167,16 @@ const AttendanceSheetForm = () => {
             <h4 className="font-bold">Assessor Details</h4>
             <table className="w-full border-collapse border border-black mt-2">
               <thead>
+
                 <tr>
-                  <th className="border border-black p-2">ID</th>
-                  <th className="border border-black p-2">Name</th>
-                  <th className="border border-black p-2">Qualification</th>
-                  <th className="border border-black p-2">Contact No.</th>
+                  <td className="border border-black p-2 text-xl font-semibold text-center text-gray-400">
+                    Training Partner Name
+                  </td>
+                  <td className="border border-black p-2 text-xl font-semibold text-center">
+                    {tpName}
+                  </td>
                 </tr>
+
               </thead>
               <tbody>
                 <tr>
@@ -197,21 +192,78 @@ const AttendanceSheetForm = () => {
             <h4 className="font-bold">Student Attendenace</h4>
             <table className="w-full border-collapse border border-black mt-2">
               <thead>
+
                 <tr>
-                  <th className="border border-black p-2">Present</th>
-                  <th className="border border-black p-2">Absent</th>
-                  <th className="border border-black p-2">Total</th>
+                  <td className="border border-black p-2 text-xl font-semibold text-center">
+                    <div className="flex justify-center">
+                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                        Course Name :
+                      </h2>
+                      {courseName}
+                    </div>
+                  </td>
+                  <td className="border border-black p-2 text-xl font-semibold text-center">
+                    <div className="flex justify-center">
+                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                        Course Code :
+                      </h2>
+                      {courseCode}
+                    </div>
+                  </td>
                 </tr>
+
               </thead>
               <tbody>
                 <tr>
                   <td className="border border-black p-4"></td>
                   <td className="border border-black p-4"></td>
                   <td className="border border-black p-4"></td>
+                </td>
+
                 </tr>
               </tbody>
             </table>
-          </div>
+            <div className="mb-4">
+              <h4 className="font-bold">Assessor Details</h4>
+              <table className="w-full border-collapse border border-black mt-2">
+                <thead>
+                  <tr>
+                    <th className="border border-black p-2">ID</th>
+                    <th className="border border-black p-2">Name</th>
+                    <th className="border border-black p-2">Qualification</th>
+                    <th className="border border-black p-2">Contact No.</th>
+                  </tr>
+                </thead>
+                <tbody className="h-10">
+                  <tr>
+                    <td className="border border-black p-2" />
+                    <td className="border border-black p-2" />
+                    <td className="border border-black p-2" />
+                    <td className="border border-black p-2" />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="mb-4">
+              <h4 className="font-bold">Student Attendance</h4>
+              <table className="w-full border-collapse border border-black mt-2">
+                <thead>
+                  <tr>
+                    <th className="border border-black p-2">Present</th>
+                    <th className="border border-black p-2">Absent</th>
+                    <th className="border border-black p-2">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="h-10">
+                  <tr>
+                    <td className="border border-black p-2" />
+                    <td className="border border-black p-2" />
+                    <td className="border border-black p-2" />
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
 
           <div className="mb-4">
             <h4 className="font-bold">Student Attendance</h4>
@@ -236,6 +288,7 @@ const AttendanceSheetForm = () => {
 
           <div className="flex justify-between mt-8">
             <div className="border-t border-black p-2 w-1/3 text-center">
+
               Signature of Centre head
             </div>
             <div className="border-t border-black p-2 w-1/3 text-center">
@@ -247,8 +300,9 @@ const AttendanceSheetForm = () => {
       <button
         className="btn bg-[#0066ff] text-base text-white font-semibold px-3 py-1 rounded duration-500 hover:bg-[#3f37c9] download-button mt-4"
         onClick={downloadPDF}
+        disabled={isDownloading}
       >
-        Download PDF
+        {isDownloading ? <div className="flex items-center gap-1"><Loader2 className="animate-spin h-5" />Downloading..</div> : "Download PDF"}
       </button>
     </div>
   );

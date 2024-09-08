@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck, UserPlus, BellPlus } from "lucide-react";
+import { LayoutDashboard, BellDot, ChevronRight, ChevronLeft, Handshake, BotMessageSquare, PackagePlus, GraduationCap, HandCoins, FilePlus2, BookOpenCheck, UserPlus, BellPlus, Menu } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import {
     useWindowWidth,
@@ -14,18 +14,24 @@ const SideNav = () => {
  const mobileWidth=onlyWidth < 768
  const isAdmin = useRecoilValue(authenticationState);
     const specificEmail = "adminaccount@cutm.ac.in";
-  const toogelSideBar=()=>
+  const toggleSideBar=()=>
     {
         setIsCollapsed(!isCollapsed)
     }
 
   return (
-    <div className="relative min-w-[80px] border-r px-2 pb-10 pt-4 bg-[#E8F5E9]">
- {
-    !mobileWidth &&(
-        <div className="absolute right-[-20px] top-2">
-        </div>
-      )}
+    <div className="relative min-w-[80px] border-r px-2 pb-10 pt-4 bg-[#e6e6fa]">
+    {!mobileWidth && (
+      <div className="absolute right-[-20px] top-5">
+        <Button
+          onClick={toggleSideBar}
+          variant="ghost"
+          className="rounded-full p-2"
+        >
+          
+        </Button>
+      </div>
+    )}
       {isAdmin?.email === specificEmail ? (
         <Nav links={[{
           title: "All Payments",
@@ -36,6 +42,7 @@ const SideNav = () => {
         }]} />
       ) : (
         <Nav
+        isCollapsed={mobileWidth ? true : isCollapsed}
           links={[
             {
               title: "Home",

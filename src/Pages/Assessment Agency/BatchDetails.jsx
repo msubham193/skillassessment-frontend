@@ -17,6 +17,7 @@ const BatchDetails = () => {
   const [formattedStartdDate, setFormattedStartdDate] = useState("");
   const [formattedEndDate, setFormattedEndDate] = useState("");
   const [isDateSet, setIsDateSet] = useState(false);
+  const [absentStudents, setAbsentStudents] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +47,10 @@ const BatchDetails = () => {
       }
     };
     fetchBatchDetails();
+
+    
+
+    setAbsentStudents(localStorage.getItem(`absentSudent_${batchId}`));
   }, [batchId, examId]);
 
   const handleClickAttendanceSheet = () => {
@@ -67,6 +72,7 @@ const BatchDetails = () => {
     }
 
     const formattedDate = format(selectedDate, "dd/M/yyyy");
+    setSelectedDate(formattedDate);
 
     try {
       const response = await axios.put(
@@ -95,7 +101,7 @@ const BatchDetails = () => {
             <h1 className="text-2xl font-semibold mb-4">Batch Details</h1>
           </div>
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-3 lg:gap-8">
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch ID
@@ -103,7 +109,7 @@ const BatchDetails = () => {
                 <p className="mt-2 text-md text-muted-foreground">{batchId}</p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch ABN
@@ -113,7 +119,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Created By
@@ -123,7 +129,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   No. of Student
@@ -133,7 +139,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   No. of Trainers
@@ -143,7 +149,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch Starting date
@@ -153,7 +159,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch End Date
@@ -163,7 +169,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch Under Course
@@ -173,7 +179,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch Under Scheme
@@ -183,7 +189,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch Under Sector
@@ -193,7 +199,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">
                   Batch Under State
@@ -203,7 +209,7 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
-            <div className="bg-blue-100 border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
               <div className="p-4">
                 <h3 className="text-lg font-semibold tracking-tight">Status</h3>
                 <p className="mt-2 text-ld font-semibold text-muted-foreground">
@@ -211,6 +217,37 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
+
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  No. Of Present Student
+                </h3>
+                <p className="mt-2 text-md text-muted-foreground">
+                  {studentslength - Number(absentStudents)}
+                </p>
+              </div>
+            </div>
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  No. Of Absent Student
+                </h3>
+                <p className="mt-2 text-md text-muted-foreground">
+                  {absentStudents}
+                </p>
+              </div>
+            </div>
+            {/* <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  Examination Data
+                </h3>
+                <p className="mt-2 text-ld font-semibold text-muted-foreground">
+                  {selectedDate?.toISOString()}
+                </p>
+              </div>
+            </div> */}
           </div>
           <div className="flex gap-4 mt-10">
             <div className="flex flex-col">

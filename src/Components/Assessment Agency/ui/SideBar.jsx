@@ -13,6 +13,7 @@ import {
 import { FaLayerGroup } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ReceiptText } from "lucide-react";
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
     icon: <FaCreditCard />,
   },
   {
+    path: "/dashboard/invoice",
+    name: "Invoice",
+    icon: <ReceiptText />,
+  },
+  {
     path: "/dashboard/invoices",
     name: "Track Invoice",
     icon: <FaFileInvoice />,
@@ -70,7 +76,7 @@ const SideBar = () => {
 
   return (
     <div
-      className={`lg:flex flex-col bg-gray-800 text-white transition-width duration-300 ${
+      className={`lg:flex flex-col bg-gray-800 text-white transition-width duration-300 fixed ${
         isOpen ? "w-64" : "w-16"
       } lg:w-64 min-h-screen`}
     >
@@ -89,17 +95,19 @@ const SideBar = () => {
               onClick={() => navigate(route.path)}
             >
               <span className="mr-2">{route.icon}</span>
-              <span className={`${isOpen ? "block" : "hidden"} lg:block`}>
+              <span
+                className={`${isOpen ? "block" : "hidden"} lg:block text-base`}
+              >
                 {route.name}
               </span>
             </div>
           ))}
         </div>
         <button
-          className="flex items-center mt-2 space-x-2 bg-red-500 text-white px-4 py-2 rounded-md"
+          className="flex items-center mt-2 gap-2 bg-red-500 text-white px-3 text-sm py-2 rounded-md"
           onClick={handleLogout}
         >
-          <FaSignOutAlt /> logout
+          <FaSignOutAlt /> Logout
         </button>
       </div>
     </div>

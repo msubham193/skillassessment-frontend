@@ -43,7 +43,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
   // console.log(typeof(data));
   const navigate = useNavigate();
   const [rowSelection, setRowSelection] = useState({});
-  const [anylisis, setAnylisis] = useState("");
+  const [anylisis, setAnylisis] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);
   const [sorting, setSorting] = useState([]);
@@ -99,7 +99,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
       columns.map((col) => row[col.accessorKey])
     );
 
-    doc.autoTable({
+    doc.autoTable({ 
       head: [tableColumn],
       body: tableRows,
     });
@@ -168,7 +168,10 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
                     colSpan={table.getAllColumns().length}
                     className="h-24 text-center"
                   >
-                    No results.
+                  {
+                    isLoding?"Loading..":" No results."
+                  }
+                   
                   </TableCell>
                 </TableRow>
               )}
@@ -197,7 +200,9 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
             <TooltipContent>Download the data as PDF.</TooltipContent>
           </Tooltip>
           <div className="ml-4">
-            <Button onClick={handleRedirect}>view statistic</Button>
+          {
+          anylisis===null?"":<Button onClick={handleRedirect}>view statistic</Button>
+          }
           </div>
         </div>
         <div ref={analysisRef}>

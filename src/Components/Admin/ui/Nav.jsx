@@ -19,8 +19,8 @@ function usePathname() {
   return location.pathname;
 }
 
-export function Nav({ links }) { 
-  const isCollapsed=false; 
+export function Nav({ links,isCollapsed }) { 
+  // const isCollapsed=false; 
   const pathName = usePathname();
   return (
     <TooltipProvider>
@@ -42,7 +42,7 @@ export function Nav({ links }) {
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                     )}
                   >
-                    <link.icon className="h-4 w-4" />
+                    <link.icon className="h-4 w-4 text-orange-600" />
                     <span className="sr-only">{link.title}</span>
                   </Link>
                 </TooltipTrigger>
@@ -64,7 +64,7 @@ export function Nav({ links }) {
                   "justify-start"
                 )}
               > 
-                <link.icon className="mr-2 h-4 w-4" />
+                <link.icon className="mr-2 h-4 w-4 text-orange-600" />
                 {link.title}
               </Link>
             )
@@ -82,7 +82,7 @@ export function Nav({ links }) {
                       "h-9 w-9 dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                     }
                   >
-                    <UserPlus className="h-4 w-4" />
+                    <UserPlus className="h-4 w-4 text-orange-600" />
                     <span className="sr-only">{"Create Admin"}</span>
                   </Button>
                 </AddAdmin>
@@ -94,7 +94,7 @@ export function Nav({ links }) {
           ) : (
             <AddAdmin>
               <Button variant={"ghost"} className={"pl-[14px] "}>
-                <UserPlus className="mr-2 h-4 w-4" />
+                <UserPlus className="mr-2 h-4 w-4 text-orange-600" />
                 {"CreateAdmin"}
               </Button>
             </AddAdmin>

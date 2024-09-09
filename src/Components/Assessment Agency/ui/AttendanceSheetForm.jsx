@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";
-import { Loader2 } from "lucide-react"; // Assuming you are using this loader
+import { Loader2 } from "lucide-react";
 
 const AttendanceSheetForm = () => {
   const pdfRef = useRef();
@@ -27,7 +27,11 @@ const AttendanceSheetForm = () => {
     aaLogo: null,
     students: []
   });
-  const [isDownloading, setDownloading] = useState(false); // Added state for downloading
+  const [isDownloading, setDownloading] = useState(false);
+  const [base64Images, setBase64Images] = useState({
+    aaLogo: null,
+    studentPhotos: {}
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,15 +61,42 @@ const AttendanceSheetForm = () => {
     fetchData();
   }, [examId]);
 
-  const loadImages = () => {
-    const images = pdfRef.current.querySelectorAll("img");
-    return Promise.all(Array.from(images).map(img => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
+  useEffect(() => {
+    const loadAndConvertImages = async () => {
+      const aaLogoBase64 = await convertImageToBase64(formData.aaLogo);
+      const studentPhotosBase64 = {};
+
+      for (const student of formData.students) {
+        studentPhotosBase64[student.uid] = await convertImageToBase64(student.profilepic);
+      }
+
+      setBase64Images({
+        aaLogo: aaLogoBase64,
+        studentPhotos: studentPhotosBase64
       });
-    }));
+    };
+
+    if (formData.aaLogo && formData.students.length > 0) {
+      loadAndConvertImages();
+    }
+  }, [formData]);
+
+  const convertImageToBase64 = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+       img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL);
+      };
+      img.onerror = reject;
+      img.src = url 
+    });
   };
 
   const downloadPDF = async () => {
@@ -74,8 +105,6 @@ const AttendanceSheetForm = () => {
     const buttons = document.querySelectorAll(".download-button");
 
     buttons.forEach(button => button.style.display = "none");
-
-    await loadImages();
 
     html2canvas(input, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
@@ -92,7 +121,7 @@ const AttendanceSheetForm = () => {
       pdf.save("attendance-sheet.pdf");
 
       buttons.forEach(button => button.style.display = "block");
-      setDownloading(false); // Reset downloading state
+      setDownloading(false);
     });
   };
 
@@ -101,7 +130,7 @@ const AttendanceSheetForm = () => {
       <tr key={student.uid}>
         <td className="border border-black p-2 text-center">{index + 1}</td>
         <td className="border border-black p-2 text-center">
-          <img src={student.profilepic} alt={student.name} className="h-10 w-10 mx-auto" />
+          <img src={base64Images.studentPhotos[student.uid] || student.profilepic} alt={student.name} className="h-10 w-10 mx-auto" />
         </td>
         <td className="border border-black p-2">{student.uid}</td>
         <td className="border border-black p-2">{student.name}</td>
@@ -129,7 +158,7 @@ const AttendanceSheetForm = () => {
               <p className="text-sm">(NCVET Recognized Awarding Body)</p>
               <h3 className="text-xl font-bold mt-2">ATTENDANCE SHEET</h3>
             </div>
-            <img src={formData.aaLogo} alt="Assessment Agency Logo" className="h-24 w-24" />
+            <img src={base64Images.aaLogo || formData.aaLogo} alt="Assessment Agency Logo" className="h-24 w-24" />
           </div>
           
           <table className="w-full border-collapse border border-black mb-4">
@@ -162,52 +191,49 @@ const AttendanceSheetForm = () => {
           </table>
 
           <div className="mb-4">
-              <h4 className="font-bold">Assessor Details</h4>
-              <table className="w-full border-collapse border border-black mt-2">
-                <thead>
-                  <tr>
-                    <th className="border border-black p-4">ID</th>
-                    <th className="border border-black p-4">Name</th>
-                    <th className="border border-black p-4">Qualification</th>
-                    <th className="border border-black p-4">Contact No.</th>
-                  </tr>
-                </thead>
-                <tbody className="h-10">
-                  <tr>
-                    <td className="border border-black p-4" />
-                    <td className="border border-black p-4" />
-                    <td className="border border-black p-4" />
-                    <td className="border border-black p-4" />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-           
-            <div className="mb-4">
-              <h4 className="font-bold">Student Attendance</h4>
-              <table className="w-full border-collapse border border-black mt-2">
-                <thead>
-                  <tr>
-                    <th className="border border-black p-2">Present</th>
-                    <th className="border border-black p-2">Absent</th>
-                    <th className="border border-black p-2">Total</th>
-                    
-                  </tr>
-                </thead>
-                <tbody className="h-10">
-                  <tr>
-                    <td className="border border-black p-4" />
-                    <td className="border border-black p-4" />
-                    <td className="border border-black p-4" />
-                    <td className="border border-black p-4" />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-
+            <h4 className="font-bold">Assessor Details</h4>
+            <table className="w-full border-collapse border border-black mt-2">
+              <thead>
+                <tr>
+                  <th className="border border-black p-4">ID</th>
+                  <th className="border border-black p-4">Name</th>
+                  <th className="border border-black p-4">Qualification</th>
+                  <th className="border border-black p-4">Contact No.</th>
+                </tr>
+              </thead>
+              <tbody className="h-10">
+                <tr>
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+         
           <div className="mb-4">
             <h4 className="font-bold">Student Attendance</h4>
+            <table className="w-full border-collapse border border-black mt-2">
+              <thead>
+                <tr>
+                  <th className="border border-black p-2">Present</th>
+                  <th className="border border-black p-2">Absent</th>
+                  <th className="border border-black p-2">Total</th>
+                </tr>
+              </thead>
+              <tbody className="h-10">
+                <tr>
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mb-4">
+            <h4 className="font-bold">Student Details</h4>
             <table className="w-full border-collapse border border-black mt-2">
               <thead>
                 <tr>

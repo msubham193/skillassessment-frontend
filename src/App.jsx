@@ -77,8 +77,6 @@ import TrackInvoices from "./Pages/Assessment Agency/TrackInvoices";
 import BatchDetailsofAA from "./Pages/Assessment Agency/BatchDetails";
 import SNALayout from "./SNALayout";
 import SNALogin from "./Pages/Sna/SNALogin";
-import TCDetails from "./Components/Sna/TCDetails";
-import TBDetails from "./Components/Sna/TBDetails";
 import SNAProtectedRoutes from "./utils/SNAProtectedRoutes";
 import ViewReports from "./Pages/Sna/ViewReports";
 import Marksheet from "./Pages/Sna/Marksheet";
@@ -105,7 +103,9 @@ import Invoice from "./Pages/Assessment Agency/Invoice";
 
 import TrainingBatches from "./Components/Sna/TrainingBatches";
 import TrainingCenters from "./Components/Sna/TrainingCentres";
-import CenterDetailsofSNA from "./Pages/Sna/CenterDetailsofSNA";
+import CenterDetailsofSNA from "./Pages/Sna/CenterDetailsofSNA"; 
+import TCDetails from "./Components/Sna/TCDetails";
+import TBDetails from "./Components/Sna/TBDetails";
 
 
 
@@ -368,7 +368,7 @@ const App = () => {
               path="markabsent/:batchId"
               element={<MarkAbsentStudentList />}
             />
-            <Route path="marksheet" element={<MarksheetForm />} />
+            <Route path="marksheet/:studentId" element={<MarksheetForm />} />
             <Route
               path="batch/:batchId/exam/:examId"
               element={<BatchDetailsofAA />}
@@ -392,8 +392,6 @@ const App = () => {
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
             <Route path="snadashboard" element={<SNADashboard />} />
-            <Route path="trainingcenters" element={<TCDetails />} />
-            <Route path="trainingbatches" element={<TBDetails />} />
             <Route path="snadashboard" element={<SNADashboard/>} />
             <Route path="trainingcenters" element={<TrainingCenters/>} />
             <Route path="trainingbatches" element={<TrainingBatches/>} />

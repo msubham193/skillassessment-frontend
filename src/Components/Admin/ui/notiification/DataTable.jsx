@@ -31,11 +31,11 @@ import {
   TooltipTrigger,
 } from "@/components(shadcn)/ui/tooltip";
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import "jspdf-autotable"; 
 import { Button } from "@/components(shadcn)/ui/button";
 import AaAnalysis from "@/Pages/Admin/AaAnalysis";
 import TpAnalysis from "@/Pages/Admin/TpAnalysis";
-import BathAnalysis from "@/Pages/Admin/BathAnalysis";
+import BathAnalysis from "@/Pages/Admin/BathAnalysis"; 
 import ExamAnalysis from "@/Pages/Admin/ExamAnalysis"; 
 
 export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {

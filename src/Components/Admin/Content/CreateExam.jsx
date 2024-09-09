@@ -24,44 +24,51 @@ import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 
-const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => { 
+const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const [courseName, setCourseName] = useState("");
   const [trainingPartnerId, setTrainingPartnerId] = useState("");
   const [batchId, setBatchId] = useState("");
   const [assesmentAgencyId, setAssesmentAgencyId] = useState("");
   const [assesmentAgencyName, setAssesmentAgencyName] = useState("");
-  const [showButton, setShowButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const authState = useRecoilValue(authenticationState);
 
-  useEffect(() => { 
+  useEffect(() => {
     setBatchId(abn_id);
     setCourseName(course);
     setTrainingPartnerId(tp_id);
   }, [abn_id, course, tp_id]);
 
-  
-  //function for create batch........
-
+  // Function to create batch
   const createExam = async (e) => {
     e.preventDefault();
-    setShowButton(true);
-    const token = authState.token;
-    if (!token) {
-      console.log("Admin not found");
+    setIsLoading(true);
+
+    if (!authState.token) {
+      toast.error("Admin not authenticated!", {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setIsLoading(false);
       return;
     }
+
     try {
-      const response = await axios.post( 
+      const response = await axios.post(
         `${server}/exam/create`,
         { courseName, batchId, assesmentAgencyId, trainingPartnerId },
         {
           headers: {
-            "x-access-token": token,
+            "x-access-token": authState.token,
             "Content-Type": "application/json",
           },
           withCredentials: true,
         }
       );
+
+      // Reset form values
       setAssesmentAgencyId("");
       setAssesmentAgencyName("");
       toast.success(response.data.message, {
@@ -70,16 +77,15 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
         draggable: true,
         theme: "colored",
       });
-      setShowButton(false);
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.error, {
+      toast.error("Error: Unable to assign exam. Please check your inputs or try again later.", {
         position: "top-center",
         closeOnClick: true,
         draggable: true,
         theme: "colored",
       });
-      setShowButton(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,58 +93,53 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
     <div>
       <Dialog>
         <DialogTrigger asChild>{children}</DialogTrigger>
-        <DialogContent className=" bg-gray-100 w-[621px]">
+        <DialogContent className="bg-gray-100 max-w-lg mx-auto">
           <DialogHeader>
-            <DialogTitle>Assign agency</DialogTitle>
+            <DialogTitle>Assign Assessment Agency</DialogTitle>
             <DialogDescription>
-              Assign this course to a accessment agency.
+              Assign this course to an assessment agency.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={createExam}>
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-left">
-                  BATCH ID
-                </Label>
-                <Input id="batch" className="col-span-4" value={batchId} />
+              {/* Batch ID */}
+              <div className="grid grid-cols-1 gap-2">
+                <Label htmlFor="batch" className="text-left">Batch ID</Label>
+                <Input id="batch" className="col-span-1" value={batchId} readOnly />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-left w-56">
-                  TRANING PARTNER ID
-                </Label>
-                <Input
-                  id="tp_id"
-                  className="col-span-4" 
-                  value={trainingPartnerId}
-                />
+
+              {/* Training Partner ID */}
+              <div className="grid grid-cols-1 gap-2">
+                <Label htmlFor="tp_id" className="text-left">Training Partner ID</Label>
+                <Input id="tp_id" className="col-span-1" value={trainingPartnerId} readOnly />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-left w-40">
-                    COURCE NAME
-                  </Label>
-                  <Input id="curse" className="col-span-4" value={courseName} />
-                </div>
+
+              {/* Course Name */}
+              <div className="grid grid-cols-1 gap-2">
+                <Label htmlFor="course" className="text-left">Course Name</Label>
+                <Input id="course" className="col-span-1" value={courseName} readOnly />
               </div>
-              {/* for manual input */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Assessment Agency ID</Label>
-                <div className="flex">
+
+              {/* Assessment Agency */}
+              <div className="grid grid-cols-1 gap-2">
+                <Label htmlFor="assesmentAgency" className="text-left">Assessment Agency</Label>
+                <div className="flex space-x-2">
                   <Input
                     type="text"
-                    id="batch"
-                    onChange={(e) => setAssesmentAgencyId(e.target.value)}
-                    placeholder="Enter the id of assessment agency or select"
+                    id="assesmentAgency"
                     value={assesmentAgencyName}
+                    onChange={(e) => setAssesmentAgencyName(e.target.value)}
+                    placeholder="Select an assessment agency"
+                    required
                   />
                   <Select>
-                    <SelectTrigger className="w-[75px]">
+                    <SelectTrigger className="w-24">
                       <SelectValue placeholder="Show" />
                     </SelectTrigger>
                     <SelectContent>
                       <ShowAccessmentAgency
                         setAssesmentAgency={setAssesmentAgencyId}
-                        setassessmentagencyName={setAssesmentAgencyName}
+                        setAssessmentAgencyName={setAssesmentAgencyName}
                         course={courseName}
                         sector={sector}
                         state={state}
@@ -148,12 +149,17 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                 </div>
               </div>
             </div>
+
+            <DialogFooter>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full"
+              >
+                {isLoading ? "Assigning..." : "Assign Exam"}
+              </Button>
+            </DialogFooter>
           </form>
-          <DialogFooter>
-            <Button disabled={showButton} onClick={createExam} type="submit">
-              {showButton ? "Loading...." : "Assign Batch"}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

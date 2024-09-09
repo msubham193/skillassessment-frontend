@@ -52,11 +52,6 @@ const routes = [
     icon: <ReceiptText />,
   },
   {
-    path: "/dashboard/invoices",
-    name: "Track Invoice",
-    icon: <FaFileInvoice />,
-  },
-  {
     path: "/dashboard/profile",
     name: "Profile",
     icon: <FaUserCircle />,

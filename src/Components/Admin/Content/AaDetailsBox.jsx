@@ -13,11 +13,6 @@ import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
 import { toast } from "react-toastify";
 import Loder from "../ui/Loder";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components(shadcn)/ui/popover";
 import { Label } from "@/components(shadcn)/ui/label";
 import { Input } from "@/components(shadcn)/ui/input";
 import {

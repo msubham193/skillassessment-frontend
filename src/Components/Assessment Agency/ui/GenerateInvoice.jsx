@@ -20,7 +20,6 @@ const GenerateInvoice = () => {
   const [branchName, setBranchName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [ifscCode, setIfscCode] = useState("");
-  const [share, setShare] = useState("");
   const [totalNoOfcandidates, setTotalNoOfcandidates] = useState(0);
   const [totalNoOfAssessedCandidates, setTotalNoOfAssessedCandidates] =
     useState(0);
@@ -34,7 +33,7 @@ const GenerateInvoice = () => {
         const response = await axios.post(
           `${server}/invoice/${assessmentAgencyId[0]}`
         );
-        console.log(response);
+        console.log(response.data.data.BankInformation.accountNumber);
         const data = response.data.data;
         setDate(data.invoiceGenerateDate);
         setName(data.AssesmentAgencyDetails.name);
@@ -42,10 +41,10 @@ const GenerateInvoice = () => {
         setContact(data.AssesmentAgencyDetails.contactNumber);
         setPan(data.AssesmentAgencyDetails.PAN);
         setGst(data.AssesmentAgencyDetails.GST_Number);
-        // setBankName(data.BankInformation.bankName);
-        // setBranchName(data.BankInformation.branchName);
-        // setAccountNumber(data.BankInformation.accountNumber);
-        // setIfscCode(data.BankInformation.IFSCCode);
+        setBankName(data.BankInformation?.bankName);
+        setBranchName(data.BankInformation?.branchName);
+        setAccountNumber(data.BankInformation?.accountNumber);
+        setIfscCode(data.BankInformation?.IFSCCode);
         setExamData(data.examDetails);
         setTotalNoOfcandidates(data.totalNoOfcandidates);
         setTotalNoOfAssessedCandidates(data.totalNoOfAssessedCandidates);

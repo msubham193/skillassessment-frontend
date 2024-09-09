@@ -7,10 +7,12 @@ import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atom
 import { FaFileUpload } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 import { server } from "@/main";
+import { Loader } from "lucide-react";
 
 const PaymentStatus = () => {
   const navigate = useNavigate();
   const [batchData, setBatchData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const assessmentAgencyId = useRecoilState(assessmentAgencyIdState);
   const [invoiceFile, setInvoiceFile] = useState(null);
   const [invoiceId, setInvoiceId] = useState("");
@@ -52,6 +54,7 @@ const PaymentStatus = () => {
 
     console.log(invoiceId);
     try {
+      setLoading(true)
       const response = await axios.put(
         `${server}/invoice/upload/${invoiceId}`,
         formData,
@@ -63,7 +66,11 @@ const PaymentStatus = () => {
       );
       toast.success("Invoice uploaded successfully:");
     } catch (error) {
+      setLoading(false);
       toast.error("Error uploading files:", error);
+     
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -175,7 +182,10 @@ const PaymentStatus = () => {
                     type="submit"
                     className="mt-2 p-1 w-10 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
                   >
-                    <FaFileUpload className="inline-block" />
+                  {
+                    loading?<Loader/>: <FaFileUpload className="inline-block" />
+                  }
+                   
                   </button>
                 </form>
               </td>

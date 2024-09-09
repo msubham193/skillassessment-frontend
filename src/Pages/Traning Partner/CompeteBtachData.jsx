@@ -49,16 +49,23 @@ const CompeteBatchData = () => {
     setCurrentStudentId(studentId);
     setDocumentType(type);
     try {
-      const response = await fetch(`${server}/student/${studentId}`, {
+      let endpoint;
+      if (type === "certificate") {
+        endpoint = `http://localhost:8000/api/v1/certificate/student/${studentId}`;
+      } else {
+        endpoint = `${server}/student/${studentId}`;
+      }
+      const response = await fetch(endpoint, {
         method: "GET",
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch student data");
+        throw new Error(`Failed to fetch ${type} data`);
       }
       const data = await response.json();
+      console.log("data", data);
       setStudentData(data.data);
     } catch (error) {
-      console.error("Error fetching student data:", error);
+      console.error(`Error fetching ${type} data:`, error);
       setLoadingStates((prev) => ({
         ...prev,
         [studentId]: {
@@ -111,26 +118,26 @@ const CompeteBatchData = () => {
     };
   }, []);
 
-  const generateCertificateData = useCallback((student) => {
-    if (!student) return null;
+  const generateCertificateData = useCallback((data) => {
+    if (!data) return null;
 
     return {
-      name: student.name,
-      fatherName: student.fathername,
-      dateOfBirth: new Date(student.dob).toISOString().split("T")[0],
-      enrollmentNumber: student.redg_No,
-      subject: student.course,
-      duration: `${student.totaldays} days`,
-      credit: student.marks.total,
-      level: "5",
-      trainingCenter: student.TrainingPartner || "N/A",
-      district: student.district || "N/A",
-      state: student.state || "N/A",
-      grade: student.marks.Grade,
-      placeOfIssue: "Jatani",
-      dateOfIssue: new Date().toISOString().split("T")[0],
-      studentId: student._id,
-      studentImageUrl: student.profilepic || "/placeholder-image.jpg",
+      name: data.studentName,
+      fatherName: data.fatherName,
+      dateOfBirth: new Date(data.DOB).toISOString().split("T")[0],
+      enrollmentNumber: data.Enrolment_number,
+      subject: data.qualification,
+      duration: `${data.duration} days`,
+      credit: data.credit,
+      level: data.level,
+      trainingCenter: data.TrainingCenter,
+      district: data.District,
+      state: data.state,
+      grade: data.grade,
+      placeOfIssue: data.placeOfIssue,
+      dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
+      studentId: data.studentId,
+      studentImageUrl: data.stutentProfilePic,
     };
   }, []);
 
@@ -236,4 +243,3 @@ const CompeteBatchData = () => {
 };
 
 export default CompeteBatchData;
-

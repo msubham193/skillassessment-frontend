@@ -27,7 +27,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
 
   return (
     <div className="max-w-7xl mx-auto">
-    <div className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto" ref={ref}>
+    <div className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto " ref={ref}>
       <div className="w-full h-full absolute">
         <img src="/Certificate.png" alt="Certificate Background" className="w-full h-full object-cover" />
       </div>
@@ -41,42 +41,42 @@ const GenerateCertificate = forwardRef((props, ref) => {
             />
           </div>
           {/* Student Name */}
-          <div className="mt-[105px] ml-[40%]">
-            <p className="text-[#117EC3] text-[20px] font-semibold">{name}</p>
+          <div className="mt-[115px] ml-[40%]">
+            <p className="text-[12px] font-semibold">{name}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
-          <div className="mt-[20px] ml-[28%] flex">
-            <p className="text-[#117EC3] text-[15px] font-semibold">{fatherName}</p>
-            <p className="text-[#117EC3] ml-[206px] text-[15px] font-semibold">{dateOfBirth}</p>
-            <p className="text-[#117EC3] ml-[120px] text-[15px] font-semibold">{enrollmentNumber}</p>
+          <div className="mt-[25px] ml-[31%] flex">
+            <p className=" text-[12px] font-semibold">{fatherName}</p>
+            <p className=" ml-[206px] text-[12px] font-semibold">{dateOfBirth}</p>
+            <p className=" ml-[130px] text-[12px] font-semibold">{enrollmentNumber}</p>
           </div>
           {/* Subject Name */}
-          <div className="mt-[16px] ml-[50%]">
-            <p className="text-[#117EC3] text-[15px] font-semibold">{subject}</p>
+          <div className="mt-[22px] ml-[50%]">
+            <p className="text-[12px] font-semibold">{subject}</p>
           </div>
           {/* Duration, Credit, Level */}
-          <div className="mt-[20px] ml-[25%] flex items-center">
-            <p className="text-[#117EC3] text-[15px] font-semibold">{duration}</p>
-            <p className="text-[#117EC3] ml-[300px] text-[15px] font-semibold">{credit}</p>
-            <p className="text-[#117EC3] ml-[230px] text-[12px] mt-2 font-semibold">{level}</p>
+          <div className="mt-[22px] ml-[25%] flex items-center">
+            <p className=" text-[12px] font-semibold">{duration}</p>
+            <p className=" ml-[305px] text-[12px] font-semibold">{credit}</p>
+            <p className=" ml-[240px] text-[12px] mt-2 font-semibold">{level}</p>
           </div>
           {/* Training Center, District, State */}
-          <div className="mt-[16px] ml-[25%] flex items-center">
-            <p className="text-[#117EC3] text-[15px] font-semibold">{trainingCenter}</p>
-            <p className="text-[#117EC3] ml-[390px] text-[15px] font-semibold">{district}</p>
-            <p className="text-[#117EC3] ml-[80px] text-[15px] font-semibold">{state}</p>
+          <div className="mt-[18px] ml-[25%] flex items-center">
+            <p className=" text-[12px] font-semibold">{trainingCenter}</p>
+            <p className=" ml-[390px] text-[12px] font-semibold">{district}</p>
+            <p className=" ml-[97px] text-[12px] font-semibold">{state}</p>
           </div>
           {/* Grade */}
-          <div className="mt-[27px] ml-[13%] flex items-center">
-            <p className="text-[#117EC3] text-[13px] font-bold">{grade}</p>
+          <div className="mt-[30px] ml-[13%] flex items-center">
+            <p className=" text-[12px] font-bold">{grade}</p>
           </div>
           {/* Place of Issue */}
-          <div className="mt-[15px] ml-[18%] flex items-center">
-            <p className="text-[#117EC3] text-[13px] font-semibold">{placeOfIssue}</p>
+          <div className="mt-[18px] ml-[18%] flex items-center">
+            <p className=" text-[12px] font-semibold">{placeOfIssue}</p>
           </div>
           {/* Date of Issue */}
-          <div className="mt-[9px] ml-[18%] flex items-center">
-            <p className="text-[#117EC3] text-[13px] font-semibold">{dateOfIssue}</p>
+          <div className="mt-[12px] ml-[18%] flex items-center">
+            <p className=" text-[12px] font-semibold">{dateOfIssue}</p>
           </div>
           {/* QR Code */}
           <div className="absolute bottom-[45px] left-[75px] bg-white">

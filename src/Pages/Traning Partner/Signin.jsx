@@ -106,7 +106,7 @@ const Signin = () => {
         </div>
         <div className="flex justify-center pt-8">
           <Button className="w-full m-3 bg-violet-700" onClick={handleSignin}>
-            {isLoading ? <Loader /> : "Submit"}
+            {isLoading ? <Loader /> : "Login"}
           </Button>
         </div>
         <div className="flex justify-between pt-8">

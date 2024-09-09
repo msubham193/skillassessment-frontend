@@ -98,9 +98,15 @@ import UpdateCenter from "./Pages/Traning Partner/UpdateCenter";
 import AssessorsPage from "./Pages/Assessment Agency/AssessorsPage";
 import TrainerDetails from "./Components/Traning Partner/ui/TrainersDetails";
 import StudentDetails from "./Pages/Sna/StudentsDetails";
+
+import Invoice from "./Pages/Assessment Agency/Invoice";
+
 import TrainingBatches from "./Components/Sna/TrainingBatches";
 import TrainingCenters from "./Components/Sna/TrainingCentres";
 import CenterDetailsofSNA from "./Pages/Sna/CenterDetailsofSNA"; 
+import TCDetails from "./Components/Sna/TCDetails";
+import TBDetails from "./Components/Sna/TBDetails";
+
 
 
 const App = () => {
@@ -273,7 +279,7 @@ const App = () => {
                 path="/admin/dasbord/Batch/payment/update/:id"
                 exact
                 element={<UpdateBatchBox />}
-              /> 
+              />
               <Route
                 path="/admin/dasbord/Aa/invoice/payment/update/:id"
                 exact
@@ -321,7 +327,7 @@ const App = () => {
             exact
             element={<CompeteBtachData />}
           />
-           <Route path="batchstudents/:batchId" element={<StudentDetails />} />
+          <Route path="batchstudents/:batchId" element={<StudentDetails />} />
           <Route
             path="/trainingPartner/dashboard/CreateBatch/addteacher/:id"
             exact
@@ -340,9 +346,7 @@ const App = () => {
             path="/trainingPartner/dashboard/student/:Id"
             element={<Student />}
           />
-           <Route path="/trainer/:teacherId"
-            element={<TrainerDetails />}
-          />
+          <Route path="/trainer/:teacherId" element={<TrainerDetails />} />
           <Route path="/trainingPartner/setting" exact element={<Setting />} />
         </Route>
         {/* Routes for Assessment Agency */}
@@ -356,6 +360,7 @@ const App = () => {
             <Route path="uploadresult" element={<UploadResult />} />
             <Route path="paymentstatus" element={<PaymentStatus />} />
             <Route path="invoices" element={<TrackInvoices />} />
+            <Route path="invoice" element={<Invoice />} />
             <Route path="profile" element={<Profile />} />
             <Route path="assessors" element={<AssessorsPage />} />
             <Route path="students/:batchId" element={<StudentList />} />
@@ -386,6 +391,7 @@ const App = () => {
         <Route path="snalogin" element={<SNALogin />} />
         <Route element={<SNAProtectedRoutes />}>
           <Route path="/sna" element={<SNALayout />}>
+            <Route path="snadashboard" element={<SNADashboard />} />
             <Route path="snadashboard" element={<SNADashboard/>} />
             <Route path="trainingcenters" element={<TrainingCenters/>} />
             <Route path="trainingbatches" element={<TrainingBatches/>} />

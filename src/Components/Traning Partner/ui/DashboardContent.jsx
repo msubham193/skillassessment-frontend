@@ -1,52 +1,33 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { toast } from "react-toastify";
 import { Button } from "@/components(shadcn)/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components(shadcn)/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components(shadcn)/ui/pagination";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components(shadcn)/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components(shadcn)/ui/pagination";
 import { Tabs } from "@/components(shadcn)/ui/tabs";
 import { Skeleton } from "@/components(shadcn)/ui/skeleton";
 import DataTabs from "@/Components/Admin/ui/DataTabs";
-
-import {
-  CandlestickChart,
-  GraduationCap,
-  Presentation,
-  SquareActivity,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Eye } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { CandlestickChart, GraduationCap, Presentation, SquareActivity, Eye } from "lucide-react";
 import { batchDataAtoms } from "../Atoms/batchatom";
-import TopBar from "../TopBar";
-import { toast } from "react-toastify";
 import { centerAtom } from "../Atoms/centerAtom";
-import { server } from "@/main";
 import { batchIdAtoms } from "../Atoms/BatchId";
+import TopBar from "../TopBar";
+import { server } from "@/main";
+import { AnimatedPagination } from "./Pagination/Animatedpagination";
 
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(null);
   const [totalBatches, setTotalBatches] = useState(0);
   const [totalCenters, setTotalCenters] = useState(0);
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalTrainers, setTotalTrainers] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [batchID,setBATCHID]=useRecoilState(batchIdAtoms)
+  const [batchID, setBATCHID] = useRecoilState(batchIdAtoms);
   const setBatchData = useSetRecoilState(batchDataAtoms);
   const trainingPartnerId = localStorage.getItem("trainingPartnerId");
   const totalCenter = useRecoilValue(centerAtom);
@@ -56,14 +37,11 @@ const Content = () => {
   }, [totalCenter]);
 
   const handelView = async (batchId) => {
-    setBATCHID(batchId)
+    setBATCHID(batchId);
     try {
-      const response = await fetch(
-        `${server}/batch/${batchId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${server}/batch/${batchId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -97,11 +75,12 @@ const Content = () => {
           setTotalBatches(batchesData.data.length);
           setTotalTrainers(trainersData.data.length);
 
-          // Calculate total students
-          const totalStudents = batchesData.data.reduce((sum, batch) => sum + batch.students.length, 0);
+          const totalStudents = batchesData.data.reduce(
+            (sum, batch) => sum + batch.students.length,
+            0
+          );
           setTotalStudents(totalStudents);
 
-          // Sort batches by creation date
           const sortedBatches = batchesData.data.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
@@ -133,28 +112,35 @@ const Content = () => {
   };
 
   const handelBatchReady = async (batchId) => {
+    setSubmitLoading(batchId);
     try {
-      const response = await fetch(
-        `${server}/batch/active/${batchId}`,
-        {
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`${server}/batch/active/${batchId}`, {
+        method: "PUT",
+      });
 
       if (response.ok) {
         const data = await response.json();
         console.log("batch submitted", data);
         toast.success("Batch Submitted Successfully");
+        setAllBatch((prevBatches) =>
+          prevBatches.map((batch) =>
+            batch._id === batchId
+              ? { ...batch, batchActivePermission: true, status: "onGoing" }
+              : batch
+          )
+        );
       } else {
         const errorData = await response.json();
         console.error("Failed to submit batch:", errorData);
         toast.error(
-          "Failed to submit batch: " + (errorData.message || "Unknown error")
+          "Failed to submit batch: " + (errorData.error || "Unknown error")
         );
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error submitting batch: " + error.message);
+    } finally {
+      setSubmitLoading(null);
     }
   };
 
@@ -177,9 +163,9 @@ const Content = () => {
   const totalPages = Math.ceil(allBatch.length / itemsPerPage);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col min-h-screen">
       <TopBar />
-      <div className="py-3 px-5 bg-transparent gap-2">
+      <div className="flex-grow py-3 px-5 bg-transparent gap-2">
         {loading ? (
           <div className="space-y-4">
             <Skeleton className="h-12 w-full" />
@@ -191,7 +177,7 @@ const Content = () => {
             <Skeleton className="h-64 w-full" />
           </div>
         ) : (
-          <div className="mt-4">
+          <div className="mt-4 flex flex-col h-full">
             <Tabs defaultValue="overview" className="space-y-4">
               <DataTabs
                 cardData={[
@@ -223,7 +209,7 @@ const Content = () => {
               />
             </Tabs>
             {allBatch.length > 0 ? (
-              <>
+              <div className="flex flex-col flex-grow">
                 <Table className="mt-8">
                   <TableHeader>
                     <TableRow>
@@ -295,9 +281,9 @@ const Content = () => {
                             <Button
                               className="text-xs text-white px-4 py-1 bg-purple-600 hover:bg-purple-700"
                               onClick={() => handelBatchReady(batch._id)}
-                              disabled={batch.batchActivePermission === true}
+                              disabled={batch.batchActivePermission === true || submitLoading === batch._id}
                             >
-                              Submit Batch
+                              {submitLoading === batch._id ? "Submitting..." : "Submit Batch"}
                             </Button>
                           </div>
                         </TableCell>
@@ -305,33 +291,14 @@ const Content = () => {
                     ))}
                   </TableBody>
                 </Table>
-                <div className="fixed bottom-0 w-full bg-white py-2">
-                  <Pagination className="mt-4">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => paginate(currentPage - 1)}
-                        />
-                      </PaginationItem>
-                      {[...Array(totalPages)].map((_, index) => (
-                        <PaginationItem key={index}>
-                          <PaginationLink
-                            onClick={() => paginate(index + 1)}
-                            isActive={currentPage === index + 1}
-                          >
-                            {index + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      <PaginationItem>
-                        <PaginationNext
-                          onClick={() => paginate(currentPage + 1)}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              </>
+                <div className="mt-auto py-4">
+              <AnimatedPagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={paginate}
+              />
+              </div>
+              </div>
             ) : (
               <div className="text-center mt-8 text-gray-500">
                 No batches found

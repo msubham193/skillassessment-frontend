@@ -17,6 +17,7 @@ const BatchDetails = () => {
   const [formattedStartdDate, setFormattedStartdDate] = useState("");
   const [formattedEndDate, setFormattedEndDate] = useState("");
   const [isDateSet, setIsDateSet] = useState(false);
+  const [absentStudents, setAbsentStudents] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +47,10 @@ const BatchDetails = () => {
       }
     };
     fetchBatchDetails();
+
+    
+
+    setAbsentStudents(localStorage.getItem(`absentSudent_${batchId}`));
   }, [batchId, examId]);
 
   const handleClickAttendanceSheet = () => {
@@ -211,6 +216,37 @@ const BatchDetails = () => {
                 </p>
               </div>
             </div>
+
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  No. Of Present Student
+                </h3>
+                <p className="mt-2 text-md text-muted-foreground">
+                  {studentslength - Number(absentStudents)}
+                </p>
+              </div>
+            </div>
+            <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  No. Of Absent Student
+                </h3>
+                <p className="mt-2 text-md text-muted-foreground">
+                  {absentStudents}
+                </p>
+              </div>
+            </div>
+            {/* <div className="bg-white border group relative overflow-hidden rounded-lg shadow-sm transition-all hover:scale-105 hover:shadow-lg">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  Examination Data
+                </h3>
+                <p className="mt-2 text-ld font-semibold text-muted-foreground">
+                  {selectedDate?.toISOString()}
+                </p>
+              </div>
+            </div> */}
           </div>
           <div className="flex gap-4 mt-10">
             <div className="flex flex-col">

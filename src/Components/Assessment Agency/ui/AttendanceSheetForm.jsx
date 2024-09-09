@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -6,68 +5,98 @@ import logo from "../../../assets/logo.png";
 import { useRecoilState } from "recoil";
 import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
-import StudentTable from "./StudentTable";
 import { server } from "@/main";
-import StudentTable10 from "./StudentTable10";
 import { Loader2 } from "lucide-react";
-
-const STUDENTS_PER_PAGE = 10;
 
 const AttendanceSheetForm = () => {
   const pdfRef = useRef();
-  const examId = useRecoilState(examIdState);
-  const [tpName, setTpName] = useState("");
-  const [aaName, setAaName] = useState("");
-  const [centerName, setCenterName] = useState("");
-  const [centId, setCentId] = useState("");
-  const [abn, setAbn] = useState("");
-  const [sector, setSector] = useState("");
-  const [courseName, setCourseName] = useState("");
-  const [courseCode, setCourseCode] = useState("");
-  const [examDate, setExamDate] = useState("");
-  const [batchNo, setBatchNo] = useState("");
-  const [aaLogo, setAaLogo] = useState(null);
-  const [students, setStudents] = useState([]);
+  const [examId] = useRecoilState(examIdState);
+  const [assessor, setAssessor] = useState({});
+  const [assessorId, setAssessorId] = useState("");
+  const [formData, setFormData] = useState({
+    tpName: "",
+    aaName: "",
+    centerName: "",
+    centId: "",
+    abn: "",
+    sector: "",
+    courseName: "",
+    courseCode: "",
+    examDate: "",
+    batchNo: "",
+    aaLogo: null,
+    students: []
+  });
   const [isDownloading, setDownloading] = useState(false);
+  const [base64Images, setBase64Images] = useState({
+    aaLogo: null,
+    studentPhotos: {}
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(examId);
       try {
-        const response = await axios.get(
-          `${server}/exam/attendance/${examId[0]}`
-        );
-        console.log(response.data.data); // Ensure the structure matches your needs
+        const response = await axios.get(`${server}/exam/attendance/${examId}`);
         const data = response.data.data;
-        setAaLogo(data.assesmentAgencyId.logo);
-        setTpName(data.TrainingOrganization);
-        setAaName(data.assesmentAgency);
-        setCenterName(data.batchId.centerName);
-        setCentId(data.batchId.students[0].cenid);
-        setAbn(data.batchId.ABN_Number);
-        setSector(data.sector);
-        setCourseName(data.course);
-        setCourseCode(data.courseCode);
-        setExamDate(data.assesmentdate);
-        setBatchNo();
-        setStudents(data.batchId.students);
+        setAssessorId(data.AssessorId);
+        setFormData({
+          aaLogo: data.assesmentAgencyId.logo,
+          tpName: data.TrainingOrganization,
+          aaName: data.assesmentAgency,
+          centerName: data.batchId.centerName,
+          centId: data.batchId.students[0].cenid,
+          abn: data.batchId.ABN_Number,
+          sector: data.sector,
+          courseName: data.course,
+          courseCode: data.courseCode,
+          examDate: data.assesmentdate,
+          batchNo: data.batchId.batchNo,
+          students: data.batchId.students,
+        });
       } catch (error) {
         console.error("Error fetching batch data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [examId]);
 
-  const loadImages = () => {
-    const images = pdfRef.current.querySelectorAll("img");
-    const promises = Array.from(images).map((img) => {
-      return new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
+  useEffect(() => {
+    const loadAndConvertImages = async () => {
+      const aaLogoBase64 = await convertImageToBase64(formData.aaLogo);
+      const studentPhotosBase64 = {};
+
+      for (const student of formData.students) {
+        studentPhotosBase64[student.uid] = await convertImageToBase64(student.profilepic);
+      }
+
+      setBase64Images({
+        aaLogo: aaLogoBase64,
+        studentPhotos: studentPhotosBase64
       });
+    };
+
+    if (formData.aaLogo && formData.students.length > 0) {
+      loadAndConvertImages();
+    }
+  }, [formData]);
+
+  const convertImageToBase64 = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+       img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL);
+      };
+      img.onerror = reject;
+      img.src = url 
     });
-    return Promise.all(promises);
   };
 
   const downloadPDF = async () => {
@@ -75,242 +104,166 @@ const AttendanceSheetForm = () => {
     const input = pdfRef.current;
     const buttons = document.querySelectorAll(".download-button");
 
-    // Hide all buttons
-    buttons.forEach((button) => button.classList.add("hidden-button"));
+    buttons.forEach(button => button.style.display = "none");
 
-    // await loadImages(); // Ensure images are loaded
-
-    const generatePDFPage = (section) => {
-      return html2canvas(section, { scale: 2 }).then((canvas) => {
-        return canvas.toDataURL("image/png");
-      });
-    };
-
-    const sections = document.querySelectorAll(".pdf-section");
-    const pagesPromises = Array.from(sections).map((section) =>
-      generatePDFPage(section)
-    );
-
-    Promise.all(pagesPromises).then((pages) => {
-      const pdf = new jsPDF("p", "mm", "a4");
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 30;
 
-      pages.forEach((page, index) => {
-        if (index > 0) {
-          pdf.addPage();
-        }
-        pdf.addImage(page, "PNG", 0, 0, pdfWidth, pdfHeight);
-      });
-
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save("attendance-sheet.pdf");
 
+      buttons.forEach(button => button.style.display = "block");
       setDownloading(false);
-
-      // Show all buttons
-      buttons.forEach((button) => button.classList.remove("hidden-button"));
     });
+  };
+
+  const renderStudentRows = () => {
+    return formData.students.map((student, index) => (
+      <tr key={student.uid}>
+        <td className="border border-black p-2 text-center">{index + 1}</td>
+        <td className="border border-black p-2 text-center">
+          <img src={base64Images.studentPhotos[student.uid] || student.profilepic} alt={student.name} className="h-10 w-10 mx-auto" />
+        </td>
+        <td className="border border-black p-2">{student.uid}</td>
+        <td className="border border-black p-2">{student.name}</td>
+        <td className="border border-black p-2">{student.fathername}</td>
+        <td className="border border-black p-2">{student.gender}</td>
+        <td className="border border-black p-2">{formatDate(student.dob)}</td>
+        <td className="border border-black p-2"></td>
+      </tr>
+    ));
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
   };
 
   return (
     <div className="p-12 h-full">
-      <div className="" ref={pdfRef}>
-        <div className="">
-          <div className="pdf-section p-12 h-full">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex gap-16">
-                <div className="mr-14">
-                  <img
-                    src={logo}
-                    alt="Centurion University Logo"
-                    className="h-48 w-36"
-                  />
-                </div>
-                <div className="ml-16 mr-12 text-center">
-                  <h2 className="text-lg font-semibold ">
-                    CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT
-                  </h2>
-                  <p className="text-lg">(NCVET Recognized Awarding Body)</p>
-                  <h3 className="text-xl font-bold mt-10">ATTENDANCE SHEET</h3>
-                </div>
-                <div className="ml-20">
-                  <img
-                    src={aaLogo}
-                    alt="Centurion University Logo"
-                    className="h-48 w-36"
-                  />
-                </div>
-              </div>
+      <div ref={pdfRef}>
+        <div className="pdf-section p-12 h-full">
+          <div className="flex justify-between items-center mb-4">
+            <img src={logo} alt="Centurion University Logo" className="h-20 w-20 object-fill" />
+            <div className="text-center">
+              <h2 className="text-lg font-semibold">CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT</h2>
+              <p className="text-sm">(NCVET Recognized Awarding Body)</p>
+              <h3 className="text-xl font-bold mt-2">ATTENDANCE SHEET</h3>
             </div>
-            <table className="w-full border-collapse border border-black mb-4">
-              <tbody>
-                <tr className="">
-                  <td className="border border-black p-2 w-1/2 text-xl font-semibold text-center text-gray-400">
-                    Name of Assessment Agency
-                  </td>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    {aaName}
-                  </td>
-                </tr>
+            <img src={base64Images.aaLogo || formData.aaLogo} alt="Assessment Agency Logo" className="h-24 w-24" />
+          </div>
+          
+          <table className="w-full border-collapse border border-black mb-4">
+            <tbody>
+              <tr>
+                <td className="border border-black p-2 w-1/2">Name of Assessment Agency</td>
+                <td className="border border-black p-2">{formData.aaName}</td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2">Training Partner Name</td>
+                <td className="border border-black p-2">{formData.tpName}</td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2">Center Name: {formData.centerName}</td>
+                <td className="border border-black p-2">Center ID: {formData.centId}</td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2">Batch ABN: {formData.abn}</td>
+                <td className="border border-black p-2">Sector: {formData.sector}</td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2">Course Name: {formData.courseName}</td>
+                <td className="border border-black p-2">Course Code: {formData.courseCode}</td>
+              </tr>
+              <tr>
+                <td className="border border-black p-2">Exam Date: {formData.examDate}</td>
+                <td className="border border-black p-2">Batch No.: {formData.batchNo}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="mb-4">
+            <h4 className="font-bold">Assessor Details</h4>
+            <table className="w-full border-collapse border border-black mt-2">
+              <thead>
                 <tr>
-                  <td className="border border-black p-2 text-xl font-semibold text-center text-gray-400">
-                    Training Partner Name
-                  </td>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    {tpName}
-                  </td>
+                  <th className="border border-black p-4">ID</th>
+                  <th className="border border-black p-4">Name</th>
+                  <th className="border border-black p-4">Qualification</th>
+                  <th className="border border-black p-4">Contact No.</th>
                 </tr>
+              </thead>
+              <tbody className="h-10">
                 <tr>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Center Name :
-                      </h2>
-                      {centerName}
-                    </div>
-                  </td>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Center ID :
-                      </h2>
-                      {centId}
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Batch ABN :
-                      </h2>
-                      {abn}
-                    </div>
-                  </td>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Sector :
-                      </h2>
-                      {sector}
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Course Name :
-                      </h2>
-                      {courseName}
-                    </div>
-                  </td>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Course Code :
-                      </h2>
-                      {courseCode}
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Exam Date :
-                      </h2>
-                      {examDate}
-                    </div>
-                  </td>
-                  <td className="border border-black p-2 text-xl font-semibold text-center">
-                    <div className="flex justify-center">
-                      <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
-                        Batch No. :
-                      </h2>
-                      {batchNo}
-                    </div>
-                  </td>
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
                 </tr>
               </tbody>
             </table>
-            <div className="mb-4">
-              <h4 className="font-bold">Assessor Details</h4>
-              <table className="w-full border-collapse border border-black mt-2">
-                <thead>
-                  <tr>
-                    <th className="border border-black p-2">ID</th>
-                    <th className="border border-black p-2">Name</th>
-                    <th className="border border-black p-2">Qualification</th>
-                    <th className="border border-black p-2">Contact No.</th>
-                  </tr>
-                </thead>
-                <tbody className="h-10">
-                  <tr>
-                    <td className="border border-black p-2" />
-                    <td className="border border-black p-2" />
-                    <td className="border border-black p-2" />
-                    <td className="border border-black p-2" />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="mb-4">
-              <h4 className="font-bold">Student Attendance</h4>
-              <table className="w-full border-collapse border border-black mt-2">
-                <thead>
-                  <tr>
-                    <th className="border border-black p-2">Present</th>
-                    <th className="border border-black p-2">Absent</th>
-                    <th className="border border-black p-2">Total</th>
-                  </tr>
-                </thead>
-                <tbody className="h-10">
-                  <tr>
-                    <td className="border border-black p-2" />
-                    <td className="border border-black p-2" />
-                    <td className="border border-black p-2" />
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <StudentTable students={students.slice(0, 5)} />
+          </div>
+         
+          <div className="mb-4">
+            <h4 className="font-bold">Student Attendance</h4>
+            <table className="w-full border-collapse border border-black mt-2">
+              <thead>
+                <tr>
+                  <th className="border border-black p-2">Present</th>
+                  <th className="border border-black p-2">Absent</th>
+                  <th className="border border-black p-2">Total</th>
+                </tr>
+              </thead>
+              <tbody className="h-10">
+                <tr>
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                  <td className="border border-black p-4" />
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <div>
-            {/* Dynamically render StudentTable10 for the remaining students in groups of 10 */}
-            {Array.from({ length: Math.ceil((students.length - 5) / 10) }).map(
-              (_, index) => {
-                const start = 5 + index * 10; // Start after the first 5 students
-                const end = start + 10;
-                const studentsToShow = students.slice(start, end);
-
-                return (
-                  <div className="pdf-section p-12 h-full" key={index}>
-                    <StudentTable10 students={studentsToShow} />
-                  </div>
-                );
-              }
-            )}
-          </div>
-          <div className="flex justify-between mt-32 gap-60">
-            <div className="border-t border-black p-2 w-1/2 text-center">
-              Signature of Centre head
-            </div>
-            <div className="border-t border-black p-2 w-1/2 text-center">
-              Signature of Assessor
-            </div>
+          <div className="mb-4">
+            <h4 className="font-bold">Student Details</h4>
+            <table className="w-full border-collapse border border-black mt-2">
+              <thead>
+                <tr>
+                  <th className="border border-black p-2">SL. NO</th>
+                  <th className="border border-black p-2">CANDIDATE PHOTO</th>
+                  <th className="border border-black p-2">REGD. NO.</th>
+                  <th className="border border-black p-2">CANDIDATE NAME</th>
+                  <th className="border border-black p-2">FATHER NAME</th>
+                  <th className="border border-black p-2">GENDER</th>
+                  <th className="border border-black p-2">DATE OF BIRTH</th>
+                  <th className="border border-black p-2">SIGNATURE</th>
+                </tr>
+              </thead>
+              <tbody>
+                {renderStudentRows()}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <button
-        className="btn bg-[#0066ff] text-base text-white font-semibold px-3 py-1 rounded duration-500 hover:bg-[#3f37c9] download-button"
-        onClick={downloadPDF}
-        disabled={isDownloading}
-      >
-        {isDownloading ? <div className="flex items-center gap-1"><Loader2 className="animate-spin h-5" />Downloading..</div> : "Download PDF"}
-      </button>
+
+      <div className="text-center mt-4">
+        <button
+          onClick={downloadPDF}
+          disabled={isDownloading}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          {isDownloading ? <Loader2 className="animate-spin" /> : "Download PDF"}
+        </button>
+      </div>
     </div>
   );
 };

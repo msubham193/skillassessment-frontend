@@ -37,7 +37,7 @@ function TopBar() {
 
   return (
     <div>
-      <header className="flex h-16 w-full items-center justify-between bg-[#1F3B4D] px-4 md:px-6">
+      <header className="flex h-16 w-full items-center justify-between bg-[#1E3A8A] px-4 md:px-6">
         <a href="#about-me" className="h-auto w-auto flex flex-row items-center">
           <img
             src={logo}

@@ -5,7 +5,6 @@ const GenerateCertificate = forwardRef((props, ref) => {
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
   }
-
   const {
     name,
     fatherName,
@@ -27,13 +26,20 @@ const GenerateCertificate = forwardRef((props, ref) => {
 
   return (
     <div className="max-w-7xl mx-auto">
-    <div className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto " ref={ref}>
-      <div className="w-full h-full absolute">
-        <img src="/Certificate.png" alt="Certificate Background" className="w-full h-full object-cover" />
-      </div>
-      <div className="absolute w-full h-full">
-        {/* Student Image */}
-        <div className="w-[103px] border ml-[82.4%] mt-[59px]">
+      <div
+        className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto "
+        ref={ref}
+      >
+        <div className="w-full h-full absolute">
+          <img
+            src="/Certificate.png"
+            alt="Certificate Background"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute w-full h-full">
+          {/* Student Image */}
+          <div className="w-[103px] border ml-[82.4%] mt-[59px]">
             <img
               className="h-28 w-24 object-cover"
               src={studentImageUrl}
@@ -47,8 +53,12 @@ const GenerateCertificate = forwardRef((props, ref) => {
           {/* Father Name, Date of Birth, Enrollment Number */}
           <div className="mt-[25px] ml-[31%] flex">
             <p className=" text-[12px] font-semibold">{fatherName}</p>
-            <p className=" ml-[206px] text-[12px] font-semibold">{dateOfBirth}</p>
-            <p className=" ml-[130px] text-[12px] font-semibold">{enrollmentNumber}</p>
+            <p className=" ml-[206px] text-[12px] font-semibold">
+              {dateOfBirth}
+            </p>
+            <p className=" ml-[130px] text-[12px] font-semibold">
+              {enrollmentNumber}
+            </p>
           </div>
           {/* Subject Name */}
           <div className="mt-[22px] ml-[50%]">
@@ -58,13 +68,17 @@ const GenerateCertificate = forwardRef((props, ref) => {
           <div className="mt-[22px] ml-[25%] flex items-center">
             <p className=" text-[12px] font-semibold">{duration}</p>
             <p className=" ml-[305px] text-[12px] font-semibold">{credit}</p>
-            <p className=" ml-[240px] text-[12px] mt-2 font-semibold">{level}</p>
+            <p className=" ml-[240px] text-[12px] mt-2 font-semibold">
+              {level}
+            </p>
           </div>
           {/* Training Center, District, State */}
-          <div className="mt-[18px] ml-[25%] flex items-center">
-            <p className=" text-[12px] font-semibold">{trainingCenter}</p>
-            <p className=" ml-[390px] text-[12px] font-semibold">{district}</p>
-            <p className=" ml-[97px] text-[12px] font-semibold">{state}</p>
+          <div className="mt-[18px] ml-[20%] flex items-center">
+            <p className=" text-xs font-semibold mb-2 sm:mb-0">
+              {trainingCenter}
+            </p>
+            <p className=" ml-[170px] text-xs font-semibold mb-2 sm:mb-0">{district}</p>
+            <p className=" ml-[90px] text-xs font-semibold">{state}</p>
           </div>
           {/* Grade */}
           <div className="mt-[30px] ml-[13%] flex items-center">
@@ -80,14 +94,17 @@ const GenerateCertificate = forwardRef((props, ref) => {
           </div>
           {/* QR Code */}
           <div className="absolute bottom-[45px] left-[75px] bg-white">
-           <div className=" w-[45px] h-[45px]"></div>
+            <div className=" w-[45px] h-[45px]"></div>
           </div>
           <div className="absolute bottom-[45px] left-[75px]">
-            <QRCode value={`https://student-details-by-qr-scan.vercel.app/${studentId}`} size={42} />
+            <QRCode
+              value={`https://student-details-by-qr-scan.vercel.app/${studentId}`}
+              size={42}
+            />
           </div>
+        </div>
       </div>
     </div>
-  </div>
   );
 });
 

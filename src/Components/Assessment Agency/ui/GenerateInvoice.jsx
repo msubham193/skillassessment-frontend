@@ -8,7 +8,7 @@ import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
 
 const GenerateInvoice = () => {
-  const pdfRef = useRef();
+  const pdfRef = useRef(); 
   const assessmentAgencyId = useRecoilState(assessmentAgencyIdState);
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -33,7 +33,7 @@ const GenerateInvoice = () => {
         const response = await axios.post(
           `${server}/invoice/${assessmentAgencyId[0]}`
         );
-        console.log(response.data.data.BankInformation.accountNumber);
+        console.log(response.data.data.totalAmountToBePaid);
         const data = response.data.data;
         setDate(data.invoiceGenerateDate);
         setName(data.AssesmentAgencyDetails.name);
@@ -55,10 +55,11 @@ const GenerateInvoice = () => {
     };
 
     fetchBatchDetails();
-    setAmmountInWord(numberToWords(45686));
-  }, []);
+    setAmmountInWord(numberToWords(totalAmountToBePaid));  //here i have to add the dynamic data
+  }, [totalAmountToBePaid]);
 
   function numberToWords(num) {
+    console.log(num)
     const ones = [
       "",
       "one",

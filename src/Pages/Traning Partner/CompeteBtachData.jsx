@@ -18,6 +18,7 @@ const CompeteBatchData = () => {
   const [studentData, setStudentData] = useState(null);
   const [currentStudentId, setCurrentStudentId] = useState(null);
   const [documentType, setDocumentType] = useState(null);
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false); // New state
 
   const handlePrint = useReactToPrint({
     content: () =>
@@ -138,6 +139,18 @@ const CompeteBatchData = () => {
     fetchStudentData(studentId, type);
   };
 
+  // New function to download all marksheets sequentially
+  const handleDownloadAll = async () => {
+    setIsDownloadingAll(true);
+    for (const student of batchData.students) {
+      if (student.markUploadStatus) {
+        await fetchStudentData(student._id, "marksheet");
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Adding a small delay to avoid issues
+      }
+    }
+    setIsDownloadingAll(false);
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <SideNav />
@@ -148,6 +161,7 @@ const CompeteBatchData = () => {
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
               Students
             </h1>
+           
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
               {batchData &&
               batchData.students &&
@@ -210,6 +224,15 @@ const CompeteBatchData = () => {
                 </div>
               )}
             </div>
+             <div className="flex justify-end mb-4 mt-4">
+              <Button
+                onClick={handleDownloadAll}
+                disabled={isDownloadingAll || !batchData.students.length}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              >
+                {isDownloadingAll ? "Downloading..." : "Download All MarkSheets"}
+              </Button>
+            </div>
           </div>
         </main>
       </div>
@@ -236,4 +259,3 @@ const CompeteBatchData = () => {
 };
 
 export default CompeteBatchData;
-

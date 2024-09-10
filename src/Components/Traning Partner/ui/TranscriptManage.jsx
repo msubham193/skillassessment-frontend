@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components(shadcn)/ui/card";
 
-const TranscriptManage = () => {
+const TranscriptManage = () => { 
   const navigate = useNavigate();
   const [batches, setBatches] = useState([]);
   const trainingPartnerId = localStorage.getItem("trainingPartnerId");

@@ -334,6 +334,11 @@ const App = () => {
             element={<AddTeacher />}
           />
           <Route
+            path="/trainingPartner/dashboard/CreateBatch/addteacher"
+            exact
+            element={<AddTeacher />}
+          />
+          <Route
             path="/trainingPartner/dashboard/CreateBatch/addstudent/:id"
             exact
             element={<AddStudent>{"Add Student"}</AddStudent>}
@@ -383,7 +388,7 @@ const App = () => {
           <Route
             path="attendacesheet/:batchId"
             element={<AttendanceSheetForm />}
-          />
+          /> 
           <Route path="resultsheet" element={<ResultSheetForm />} />
         </Route>
 

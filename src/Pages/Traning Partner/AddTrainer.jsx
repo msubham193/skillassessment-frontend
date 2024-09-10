@@ -47,9 +47,8 @@ const stateOptions = [
 const AddTeacher = () => {
   const { id: batchId } = useParams();
   const navigate = useNavigate();
-  const [batchData, setBatchData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({ 
     name: "",
     phoneNumber: "",
     email: "",
@@ -73,36 +72,36 @@ const AddTeacher = () => {
   });
   const [image, setImage] = useState(null);
 
-  const fetchBatchdata = async () => {
-    try {
-      const response = await fetch(`${server}/batch/${batchId}`, {
-        method: "GET",
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-        },
-      });
+  // const fetchBatchdata = async () => {
+  //   try {
+  //     const response = await fetch(`${server}/batch/${batchId}`, {
+  //       method: "GET",
+  //       headers: {
+  //         "x-access-token": localStorage.getItem("token"),
+  //       },
+  //     });
 
-      if (response.ok) {
-        const data = await response.json();
-        setBatchData(data.data);
-        setFormData(prevState => ({
-          ...prevState,
-          sector: data.data.sectorName || "",
-          coursecode: data.data.courseCode || "",
-        }));
-      } else {
-        console.error("Failed to fetch batch data");
-        toast.error("Failed to fetch batch data");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Error fetching batch data");
-    }
-  };
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setBatchData(data.data);
+  //       setFormData(prevState => ({
+  //         ...prevState,
+  //         sector: data.data.sectorName || "",
+  //         coursecode: data.data.courseCode || "",
+  //       }));
+  //     } else {
+  //       console.error("Failed to fetch batch data");
+  //       toast.error("Failed to fetch batch data");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     toast.error("Error fetching batch data");
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchBatchdata();
-  }, [batchId]);
+  // useEffect(() => {
+  //   fetchBatchdata();
+  // }, [batchId]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -168,7 +167,7 @@ const AddTeacher = () => {
 
       if (response.status === 201) {
         toast.success("Teacher added successfully");
-        navigate("/trainingPartner/dashboard");
+        navigate("/trainers");
       } else {
         toast.error(response.data.message || "Failed to add teacher");
       }
@@ -184,7 +183,7 @@ const AddTeacher = () => {
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="flex justify-center p-8 bg-gray-100">
       <div className="p-6 w-[600px] overflow-y-auto bg-white rounded-lg shadow-md">
@@ -195,13 +194,7 @@ const AddTeacher = () => {
           Back to Dashboard
         </Button>
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-indigo-600">Add Trainer</h1>
-          <Link
-            className="text-indigo-600 hover:text-indigo-800 transition-colors"
-            to={`/trainingPartner/dashboard/Teachers?batchId=${batchId}`}
-          >
-            Add existing Teacher
-          </Link>
+          <h1 className="text-2xl font-bold text-indigo-600">Add Trainer</h1>  
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4" encType="multipart/form-data">
           {Object.entries(formData).map(([field, value]) => (

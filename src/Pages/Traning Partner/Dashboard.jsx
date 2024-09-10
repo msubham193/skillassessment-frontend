@@ -5,7 +5,7 @@ const Dashboard = () => {
     return(
     <div className='min-h-screen w-[100%]  text-black flex '> 
     {/* side bar */}
-    <div  className=''>
+    <div  className=''> 
     <SideNav />
     </div>
 

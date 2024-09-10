@@ -11,7 +11,7 @@ const TopBar = () => {
   const navigate = useNavigate(); 
   const [notification, setNotification] = useState(localStorage.getItem("notification") || "No new notification !!");
   const [loading, setLoading] = useState(false);
-  const [initialLoad, setInitialLoad] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true); 
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
@@ -140,12 +140,14 @@ const TopBar = () => {
   // //make dynamic admin.................
 
   const admin = {
-    name: "Rakes Pradhan",
-    email: "rp5865442@gmail.com",
+    name:  localStorage.getItem("adminName"),
+    email:  localStorage.getItem("adminEmail"),
     profile: "https://res.cloudinary.com/dcycd6p6i/image/upload/v1702218768/hcwc8pzapqn2egwgu1ag.jpg",
     createdAt: String(new Date().toISOString()),
     role: "admin",
   };
+
+
 
   return (
     <nav className="bg-[#e6e6fa] w-full h-16 border-b border-[#8B0000] dark:bg-gray-900">

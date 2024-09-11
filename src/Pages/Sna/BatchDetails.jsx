@@ -57,8 +57,8 @@ const BatchDetailsOfSNA = () => {
         console.log(response.data.data.trainers);
         console.log(response.data.data.students);
         const data = response.data.data;
-        setStudentData(data?.students)
-        setTrainerData(data?.trainers)
+        setStudentData(data?.students);
+        setTrainerData(data?.trainers);
         setBatchDetails(data);
         if (data.approvedByGovernmentBody === true) {
           setIsApproaved(true);
@@ -393,15 +393,23 @@ const BatchDetailsOfSNA = () => {
         </div>
 
         {/* Students Modal */}
-        <Dialog open={showStudentsModal} onOpenChange={setShowStudentsModal} className="w-full">
-          <DialogContent className="max-w-4xl">
+        <Dialog
+          open={showStudentsModal}
+          onOpenChange={setShowStudentsModal}
+          className="w-full"
+        >
+          <DialogContent className="max-w-6xl">
+            {" "}
+            {/* Increased width */}
             <DialogHeader>
               <DialogTitle>Students List</DialogTitle>
               <DialogDescription>
                 Below is the list of students enrolled in this batch.
               </DialogDescription>
             </DialogHeader>
-            <div className="mt-4">
+            <div className="mt-4 overflow-x-auto">
+              {" "}
+              {/* Ensure the table scrolls if it overflows */}
               <StudentTable data={studentData} />
             </div>
             <DialogFooter>
@@ -411,15 +419,23 @@ const BatchDetailsOfSNA = () => {
         </Dialog>
 
         {/* Trainers Modal */}
-        <Dialog open={showTrainersModal} onOpenChange={setShowTrainersModal} className="w-full">
-          <DialogContent className="max-w-4xl">
+        <Dialog
+          open={showTrainersModal}
+          onOpenChange={setShowTrainersModal}
+          className="w-full"
+        >
+          <DialogContent className="max-w-6xl">
+            {" "}
+            {/* Increased width */}
             <DialogHeader>
               <DialogTitle>Trainers List</DialogTitle>
               <DialogDescription>
                 Below is the list of trainers assigned to this batch.
               </DialogDescription>
             </DialogHeader>
-            <div className="mt-4">
+            <div className="mt-4 overflow-x-auto">
+              {" "}
+              {/* Ensure the table scrolls if it overflows */}
               <TrainerTable data={trainerData} />
             </div>
             <DialogFooter>

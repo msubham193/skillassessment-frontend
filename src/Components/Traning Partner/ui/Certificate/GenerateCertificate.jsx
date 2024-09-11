@@ -2,6 +2,7 @@ import React, { forwardRef } from "react";
 import QRCode from "qrcode.react";
 
 const GenerateCertificate = forwardRef((props, ref) => {
+  console.log(props.data);
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
   }
@@ -14,7 +15,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
     duration,
     credit,
     level,
-    trainingCenter,
+    trainingCenter, 
     district,
     state,
     grade,

@@ -1,31 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import {
   assessmentAgencyNameState,
-  batchAbnState,
-  batchIdState,
   courseNameState,
-  examDateState,
   examIdState,
-  sectorState,
-  setCenterIdState,
-  setStudentDobState,
-  setStudentIdState,
-  setStudentNameState,
-  setStudentProfilePictureState,
-  setStudentRegdState,
-  tpNameState,
 } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";
 import toast, { Toaster } from "react-hot-toast";
-import { Loader } from "lucide-react";
-
-const MarksheetForm = () => {
+const MarksheetForm = () => { 
   const { studentId } = useParams();
-  const [batchId, setBatchId] = useState("");
+  const [batchId, setBatchId] = useState(""); 
   const [assessmentDate, setAssessmentDate] = useState("");
   const [studentData, setStudentData] = useState({});
   const [batchData, setBatchData] = useState({});
@@ -136,8 +123,6 @@ const MarksheetForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("aaAuthToken");
-
     const payload = {
       examId: examId[0],
       courseName: courseName,
@@ -155,15 +140,13 @@ const MarksheetForm = () => {
       studentProfilePic: studentData?.profilepic,
       studentId: studentData?._id,
       Nos: nosData.map((nos) => ({
-        description: nos.description,
-        code: nos.code,
-        credit: nos.credit,
-        theoryMarks: parseInt(nos.theoryMarks || 0, 10),
-        practicalMarks: parseInt(nos.practicalMarks || 0, 10),
-        vivaMarks: parseInt(nos.vivaMarks || 0, 10),
-        totalMarks: nos.totalMarks,
-        nosWisePassPercentage: nos.nosWisePassPercentage,
-        marksObtained: nos.marksObtained,
+        code:nos.code,
+        name: nos.description,
+        Theory: nos.theoryMarks,
+        Practical: nos.practicalMarks,
+        Total: nos.marksObtained,
+        passMark: nos.passMarks,
+        MarksObtained: nos.marksObtained,
       })),
       total: totalMarksObtained,
       totalTheorymark: nosData.reduce(
@@ -205,12 +188,11 @@ const MarksheetForm = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error);
+      toast.error(error.response.data.error);
     } finally{
       setShowButton(false);
     }
   };
-
   if (loading) {
     return <div>Loading...</div>;
   }

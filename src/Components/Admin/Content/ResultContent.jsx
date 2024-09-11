@@ -13,7 +13,7 @@ const ResultContent = ({ batchId }) => {
   const [attendanceSheet, setAttendanceSheet] = useState("");
   const [resultSheet, setResultSheet] = useState("");
   const [images, setImages] = useState([]);
-  const [showPhotos, setShowPhotos] = useState(false); 
+  const [showPhotos, setShowPhotos] = useState(false);  
 
   // Fetch the student from batch by using batchID data
   useEffect(() => {
@@ -102,7 +102,6 @@ const ResultContent = ({ batchId }) => {
         draggable: true,
         theme: "colored",
       });
-      setLoading(false);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.error, {
@@ -111,6 +110,7 @@ const ResultContent = ({ batchId }) => {
         draggable: true,
         theme: "colored",
       });
+    } finally{
       setLoading(false);
     }
   };

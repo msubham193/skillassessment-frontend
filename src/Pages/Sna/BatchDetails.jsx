@@ -393,7 +393,7 @@ const BatchDetailsOfSNA = () => {
         </div>
 
         {/* Students Modal */}
-        <Dialog open={showStudentsModal} onOpenChange={setShowStudentsModal}>
+        <Dialog open={showStudentsModal} onOpenChange={setShowStudentsModal} className="w-full">
           <DialogContent className="max-w-4xl">
             <DialogHeader>
               <DialogTitle>Students List</DialogTitle>
@@ -411,7 +411,7 @@ const BatchDetailsOfSNA = () => {
         </Dialog>
 
         {/* Trainers Modal */}
-        <Dialog open={showTrainersModal} onOpenChange={setShowTrainersModal}>
+        <Dialog open={showTrainersModal} onOpenChange={setShowTrainersModal} className="w-full">
           <DialogContent className="max-w-4xl">
             <DialogHeader>
               <DialogTitle>Trainers List</DialogTitle>

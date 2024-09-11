@@ -80,8 +80,9 @@ const AaDetailsBox = ({ id }) => {
   const applicationApproved = async () => {
     setLoding(true);
     const token = authState.token;
+    console.log(token)
     if (!token) {
-      console.log("Admin not  found");
+      console.log("Admin not  found"); 
       return;
     }
     try {
@@ -121,7 +122,7 @@ const AaDetailsBox = ({ id }) => {
     const token = authState.token;
     if (!token) {
       console.log("Admin not  found");
-      return;
+      return; 
     }
     try {
       const responce = await axios.put(

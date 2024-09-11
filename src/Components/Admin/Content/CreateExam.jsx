@@ -21,7 +21,7 @@ import {
 import axios from "axios";
 import { server } from "@/main";
 import { useRecoilValue } from "recoil";
-import { authenticationState } from "@/Pages/Admin/Atoms/atoms";
+import { authenticationState } from "@/Pages/Admin/Atoms/atoms"; 
 import { toast } from "react-toastify";
 
 const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
@@ -43,6 +43,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
   const createExam = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log(authState.token)
 
     if (!authState.token) {
       toast.error("Admin not authenticated!", {

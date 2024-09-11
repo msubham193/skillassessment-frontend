@@ -38,7 +38,6 @@ const AttendanceSheetForm = () => {
       try {
         const response = await axios.get(`${server}/exam/attendance/${examId}`);
         const data = response.data.data;
-        console.log(data);
         setAssessorId(data.AssessorId);
         setFormData({
           aaLogo: data.assesmentAgencyId.logo,
@@ -62,35 +61,45 @@ const AttendanceSheetForm = () => {
     fetchData();
   }, [examId]);
 
+  const convertToBlob = async (url) => {
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      return blobUrl;
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      return null; // Return null if the image fetch fails
+    }
+  };
+
   useEffect(() => {
     const loadAndConvertImages = async () => {
       try {
-        const aaLogoBase64 = formData.aaLogo
-          ? await convertImageToBase64(formData.aaLogo)
+        // Convert aaLogo to Blob URL
+        const aaLogoBlob = formData.aaLogo
+          ? await convertToBlob(formData.aaLogo)
           : null;
-        const studentPhotosBase64 = {};
 
+        // Convert student profile pictures to Blob URLs
+        const studentPhotosBlob = {};
         for (const student of formData.students) {
-
-          // console.log(student.profilepic);
-
           if (student.profilepic) {
-            studentPhotosBase64[student.uid] = await convertImageToBase64(
-              student.profilepic
-            );
-            console.log("profile photo is avable",studentPhotosBase64)
+            studentPhotosBlob[student.uid] = await convertToBlob(student.profilepic);
           } else {
-            studentPhotosBase64[student.uid] = null;
-            console.log(null)
+            studentPhotosBlob[student.uid] = null;
           }
         }
 
         setBase64Images({
-          aaLogo: aaLogoBase64,
-          studentPhotos: studentPhotosBase64
+          aaLogo: aaLogoBlob,
+          studentPhotos: studentPhotosBlob
         });
       } catch (error) {
-        console.error("Error converting images to Base64:", error);
+        console.error("Error converting images to Blob:", error);
       }
     };
 
@@ -99,45 +108,14 @@ const AttendanceSheetForm = () => {
     }
   }, [formData]);
 
-  const convertImageToBase64 = (url) => {
-    return new Promise((resolve, reject) => {
-      if (!url) {
-        resolve(null);
-        return;
-      }
-
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          const dataURL = canvas.toDataURL("image/png");
-          resolve(dataURL);
-        } catch (err) {
-          console.error("Error drawing image to canvas:", err);
-          resolve(null);
-        }
-      };
-      img.onerror = () => {
-        console.error("Error loading image:", url);
-        resolve(null);
-      };
-      img.src = url;
-    });
-  };
-
   const downloadPDF = async () => {
     setDownloading(true);
     const input = pdfRef.current;
     const buttons = document.querySelectorAll(".download-button");
-  
+
     // Hide the buttons during PDF generation
     buttons.forEach((button) => (button.style.display = "none"));
-  
+
     try {
       const canvas = await html2canvas(input, {
         scale: 3, // Increase scale for better quality
@@ -145,22 +123,22 @@ const AttendanceSheetForm = () => {
         logging: true, // Log issues if any
       });
       const imgData = canvas.toDataURL("image/png");
-  
+
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-  
+
       const imgProps = pdf.getImageProperties(imgData);
       const imgWidth = pdfWidth;
       const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-  
+
       let heightLeft = imgHeight;
       let position = 0;
-  
+
       // Add the first image (first page)
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
-  
+
       // If content is longer than one page, add more pages
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
@@ -168,13 +146,13 @@ const AttendanceSheetForm = () => {
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pdfHeight;
       }
-  
+
       // Save the generated PDF
       pdf.save("attendance-sheet.pdf");
     } catch (error) {
       console.error("Error generating PDF:", error);
     }
-    
+
     // Show the buttons back after PDF generation
     buttons.forEach((button) => (button.style.display = "block"));
     setDownloading(false);
@@ -233,7 +211,7 @@ const AttendanceSheetForm = () => {
             </div>
             {base64Images.aaLogo ? (
               <img
-                src={base64Images.aaLogo}
+                src={base64Images.aaLogo||formData.aaLogo}
                 alt="Assessment Agency Logo"
                 className="h-24 w-24 object-contain"
               />

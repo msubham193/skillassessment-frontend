@@ -151,6 +151,7 @@ const TpDetailsBOx = ({ id }) => {
   const applicationReject = async () => {
     setLoding(true);
     const token = authState.token;
+    console.log(token);
     if (!token) {
       console.log("Admin not  found");
       return;

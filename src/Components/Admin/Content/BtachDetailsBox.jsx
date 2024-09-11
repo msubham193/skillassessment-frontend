@@ -316,7 +316,7 @@ const BtachDetailsBox = ({ id }) => {
           >
             <Button
               disabled={
-                data?.status === "Completed" ||
+                data?.status === "Completed" || 
                 data?.paymentStatus === false ||
                 data?.isAssigned
               }

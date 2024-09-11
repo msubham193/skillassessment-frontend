@@ -77,8 +77,8 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className=" text-xs font-semibold mb-2 sm:mb-0">
               {trainingCenter}
             </p>
-            <p className=" ml-[170px] text-xs font-semibold mb-2 sm:mb-0">{district}</p>
-            <p className=" ml-[90px] text-xs font-semibold">{state}</p>
+            <p className=" ml-[310px] text-xs font-semibold mb-2 sm:mb-0">{district}</p>
+            <p className=" ml-[140px] text-xs font-semibold">{state}</p>
           </div>
           {/* Grade */}
           <div className="mt-[30px] ml-[13%] flex items-center">

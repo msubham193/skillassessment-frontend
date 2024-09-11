@@ -10,7 +10,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectTrigger, 
+  SelectTrigger,  
   SelectValue,
 } from "@/components(shadcn)/ui/select"; 
 import { RotateCcw, X } from "lucide-react";
@@ -254,7 +254,7 @@ export const batchColumns = [
     header: "Created By",
   },
   {
-    accessorKey: "students",
+    accessorKey: "students", 
     header: "No of Student",
     cell: ({ row }) => {
       return (

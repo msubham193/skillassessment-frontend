@@ -71,8 +71,7 @@ const BatchDetails = () => {
       toast.error("Select a Date");
     }
 
-    const formattedDate = format(selectedDate, "dd/M/yyyy");
-    setSelectedDate(formattedDate);
+    const formattedDate = format(selectedDate, "dd/MM/yyyy");
 
     try {
       const response = await axios.put(
@@ -261,13 +260,13 @@ const BatchDetails = () => {
               </p>
               <div className="flex flex-col">
                 <form onSubmit={handleSubmit} className="flex gap-4">
-                  {/* <label className="font-medium">Select Date</label> */}
                   <DatePicker
                     selected={selectedDate}
                     placeholderText="Select Date"
                     onChange={handleDateChange}
                     dateFormat="yyyy-MM-dd"
                     className="p-2 border border-black rounded-md"
+                    disabled={isDateSet}
                   />
                   <button
                     type="submit"
@@ -278,11 +277,6 @@ const BatchDetails = () => {
                   >
                     Set Date
                   </button>
-                  {/* {isDateSet && (
-                    <p className="text-red-600 font-medium">
-                      Date has been selected already.
-                    </p>
-                  )} */}
                 </form>
                 <Toaster />
               </div>

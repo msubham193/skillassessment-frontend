@@ -15,7 +15,7 @@ import { batchIdAtoms } from "../Atoms/BatchId";
 import TopBar from "../TopBar";
 import { server } from "@/main";
 import { AnimatedPagination } from "./Pagination/Animatedpagination";
-
+ 
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
@@ -260,7 +260,7 @@ const Content = () => {
                               className="text-xs text-white px-4 py-1 bg-blue-600 hover:bg-blue-700"
                               onClick={() =>
                                 navigate(
-                                  `/trainingPartner/dashboard/CreateBatch/addteacher/${batch._id}`
+                                  `/trainingPartner/dashboard/Teachers?batchId=${batch._id}`
                                 )
                               }
                               disabled={batch.batchActivePermission === true}

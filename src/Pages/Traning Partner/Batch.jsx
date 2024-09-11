@@ -104,4 +104,4 @@ const{batchId}=useParams();
   );
 };
 
-export default Batch;
+export default Batch; 

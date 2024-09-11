@@ -32,9 +32,11 @@ export const useAuthentication = () => {
       }));
 
       //store token and time in local Storage
-      // console.log(response.data.data.data);
+      console.log(response.data.data);
       const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; 
-      localStorage.setItem('adminAuthToken',response.data.data);
+      localStorage.setItem('adminAuthToken',response.data.data.token);
+      localStorage.setItem('adminName',response.data.data.name);
+      localStorage.setItem('adminEmail',response.data.data.email);
       localStorage.setItem('tokenExpiration', expirationTime);
       // localStorage.setItem('specificEmail',response.data.data.data)
 

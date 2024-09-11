@@ -134,40 +134,49 @@ const AttendanceSheetForm = () => {
     setDownloading(true);
     const input = pdfRef.current;
     const buttons = document.querySelectorAll(".download-button");
-
-    buttons.forEach(button => button.style.display = "none");
-
+  
+    // Hide the buttons during PDF generation
+    buttons.forEach((button) => (button.style.display = "none"));
+  
     try {
-      const canvas = await html2canvas(input, { scale: 2 });
+      const canvas = await html2canvas(input, {
+        scale: 3, // Increase scale for better quality
+        useCORS: true, // Handle cross-origin images
+        logging: true, // Log issues if any
+      });
       const imgData = canvas.toDataURL("image/png");
-
+  
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-
+  
       const imgProps = pdf.getImageProperties(imgData);
       const imgWidth = pdfWidth;
       const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-
+  
       let heightLeft = imgHeight;
       let position = 0;
-
+  
+      // Add the first image (first page)
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
-
+  
+      // If content is longer than one page, add more pages
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pdfHeight;
       }
-
+  
+      // Save the generated PDF
       pdf.save("attendance-sheet.pdf");
     } catch (error) {
       console.error("Error generating PDF:", error);
     }
-
-    buttons.forEach(button => (button.style.display = "block"));
+    
+    // Show the buttons back after PDF generation
+    buttons.forEach((button) => (button.style.display = "block"));
     setDownloading(false);
   };
 

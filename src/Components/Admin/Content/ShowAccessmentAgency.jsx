@@ -3,13 +3,9 @@ import FormTable from './FormTable';
 import axios from 'axios';
 import { server } from '@/main';
 
-const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state,setassessmentagencyName }) => {
+const ShowAccessmentAgency = ({ setAssesmentAgency, course, sector, state, setassessmentagencyName }) => {
     const [assessmentAgency, setAssessmentAgency] = useState([]); 
     const [loading, setLoading] = useState(false);
-
-    //here i can apply the filter for accessment agency.........
-
-    // console.log(course,sector,state) 
 
     useEffect(() => {
       const fetchAssessmentAgency = async () => { 
@@ -17,19 +13,17 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state,setassess
           try {
               const response = await axios.get(`${server}/aa/all/query`, {
                   params: {
-                     
                       sector,
                       state,
                       course
                   },
                   withCredentials: true,
                   headers: {
-            "Cache-Control": "no-cache",
-            'Pragma': "no-cache",
-            'Expires': "0",
-          },
+                      "Cache-Control": "no-cache",
+                      'Pragma': "no-cache",
+                      'Expires': "0",
+                  },
               });
-              // console.log(response.data.data)
               setAssessmentAgency(response.data.data.reverse());
           } catch (error) {
               console.error(error);
@@ -39,17 +33,23 @@ const ShowAccessmentAgency = ({ setAssesmentAgency,course,sector,state,setassess
       };
 
       fetchAssessmentAgency();
-  }, [course, sector, state]);
+    }, [course, sector, state]);
 
     const handleRowClick = (row) => {
-      // console.log(row)//agencyName
-      setassessmentagencyName(row?.agencyName)
-      setAssesmentAgency(row._id); // Assuming _id is the id of the assessment agency
+      // Call the setter functions from props
+      setassessmentagencyName(row?.agencyName);  // Set the agency name in the parent
+      setAssesmentAgency(row._id);               // Set the agency ID in the parent
     };
 
     return (
       <div>
-        <FormTable filter1={"agencyName"} columns={columns} data={assessmentAgency} isLoading={loading} onRowClick={handleRowClick} />
+        <FormTable 
+          filter1={"agencyName"} 
+          columns={columns} 
+          data={assessmentAgency} 
+          isLoading={loading} 
+          onRowClick={handleRowClick} 
+        />
       </div>
     )
 }
@@ -61,12 +61,12 @@ const columns = [
     accessorKey: "agencyName",
     header: "Agency Name ",
   },
-    {
-      accessorKey: "email",
-      header: "email",
-    },
-    {
-      accessorKey: "_id",
-      header: "id",
-    },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "_id",
+    header: "ID",
+  },
 ];

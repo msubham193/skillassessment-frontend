@@ -12,7 +12,7 @@ import { server } from "@/main";
 
 const CompeteBatchData = () => {
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
-  const marksheetRef = useRef();
+  const marksheetRef = useRef(); 
   const certificateRef = useRef();
   const [loadingStates, setLoadingStates] = useState({});
   const [studentData, setStudentData] = useState(null);
@@ -52,7 +52,7 @@ const CompeteBatchData = () => {
     try {
       let endpoint;
       if (type === "certificate") {
-        endpoint = `http://localhost:8000/api/v1/certificate/student/${studentId}`;
+        endpoint = `${server}/certificate/student/${studentId}`;
       } else {
         endpoint = `${server}/student/${studentId}`;
       }

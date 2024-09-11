@@ -5,26 +5,20 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   examIdState,
   setAbsentCountState,
-  setCenterIdState,
-  setStudentDobState,
   setStudentIdState,
-  setStudentNameState,
-  setStudentProfilePictureState,
 } from "../Atoms/AssessmentAgencyAtoms";
-import { FaArrowRight } from "react-icons/fa"; 
+import { FaArrowRight } from "react-icons/fa";
 import { server } from "@/main";
 
 const StudentList = () => {
   const navigate = useNavigate();
   const { batchId } = useParams();
   const [studentData, setStudentData] = useState([]);
-  const setStudentID = useSetRecoilState(setStudentIdState);
-  const setStudentName = useSetRecoilState(setStudentNameState);
-  const setStudentDob = useSetRecoilState(setStudentDobState);
-  const setStudentProfile = useSetRecoilState(setStudentProfilePictureState);
-  const setCenterId = useSetRecoilState(setCenterIdState);
   const setAbsentCount = useSetRecoilState(setAbsentCountState);
   const examId = useRecoilState(examIdState);
+  
+  const [loading, setLoading] = useState(true);
+  const [allProcessed, setAllProcessed] = useState(false);
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
@@ -43,13 +37,36 @@ const StudentList = () => {
 
         setAbsentCount(initialAbsentCount);
         setStudentData(updatedStudents);
+        setLoading(false); 
       } catch (error) {
         console.error("Error fetching student data:", error);
+        setLoading(false); 
       }
     };
 
     fetchBatchDetails();
   }, [batchId, setAbsentCount]);
+
+  useEffect(() => {
+    if (!loading) {
+     
+      const allRowsCompleted = studentData.every(
+        (student) => student.isAbsent || student.markUploadStatus
+      );
+
+      console.log('Student Data:', studentData);
+      console.log('All Rows Completed:', allRowsCompleted);
+
+      if (allRowsCompleted) {
+    
+        setTimeout(() => {
+          navigate(`/dashboard/uploaddetails/${examId[0]}/${batchId}`);
+        }, 1500); // 1.5 second delay before redirect
+      }
+
+      setAllProcessed(allRowsCompleted); 
+    }
+  }, [studentData, examId, batchId, navigate, loading]);
 
   // Function to mark a student as absent
   const markAbsent = async (studentId) => {
@@ -60,12 +77,6 @@ const StudentList = () => {
           const updatedData = prevData.map((student) =>
             student._id === studentId ? { ...student, isAbsent: true } : student
           );
-
-          const updatedAbsentCount = updatedData.filter(
-            (student) => student.isAbsent
-          ).length;
-
-          localStorage.setItem(`absentSudent_${batchId}`, updatedAbsentCount);
           return updatedData;
         });
       }
@@ -74,7 +85,7 @@ const StudentList = () => {
     }
   };
 
-  // Function to navigate to general data upload
+  // Function to manually proceed
   const handlegeneraldata = () => {
     navigate(`/dashboard/uploaddetails/${examId[0]}/${batchId}`);
   };
@@ -118,7 +129,7 @@ const StudentList = () => {
             <tr
               key={student._id}
               className={`${
-                student.isAbsent
+                student.isAbsent || student.markUploadStatus
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "hover:bg-gray-100"
               }`}
@@ -178,8 +189,11 @@ const StudentList = () => {
       </table>
       <div className="flex justify-end">
         <button
-          className="mt-2 p-2 border border-transparent text-md font-medium rounded-md shadow-sm text-white bg-blue-700 hover:bg-blue-700"
+          className={`mt-2 p-2 border border-transparent text-md font-medium rounded-md shadow-sm text-white ${
+            allProcessed ? "bg-gray-500 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-700"
+          }`}
           onClick={handlegeneraldata}
+          disabled={allProcessed} // Disable if auto-redirected
         >
           <FaArrowRight className="inline-block mr-2" />
           Proceed Further

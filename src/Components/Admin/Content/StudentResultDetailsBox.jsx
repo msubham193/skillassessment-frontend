@@ -1,27 +1,34 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Button } from "@/components(shadcn)/ui/button";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { server } from "@/main";
 import axios from "axios"; 
 import { Download } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components(shadcn)/ui/card";
-import QRCode from "qrcode.react";
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components(shadcn)/ui/table";
 import GenerateMarksheetFrom from "@/Components/Traning Partner/ui/Marksheet/generateMarkFrom";
 import { useReactToPrint } from "react-to-print";
+import ViewSectorAndCourse from "./ViewSectorAndCourse";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components(shadcn)/ui/tabs";
+import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 
 const StudentResultDetailsBox = ({ id }) => {  
+  const [currentStudentId, setCurrentStudentId] = useState(null);
+  const [documentType, setDocumentType] = useState(null);
+  const query = new URLSearchParams(location.search); 
+  const defaultTab = query.get("tab") || "overview"; 
+  const [selectedTab, setSelectedTab] = useState(defaultTab);
   const componentRef = useRef();
-  const [studentData, setStudentData] = useState({}); 
+  const certificateRef = useRef();
+  const [studentData, setStudentData] = useState({});  
   const [certificatedata, setCertificatedatadata] = useState([]);
   const [batchId, setBatchId] = useState("");
   const [batchdata, setBatchdata] = useState({});
   const [loding, setLoding] = useState(false);
-
+//make the change in this component ony...........
   //need to get student details usinfstudent id....
+  useEffect(() => {
+    setSelectedTab(defaultTab); 
+  }, [defaultTab]);
   useEffect(() => {
     try {
       setLoding(true);
@@ -46,12 +53,14 @@ const StudentResultDetailsBox = ({ id }) => {
       throw error;
     }
   }, []);
-  //function for retrive the certificate result by id
+
+  //function for gete the result from certificate
+
   useEffect(() => {
     try {
       setLoding(true);
       axios
-        .get(`${server}/certificate/batch/${batchId}`, {
+        .get(`${server}/certificate/student/${id}`, {
           withCredentials: true,
           headers: {
             "Cache-Control": "no-cache",
@@ -71,7 +80,7 @@ const StudentResultDetailsBox = ({ id }) => {
       console.error("Error fetching studen result:", error);
       throw error;
     }
-  }, [batchId]);
+  }, []);
 
   // function for fetch batch detais of the student
   useEffect(() => {
@@ -119,7 +128,6 @@ const generateMarksheet=()=>
 //generate data for marksheet
 const generateDummyData = useCallback((student) => {
   if (!student) return null;
-
   return {
     schemCode: student?.marks?.TrainingPartner || 'N/A',
     name: student?.name || 'Loading...',
@@ -149,13 +157,63 @@ const generateDummyData = useCallback((student) => {
   
   };
 }, []);
+
+
+  const generateCertificateData = useCallback((data) => {
+    if (!data) return null;
+    return {
+      name: data.studentName,
+      fatherName: data.fatherName,
+      dateOfBirth: data?.DOB ? data?.DOB.split('T')[0] : 'Loading...',
+      enrollmentNumber: data.Enrolment_number,
+      subject: data.qualification,
+      duration: `${data.duration} days`,
+      credit: data.credit,
+      level: data.level,
+      trainingCenter: data.TrainingCenter,
+      district: data.District,
+      state: data.state,
+      grade: data.grade,
+      placeOfIssue: data.placeOfIssue,
+      dateOfIssue: new Date().toISOString().split('T')[0], 
+      studentId: data.studentId,
+      studentImageUrl: data.stutentProfilePic,
+    };
+  }, []);
+
   return (
     <>  
-        {/*  here is the update marksheet... */}
-        <GenerateMarksheetFrom
+    {/* here create two tabs one for marksheet and another for certificate*/}
+
+
+    <Tabs defaultValue={selectedTab} className="space-y-4">
+      <TabsList>
+        <TabsTrigger onClick={() => setSelectedTab("overview")} value="overview">
+         MarkSheet
+        </TabsTrigger>
+        <TabsTrigger onClick={() => setSelectedTab("updateBatchgov")} value="updateBatchgov">
+          Certificate
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        {selectedTab === "overview" && <GenerateMarksheetFrom
                     ref={componentRef} 
                     data={id && studentData ? generateDummyData(studentData) : null} 
-                />
+                />}
+      </TabsContent>
+      <TabsContent value="updateBatchgov">
+        {selectedTab === "updateBatchgov" &&  <GenerateCertificate
+          ref={certificateRef}
+          data={
+            id && studentData ? generateCertificateData(certificatedata): null
+          }
+        />}
+      </TabsContent>
+    </Tabs>
+
+
+        {/*  here is the update marksheet... */}
+        
 
        <div className="w-[900px] mx-auto px-4 flex justify-end">
         {" "}

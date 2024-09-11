@@ -18,7 +18,7 @@ import { server } from "@/main";
 
 const UploadResult = () => {
   const navigate = useNavigate();
-  const [batchData, setBatchData] = useState([]); // Initialize as an empty array
+  const [batchData, setBatchData] = useState([]); // Initialize as an empty array 
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
   const setBatch_Id = useSetRecoilState(batchIdState);
   const setExamId = useSetRecoilState(examIdState);
@@ -61,13 +61,15 @@ const UploadResult = () => {
     examDate,
     sector
   ) => {
-    console.log(examId);
-    console.log(batchId);
-    console.log(courseName);
-    console.log(trainingPartner);
-    console.log(batchABN);
-    console.log(examDate);
-    console.log(sector);
+
+    alert("After uploading Student Mark you have to update the batch details ")
+    // console.log(examId);
+    // console.log(batchId);
+    // console.log(courseName);
+    // console.log(trainingPartner);
+    // console.log(batchABN);
+    // console.log(examDate);
+    // console.log(sector);
     setBatch_Id(batchId);
     setExamId(examId);
     setBatchAbn(batchABN);

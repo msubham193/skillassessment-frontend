@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { server } from "@/main";
 
 const BatchDetails = () => {
-  const { batchId, examId } = useParams();
+  const { batchId, examId } = useParams(); 
   const [batchData, setBatchData] = useState([]);
   const [studentslength, setStudentsLength] = useState(0);
   const [trainerslength, setTrainersLength] = useState(0);
@@ -48,8 +48,7 @@ const BatchDetails = () => {
     };
     fetchBatchDetails();
 
-    
-
+  
     setAbsentStudents(localStorage.getItem(`absentSudent_${batchId}`));
   }, [batchId, examId]);
 
@@ -80,6 +79,7 @@ const BatchDetails = () => {
           date: formattedDate.toString(),
         }
       );
+      console.log(selectedDate.toISOString())
       toast.success("Exam date set successfully");
       localStorage.setItem(
         `selectedDate_${examId}`,

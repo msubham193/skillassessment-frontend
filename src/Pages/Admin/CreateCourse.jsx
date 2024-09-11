@@ -8,7 +8,7 @@ import ViewSectorAndCourse from '@/Components/Admin/Content/ViewSectorAndCourse'
 
 const CreateCourse = ({children}) => {
   const location = useLocation(); 
-  const query = new URLSearchParams(location.search);
+  const query = new URLSearchParams(location.search); 
   const defaultTab = query.get("tab") || "overview"; 
   const [selectedTab, setSelectedTab] = useState(defaultTab);
 
@@ -33,8 +33,6 @@ const CreateCourse = ({children}) => {
           </p>
         </div>
       </div>
-
-
       <Tabs defaultValue={selectedTab} className="space-y-4">
       <TabsList>
         <TabsTrigger onClick={() => setSelectedTab("overview")} value="overview">

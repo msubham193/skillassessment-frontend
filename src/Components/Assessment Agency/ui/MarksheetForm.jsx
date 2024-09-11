@@ -81,86 +81,6 @@ const MarksheetForm = () => {
     fetchCourseData();
   }, []);
 
-  //function for fetch student data by id
-  useEffect(() => {
-    const fetchStudenDetails = async () => {
-      try {
-        const response = await axios.get(`${server}/student/${studentId}`);
-        console.log(response.data.data);
-        setStudentData(response.data.data);
-        const formattedDOB = new Date(response.data.data?.dob)
-          .toISOString()
-          .split("T")[0];
-        setDob(formattedDOB);
-        setBatchId(response.data.data?.enrolledBatch);
-      } catch (error) {
-        console.error("Error fetching student data:", error);
-      }
-    };
-
-    fetchStudenDetails();
-  }, []);
-
-  //function for gate batch info from batchId
-  useEffect(() => {
-    fetchBatches();
-  }, [batchId]);
-  const fetchBatches = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${server}/batch/${batchId}`, {
-        withCredentials: true,
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      });
-      setBatchData(response.data.data);
-      // console.log(response.data.data)
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  //create a date formater
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-indexed in JS
-    const year = date.getFullYear();
-
-    return `${year}-${month}-${day}`;
-  }
-
-  //function for fetch exam date from exam model by exam id..
-  useEffect(() => {
-    fetchExam();
-  }, []);
-  const fetchExam = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${server}/exam/${examId[0]}`, {
-        withCredentials: true,
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      });
-      // setBatchData(response.data.data);
-      console.log(formatDate(response.data.data?.assesmentdate))
-      setAssessmentDate(formatDate(response.data.data?.assesmentdate));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  //function for take input for nos..
   const handleChange = (index, field, value) => {
     const updatedNosData = nosData.map((nos, idx) =>
       idx === index ? { ...nos, [field]: value } : nos
@@ -211,13 +131,9 @@ const MarksheetForm = () => {
       grade = "F";
       result = "Fail";
     }
-
     setGrade(grade);
     setResult(result);
   };
-
-  //this function is for update the mark sheet..
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("aaAuthToken");
@@ -239,12 +155,15 @@ const MarksheetForm = () => {
       studentProfilePic: studentData?.profilepic,
       studentId: studentData?._id,
       Nos: nosData.map((nos) => ({
-        name: nos.description,
-        Theory: nos.theoryMarks,
-        Practical: nos.practicalMarks,
-        Total: nos.marksObtained,
-        passMark: nos.passMarks,
-        MarksObtained: nos.marksObtained,
+        description: nos.description,
+        code: nos.code,
+        credit: nos.credit,
+        theoryMarks: parseInt(nos.theoryMarks || 0, 10),
+        practicalMarks: parseInt(nos.practicalMarks || 0, 10),
+        vivaMarks: parseInt(nos.vivaMarks || 0, 10),
+        totalMarks: nos.totalMarks,
+        nosWisePassPercentage: nos.nosWisePassPercentage,
+        marksObtained: nos.marksObtained,
       })),
       total: totalMarksObtained,
       totalTheorymark: nosData.reduce(
@@ -264,6 +183,13 @@ const MarksheetForm = () => {
     };
 
     try {
+      // console.log(totalPracticalMark[0]);
+      console.log( "payload this id",payload);
+      console.log(payload.Nos);
+      console.log(payload.totalPracticalMark);
+      console.log(payload.totalVivaMark);
+    
+      console.log(token);
       // Submit to backend using Axios
     setShowButton(true);
       const response = await axios.post(`${server}/marks/upload`, payload, {
@@ -288,7 +214,6 @@ const MarksheetForm = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-md mt-10 mb-10">
       <div className="text-center mb-8">

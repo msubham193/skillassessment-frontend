@@ -26,7 +26,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
     certificateNo,
     studentId
   } = props.data;
-
+   console.log("marksheet data",props)
   return (
     <div
       ref={ref}

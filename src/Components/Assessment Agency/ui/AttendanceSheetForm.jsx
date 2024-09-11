@@ -28,10 +28,6 @@ const AttendanceSheetForm = () => {
     students: []
   });
   const [isDownloading, setDownloading] = useState(false);
-  const [base64Images, setBase64Images] = useState({
-    aaLogo: null,
-    studentPhotos: {}
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,52 +57,43 @@ const AttendanceSheetForm = () => {
     fetchData();
   }, [examId]);
 
-  const convertToBlob = async (url) => {
-    try {
-      const response = await fetch(url, { mode: 'cors' });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      return blobUrl;
-    } catch (error) {
-      console.error("Error fetching image:", error);
-      return null; // Return null if the image fetch fails
-    }
-  };
-
   useEffect(() => {
     const loadAndConvertImages = async () => {
-      try {
-        // Convert aaLogo to Blob URL
-        const aaLogoBlob = formData.aaLogo
-          ? await convertToBlob(formData.aaLogo)
-          : null;
+      const aaLogoBase64 = await convertImageToBase64(formData.aaLogo);
+      const studentPhotosBase64 = {};
 
-        // Convert student profile pictures to Blob URLs
-        const studentPhotosBlob = {};
-        for (const student of formData.students) {
-          if (student.profilepic) {
-            studentPhotosBlob[student.uid] = await convertToBlob(student.profilepic);
-          } else {
-            studentPhotosBlob[student.uid] = null;
-          }
-        }
-
-        setBase64Images({
-          aaLogo: aaLogoBlob,
-          studentPhotos: studentPhotosBlob
-        });
-      } catch (error) {
-        console.error("Error converting images to Blob:", error);
+      for (const student of formData.students) {
+        studentPhotosBase64[student.uid] = await convertImageToBase64(student.profilepic);
       }
+
+      setBase64Images({
+        aaLogo: aaLogoBase64,
+        studentPhotos: studentPhotosBase64
+      });
     };
 
     if (formData.aaLogo && formData.students.length > 0) {
       loadAndConvertImages();
     }
   }, [formData]);
+
+  const convertImageToBase64 = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+       img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL);
+      };
+      img.onerror = reject;
+      img.src = url 
+    });
+  };
 
   const downloadPDF = async () => {
     setDownloading(true);
@@ -163,17 +150,7 @@ const AttendanceSheetForm = () => {
       <tr key={student.uid}>
         <td className="border border-black p-2 text-center">{index + 1}</td>
         <td className="border border-black p-2 text-center">
-          {base64Images.studentPhotos[student.uid] ||student.profilepic ? (
-            <img
-              src={base64Images.studentPhotos[student.uid] ||student.profilepic}
-              alt={student.name}
-              className="h-12 w-12 mx-auto"
-            />
-          ) : (
-            <div className="h-12 w-12 mx-auto bg-gray-200 flex items-center justify-center">
-              N/A
-            </div>
-          )}
+          <img src={base64Images.studentPhotos[student.uid] || student.profilepic} alt={student.name} className="h-10 w-10 mx-auto" />
         </td>
         <td className="border border-black p-2">{student.uid}</td>
         <td className="border border-black p-2">{student.name}</td>
@@ -209,23 +186,7 @@ const AttendanceSheetForm = () => {
               <p className="text-sm">(NCVET Recognized Awarding Body)</p>
               <h3 className="text-xl font-bold mt-2">ATTENDANCE SHEET</h3>
             </div>
-            {base64Images.aaLogo ? (
-              <img
-                src={base64Images.aaLogo||formData.aaLogo}
-                alt="Assessment Agency Logo"
-                className="h-24 w-24 object-contain"
-              />
-            ) : formData.aaLogo ? (
-              <img
-                src={formData.aaLogo}
-                alt="Assessment Agency Logo"
-                className="h-24 w-24 object-contain"
-              />
-            ) : (
-              <div className="h-24 w-24 bg-gray-200 flex items-center justify-center">
-                N/A
-              </div>
-            )}
+            <img src={base64Images.aaLogo || formData.aaLogo} alt="Assessment Agency Logo" className="h-24 w-24" />
           </div>
 
           {/* Batch Details Table */}

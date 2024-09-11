@@ -28,10 +28,6 @@ const AttendanceSheetForm = () => {
     students: []
   });
   const [isDownloading, setDownloading] = useState(false);
-  const [base64Images, setBase64Images] = useState({
-    aaLogo: null,
-    studentPhotos: {}
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,44 +56,6 @@ const AttendanceSheetForm = () => {
 
     fetchData();
   }, [examId]);
-
-  useEffect(() => {
-    const loadAndConvertImages = async () => {
-      const aaLogoBase64 = await convertImageToBase64(formData.aaLogo);
-      const studentPhotosBase64 = {};
-
-      for (const student of formData.students) {
-        studentPhotosBase64[student.uid] = await convertImageToBase64(student.profilepic);
-      }
-
-      setBase64Images({
-        aaLogo: aaLogoBase64,
-        studentPhotos: studentPhotosBase64
-      });
-    };
-
-    if (formData.aaLogo && formData.students.length > 0) {
-      loadAndConvertImages();
-    }
-  }, [formData]);
-
-  const convertImageToBase64 = (url) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-       img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        const dataURL = canvas.toDataURL("image/png");
-        resolve(dataURL);
-      };
-      img.onerror = reject;
-      img.src = url 
-    });
-  };
 
   const downloadPDF = async () => {
     setDownloading(true);
@@ -130,7 +88,7 @@ const AttendanceSheetForm = () => {
       <tr key={student.uid}>
         <td className="border border-black p-2 text-center">{index + 1}</td>
         <td className="border border-black p-2 text-center">
-          <img src={base64Images.studentPhotos[student.uid] || student.profilepic} alt={student.name} className="h-10 w-10 mx-auto" />
+          <img src={student.profilepic} alt={student.name} className="h-10 w-10 mx-auto" />
         </td>
         <td className="border border-black p-2">{student.uid}</td>
         <td className="border border-black p-2">{student.name}</td>
@@ -158,7 +116,7 @@ const AttendanceSheetForm = () => {
               <p className="text-sm">(NCVET Recognized Awarding Body)</p>
               <h3 className="text-xl font-bold mt-2">ATTENDANCE SHEET</h3>
             </div>
-            <img src={base64Images.aaLogo || formData.aaLogo} alt="Assessment Agency Logo" className="h-24 w-24" />
+            <img src={formData.aaLogo} alt="Assessment Agency Logo" className="h-24 w-24" />
           </div>
           
           <table className="w-full border-collapse border border-black mb-4">

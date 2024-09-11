@@ -9,6 +9,7 @@ import { CompeltebatchDataAtoms } from "@/Components/Traning Partner/Atoms/compl
 import GenerateMarksheetFrom from "@/Components/Traning Partner/ui/Marksheet/generateMarkFrom";
 import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 import { server } from "@/main";
+import { useParams } from "react-router-dom";
 
 const CompeteBatchData = () => {
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
@@ -16,9 +17,10 @@ const CompeteBatchData = () => {
   const certificateRef = useRef();
   const [loadingStates, setLoadingStates] = useState({});
   const [studentData, setStudentData] = useState(null);
+  // const [batchData,setBatchData]=useState({})
   const [currentStudentId, setCurrentStudentId] = useState(null);
   const [documentType, setDocumentType] = useState(null);
-
+  const {batchId}=useParams();
   const handlePrint = useReactToPrint({
     content: () =>
       documentType === "marksheet"
@@ -75,7 +77,7 @@ const CompeteBatchData = () => {
       }));
     }
   }, []);
-
+ console.log("data comes",studentData)
   useEffect(() => {
     if (currentStudentId && studentData && documentType) {
       handlePrint();
@@ -103,7 +105,7 @@ const CompeteBatchData = () => {
         ? new Date(student.marks.examDate).toISOString().split("T")[0]
         : "N/A",
       nosMarks: student.marks.Nos.map((nos, index) => ({
-        code: `NOS${index + 1}`,
+        code: nos.code,
         name: nos.name,
         type: "Theory",
         maxMarks: nos.passMark,
@@ -111,7 +113,7 @@ const CompeteBatchData = () => {
       })),
       totalMarks: student.marks.total,
       grade: student.marks.Grade,
-      result: student.marks.Result,
+      result: student.marks.Result, 
       dateOfIssue: new Date().toISOString().split("T")[0],
       certificateNo: `CERT${student.redg_No}`,
       studentId: student._id,

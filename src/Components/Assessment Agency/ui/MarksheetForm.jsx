@@ -92,7 +92,7 @@ const MarksheetForm = () => {
 
     fetchCourseData();
   }, []);
-
+  console.log("course mateched", courseName)
   const handleChange = (index, field, value) => {
     const updatedNosData = nosData.map((nos, idx) =>
       idx === index ? { ...nos, [field]: value } : nos
@@ -139,11 +139,9 @@ const MarksheetForm = () => {
       grade = "F";
       result = "Fail";
     }
-
     setGrade(grade);
     setResult(result);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -166,12 +164,15 @@ const MarksheetForm = () => {
       studentProfilePic: studentProfilePic[0],
       studentId: studentId[0],
       Nos: nosData.map((nos) => ({
-        name: nos.description,
-        Theory: nos.theoryMarks,
-        Practical: nos.practicalMarks,
-        Total: nos.marksObtained,
-        passMark: nos.passMarks,
-        MarksObtained: nos.marksObtained,
+        description: nos.description,
+        code: nos.code,
+        credit: nos.credit,
+        theoryMarks: parseInt(nos.theoryMarks || 0, 10),
+        practicalMarks: parseInt(nos.practicalMarks || 0, 10),
+        vivaMarks: parseInt(nos.vivaMarks || 0, 10),
+        totalMarks: nos.totalMarks,
+        nosWisePassPercentage: nos.nosWisePassPercentage,
+        marksObtained: nos.marksObtained,
       })),
       total: totalMarksObtained,
       totalTheorymark: nosData.reduce(
@@ -192,10 +193,11 @@ const MarksheetForm = () => {
 
     try {
       // console.log(totalPracticalMark[0]);
-      console.log(payload);
+      console.log( "payload this id",payload);
       console.log(payload.Nos);
       console.log(payload.totalPracticalMark);
       console.log(payload.totalVivaMark);
+    
       console.log(token);
       // Submit to backend using Axios
       const response = await axios.post(`${server}/marks/upload`, payload, {
@@ -218,7 +220,6 @@ const MarksheetForm = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-md mt-10 mb-10">
       <div className="text-center mb-8">

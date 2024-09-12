@@ -73,7 +73,7 @@ const ViewSectorAndCourse = () => {
   
 
   const toggleScheme = (schemeName) => {
-    setFilters(filters === schemeName ? "" : schemeName);
+    setFilters(filters === schemeName ? "" : schemeName); 
   };
   
   if(loading)
@@ -96,8 +96,8 @@ const ViewSectorAndCourse = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">SL NO</TableHead>
-            <TableHead>Scheme Name</TableHead>
-            <TableHead>Scheme Description</TableHead>
+            <TableHead>Sector Name</TableHead>
+            <TableHead>Sector Description</TableHead>
             <TableHead>No Of Courses</TableHead>
             <TableHead className="w-[100px]">Actions</TableHead>
           </TableRow>

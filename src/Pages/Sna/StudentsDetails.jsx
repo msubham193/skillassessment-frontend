@@ -12,7 +12,7 @@ const StudentDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const respone = await axios.get(`${server}/batch/${batchId}`);
+        const respone = await axios.get(`${server}/batch/${batchId}`); 
         console.log(respone.data.data.students);
         const data = respone.data.data.students;
         setStudents(data);

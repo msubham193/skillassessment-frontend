@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import {
   assessmentAgencyNameState,
-  batchAbnState,
-  batchIdState,
   courseNameState,
-  examDateState,
   examIdState,
-  sectorState,
-  setCenterIdState,
-  setStudentDobState,
-  setStudentIdState,
-  setStudentNameState,
-  setStudentProfilePictureState,
-  setStudentRegdState,
-  tpNameState,
 } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";
-import toast, { Toaster } from "react-hot-toast";
+
 
 const MarksheetForm = () => {
   const navigate = useNavigate();
+
+ 
+  const { studentId } = useParams();
+  const [batchId, setBatchId] = useState(""); 
+  const [assessmentDate, setAssessmentDate] = useState("");
+  const [studentData, setStudentData] = useState({});
+  const [batchData, setBatchData] = useState({});
+  const [dob, setDob] = useState("");
+
   const [courseName, setCourseName] = useState("");
   const [nosData, setNosData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -145,7 +144,10 @@ const MarksheetForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     const token = localStorage.getItem("aaAuthToken");
+
+
 
     const payload = {
       examId: examId[0],
@@ -164,15 +166,13 @@ const MarksheetForm = () => {
       studentProfilePic: studentProfilePic[0],
       studentId: studentId[0],
       Nos: nosData.map((nos) => ({
-        description: nos.description,
-        code: nos.code,
-        credit: nos.credit,
-        theoryMarks: parseInt(nos.theoryMarks || 0, 10),
-        practicalMarks: parseInt(nos.practicalMarks || 0, 10),
-        vivaMarks: parseInt(nos.vivaMarks || 0, 10),
-        totalMarks: nos.totalMarks,
-        nosWisePassPercentage: nos.nosWisePassPercentage,
-        marksObtained: nos.marksObtained,
+        code:nos.code,
+        name: nos.description,
+        Theory: nos.theoryMarks,
+        Practical: nos.practicalMarks,
+        Total: nos.marksObtained,
+        passMark: nos.passMarks,
+        MarksObtained: nos.marksObtained,
       })),
       total: totalMarksObtained,
       totalTheorymark: nosData.reduce(
@@ -213,10 +213,13 @@ const MarksheetForm = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error);
+
+      toast.error(error.response.data.error);
+    } finally{
+      setShowButton(false);
+
     }
   };
-
   if (loading) {
     return <div>Loading...</div>;
   }

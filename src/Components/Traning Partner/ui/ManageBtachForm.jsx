@@ -9,8 +9,10 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
 import { server } from "@/main";
+import { useNavigate } from "react-router-dom";
 
 const ManageBatchForm = () => {
+  const navigate=useNavigate()
   const [batches, setBatches] = useState([]);
   const [batchStatuses, setBatchStatuses] = useState({});
   const [batchTransactionIds, setBatchTransactionIds] = useState({});
@@ -158,6 +160,14 @@ const ManageBatchForm = () => {
 
   return (
     <Card className="w-full mx-auto mt-8">
+      <div className="mt-3 ml-3">
+        <Button
+          onClick={() => navigate("/trainingPartner/dashboard")}
+          className="mb-4 bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
+        >
+          Back to Dashboard
+        </Button>
+        </div>
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Manage Batches</CardTitle>
       </CardHeader>

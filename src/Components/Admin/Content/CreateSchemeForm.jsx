@@ -20,26 +20,43 @@ const CreateSchemeForm = () => {
   const [code, setCode] = useState("");
   const [pricePerStudent, setPricePerStudent] = useState("");
   const [state, setState] = useState("");
-  const [showButton, setShowButton] = useState(false); 
+  const [image, setImage] = useState(null); // State for image
+  const [showButton, setShowButton] = useState(false);
+
+  // Handle image change
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setShowButton(true);
+
+    // Create FormData to send both text and image data
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("code", code);
+    formData.append("projectType", projectType);
+    formData.append("schemeType", schemeType);
+    formData.append("pricePerStudent", pricePerStudent);
+    formData.append("state", state);
+    if (image) {
+      formData.append("image", image); // Append image file if selected
+    }
+
     try {
-      const response = await axios.post(
-        `${server}/scheme`,
-        { name, code, projectType, schemeType, pricePerStudent,state },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${server}/scheme`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+
       setName("");
       setCode("");
       setProjectType("");
       setPricePerStudent("");
+      setImage(null); // Reset image
       toast.success("New scheme added !!", {
         position: "top-center",
         closeOnClick: true,
@@ -54,13 +71,13 @@ const CreateSchemeForm = () => {
         draggable: true,
         theme: "colored",
       });
-      console.log(error)
+      console.log(error);
       setShowButton(false);
     }
   };
 
   return (
-    <div className="h-full flex-1 flex-col space-y-2 px-8 pt-4 md:flex">
+    <div className="h-full flex-1 flex-col space-y-2 px-8 pt-2 md:flex">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Create Course!</h2>
@@ -69,8 +86,8 @@ const CreateSchemeForm = () => {
           </p>
         </div>
       </div>
-      <form onSubmit={submitHandler}>
-        <div className="mx-72 mt-10">
+      <form onSubmit={submitHandler} encType="multipart/form-data">
+        <div className="mx-72 mt-8">
           <Label htmlFor="schemeType" className="text-left w-40">
             Scheme Type
           </Label>
@@ -83,7 +100,6 @@ const CreateSchemeForm = () => {
               <SelectValue placeholder="Select Scheme Type" />
             </SelectTrigger>
             <SelectContent>
-            
               <SelectItem value="Corporate">Corporate</SelectItem>
               <SelectItem value="State Government">State Government</SelectItem>
               <SelectItem value="Central Government">Central Government</SelectItem>
@@ -101,11 +117,11 @@ const CreateSchemeForm = () => {
               <SelectValue placeholder="Select State" />
             </SelectTrigger>
             <SelectContent>
-            <SelectItem value="Odisha">Odisha</SelectItem>
-            <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
-            <SelectItem value="West Bengal">West Bengal</SelectItem>
-            <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
-            <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+              <SelectItem value="Odisha">Odisha</SelectItem>
+              <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+              <SelectItem value="West Bengal">West Bengal</SelectItem>
+              <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+              <SelectItem value="Jharkhand">Jharkhand</SelectItem>
             </SelectContent>
           </Select>
           <Label htmlFor="name" className="text-left w-40">
@@ -153,6 +169,18 @@ const CreateSchemeForm = () => {
               />
             </>
           )}
+
+         
+          <Label htmlFor="image" className="text-left w-40">
+            Upload Logo
+          </Label>
+          <Input
+            type="file"
+            id="scheme-logo"
+            className="col-span-4 py-6"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
         </div>
       </form>
       <Button

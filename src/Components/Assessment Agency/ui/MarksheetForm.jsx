@@ -4,8 +4,19 @@ import {  useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import {
   assessmentAgencyNameState,
+  batchAbnState,
+  batchIdState,
   courseNameState,
+  examDateState,
   examIdState,
+  sectorState,
+  setCenterIdState,
+  setStudentDobState,
+  setStudentIdState,
+  setStudentNameState,
+  setStudentProfilePictureState,
+  setStudentRegdState,
+  tpNameState,
 } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";

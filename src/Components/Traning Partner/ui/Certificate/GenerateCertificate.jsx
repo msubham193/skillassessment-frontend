@@ -54,7 +54,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
           {/* Father Name, Date of Birth, Enrollment Number */}
           <div className="mt-[25px] ml-[31%] flex">
             <p className=" text-[12px] font-semibold">{fatherName}</p>
-            <p className=" ml-[206px] text-[12px] font-semibold">
+            <p className=" ml-[255px] text-[12px] font-semibold">
               {dateOfBirth}
             </p>
             <p className=" ml-[130px] text-[12px] font-semibold">

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -16,8 +15,8 @@ const MarksheetForm = () => {
   const { studentId } = useParams();
   const [batchId, setBatchId] = useState("");
   const [assessmentDate, setAssessmentDate] = useState("");
-  const [studentData, setStudentData] = useState(null);
-  const [batchData, setBatchData] = useState(null);
+  const [studentData, setStudentData] = useState({});
+  const [batchData, setBatchData] = useState({});
   const [dob, setDob] = useState("");
   const [courseName, setCourseName] = useState("");
   const [nosData, setNosData] = useState([]);
@@ -36,7 +35,7 @@ const MarksheetForm = () => {
     const fetchCourseData = async () => {
       try {
         const response = await axios.get(`${server}/course/course`);
-        console.log("this is all the avable course", response.data.data);
+        console.log(response.data.data);
         const course = response.data.data.find(
           (course) => course.courseName === batchCourseName[0]
         );
@@ -87,7 +86,7 @@ const MarksheetForm = () => {
     };
     fetchStudenDetails();
   }, []);
-
+//function for convert the date ##################
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -95,6 +94,7 @@ const MarksheetForm = () => {
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   }
+
   //function for fetch exam date from exam model by exam id..###############################
   useEffect(() => {
     fetchExam();
@@ -121,6 +121,8 @@ const MarksheetForm = () => {
       setLoading(false);
     }
   };
+
+
   //function for take input for nos..##############################
   const handleChange = (index, field, value) => {
     const updatedNosData = nosData.map((nos, idx) =>
@@ -172,6 +174,9 @@ const MarksheetForm = () => {
   //this is a functio for add the  mark in resulr sheet of  studen........#####################
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("aaAuthToken");
+
     const payload = {
       examId: examId[0],
       courseName: courseName,
@@ -213,7 +218,6 @@ const MarksheetForm = () => {
       Grade: grade,
       Result: result,
     };
-
     // Print the payload
     console.log("Payload:", payload);
 
@@ -231,7 +235,9 @@ const MarksheetForm = () => {
           draggable: true,
           theme: "colored",
         });
-        navigate(`/dashboard/students/${batchId}`);
+        setTimeout(() => {
+          navigate(`/dashboard/students/${batchId}`);
+        }, 1000); 
       } else {
         console.error("Error uploading marks:", response.data.message);
       }
@@ -251,276 +257,278 @@ const MarksheetForm = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-md mt-10 mb-10">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-semibold">
-          Centurion University of Technology and Management
-        </h2>
-        <p className="text-lg">(NCVET recognized Awarding Body)</p>
-        <p className="text-xl">{assessmentAgency}</p>
-        <h3 className="text-xl mt-4">Marksheet</h3>
-      </div>
-      <div className="mb-2">
-        <img src={studentData?.profilepic} className="h-24 w-24"></img>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <div className="max-w-5xl mx-auto p-4 border">
-          <div className="grid grid-cols-4 gap-4 mb-4">
-            <div className="col-span-2">
-              <label
-                htmlFor="course-name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                COURSE NAME
-              </label>
-              <input
-                id="course-name"
-                value={courseName}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="candidate-reg-no"
-                className="block text-sm font-medium text-gray-700"
-              >
-                CANDIDATE REG. NO.
-              </label>
-              <input
-                id="candidate-reg-no"
-                value={studentData?.redg_No}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="abn-no"
-                className="block text-sm font-medium text-gray-700"
-              >
-                ABN NO.
-              </label>
-              <input
-                id="abn-no"
-                value={batchData?.ABN_Number}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
+    <div className="text-center mb-8">
+      <h2 className="text-2xl font-semibold">
+        Centurion University of Technology and Management
+      </h2>
+      <p className="text-lg">(NCVET recognized Awarding Body)</p>
+      <p className="text-xl">{assessmentAgency}</p>
+      <h3 className="text-xl mt-4">Marksheet</h3>
+    </div>
+    <div className="mb-2">
+      <img src={studentData?.profilepic} className="h-24 w-24"></img>
+    </div>
+    <form onSubmit={handleSubmit}>
+      <div className="max-w-5xl mx-auto p-4 border">
+        <div className="grid grid-cols-4 gap-4 mb-4">
+          <div className="col-span-2">
+            <label
+              htmlFor="course-name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              COURSE NAME
+            </label>
+            <input
+              id="course-name"
+              value={courseName}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
           </div>
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div>
-              <label
-                htmlFor="candidate-name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                CANDIDATE NAME
-              </label>
-              <input
-                id="candidate-name"
-                value={studentData?.name}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium" htmlFor="dob">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                id="dob"
-                value={dob}
-                className="w-full px-3 py-2 border rounded-md"
-                onChange={(e) => setDob(e.target.value)} // Allow DOB change
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium" htmlFor="dob">
-                Assessment Date
-              </label>
-              <input
-                type="date"
-                id="assessmentDate"
-                value={assessmentDate}
-                className="w-full px-3 py-2 border rounded-md"
-                onChange={(e) => setAssessmentDate(e.target.value)} // Allow DOB change
-              />
-            </div>
+          <div>
+            <label
+              htmlFor="candidate-reg-no"
+              className="block text-sm font-medium text-gray-700"
+            >
+              CANDIDATE REG. NO.
+            </label>
+            <input
+              id="candidate-reg-no"
+              value={studentData?.redg_No}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    SL NO.
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    NOS
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Credit
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Theory
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Practical
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Viva
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    PASS MARKS
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    MARKS OBTAINED
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {nosData.map((nos, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{nos.code}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {nos.credit}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        className="block w-full p-2 border border-gray-300 rounded-md"
-                        value={nos.theoryMarks}
-                        onChange={(e) =>
-                          handleChange(index, "theoryMarks", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        className="block w-full p-2 border border-gray-300 rounded-md"
-                        value={nos.practicalMarks}
-                        onChange={(e) =>
-                          handleChange(index, "practicalMarks", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        className="block w-full p-2 border border-gray-300 rounded-md"
-                        value={nos.vivaMarks}
-                        onChange={(e) =>
-                          handleChange(index, "vivaMarks", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="block w-full p-2 border border-gray-300 rounded-md">
-                        {nos.passMarks}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input
-                        className="block w-full p-2 border border-gray-300 rounded-md"
-                        value={nos.marksObtained}
-                        onChange={(e) =>
-                          handleChange(index, "marksObtained", e.target.value)
-                        }
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="grid grid-cols-3 gap-4 mt-4">
-            <div>
-              <label
-                htmlFor="total-marks"
-                className="block text-sm font-medium text-gray-700"
-              >
-                TOTAL MARKS OBTAINED
-              </label>
-              <input
-                id="total-marks"
-                value={totalMarksObtained}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="grade"
-                className="block text-sm font-medium text-gray-700"
-              >
-                GRADE
-              </label>
-              <input
-                id="grade"
-                value={grade}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="result"
-                className="block text-sm font-medium text-gray-700"
-              >
-                RESULT
-              </label>
-              <input
-                id="result"
-                value={result}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              />
-            </div>
+          <div>
+            <label
+              htmlFor="abn-no"
+              className="block text-sm font-medium text-gray-700"
+            >
+              ABN NO.
+            </label>
+            <input
+              id="abn-no"
+              value={batchData?.ABN_Number}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
           </div>
         </div>
-
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700">
-            Date of Issue
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <label
+              htmlFor="candidate-name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              CANDIDATE NAME
+            </label>
+            <input
+              id="candidate-name"
+              value={studentData?.name}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 font-medium" htmlFor="dob">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              id="dob"
+              value={dob}
+              className="w-full px-3 py-2 border rounded-md"
+              onChange={(e) => setDob(e.target.value)} // Allow DOB change
+            />
+          </div>
+          <div>
+          <label className="block text-gray-700 font-medium" htmlFor="dob">
+            Assessment Date
           </label>
           <input
             type="date"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            id="assessmentDate"
+            value={assessmentDate}
+            className="w-full px-3 py-2 border rounded-md"
+            onChange={(e) => setAssessmentDate(e.target.value)} // Allow DOB change
           />
         </div>
-
-        <div className="text-center">
-          <p className="mb-6">Head – Centre for Skill Certification</p>
-          <p className="mb-6">
-            Centurion University of Technology and Management
-          </p>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            {showButton ? "Submiting..." : "Submit"}
-          </button>
         </div>
-      </form>
-    </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  SL NO.
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  NOS
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Credit
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Theory
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Practical
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Viva
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  PASS MARKS
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  MARKS OBTAINED
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {nosData.map((nos, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{nos.code}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {nos.credit}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      className="block w-full p-2 border border-gray-300 rounded-md"
+                      value={nos.theoryMarks}
+                      onChange={(e) =>
+                        handleChange(index, "theoryMarks", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      className="block w-full p-2 border border-gray-300 rounded-md"
+                      value={nos.practicalMarks}
+                      onChange={(e) =>
+                        handleChange(index, "practicalMarks", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      className="block w-full p-2 border border-gray-300 rounded-md"
+                      value={nos.vivaMarks}
+                      onChange={(e) =>
+                        handleChange(index, "vivaMarks", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="block w-full p-2 border border-gray-300 rounded-md">
+                      {nos.passMarks}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      className="block w-full p-2 border border-gray-300 rounded-md"
+                      value={nos.marksObtained}
+                      onChange={(e) =>
+                        handleChange(index, "marksObtained", e.target.value)
+                      }
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          <div>
+            <label
+              htmlFor="total-marks"
+              className="block text-sm font-medium text-gray-700"
+            >
+              TOTAL MARKS OBTAINED
+            </label>
+            <input
+              id="total-marks"
+              value={totalMarksObtained}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="grade"
+              className="block text-sm font-medium text-gray-700"
+            >
+              GRADE
+            </label>
+            <input
+              id="grade"
+              value={grade}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="result"
+              className="block text-sm font-medium text-gray-700"
+            >
+              RESULT
+            </label>
+            <input
+              id="result"
+              value={result}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700">
+          Date of Issue
+        </label>
+        <input
+          type="date"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+        />
+      </div>
+      <div className="text-center">
+        <p className="mb-6">Head – Centre for Skill Certification</p>
+        <p className="mb-6">
+          Centurion University of Technology and Management
+        </p>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+        {
+          showButton?"Submiting...":"Submit"
+        }
+          
+        </button>
+      </div>
+    </form>
+  </div>
   );
 };
 

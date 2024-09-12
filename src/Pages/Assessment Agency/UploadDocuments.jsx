@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import {useRecoilValue } from "recoil";
 import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { useNavigate, useParams } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { server } from "@/main";
 import { Loader } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
+import { toast } from "react-toastify";
 
 const UploadDocuments = () => {
   const navigate = useNavigate();
@@ -34,7 +34,12 @@ const UploadDocuments = () => {
           setStudentAttendance(Number(storedAttendance));
         }
       } catch (error) {
-        toast.error("Error fetching assessors");
+        toast.error("Error fetching assessors", {
+          position: "top-right",
+          closeOnClick: true,
+          draggable: true,
+          theme: "colored",
+        });
       }
     };
 
@@ -51,10 +56,20 @@ const UploadDocuments = () => {
       const response = await axios.put(`${server}/exam/addassessor/${examId}`, {
         assessorId: selectedAssessor,
       });
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
       setStep(2); // Move to step 2
     } catch (error) {
-      toast.error("Error assigning assessor. Please try again.");
+      toast.error("Error assigning assessor. Please try again.", {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
     } finally {
       setLoader(false);
     }
@@ -70,10 +85,20 @@ const UploadDocuments = () => {
       const response = await axios.put(`${server}/exam/attendance/${examId}`, {
         attendanceNumber: Number(studentAttendance),
       });
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
       setStep(3); // Move to step 3
     } catch (error) {
-      toast.error("Error assigning attendance. Please try again.");
+      toast.error("Error assigning attendance. Please try again.", {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
     } finally {
       setLoader(false);
     }
@@ -98,11 +123,20 @@ const UploadDocuments = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
       setStep(4); // Move to step 4
     } catch (error) {
-      toast.error("Error uploading files. Please try again.");
+      toast.error("Error uploading files. Please try again.", {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
     } finally {
       setLoader(false);
     }
@@ -126,10 +160,23 @@ const UploadDocuments = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success(response.data.message);
-      navigate("/dashboard/uploadresult");
+      toast.success("Photos uploaded successfully & This batch is successfully completed", {
+        position: "top-center",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
+      setTimeout(() => {
+        navigate("/dashboard/uploadresult");
+      }, 1000); 
+     
     } catch (error) {
-      toast.error(error.response.data.error);
+      toast.error(error.response?.data?.error || "Failed to upload Photo", {
+        position: "top-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
     } finally {
       setLoader(false);
     }
@@ -276,7 +323,6 @@ const UploadDocuments = () => {
         </form>
       )}
 
-      <Toaster />
     </div>
   );
 };

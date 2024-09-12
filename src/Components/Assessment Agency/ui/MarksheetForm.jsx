@@ -13,10 +13,6 @@ import { server } from "@/main";
 
 const MarksheetForm = () => {
   const navigate = useNavigate();
-
- 
-  const { studentId } = useParams();
-  const [batchId, setBatchId] = useState(""); 
   const [assessmentDate, setAssessmentDate] = useState("");
   const [studentData, setStudentData] = useState({});
   const [batchData, setBatchData] = useState({});

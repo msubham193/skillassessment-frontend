@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import {
   assessmentAgencyNameState,
@@ -21,33 +20,45 @@ import {
 import axios from "axios";
 import { server } from "@/main";
 import toast, { Toaster } from "react-hot-toast";
-import { Loader } from "lucide-react";
 
 const MarksheetForm = () => {
-  const { studentId } = useParams();
-  const [batchId, setBatchId] = useState("");
-  const [assessmentDate, setAssessmentDate] = useState("");
-  const [studentData, setStudentData] = useState({});
-  const [batchData, setBatchData] = useState({});
-  const [dob, setDob] = useState("");
+  const navigate = useNavigate();
   const [courseName, setCourseName] = useState("");
   const [nosData, setNosData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showButton, setShowButton] = useState(false);
   const [totalMarksObtained, setTotalMarksObtained] = useState(0);
   const [grade, setGrade] = useState("");
   const [result, setResult] = useState("Pass");
   const [totalPassMarks, setTotalPassMarks] = useState(0);
+
   const examId = useRecoilState(examIdState);
   const batchCourseName = useRecoilState(courseNameState);
+  const trainingAgency = useRecoilState(tpNameState);
   const assessmentAgency = useRecoilState(assessmentAgencyNameState);
+  const batchABN = useRecoilState(batchAbnState);
+  const batchId = useRecoilState(batchIdState);
+  const examDate = useRecoilState(examDateState);
+  const centerCode = useRecoilState(setCenterIdState);
+  const sectorName = useRecoilState(sectorState);
+  const studentRedgNo = useRecoilState(setStudentRegdState);
+  const studentName = useRecoilState(setStudentNameState);
+  const studentDOB = useRecoilState(setStudentDobState);
+  const studentProfilePic = useRecoilState(setStudentProfilePictureState);
+  const studentId = useRecoilState(setStudentIdState);
+  const total = useState(0);
+  const totalTheorymark = useState(0);
+  const totalPracticalMark = useState(0);
+  const totalVivaMark = useState(0);
+  const Result = useState("paas");
   const studentAttendance = useState(false);
-  //function for fettch course..
+
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
+        console.log(studentDOB);
         const response = await axios.get(`${server}/course/course`);
         console.log(response.data.data);
+        console.log(batchCourseName[0]);
         const course = response.data.data.find(
           (course) => course.courseName === batchCourseName[0]
         );
@@ -58,10 +69,11 @@ const MarksheetForm = () => {
             description: nos.description,
             code: nos.code,
             credit: nos.credit,
-            theoryMarks: "", // User will input this manually
-            practicalMarks: "", // User will input this manually
-            vivaMarks: "", // User will input this manually
-            passMarks: nos.totalMarks, // Fetched and shown
+            theoryMarks: "",
+            practicalMarks: "",
+            vivaMarks: "",
+            totalMarks: nos.totalMarks,
+            nosWisePassPercentage: nos.nosWisePassPercentage,
             marksObtained: "",
           }));
           setNosData(initialNosData);
@@ -80,7 +92,7 @@ const MarksheetForm = () => {
 
     fetchCourseData();
   }, []);
-
+  console.log("course mateched", courseName)
   const handleChange = (index, field, value) => {
     const updatedNosData = nosData.map((nos, idx) =>
       idx === index ? { ...nos, [field]: value } : nos
@@ -88,8 +100,6 @@ const MarksheetForm = () => {
     setNosData(updatedNosData);
     calculateMarksObtained(updatedNosData);
   };
-
-  //function for calculate the total mark
 
   const calculateMarksObtained = (data) => {
     const updatedData = data.map((nos) => ({
@@ -108,8 +118,6 @@ const MarksheetForm = () => {
     setTotalMarksObtained(totalMarks);
     calculateGradeAndResult(totalMarks);
   };
-
-  //function for callculate the greade ...
 
   const calculateGradeAndResult = (totalMarks) => {
     const percentage = (totalMarks / totalPassMarks) * 100;
@@ -136,24 +144,25 @@ const MarksheetForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const token = localStorage.getItem("aaAuthToken");
 
     const payload = {
       examId: examId[0],
       courseName: courseName,
-      TrainingPartner: batchData?.trainingOrganization,
+      TrainingPartner: trainingAgency[0],
       AssesmentAgencyName: assessmentAgency[0],
       studentAttendance: studentAttendance[0],
-      batchABN: batchData?.ABN_Number,
-      batchId: batchData?._id,
-      examDate: assessmentDate,
-      centerCode: batchData?.CenterCode,
-      sectorName: batchData?.sectorName,
-      studentRedgNo: studentData?.redg_No,
-      studentName: studentData?.name,
-      studentDOB: dob,
-      studentProfilePic: studentData?.profilepic,
-      studentId: studentData?._id,
+      batchABN: batchABN[0],
+      batchId: batchId[0],
+      examDate: examDate[0],
+      centerCode: centerCode[0],
+      sectorName: sectorName[0],
+      studentRedgNo: studentRedgNo[0],
+      studentName: studentName[0],
+      studentDOB: studentDOB[0],
+      studentProfilePic: studentProfilePic[0],
+      studentId: studentId[0],
       Nos: nosData.map((nos) => ({
         description: nos.description,
         code: nos.code,
@@ -184,14 +193,13 @@ const MarksheetForm = () => {
 
     try {
       // console.log(totalPracticalMark[0]);
-      console.log( "payload this id",payload);
+      console.log(payload);
       console.log(payload.Nos);
       console.log(payload.totalPracticalMark);
       console.log(payload.totalVivaMark);
     
       console.log(token);
       // Submit to backend using Axios
-    setShowButton(true);
       const response = await axios.post(`${server}/marks/upload`, payload, {
         Grade: grade,
       });
@@ -206,14 +214,13 @@ const MarksheetForm = () => {
     } catch (error) {
       console.error("Error:", error);
       toast.error(error);
-    } finally{
-      setShowButton(false);
     }
   };
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-md mt-10 mb-10">
       <div className="text-center mb-8">
@@ -225,7 +232,7 @@ const MarksheetForm = () => {
         <h3 className="text-xl mt-4">Marksheet</h3>
       </div>
       <div className="mb-2">
-        <img src={studentData?.profilepic} className="h-24 w-24"></img>
+        <img src={studentProfilePic[0]} className="h-24 w-24"></img>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="max-w-5xl mx-auto p-4 border">
@@ -252,7 +259,7 @@ const MarksheetForm = () => {
               </label>
               <input
                 id="candidate-reg-no"
-                value={studentData?.redg_No}
+                value={studentRedgNo[0]}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
@@ -265,7 +272,7 @@ const MarksheetForm = () => {
               </label>
               <input
                 id="abn-no"
-                value={batchData?.ABN_Number}
+                value={batchABN[0]}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
@@ -280,34 +287,37 @@ const MarksheetForm = () => {
               </label>
               <input
                 id="candidate-name"
-                value={studentData?.name}
+                value={studentName[0]}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium" htmlFor="dob">
-                Date of Birth
+              <label
+                htmlFor="dob"
+                value={studentDOB}
+                className="block text-sm font-medium text-gray-700"
+              >
+                DATE OF BIRTH
               </label>
               <input
-                type="date"
                 id="dob"
-                value={dob}
-                className="w-full px-3 py-2 border rounded-md"
-                onChange={(e) => setDob(e.target.value)} // Allow DOB change
+                type="date"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
             <div>
-            <label className="block text-gray-700 font-medium" htmlFor="dob">
-              Assessment Date
-            </label>
-            <input
-              type="date"
-              id="assessmentDate"
-              value={assessmentDate}
-              className="w-full px-3 py-2 border rounded-md"
-              onChange={(e) => setAssessmentDate(e.target.value)} // Allow DOB change
-            />
-          </div>
+              <label
+                htmlFor="assessment-date"
+                className="block text-sm font-medium text-gray-700"
+              >
+                ASSESSMENT DATE
+              </label>
+              <input
+                id="assessment-date"
+                type="date"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -479,10 +489,7 @@ const MarksheetForm = () => {
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
-          {
-            showButton?"Submiting...":"Submit"
-          }
-            
+            Submit
           </button>
         </div>
       </form>

@@ -102,7 +102,8 @@ const TranscriptManage = () => {
             </TableHeader>
             <TableBody>
               {batches
-                .filter(batch => batch.paymentStatus === true)
+                .filter(batch => batch.paymentStatus === true && batch.
+                  certificateIssued=== true)
                 .map((batch, index) => (
                   <TableRow
                     key={batch._id}

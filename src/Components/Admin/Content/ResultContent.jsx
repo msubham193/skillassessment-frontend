@@ -6,7 +6,7 @@ import HomeTable from '../ui/HomeTablist/HomeTable';
 import { Button } from '@/components(shadcn)/ui/button';
 import { toast } from 'react-toastify';
 const ResultContent = ({ batchId }) => { 
-  const [students, setSutdents] = useState([]); 
+  const [students, setSutdents] = useState([]);  
   const [loading, setLoading] = useState(false);
   const [examId, setExamId] = useState("");
   const [exam, setExam] = useState({});
@@ -142,9 +142,13 @@ const ResultContent = ({ batchId }) => {
         <Button className="mr-2" onClick={togglePhotos}>
           {showPhotos ? "Hide Photos" : "View Photos"}
         </Button>
-        <Button className="mr-2 bg-green-600" onClick={approveAndPublish}>
-         {loading?"Loding...":(exam?.certificateIssued?"Approved":"Approve & Publish")} 
-        </Button>
+        <Button
+        className="mr-2 bg-green-600"
+        onClick={approveAndPublish}
+        disabled={exam?.certificateIssued}
+      >
+        {loading ? "Loading..." : exam?.certificateIssued ? "Approved" : "Approve & Publish"}
+      </Button>
       </div>
       {showPhotos && (
         <div className="grid grid-cols-4 gap-2 mt-4">

@@ -20,6 +20,7 @@ const CompeteBatchData = () => {
   // const [batchData,setBatchData]=useState({})
   const [currentStudentId, setCurrentStudentId] = useState(null);
   const [documentType, setDocumentType] = useState(null);
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
   const handlePrint = useReactToPrint({
     content: () =>
@@ -36,10 +37,9 @@ const CompeteBatchData = () => {
         },
       }));
       setCurrentStudentId(null);
-      setDocumentType(null);
+      setDocumentType(null); 
     },
   });
-
   const fetchStudentData = useCallback(async (studentId, type) => {
     setLoadingStates((prev) => ({
       ...prev,

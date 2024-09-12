@@ -164,7 +164,7 @@ const generateDummyData = useCallback((student) => {
     return {
       name: data.studentName,
       fatherName: data.fatherName,
-      dateOfBirth: data?.DOB ? data?.DOB.split('T')[0] : 'Loading...',
+      dateOfBirth: new Date(data.DOB).toISOString().split("T")[0],
       enrollmentNumber: data.Enrolment_number,
       subject: data.qualification,
       duration: `${data.duration} days`,
@@ -175,7 +175,7 @@ const generateDummyData = useCallback((student) => {
       state: data.state,
       grade: data.grade,
       placeOfIssue: data.placeOfIssue,
-      dateOfIssue: new Date().toISOString().split('T')[0], 
+      dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
     };

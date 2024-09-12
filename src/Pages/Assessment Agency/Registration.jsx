@@ -4,8 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { server } from "@/main";
 import { toast } from "react-toastify";
+import { Button } from "@/components(shadcn)/ui/button";
 
-const RegistrationForm = () => {
+const RegistrationForm = () => { 
   const navigate = useNavigate();
   const [agencyName, setAgencyName] = useState("");
   const [loading, setLoading] = useState(false); 
@@ -373,18 +374,6 @@ const RegistrationForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Application Status
-              </label>
-              <input
-                type="text"
-                name="applicationStatus"
-                value={applicationStatus}
-                onChange={handleChange}
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <div className="relative">
@@ -713,29 +702,17 @@ const RegistrationForm = () => {
                 <option value="false">Not Available</option>
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Role
-              </label>
-              <input
-                type="text"
-                name="role"
-                value={role}
-                readOnly
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
-            </div>
           </div>
           <div className="pt-5">
-            <button
+            <Button
               type="submit"
-              className="px-4 py-2 bg-[#A41034] text-white font-medium rounded-md shadow-md hover:bg-[#87112d]"
+              className="px-4 py-2  text-white font-medium rounded-md shadow-md hover:bg-[#11874e]"
             >
             {
               loading?"Submiting....":"Submit"
             }
               
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaFileUpload } from "react-icons/fa";
-import { useRecoilState } from "recoil";
+import {useRecoilValue } from "recoil";
 import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,14 +22,12 @@ const UploadDocuments = () => {
   const [isAttendanceFileSelected, setIsAttendanceFileSelected] = useState(false);
   const [isResultFileSelected, setIsResultFileSelected] = useState(false);
   const [isPhotosSelected, setIsPhotosSelected] = useState(false);
-  const assessmentAgencyId = useRecoilState(assessmentAgencyIdState);
+  const assessmentAgencyId = useRecoilValue(assessmentAgencyIdState);
 
   useEffect(() => {
     const fetchAssessors = async () => {
       try {
-        const response = await axios.get(
-          `${server}/assessor/aa/${assessmentAgencyId[0]}`
-        );
+        const response = await axios.get(`${server}/assessor/aa/${assessmentAgencyId}`);
         setAssessors(response.data.data);
         const storedAttendance = localStorage.getItem(`absentSudent_${batchId}`);
         if (storedAttendance !== null) {
@@ -40,7 +37,10 @@ const UploadDocuments = () => {
         toast.error("Error fetching assessors");
       }
     };
-    fetchAssessors();
+
+    if (assessmentAgencyId && batchId) {  // Fetch only if assessmentAgencyId and batchId are available
+      fetchAssessors();
+    }
   }, [assessmentAgencyId, batchId]);
 
   const handleSetAssessor = async (e) => {

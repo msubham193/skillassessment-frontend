@@ -4,7 +4,7 @@ import TopBar from '@/Components/Admin/Content/TopBar'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-const BatchWiseStudentResult = ({children}) => {       
+const BatchWiseStudentResult = ({children}) => {        
     const { id } = useParams();
     
   return (

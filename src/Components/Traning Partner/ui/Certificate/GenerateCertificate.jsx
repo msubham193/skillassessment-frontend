@@ -8,7 +8,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
   }
   const {
     name,
-    fatherName,
+    fatherName, 
     dateOfBirth,
     enrollmentNumber,
     subject,
@@ -31,7 +31,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
         className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto "
         ref={ref}
       >
-        <div className="w-full h-full absolute">
+        <div className="w-full h-full absolute"> 
           <img
             src="/Certificate.png"
             alt="Certificate Background"

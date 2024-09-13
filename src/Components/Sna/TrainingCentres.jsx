@@ -9,7 +9,7 @@ import { DataTable } from "../Admin/ui/notiification/DataTable";
 
 const TrainingCenters = () => {
   const [centerDetails, setCenterDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const state = localStorage.getItem("state");
   const schemeName = localStorage.getItem("scheme");
 

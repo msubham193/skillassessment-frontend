@@ -8,12 +8,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const UpdateBatchBox = () => {  
+const UpdateBatchBox = () => {   
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPreInvoice, setShowPreInvoice] = useState(false); 
   const [showPostInvoice, setShowPostInvoice] = useState(false);
+  const [isBatchApproved, setIsBatchApproved] = useState(false);
 
   // Function for fetching batch by id
   useEffect(() => {
@@ -33,7 +34,7 @@ const UpdateBatchBox = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id,isBatchApproved]);
 
   // Function for approving the payment
   const batchApproved = async () => {
@@ -49,6 +50,7 @@ const UpdateBatchBox = () => {
           },
         }
       );
+      setIsBatchApproved(true); 
       setLoading(false);
       toast.success(response.data.message, {
         position: "bottom-right",
@@ -159,7 +161,7 @@ const UpdateBatchBox = () => {
                     Post Invoice
                   </Button>
                 ) : (
-                  <p className="text-lg ">Payment Not Completed</p>
+                  <p className="text-lg text-red-600 ">Payment Not Completed</p>
                 )}
                 {showPostInvoice && data?.clientPaymentStatus && (
                   <div className="mt-4">
@@ -182,7 +184,7 @@ const UpdateBatchBox = () => {
                 <Button
                   onClick={batchApproved}
                   className="bg-green-600 hover:bg-green-400 w-full md:w-auto ml-3"
-                  disabled={!data.clientPaymentStatus || data.paymentStatus}
+                  disabled={!data.clientPaymentStatus || data.paymentStatus || isBatchApproved}
                 >
                   {loading
                     ? "Loading..."

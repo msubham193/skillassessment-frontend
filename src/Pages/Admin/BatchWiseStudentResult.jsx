@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom'
 
 const BatchWiseStudentResult = ({children}) => {        
     const { id } = useParams();
-    
-  return (
+     
+  return ( 
     <div>
     <div className='min-h-screen bg-white text-black flex flex-col'>
     {/*top Bar */}

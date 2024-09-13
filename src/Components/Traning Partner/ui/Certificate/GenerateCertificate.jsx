@@ -6,7 +6,7 @@ const GenerateCertificate = ({ data }) => {
     return <div>Loading...</div>;
   }
 
-  console.log("data comes", data);
+ 
 
   const {
     studentName,

@@ -62,7 +62,7 @@ const BatchManagementPage = () => {
       console.log(response);
     } catch (error) {
       console.error("Error", error);
-      toast.error("Error generating invoice. Please try again.");
+      toast.error(error.message);
     }
     finally{
       setLoading(false);

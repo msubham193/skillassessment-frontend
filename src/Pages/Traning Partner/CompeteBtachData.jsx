@@ -99,7 +99,7 @@ const CompeteBatchData = () => {
     if (!student) return null;
 
     return {
-      schemCode: student.marks.TrainingPartner || "N/A",
+      schemCode: student.marks?.TrainingPartner || "N/A",
       name: student.name,
       ward: student.fathername,
       qualificationName: student.course,

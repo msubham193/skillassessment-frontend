@@ -27,7 +27,7 @@ export const validationSchema = Yup.object({
   registeredOfficeTelephone: Yup.string()
     .matches(/^\d+$/, "Must be only digits")
     .required("Registered Office Telephone is required"),
-  registeredOfficeMobile: Yup.string()
+  registeredOfficeMobile: Yup.number()
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits")
     .required("Registered Office Mobile is required"),
   registeredOfficeFax: Yup.string()
@@ -49,10 +49,10 @@ export const validationSchema = Yup.object({
   regionalStateOfficePin: Yup.string()
     .matches(/^\d{6}$/, "PIN must be exactly 6 digits")
     .required("Regional State Office PIN is required"),
-  regionalStateOfficeTelephone: Yup.string()
+  regionalStateOfficeTelephone: Yup.number()
     .matches(/^\d+$/, "Must be only digits")
     .required("Regional State Office Telephone is required"),
-  regionalStateOfficeMobile: Yup.string()
+  regionalStateOfficeMobile: Yup.number()
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits")
     .required("Regional State Office Mobile is required"),
   regionalStateOfficeFax: Yup.string()
@@ -80,7 +80,7 @@ export const validationSchema = Yup.object({
   headOwnerMobile: Yup.string()
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits")
     .required("Head Owner Mobile is required"),
-  headOwnerAlternateMobile: Yup.string()
+  headOwnerAlternateMobile: Yup.number()
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
   headOwnerEmail: Yup.string()
     .email("Invalid Email")
@@ -105,10 +105,10 @@ export const validationSchema = Yup.object({
     .required("Project Contact Person Designation is required"),
   projectContactPersonCity: Yup.string()
     .required("Project Contact Person City is required"),
-  projectContactPersonMobile: Yup.string()
+  projectContactPersonMobile: Yup.number()
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits")
     .required("Project Contact Person Mobile is required"),
-  projectContactPersonAlternateMobile: Yup.string()
+  projectContactPersonAlternateMobile: Yup.number()
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
   projectContactPersonResidenceAddress: Yup.string()
     .required("Project Contact Person Residence Address is required"),

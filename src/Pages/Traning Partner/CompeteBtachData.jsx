@@ -100,31 +100,31 @@ const CompeteBatchData = () => {
 
     return {
       schemCode: student.marks?.TrainingPartner || "N/A",
-      name: student.name,
-      ward: student.fathername,
-      qualificationName: student.course,
-      qualificationCode: student.marks.batchABN
+      name: student?.name,
+      ward: student?.fathername,
+      qualificationName: student?.course,
+      qualificationCode: student?.marks?.batchABN
         ? student.marks.batchABN.split("/")[1]
         : "N/A",
       nsqfLevel: "5",
-      sector: student.sector_name,
+      sector: student?.sector_name,
       duration: `${student.totaldays} days`,
       assessorRegNo: "AR123456",
       dob: new Date(student.dob).toISOString().split("T")[0],
-      assessmentBatchNo: student.marks.batchABN,
-      assessmentDate: student.marks.examDate
+      assessmentBatchNo: student.marks?.batchABN,
+      assessmentDate: student.marks?.examDate
         ? new Date(student.marks.examDate).toISOString().split("T")[0]
         : "N/A",
-      nosMarks: student.marks.Nos.map((nos, index) => ({
-        code: nos.code,
-        name: nos.name,
-        type: "Theory",
-        maxMarks: nos.passMark,
-        marksObtained: nos.MarksObtained,
+      nosMarks: student?.marks.Nos.map((nos, index) => ({
+        code: nos?.code,
+        name: nos?.name,
+        type: "Theory & Practical",
+        maxMarks: nos?.passMark,
+        marksObtained: nos?.MarksObtained,
       })),
-      totalMarks: student.marks.total,
-      grade: student.marks.Grade,
-      result: student.marks.Result, 
+      totalMarks: student?.marks?.total,
+      grade: student?.marks?.Grade,
+      result: student?.marks?.Result, 
       dateOfIssue: new Date().toISOString().split("T")[0],
       certificateNo: `CERT${student.redg_No}`,
       studentId: student._id,

@@ -85,9 +85,9 @@ const DataTable = ({batchId}) => {
                     <AvatarFallback>{student.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </TableCell>
-                <TableCell className="text-white">{student.name}</TableCell>
-                <TableCell className="text-white">{student.MPR_Id}</TableCell>
-                <TableCell className="text-white">{student.SNA_Id}</TableCell>
+                <TableCell className="text-black">{student.name}</TableCell>
+                <TableCell className="text-black">{student.MPR_Id}</TableCell>
+                <TableCell className="text-black">{student.SNA_Id}</TableCell>
                 <TableCell className="text-center">
                   <Button
                     className="text-blue-500 hover:underline"

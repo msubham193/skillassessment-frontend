@@ -41,7 +41,7 @@ const Student = () => {
                     <Button 
                     className="bg-blue-500"
                         variant=""
-                        onClick={() => navigate(`/trainingPartner/dashboard/${batchId}`)}
+                        onClick={() => navigate(`/trainingPartner/viewBatch/${batchId}`)}
                     >
                         Back to Students
                     </Button>

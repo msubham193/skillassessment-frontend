@@ -59,9 +59,9 @@ useEffect(()=>{
                         <AvatarFallback>{teacher.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                     </TableCell>
-                    <TableCell className="text-white">{teacher.name}</TableCell>
-                    <TableCell className="text-white">{teacher.email}</TableCell>
-                    <TableCell className="text-white">{teacher.phoneNumber}</TableCell>
+                    <TableCell className="text-black">{teacher.name}</TableCell>
+                    <TableCell className="text-black">{teacher.email}</TableCell>
+                    <TableCell className="text-black">{teacher.phoneNumber}</TableCell>
                     <TableCell className="text-center">
                        {console.log("id",teacher._id)}
                       <Button

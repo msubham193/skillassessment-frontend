@@ -1,10 +1,9 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Building2, BarChart, Calendar, Book } from "lucide-react";
 import { batchDataAtoms } from "@/Components/Traning Partner/Atoms/batchatom";
 import { Button } from "@/components(shadcn)/ui/button";
-import { useParams } from 'react-router-dom';
 import {
   Tabs,
   TabsContent,
@@ -15,9 +14,9 @@ import DataTable from "@/Components/Traning Partner/ui/StudentDataTable";
 import TrainersTable from "@/Components/Traning Partner/ui/TrainersTable";
 
 const Batch = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const batchData = useRecoilValue(batchDataAtoms);
-const{batchId}=useParams();
+  const { batchId } = useParams();
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -33,9 +32,9 @@ const{batchId}=useParams();
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-900 text-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col min-h-screen bg-white text-black">
       {/* Upper navbar section */}
-      <div className="w-full flex justify-end items-center mb-6">
+      <div className="w-full flex justify-end items-center p-4 bg-gray-100">
         <Button
           className="bg-blue-600 hover:bg-blue-700 transition-colors"
           onClick={() => navigate("/trainingPartner/dashboard")}
@@ -43,10 +42,10 @@ const{batchId}=useParams();
           Back to Dashboard
         </Button>
       </div>
-      <hr className="border-gray-700 my-6" />
-      
-      {/* Batch details section */}
-      <div className="flex flex-col lg:flex-row gap-8">
+      <hr className="border-gray-300" />
+
+      {/* Main content */}
+      <div className="flex-grow flex flex-col lg:flex-row p-6 gap-8 overflow-auto">
         {/* Batch Details */}
         <div className="w-full lg:w-1/4 flex flex-col gap-6">
           <h1 className="text-2xl font-semibold mb-4">
@@ -81,9 +80,9 @@ const{batchId}=useParams();
             </div>
           </div>
         </div>
-        
-        <div className="hidden lg:block w-px bg-gray-700 self-stretch mx-4"></div>
-        
+
+        <div className="hidden lg:block w-px bg-gray-300 self-stretch mx-4"></div>
+
         {/* Students and trainers Details */}
         <div className="w-full lg:w-3/4">
           <Tabs defaultValue="student" className="w-full">
@@ -104,4 +103,4 @@ const{batchId}=useParams();
   );
 };
 
-export default Batch; 
+export default Batch;

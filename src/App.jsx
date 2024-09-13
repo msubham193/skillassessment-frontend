@@ -32,9 +32,7 @@ import Signup from "./Pages/Traning Partner/Signup";
 import ApllicationStatusFail from "./Pages/Traning Partner/ApllicationStatusFail";
 import Signin from "./Pages/Traning Partner/Signin";
 import ProfilePopup from "./Pages/Traning Partner/ProfilePopup";
-import Teachers from "./Pages/Traning Partner/BulkTrainerAdd";
 import CreateBatch from "./Pages/Traning Partner/CreateBatch";
-import AddTeacher from "./Pages/Traning Partner/AddTrainer";
 import AddStudent from "./Pages/Traning Partner/AddStudent";
 import Batch from "./Pages/Traning Partner/Batch";
 import Student from "./Pages/Traning Partner/Student";
@@ -106,6 +104,8 @@ import TrainingCenters from "./Components/Sna/TrainingCentres";
 import CenterDetailsofSNA from "./Pages/Sna/CenterDetailsofSNA"; 
 import TCDetails from "./Components/Sna/TCDetails";
 import TBDetails from "./Components/Sna/TBDetails";
+import AddBulkTrainer from "./Pages/Traning Partner/BulkTrainerAdd";
+import AddTrainer from "./Pages/Traning Partner/AddTrainer";
 
 
 
@@ -313,7 +313,7 @@ const App = () => {
           <Route
             path="/trainingPartner/dashboard/Teachers"
             exact
-            element={<Teachers batchid={batchId} />}
+            element={<AddBulkTrainer batchid={batchId} />}
           />
           <Route path="/CreateBatch" exact element={<CreateBatch />} />
           <Route path="/Createcenter" exact element={<CreateCenter />} />
@@ -329,14 +329,9 @@ const App = () => {
           />
           <Route path="batchstudents/:batchId" element={<StudentDetails />} />
           <Route
-            path="/trainingPartner/dashboard/CreateBatch/addteacher/:id"
-            exact
-            element={<AddTeacher />}
-          />
-          <Route
             path="/trainingPartner/dashboard/CreateBatch/addteacher"
             exact
-            element={<AddTeacher />}
+            element={<AddTrainer />}
           />
           <Route
             path="/trainingPartner/dashboard/CreateBatch/addstudent/:id"
@@ -344,7 +339,7 @@ const App = () => {
             element={<AddStudent>{"Add Student"}</AddStudent>}
           />
           <Route
-            path="/trainingPartner/dashboard/:batchId"
+            path="/trainingPartner/viewBatch/:batchId"
             element={<Batch />}
           />
           <Route

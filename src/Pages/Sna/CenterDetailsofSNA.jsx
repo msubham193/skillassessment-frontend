@@ -30,10 +30,11 @@ import { toast } from "react-toastify";
 const CenterDetailsofSNA = () => {
   const { centerId } = useParams();
   const [data, setData] = useState({});
-  const [isApproaved, setIsApproaved] = useState(false);
+  const [isApproaved, setIsApproaved] = useState(false); 
   const [loading, setLoading] = useState(false);
   const state = localStorage.getItem("state");
   const schemeName = localStorage.getItem("scheme");
+  const [isBatchApproved, setIsBatchApproved] = useState(false);
 
 
   //here is the function for get the details of traning center
@@ -54,7 +55,7 @@ const CenterDetailsofSNA = () => {
       }
     };
     fetchBatchDetails();
-  }, [centerId]);
+  }, [centerId,isBatchApproved]);
 
   const handleApproval = async () => {
     setLoading(true);
@@ -63,6 +64,7 @@ const CenterDetailsofSNA = () => {
         `${server}/sna/center/approve/${centerId}`,
         { state, schemeName }
       );
+      setIsBatchApproved(true)
       setIsApproaved(true)
       console.log(response);
       toast.success("Center Approve successfully", {
@@ -95,6 +97,7 @@ const CenterDetailsofSNA = () => {
         draggable: true,
         theme: "colored",
       });
+setIsBatchApproved(true)
       // console.log(response);
       // navigate("/trainingbatches");
     } catch (error) {
@@ -235,14 +238,18 @@ const CenterDetailsofSNA = () => {
           <Separator/>
           <div className="flex justify-end mt-8">
           <button
-            onClick={handleApproval}
-            disabled={isApproaved}
-            className={`px-6 py-2 text-white rounded-lg transition duration-300 mr-4 ${
-              isApproaved ? "bg-green-300" : "bg-green-600 hover:bg-green-700"
-            }`}
-          >
-          {loading ? <Loader2 size={20} className="animate-spin" /> : "Approve"}
-          </button>
+          onClick={handleApproval}
+          disabled={isApproaved || isBatchApproved}
+          className={`px-6 py-2 text-white rounded-lg transition duration-300 mr-4 ${
+            isApproaved ? "bg-green-300" : "bg-green-600 hover:bg-green-700"
+          }`}
+        >
+          {loading ? (
+            <Loader2 size={20} className="animate-spin" />
+          ) : isApproaved?"Approved": (
+            "Approve"
+          )}
+        </button>
           <button
             onClick={handleRejection}
             disabled={isApproaved}

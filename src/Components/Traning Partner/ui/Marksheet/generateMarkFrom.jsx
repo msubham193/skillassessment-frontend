@@ -1,10 +1,11 @@
 import React, { forwardRef } from "react";
 import QRCode from "qrcode.react";
+import { data } from "autoprefixer";
 const GenerateMarksheetFrom = forwardRef((props, ref) => {
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
   }
-
+// console.log(props.data);
   // const {
   //   schemCode,
   //   name,
@@ -44,7 +45,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
           </h1>
           <p className="text-lg mb-2">(NCVET recognized Awarding Body)</p>
           <p className="text-lg mb-2">
-            Scheme- <span>{props.data.marks.TrainingPartner}</span>
+            Scheme- <span>{props.data?.marks?.TrainingPartner}</span>
           </p>
           <h2 className="text-2xl font-bold text-green-600 border-t-2 border-b-2 border-green-600 inline-block px-4 py-1">
             M A R K S H E E T
@@ -52,26 +53,25 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
         </div>
         <img src="/ncevt.jpg" alt="NCVET Logo" className="w-28 h-28" />
       </div>
-
       <table className="w-full mb-2 border-collapse">
         <tbody>
           <tr className="border">
             <td className="border px-2 py-1 font-medium w-1/3">
               Name of Student:
             </td>
-            <td className="border px-2 py-1 w-2/3">{props.data.name}</td>
+            <td className="border px-2 py-1 w-2/3">{props.data?.name}</td>
           </tr>
           <tr className="border">
             <td className="border px-2 py-1 font-medium w-1/3">
               Son/Daughter/Ward of:
             </td>
-            <td className="border px-2 py-1 w-2/3">{props.data.fathername}</td>
+            <td className="border px-2 py-1 w-2/3">{props.data?.fathername}</td>
           </tr>
           <tr className="border">
             <td className="border px-2 py-1 font-medium w-1/3">
               Qualification Name:
             </td>
-            <td className="border px-2 py-1 w-2/3">{props.data.course}</td>
+            <td className="border px-2 py-1 w-2/3">{props.data?.course}</td>
           </tr>
           <tr className="border">
             <td className="border px-2 py-1 font-medium w-1/3">
@@ -85,12 +85,12 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
           </tr>
           <tr className="border">
             <td className="border px-2 py-1 font-medium w-1/3">Sector:</td>
-            <td className="border px-2 py-1 w-2/3">{props.data.sector_name}</td>
+            <td className="border px-2 py-1 w-2/3">{props.data?.sector_name}</td>
           </tr>
           <tr className="border">
             <td className="border px-2 py-1 font-medium w-1/3">Duration:</td>
             <td className="border px-2 py-1 w-2/3">
-              {props.data.totaldays} Days
+              {props.data?.totaldays} Days
             </td>
           </tr>
         </tbody>
@@ -105,8 +105,8 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
             <td className="border px-1 py-1 w-1/2">Date of Birth</td>
           </tr>
           <tr className="text-center">
-            <td className="border px-1 py-1">{props.data.redg_No || "NA"}</td>
-            <td className="border px-1 py-1">{props.data.marks.studentDOB}</td>
+            <td className="border px-1 py-1">{props.data?.redg_No || "NA"}</td>
+            <td className="border px-1 py-1">{props.data?.marks?.studentDOB}</td>
           </tr>
         </tbody>
       </table>
@@ -118,10 +118,10 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
             <td className="border px-1 py-1 w-1/2">Assessment Date</td>
           </tr>
           <tr className="text-center">
-            <td className="border px-1 py-1">{props.data.marks.batchABN}</td>
+            <td className="border px-1 py-1">{props.data?.marks?.batchABN}</td>
             <td className="border px-1 py-1">
-              {props.data.marks.examDate
-                ? new Date(props.data.marks.examDate).toLocaleDateString()
+              {props.data?.marks?.examDate
+                ? new Date(props.data?.marks?.examDate).toLocaleDateString()
                 : "N/A"}
             </td>
           </tr>
@@ -139,8 +139,8 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
           </tr>
         </thead>
         <tbody>
-          {props.data.marks.Nos &&
-            props.data.marks.Nos.map((nos, index) => (
+          {props.data?.marks?.Nos &&
+            props.data?.marks?.Nos.map((nos, index) => (
               <tr key={index}>
                 <td className="border px-1 py-1">{nos.code}</td>
                 <td className="border px-1 py-1">{nos.name}</td>
@@ -159,7 +159,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
               Total Marks Obtained
             </td>
             <td className="w-1/2 border px-1 py-1 text-center">
-              {props.data.marks.total}
+              {props.data?.marks?.total}
             </td>
           </tr>
           <tr>
@@ -167,7 +167,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
               Grade
             </td>
             <td className="w-1/2 border px-1 py-1 text-center">
-              {props.data.marks.Grade}
+              {props.data?.marks?.Grade}
             </td>
           </tr>
           <tr>
@@ -175,7 +175,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
               Result
             </td>
             <td className="w-1/2 border px-1 py-1 text-center">
-              {props.data.marks.Result}
+              {props.data?.marks?.Result}
             </td>
           </tr>
         </tbody>
@@ -185,7 +185,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
         <div>
           <div className="mb-6">
             <QRCode
-              value={`https://student-details-by-qr-scan.vercel.app/${props.data._id}`}
+              value={`https://student-details-by-qr-scan.vercel.app/${props.data?._id}`}
               size={60}
             />
           </div>
@@ -195,7 +195,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
               <span>{new Date().toISOString().split("T")[0]}</span>
             </p>
             <p>
-              Certificate No: <span>{`CERT${props.data.redg_No}`}</span>
+              Certificate No: <span>{`CERT${props.data?.redg_No}`}</span>
             </p>
           </div>
         </div>

@@ -3,10 +3,8 @@ import QRCode from "qrcode.react";
 
 const GenerateCertificate = ({ data }) => {
   if (!data) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; 
   }
-
- 
 
   const {
     studentName,
@@ -44,7 +42,7 @@ const GenerateCertificate = ({ data }) => {
           <div className="w-[103px] border ml-[82%] mt-[61px]">
             <img
               className="h-28 w-24 object-cover"
-              src={convertedImageUrl}
+              src={convertedImageUrl ||data?.stutentProfilePic}
               alt="Student"
             />
           </div>

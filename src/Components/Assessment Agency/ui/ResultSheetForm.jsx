@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { useEffect, useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 import logo from "../../../assets/logo.png";
 import { useRecoilState } from "recoil";
 import { examIdState } from "../Atoms/AssessmentAgencyAtoms";
@@ -9,7 +7,7 @@ import axios from "axios";
 import { server } from "@/main";
 
 const ResultSheetForm = () => {
-  const pdfRef = useRef();
+  const componentRef = useRef();
   const examId = useRecoilState(examIdState);
   const [tpName, setTpName] = useState("");
   const [aaName, setAaName] = useState("");
@@ -24,6 +22,28 @@ const ResultSheetForm = () => {
   const [aaLogo, setAaLogo] = useState(null);
   const [students, setStudents] = useState([]);
 
+  const printStyles = `
+  @page {
+    size: auto;
+    margin: 0mm;
+  }
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .pdf-section {
+      width: 100%;
+      height: 100%;
+      page-break-after: always;
+    }
+  }
+`;
+
   useEffect(() => {
     const fetchData = async () => {
       console.log(examId);
@@ -31,7 +51,7 @@ const ResultSheetForm = () => {
         const response = await axios.get(
           `${server}/exam/attendance/${examId[0]}`
         );
-        console.log(response); // Ensure the structure matches your needs
+        console.log(response);
         const data = response.data.data;
         setAaLogo(data.assesmentAgencyId.logo);
         setTpName(data.TrainingOrganization);
@@ -52,89 +72,59 @@ const ResultSheetForm = () => {
 
     fetchData();
   }, []);
-  const downloadPDF = () => {
-    const input = pdfRef.current;
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
 
-      // Adjust dimensions to fill the page
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const imgX = 0; // Start at the top-left corner
-      const imgY = 0; // Start at the top-left corner
-      const adjustedWidth = pdfWidth; // Adjust to PDF width
-      const adjustedHeight = pdfHeight; // Adjust to PDF height
-
-      pdf.addImage(imgData, "PNG", imgX, imgY, adjustedWidth, adjustedHeight);
-      pdf.save("result-sheet.pdf");
-    });
-  };
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    pageStyle: printStyles,
+  });
 
   return (
-    <div className="p-12 h-full">
-      <div className="" ref={pdfRef}>
+    <div className="p-12 max-w-5xl m-auto h-full">
+      <div ref={componentRef}>
         <div className="pdf-section p-12 h-full">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex gap-16">
-              <div className="mr-28">
-                <img
-                  src={logo}
-                  alt="Centurion University Logo"
-                  className="h-48 w-36"
-                />
-              </div>
-              <div className="ml-16 mr-12 text-center">
-                <h2 className="text-lg font-semibold ">
+          <div className="flex items-center justify-around mb-4 ">
+            <img src={logo} alt="" className="h-20 w-25 object-cover" />
+            <div>
+              <div className=" text-center">
+                <h2 className="text-sm font-semibold ">
                   CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT
                 </h2>
                 <p className="text-lg">(NCVET Recognized Awarding Body)</p>
-                <h3 className="text-xl font-bold mt-10">Result SHEET</h3>
-              </div>
-              <div>
-                <div className="ml-28">
-                  <img
-                    src={aaLogo}
-                    alt="Centurion University Logo"
-                    className="h-48 w-36"
-                  />
-                </div>
+                <h3 className="text-xl font-bold mt-10">RESULT SHEET</h3>
               </div>
             </div>
+            <img src={aaLogo} alt="" className="max-h-20 max-w-20 bg-black object-cover" />
           </div>
           <table className="w-full border-collapse border border-black mb-4">
             <tbody>
               <tr className="">
-                <td className="border border-black p-2 w-1/2 text-xl font-semibold text-center text-gray-400">
+                <td className="border border-black p-2 w-1/2  text-center text-gray-400">
                   Name of Assessment Agency
                 </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   {aaName}
                 </td>
               </tr>
               <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center text-gray-400">
+                <td className="border border-black p-2  text-center text-gray-400">
                   Training Partner Name
                 </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   {tpName}
                 </td>
               </tr>
               <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Center Name :
                     </h2>
                     {centerName}
                   </div>
                 </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Center ID :
                     </h2>
                     {centId}
@@ -142,17 +132,17 @@ const ResultSheetForm = () => {
                 </td>
               </tr>
               <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Batch ABN :
                     </h2>
                     {abn}
                   </div>
                 </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2 text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Sector :
                     </h2>
                     {sector}
@@ -160,17 +150,17 @@ const ResultSheetForm = () => {
                 </td>
               </tr>
               <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Course Name :
                     </h2>
                     {courseName}
                   </div>
                 </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Course Code :
                     </h2>
                     {courseCode}
@@ -178,17 +168,17 @@ const ResultSheetForm = () => {
                 </td>
               </tr>
               <tr>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black p-2  text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Exam Date :
                     </h2>
                     {examDate}
                   </div>
                 </td>
-                <td className="border border-black p-2 text-xl font-semibold text-center">
+                <td className="border border-black text-center">
                   <div className="flex justify-center">
-                    <h2 className="text-xl font-semibold text-center text-gray-400 mr-2">
+                    <h2 className=" text-center text-gray-400 mr-2">
                       Batch No. :
                     </h2>
                     {batchNo}
@@ -284,11 +274,12 @@ const ResultSheetForm = () => {
           </div>
         </div>
       </div>
+
       <button
         className="btn bg-[#0066ff] text-base text-white font-semibold px-3 py-1 rounded duration-500 hover:bg-[#3f37c9]"
-        onClick={downloadPDF}
+        onClick={handlePrint}
       >
-        Download PDF
+        Print Result Sheet
       </button>
     </div>
   );

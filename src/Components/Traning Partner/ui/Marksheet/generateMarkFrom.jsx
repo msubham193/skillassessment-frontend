@@ -4,7 +4,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
   }
-  console.log("props", props);
+
   // const {
   //   schemCode,
   //   name,
@@ -26,7 +26,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
   //   certificateNo,
   //   studentId,
   // } = props.data;
-  console.log("marksheet data", props);
+
   return (
     <div
       ref={ref}

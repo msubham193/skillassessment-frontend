@@ -59,7 +59,7 @@ const ViewSectorAndCourse = () => {
   
         setCourse(response.data.data.reverse());
      
-      console.log(response.data.data.reverse());
+      // console.log(response.data.data.reverse());
   
       } catch (error) {
         console.log(error);
@@ -85,7 +85,7 @@ const ViewSectorAndCourse = () => {
   if(sectors.length==0)
   {
     return(
-      <div className="text-3xl font-semibold flex justify-center mt-44 text-purple-800">Oops no sector and course avable yet !!</div>
+      <div className="text-3xl font-semibold flex justify-center mt-44 text-purple-800">Oops no sector and course availabil yet !!</div>
   )
   }
 

@@ -61,7 +61,7 @@ const AaDetailsBox = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
-          // console.log(response.data.data);
+          console.log(response.data.data);
           setReferesh((prev) => !prev);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sectors);
@@ -80,9 +80,9 @@ const AaDetailsBox = ({ id }) => {
   const applicationApproved = async () => {
     setLoding(true);
     const token = authState.token;
-    console.log(token)
+    console.log(token);
     if (!token) {
-      console.log("Admin not  found"); 
+      console.log("Admin not  found");
       return;
     }
     try {
@@ -122,7 +122,7 @@ const AaDetailsBox = ({ id }) => {
     const token = authState.token;
     if (!token) {
       console.log("Admin not  found");
-      return; 
+      return;
     }
     try {
       const responce = await axios.put(
@@ -267,7 +267,9 @@ const AaDetailsBox = ({ id }) => {
               </div>
               <Separator />
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Geographical Information</h3>
+                <h3 className="font-semibold text-lg">
+                  Geographical Information
+                </h3>
                 <p>Region: {data.geographical_region ?? "N/A"}</p>
                 <p>State: {data.state_Under_geographicalRegion ?? "N/A"}</p>
               </div>
@@ -307,7 +309,9 @@ const AaDetailsBox = ({ id }) => {
               </div>
               <Separator />
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Additional Information</h3>
+                <h3 className="font-semibold text-lg">
+                  Additional Information
+                </h3>
                 {data.LETTER_OF_NCVET && (
                   <p>
                     <a
@@ -337,12 +341,13 @@ const AaDetailsBox = ({ id }) => {
           <div className="p-8 w-[500px]">
             <form onSubmit={applicationApproved}>
               <Label htmlFor="name" className="text-left w-40 text-lg">
+              <p className="text-sm text-red-600">Note*</p>
                 Add Share in Percentege for this Assessment agency..
               </Label>
               <Input
                 id="scheme-name"
-                className="col-span-4 py-6 mt-2"
-                placeholder="Add amount in percentage"
+                className="col-span-4 py-6 mt-2 bg-green-100"
+                placeholder="Add amount in percentage here..."
                 value={percentage}
                 onChange={(e) => setPercentage(e.target.value)}
               />
@@ -357,9 +362,8 @@ const AaDetailsBox = ({ id }) => {
             onClick={applicationReject}
             className="bg-red-600 hover:bg-red-400  w-full md:w-auto mb-4 md:mb-0 "
             disabled={
-              data?.applicationStatus === "Approved" ||
-              percentage === null ||
-              data?.applicationStatus === "Rejected"
+              data?.applicationStatus === "Rejected" ||
+              data?.applicationStatus === "Approved"
             }
           >
             {" "}
@@ -369,20 +373,40 @@ const AaDetailsBox = ({ id }) => {
               ? "Rejected"
               : "Reject"}
           </Button>
-          <Button
-            onClick={applicationApproved}
-            className=" bg-green-600 hover:bg-green-400 w-full md:w-auto"
-            disabled={
-              data?.applicationStatus === "Rejected" ||
-              data?.applicationStatus === "Approved"
-            }
-          >
-            {loding
-              ? "Loding..."
-              : data.applicationStatus === "Approved"
-              ? "Approved"
-              : "Approve"}
-          </Button>
+          <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="w-full md:w-auto">
+                <Button
+                  onClick={applicationApproved}
+                  className="bg-green-600 hover:bg-green-400 w-full md:w-auto"
+                  disabled={
+                    data?.applicationStatus === "Rejected" ||
+                    data?.applicationStatus === "Approved" ||
+                    percentage === null ||
+                    percentage === ""
+                  }
+                >
+                  {loding
+                    ? "Loding..."
+                    : data.applicationStatus === "Approved"
+                    ? "Approved"
+                    : "Approve"}
+                </Button>
+              </div>
+            </TooltipTrigger>
+            {/* Show tooltip if the button is disabled */}
+            {(data?.applicationStatus === "Rejected" ||
+              data?.applicationStatus === "Approved" ||
+              percentage === null ||
+              percentage === "") && (
+              <TooltipContent side="top">
+                Please fill in the percentage or ensure the agency is not already approved or rejected.
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
+        
         </div>
       </div>
     </TooltipProvider>

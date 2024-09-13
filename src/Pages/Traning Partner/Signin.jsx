@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
-import { Loader } from 'lucide-react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Loader, LoaderCircle } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { server } from "@/main";
 import { tokenAtoms } from "@/Components/Traning Partner/Atoms/tokenAtom";
+import logo from "../../assets/logo.png";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -40,42 +41,46 @@ const Signin = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          registeredOfficeEmail,  
+          registeredOfficeEmail,
           password,
         }),
       });
 
       const data = await response.json();
-      console.log('Response Data:', data);
+      console.log("Response Data:", data);
 
       if (!response.ok) {
-        throw new Error(data.message || 'Invalid credentials');
+        throw new Error(data.message || "Invalid credentials");
       }
       setResponseData(data.data.data);
       setToken(data.data.token);
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("trainingPartnerId", data.data.data._id);
       toast.success(data.message);
-      console.log("satatus",data.data.data.applicationStatus)
-      if ( data.data.data.applicationStatus === "Approved") {
+      console.log("satatus", data.data.data.applicationStatus);
+      if (data.data.data.applicationStatus === "Approved") {
         navigate("/trainingPartner/dashboard");
       } else {
         navigate("/statusFail");
       }
     } catch (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
       toast.error("Please provide valid credentials");
     } finally {
       setIsLoading(false);
     }
   };
   return (
-    <div className="h-screen flex justify-center items-center p-4 bg-black">
-      <div className="bg-black w-[400px] h-[400px] rounded-md pt-8 border border-gray-800">
-        <div className="flex justify-center font-medium text-lg m-6 text-white">
-          Training Partner Signin
+    <div className="h-screen flex justify-center items-center p-4 bg-[#F3F6F8]">
+      <div className=" w-[400px] h-[500px] p-4 pt-8 shadow-xl bg-[#FFFFFF] rounded-md ">
+        <div className="w-full  flex flex-row justify-center">
+          <img src={logo} alt="" className="h-20 text-center  " />
         </div>
-        <div className="p-4">
+        <div className="flex justify-center font-medium text-lg m-6  text-gray-900">
+          Training Partner 
+        </div>
+       
+        <div className="px-4 ">
           <div>
             <label className="text-white">Email</label>
             <Input
@@ -83,9 +88,10 @@ const Signin = () => {
               value={registeredOfficeEmail}
               onChange={handleEmailChange}
               placeholder="registered office email"
-              className="bg-transparent text-white"
+              className="bg-transparent focus-visible:ring-transparent text-black p-3 outline-none border-black"
             />
           </div>
+          
           <div className="relative">
             <label className="text-white">Password</label>
             <Input
@@ -93,29 +99,32 @@ const Signin = () => {
               value={password}
               onChange={handlePasswordChange}
               placeholder="password"
-              className="bg-transparent text-white"
+              className="bg-transparent focus-visible:ring-transparent text-black border-black p-3"
             />
             <button
               type="button"
               className="absolute right-3 top-9 text-gray-600"
               onClick={togglePasswordVisibility}
             >
-              {showPassword ? <EyeOff /> : <Eye />}
+              {showPassword ? <Eye /> : <EyeOff />}
             </button>
           </div>
         </div>
-        <div className="flex justify-center pt-8">
-          <Button className="w-full m-3 bg-violet-700" onClick={handleSignin}>
-            {isLoading ? <Loader /> : "Login"}
+        <div className="flex justify-center ">
+          <Button className="w-full m-3 mt-6 py-2   bg-violet-700" onClick={handleSignin}>
+            {isLoading ? <LoaderCircle className="animate-spin" /> : "Login"}
           </Button>
         </div>
-        <div className="flex justify-between pt-8">
-          <Button className="w-[48%] m-3 bg-violet-700" onClick={() => navigate('/trainingPartner/signup')}>
-            Back to Signup
-          </Button>
-          <Button className="w-[48%] m-3 bg-violet-700" onClick={() => navigate('/')}>
-            Back to Home
-          </Button>
+        <div className="ml-4">
+          <p>
+            New here ?{" "}
+            <span
+              className="cursor-pointer text-blue-700"
+              onClick={() => navigate("/trainingPartner/signup")}
+            >
+              create a new Account{" "}
+            </span>
+          </p>
         </div>
       </div>
     </div>

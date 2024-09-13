@@ -1,6 +1,22 @@
 import React, { forwardRef } from "react";
 import QRCode from "qrcode.react";
 
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) throw new Error("Invalid date");
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return dateString; // Return original string if parsing fails
+  }
+};
+
 const GenerateCertificate = forwardRef((props, ref) => {
   console.log(props.data);
   if (!props.data) {
@@ -24,6 +40,9 @@ const GenerateCertificate = forwardRef((props, ref) => {
     studentId,
     studentImageUrl,
   } = props.data;
+
+  const formattedDateOfBirth = formatDate(dateOfBirth);
+  const formattedDateOfIssue = formatDate(dateOfIssue);
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -49,49 +68,49 @@ const GenerateCertificate = forwardRef((props, ref) => {
           </div>
           {/* Student Name */}
           <div className="mt-[115px] ml-[40%]">
-            <p className="text-[12px] font-semibold">{name}</p>
+            <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
           <div className="mt-[25px] ml-[28%] flex">
-            <p className=" text-[12px] font-semibold">{fatherName}</p>
-            <p className=" ml-[255px] text-[12px] font-semibold">
-              {dateOfBirth}
+            <p className=" text-[12px] font-semibold">{fatherName || "N/A"}</p>
+            <p className=" ml-[225px] text-[12px] font-semibold">
+              {formattedDateOfBirth || "N/A"}
             </p>
             <p className=" ml-[130px] text-[12px] font-semibold">
-              {enrollmentNumber}
+              {enrollmentNumber || "N/A"}
             </p>
           </div>
           {/* Subject Name */}
           <div className="mt-[22px] ml-[50%]">
-            <p className="text-[12px] font-semibold">{subject}</p>
+            <p className="text-[12px] font-semibold">{subject || "N/A"}</p>
           </div>
           {/* Duration, Credit, Level */}
           <div className="mt-[22px] ml-[25%] flex items-center">
-            <p className=" text-[12px] font-semibold">{duration}</p>
-            <p className=" ml-[305px] text-[12px] font-semibold">{credit}</p>
+            <p className=" text-[12px] font-semibold">{duration || "N/A"}</p>
+            <p className=" ml-[305px] text-[12px] font-semibold">{credit || "N/A"}</p>
             <p className=" ml-[240px] text-[12px] mt-2 font-semibold">
-              {level}
+              {level || "N/A"}
             </p>
           </div>
           {/* Training Center, District, State */}
           <div className="mt-[18px] ml-[20%] flex items-center">
             <p className=" text-xs font-semibold mb-2 sm:mb-0">
-              {trainingCenter}
+              {trainingCenter || "N/A"}
             </p>
-            <p className=" ml-[350px] text-xs font-semibold mb-2 sm:mb-0">{district}</p>
-            <p className=" ml-[140px] text-xs font-semibold">{state}</p>
+            <p className=" ml-[350px] text-xs font-semibold mb-2 sm:mb-0">{district || "N/A"}</p>
+            <p className=" ml-[140px] text-xs font-semibold">{state || "N/A"}</p>
           </div>
           {/* Grade */}
           <div className="mt-[30px] ml-[13%] flex items-center">
-            <p className=" text-[12px] font-bold">{grade}</p>
+            <p className=" text-[12px] font-bold">{grade || "N/A"}</p>
           </div>
           {/* Place of Issue */}
           <div className="mt-[18px] ml-[18%] flex items-center">
-            <p className=" text-[12px] font-semibold">{placeOfIssue}</p>
+            <p className=" text-[12px] font-semibold">{placeOfIssue || "N/A"}</p>
           </div>
           {/* Date of Issue */}
           <div className="mt-[12px] ml-[18%] flex items-center">
-            <p className=" text-[12px] font-semibold">{dateOfIssue}</p>
+            <p className=" text-[12px] font-semibold">{formattedDateOfIssue || "N/A"}</p>
           </div>
           <div className="absolute bottom-[90px] left-[749px] w-[54px] h-[54px] bg-white">
             <div className="w-full h-full">
@@ -117,7 +136,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
           </div>
           <div className="absolute bottom-[45px] left-[77px]">
             <QRCode
-              value={`https://student-details-by-qr-scan.vercel.app/${studentId}`}
+              value={`https://student-details-by-qr-scan.vercel.app/${studentId || ""}`}
               size={44}
             />
           </div>

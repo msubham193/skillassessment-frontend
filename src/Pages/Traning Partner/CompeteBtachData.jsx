@@ -1,8 +1,6 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { createRoot } from 'react-dom/client';
+import { useReactToPrint } from "react-to-print";
 import TopBar from "@/Components/Traning Partner/TopBar";
 import SideNav from "@/Components/Traning Partner/SideNav";
 import { Button } from "@/components(shadcn)/ui/button";
@@ -11,119 +9,48 @@ import { CompeltebatchDataAtoms } from "@/Components/Traning Partner/Atoms/compl
 import GenerateMarksheetFrom from "@/Components/Traning Partner/ui/Marksheet/generateMarkFrom";
 import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 import { server } from "@/main";
-
-const generateMarksheetPDF = (data, Component, filename) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-  const root = createRoot(container);
-  root.render(<Component data={data} />);
-
-  setTimeout(() => {
-    const scale = 3;
-    html2canvas(container, {
-      scale: scale,
-      logging: false,
-      useCORS: true,
-      allowTaint: true,
-      scrollY: -window.scrollY,
-      windowHeight: document.documentElement.scrollHeight
-    }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const aspectRatio = canvas.height / canvas.width;
-      const pdfWidth = 210;
-      const pdfHeight = pdfWidth * aspectRatio;
-      
-      const pdf = new jsPDF({
-        orientation: pdfHeight > pdfWidth ? 'p' : 'l',
-        unit: 'mm',
-        format: [pdfWidth, pdfHeight]
-      });
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(filename);
-      document.body.removeChild(container);
-    });
-  }, 500);
-};
-
-const generateCertificatePDF = (data, Component, filename) => {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-  const root = createRoot(container);
-  root.render(<Component data={data} />);
-
-  setTimeout(() => {
-    const scale = 3;
-    html2canvas(container, {
-      scale: scale,
-      logging: false,
-      useCORS: true,
-      allowTaint: true,
-      scrollY: -window.scrollY,
-      windowHeight: document.documentElement.scrollHeight
-    }).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdfWidth = 297;
-      const pdfHeight = 210;
-      
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: [pdfWidth, pdfHeight]
-      });
-
-      const imgWidth = canvas.width / scale;
-      const imgHeight = canvas.height / scale;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const centerShiftX = (pdfWidth - imgWidth * ratio) / 2;
-      const centerShiftY = (pdfHeight - imgHeight * ratio) / 2;
-
-      pdf.addImage(imgData, 'PNG', centerShiftX, centerShiftY, imgWidth * ratio, imgHeight * ratio);
-      pdf.save(filename);
-      document.body.removeChild(container);
-    });
-  }, 500);
-};
+import { useParams } from "react-router-dom";
 
 const CompeteBatchData = () => {
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
+  const marksheetRef = useRef(); 
+  const certificateRef = useRef();
   const [loadingStates, setLoadingStates] = useState({});
+  const [studentData, setStudentData] = useState(null);
+  // const [batchData,setBatchData]=useState({})
+  const [currentStudentId, setCurrentStudentId] = useState(null);
+  const [documentType, setDocumentType] = useState(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
-  const [studentImages, setStudentImages] = useState({});
 
-  const convertToBlob = useCallback(async (url, studentId) => {
-    try {
-      const response = await fetch(url, { mode: 'cors' });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      setStudentImages(prev => ({ ...prev, [studentId]: blobUrl }));
-    } catch (error) {
-      console.error("Error fetching image:", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    batchData.students.forEach(student => {
-      if (student.profilepic) {
-        convertToBlob(student.profilepic, student._id);
-      }
-    });
-  }, [batchData, convertToBlob]);
-
-  const handleDownloadAll = useCallback(async () => {
+  const handleDownloadAll = async () => {
     setIsDownloadingAll(true);
     for (const student of batchData.students) {
       if (student.markUploadStatus) {
         await fetchStudentData(student._id, "marksheet");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Adding a small delay to avoid issues
       }
     }
     setIsDownloadingAll(false);
-  }, [batchData.students]);
+  };
 
+  const handlePrint = useReactToPrint({
+    content: () =>
+      documentType === "marksheet"
+        ? marksheetRef.current
+        : certificateRef.current,
+    documentTitle: documentType === "marksheet" ? "MarkSheet" : "Certificate",
+    onAfterPrint: () => {
+      setLoadingStates((prev) => ({
+        ...prev,
+        [currentStudentId]: {
+          ...prev[currentStudentId],
+          [documentType]: false,
+        },
+      }));
+      setCurrentStudentId(null);
+      setDocumentType(null); 
+    },
+  });
   const fetchStudentData = useCallback(async (studentId, type) => {
     setLoadingStates((prev) => ({
       ...prev,
@@ -132,26 +59,26 @@ const CompeteBatchData = () => {
         [type]: true,
       },
     }));
-
+    setCurrentStudentId(studentId);
+    setDocumentType(type);
     try {
-      let endpoint = type === "certificate" 
-        ? `${server}/certificate/student/${studentId}`
-        : `${server}/student/${studentId}`;
-      
-      const response = await fetch(endpoint, { method: "GET" });
-      if (!response.ok) throw new Error(`Failed to fetch ${type} data`);
-      
-      const data = await response.json();
-      data.data.convertedImageUrl = studentImages[studentId];
-
+      let endpoint;
       if (type === "certificate") {
-        generateCertificatePDF(data.data, GenerateCertificate, `Certificate_${data.data.name}.pdf`);
+        endpoint = `${server}/certificate/student/${studentId}`;
       } else {
-        generateMarksheetPDF(data.data, GenerateMarksheetFrom, `Marksheet_${data.data.name}.pdf`);
+        endpoint = `${server}/student/${studentId}`;
       }
+      const response = await fetch(endpoint, {
+        method: "GET",
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${type} data`);
+      }
+      const data = await response.json();
+      console.log("data", data);
+      setStudentData(data.data);
     } catch (error) {
       console.error(`Error fetching ${type} data:`, error);
-    } finally {
       setLoadingStates((prev) => ({
         ...prev,
         [studentId]: {
@@ -160,11 +87,79 @@ const CompeteBatchData = () => {
         },
       }));
     }
-  }, [studentImages]);
+  }, []);
+ console.log("data comes",studentData)
+  useEffect(() => {
+    if (currentStudentId && studentData && documentType) {
+      handlePrint();
+    }
+  }, [currentStudentId, studentData, documentType, handlePrint]);
 
-  const handleButtonClick = useCallback((studentId, type) => {
+  const generateMarksheetData = useCallback((student) => {
+    if (!student) return null;
+
+    return {
+      schemCode: student.marks?.TrainingPartner || "N/A",
+      name: student.name,
+      ward: student.fathername,
+      qualificationName: student.course,
+      qualificationCode: student.marks.batchABN
+        ? student.marks.batchABN.split("/")[1]
+        : "N/A",
+      nsqfLevel: "5",
+      sector: student.sector_name,
+      duration: `${student.totaldays} days`,
+      assessorRegNo: "AR123456",
+      dob: new Date(student.dob).toISOString().split("T")[0],
+      assessmentBatchNo: student.marks.batchABN,
+      assessmentDate: student.marks.examDate
+        ? new Date(student.marks.examDate).toISOString().split("T")[0]
+        : "N/A",
+      nosMarks: student.marks.Nos.map((nos, index) => ({
+        code: nos.code,
+        name: nos.name,
+        type: "Theory",
+        maxMarks: nos.passMark,
+        marksObtained: nos.MarksObtained,
+      })),
+      totalMarks: student.marks.total,
+      grade: student.marks.Grade,
+      result: student.marks.Result, 
+      dateOfIssue: new Date().toISOString().split("T")[0],
+      certificateNo: `CERT${student.redg_No}`,
+      studentId: student._id,
+    };
+  }, []);
+
+  const generateCertificateData = useCallback((data) => {
+    if (!data) return null;
+
+    return {
+      name: data.studentName,
+      fatherName: data.fatherName,
+      dateOfBirth: new Date(data.DOB).toISOString().split("T")[0],
+      enrollmentNumber: data.Enrolment_number,
+      subject: data.qualification,
+      duration: `${data.duration} days`,
+      credit: data.credit,
+      level: data.level,
+      trainingCenter: data.TrainingCenter,
+      district: data.District,
+      state: data.state,
+      grade: data.grade,
+      placeOfIssue: data.placeOfIssue,
+      dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
+      studentId: data.studentId,
+      studentImageUrl: data.stutentProfilePic,
+    };
+  }, []);
+
+  const handleButtonClick = (studentId, type) => {
     fetchStudentData(studentId, type);
-  }, [fetchStudentData]);
+  };
+
+  // New function to download all marksheets sequentially
+ 
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -188,7 +183,7 @@ const CompeteBatchData = () => {
                   >
                     <div className="flex items-center">
                       <img
-                        src={studentImages[student._id] || "/placeholder-image.jpg"}
+                        src={student.profilepic || "/placeholder-image.jpg"}
                         alt={student.name}
                         className="w-16 h-16 rounded-full object-cover mr-4"
                       />
@@ -250,6 +245,24 @@ const CompeteBatchData = () => {
             </div> 
           </div>
         </main>
+      </div>
+      <div style={{ display: "none" }}>
+        <GenerateMarksheetFrom
+          ref={marksheetRef}
+          data={
+            currentStudentId && studentData && documentType === "marksheet"
+              ? generateMarksheetData(studentData)
+              : null
+          }
+        />
+        <GenerateCertificate
+          ref={certificateRef}
+          data={
+            currentStudentId && studentData && documentType === "certificate"
+              ? generateCertificateData(studentData)
+              : null
+          }
+        />
       </div>
     </div>
   );

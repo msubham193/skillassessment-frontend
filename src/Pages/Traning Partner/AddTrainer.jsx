@@ -23,22 +23,23 @@ const AddTrainer = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
-  const [selectedSector,setSelectedSector]=useState("")
+  const [courses, setCourses] = useState([]);
+  const [selectedSector, setSelectedSector] = useState("");
   const [formData, setFormData] = useState({
     name: "", phoneNumber: "", email: "", educationQualification_1: "",
     educationQualification_2: "", educationQualification_3: "", educationQualification_4: "",
     certification_course: "", relevant_industryExperience: "", other_experience: "",
     PAN_CARD_NO: "", AADHAR_NO: "", state: "", city: "", district: "", pincode: "",
-    certifiedIn: "", coursecode: "", sector: "", PRN_NO: "",
+    certifiedIn: "", sector: "", coursecode: "",PRN_NO: "",
   });
   const [image, setImage] = useState(null);
+
   const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
   const validationSchema = Yup.object().shape({
-   
     name: Yup.string().required("Name is required"),
-    phoneNumber:  Yup.string()
-    .matches(phoneRegExp, "Invalid phone number")
-    .required("Phone Number is required"),
+    phoneNumber: Yup.string()
+      .matches(phoneRegExp, "Invalid phone number")
+      .required("Phone Number is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
     state: Yup.string().required("State is required"),
     city: Yup.string().required("City is required"),
@@ -64,13 +65,49 @@ const AddTrainer = () => {
     fetchSectors();
   }, []);
 
+  useEffect(() => {
+    const fetchCoursesOfSectors = async () => {
+      if (selectedSector) {
+        try {
+          const response = await axios.get(`${server}/sector?name=${selectedSector}`);
+          console.log("API Response:", response.data);
+          
+          if (response.data && response.data.data) {
+            // Check if the data is nested under a 'courses' property
+            const coursesData = response.data.data.courses || response.data.data;
+            
+            if (Array.isArray(coursesData) && coursesData.length > 0) {
+              setCourses(coursesData);
+            } else {
+              console.log("No courses found for the selected sector");
+              setCourses([]);
+            }
+          } else {
+            console.log("Unexpected response structure:", response.data);
+            setCourses([]);
+          }
+        } catch (error) {
+          console.error("Error fetching courses:", error.message);
+          toast.error("Failed to fetch courses");
+          setCourses([]);
+        }
+      } else {
+        setCourses([]);
+      }
+    };
+
+    fetchCoursesOfSectors();
+  }, [selectedSector]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleSelectChange = (field, value) => {
-    {field==="sector"?setSelectedSector(value):""}
+    if(field=="sector"){
+      setSelectedSector(value)
+    }
     setFormData(prevState => ({
       ...prevState,
       [field]: value,
@@ -109,7 +146,7 @@ const AddTrainer = () => {
       setLoading(false);
     }
   };
- console.log(selectedSector)
+console.log(courses)
   return (
     <div className="flex justify-center p-8 bg-gray-100 min-h-screen">
       <div className="p-8 w-full max-w-3xl bg-white rounded-lg shadow-lg">
@@ -161,12 +198,34 @@ const AddTrainer = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {sectors.map((sector) => (
-                      <SelectItem key={sector._id} value={sector._id}>
+                      <SelectItem key={sector._id} value={sector.name}>
                         {sector.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+              ) : field === "coursecode" ? (
+                <Select 
+                onValueChange={(value) => handleSelectChange(field, value)} 
+                value={value}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={`Select ${field}`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {courses.length > 0 ? (
+                    courses.map((course) => (
+                      <SelectItem key={course._id} value={course.courseCode}>
+                        {course.courseName} ({course.courseCode})
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-courses" disabled>
+                      No courses available
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
               ) : (
                 <Input
                   type="text"

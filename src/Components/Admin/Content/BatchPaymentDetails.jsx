@@ -53,7 +53,7 @@ export default BatchPaymentDetails
 const batchColumns = [
   {
     accessorKey: "trainingOrganization",
-    header: "Traning Partner Name",
+    header: "Training Partner Name",
   },
   {
     accessorKey: "ABN_Number",
@@ -87,7 +87,7 @@ const batchColumns = [
         <div
          
         >
-          {preInvoice ? "Avable" : "Not Avable"}
+          {preInvoice ? "Available" : "Not Available"}
         </div>
       );
     },

@@ -79,13 +79,13 @@ const ViewSectorAndCourse = () => {
   if(loading)
   {
     return(
-        <div className="text-3xl font-semibold flex">Loding...</div>
+        <div className="text-3xl font-semibold flex">Lading...</div>
     )
   }
   if(sectors.length==0)
   {
     return(
-      <div className="text-3xl font-semibold flex justify-center mt-44 text-purple-800">Oops no sector and course availabil yet !!</div>
+      <div className="text-3xl font-semibold flex justify-center mt-44 text-purple-800">Oops no sector and course available yet !!</div>
   )
   }
 

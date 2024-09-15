@@ -342,7 +342,7 @@ const AaDetailsBox = ({ id }) => {
             <form onSubmit={applicationApproved}>
               <Label htmlFor="name" className="text-left w-40 text-lg">
               <p className="text-sm text-red-600">Note*</p>
-                Add Share in Percentege for this Assessment agency..
+                Add Share in Percentage for this Assessment agency..
               </Label>
               <Input
                 id="scheme-name"

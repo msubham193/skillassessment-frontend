@@ -217,7 +217,7 @@ const AaPaymentInvoicedetails = () => {
         <div className=" flex justify-center">
           <p className="mt-5 text-2xl font-semibold text-green-700">
             {loading ? (
-              "Loding...."
+              "Lading...."
             ) : filters.month && filters.year ? (
               <div className="flex min-h-[100dvh] flex-col items-center  bg-background px-4 py-12 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-md text-center">

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -24,151 +25,125 @@ import { coursesData } from "@/Components/Traning Partner/Atoms/courseAtom";
 import { sectorData } from "@/Components/Traning Partner/Atoms/sectorAtom";
 import { validationSchema } from "@/Components/Traning Partner/utils/validation";
 import { server } from "@/main";
+import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
-  const inputLabels = [
-    { name: "organizationName", label: "Organization Name" },
-    { name: "password", label: "Password" },
-    { name: "organizationCategory", label: "Organization Category" },
-    { name: "centerId", label: "Center ID" },
-    { name: "tpCode", label: "TP Code" },
-    { name: "scheme", label: "Scheme" },
-    { name: "affiliation", label: "Affiliation" },
-    { name: "dateOfIncorporation", label: "Date of Incorporation" },
-    { name: "registeredOfficeAddress", label: "Registered Office Address" },
-    { name: "registeredOfficeDistrict", label: "Registered Office District" },
-    { name: "registeredOfficeCity", label: "Registered Office City" },
-    { name: "registeredOfficeState", label: "Registered Office State" },
-    { name: "registeredOfficePin", label: "Registered Office PIN" },
-    { name: "registeredOfficeTelephone", label: "Registered Office Telephone" },
-    { name: "registeredOfficeMobile", label: "Registered Office Mobile" },
-    { name: "registeredOfficeFax", label: "Registered Office Fax" },
-    { name: "registeredOfficeEmail", label: "Registered Office Email" },
-    { name: "registeredOfficeGst", label: "Registered Office GST" },
-    {
-      name: "regionalStateOfficeAddress",
-      label: "Regional State Office Address",
-    },
-    {
-      name: "regionalStateOfficeDistrict",
-      label: "Regional State Office District",
-    },
-    { name: "regionalStateOfficeCity", label: "Regional State Office City" },
-    { name: "regionalStateOfficeState", label: "Regional Office State" },
-    { name: "regionalStateOfficePin", label: "Regional State Office PIN" },
-    {
-      name: "regionalStateOfficeTelephone",
-      label: "Regional State Office Telephone",
-    },
-    {
-      name: "regionalStateOfficeMobile",
-      label: "Regional State Office Mobile",
-    },
-    { name: "regionalStateOfficeFax", label: "Regional State Office Fax" },
-    { name: "regionalStateOfficeEmail", label: "Regional State Office Email" },
-    { name: "regionalStateOfficeGst", label: "Regional State Office GST" },
-    { name: "website", label: "Website" },
-    { name: "pan", label: "PAN" },
-    { name: "prnNo", label: "PRN No" },
-    { name: "headOwnerName", label: "Head Owner Name" },
-    { name: "headOwnerDob", label: "Head Owner DOB" },
-    { name: "headOwnerCity", label: "Head Owner City" },
-    {
-      name: "headOwnerResidenceAddress",
-      label: "Head Owner Residence Address",
-    },
-    {
-      name: "headOwnerPermanentAddress",
-      label: "Head Owner Permanent Address",
-    },
-    { name: "headOwnerMobile", label: "Head Owner Mobile" },
-    { name: "headOwnerAlternateMobile", label: "Head Owner Alternate Mobile" },
-    { name: "headOwnerEmail", label: "Head Owner Email" },
-    { name: "headOwnerQualification", label: "Head Owner Qualification" },
-    { name: "headOwnerWorkExperience", label: "Head Owner Work Experience" },
-    { name: "headOwnerPanNo", label: "Head Owner PAN No" },
-    { name: "headOwnerAadharNo", label: "Head Owner Aadhar No" },
-    { name: "headOwnerPromoter1", label: "Head Owner Promoter 1" },
-    { name: "headOwnerPromoter2", label: "Head Owner Promoter 2" },
-    { name: "headOwnerPromoter3", label: "Head Owner Promoter 3" },
-    { name: "projectContactPersonName", label: "Project Contact Person Name" },
-    {
-      name: "projectContactPersonDesignation",
-      label: "Project Contact Person Designation",
-    },
-    { name: "projectContactPersonCity", label: "Project Contact Person City" },
-    {
-      name: "projectContactPersonMobile",
-      label: "Project Contact Person Mobile",
-    },
-    {
-      name: "projectContactPersonAlternateMobile",
-      label: "Project Contact Person Alternate Mobile",
-    },
-    {
-      name: "projectContactPersonResidenceAddress",
-      label: "Project Contact Person Residence Address",
-    },
-    {
-      name: "projectContactPersonPermanentAddress",
-      label: "Project Contact Person Permanent Address",
-    },
-    {
-      name: "projectContactPersonEmail",
-      label: "Project Contact Person Email",
-    },
-    {
-      name: "projectContactPersonAlternateEmail",
-      label: "Project Contact Person Alternate Email",
-    },
-    { name: "sector", label: "Sector" },
-  ];
-
-  const TimeLabel = ["dateOfIncorporation", "headOwnerDob"];
+  const [formData, setFormData] = useState({
+    organizationName: "",
+    password: "",
+    organizationCategory: "",
+    centerId: "",
+    tpCode: "",
+    scheme: "",
+    affiliation: "",
+    dateOfIncorporation: "",
+    sector: "",
+    website: "",
+    panNumber: "",
+    prnNo: "",
+    // Registered Office Details
+    registeredOfficeAddress: "",
+    registeredOfficeDistrict: "",
+    registeredOfficeCity: "",
+    registeredOfficeState: "",
+    registeredOfficePIN: "",
+    registeredOfficeTelephone: "",
+    registeredOfficeMobile: "",
+    registeredOfficeFax: "",
+    registeredOfficeEmail: "",
+    registeredOfficeGST: "",
+    // Regional Office Details
+    regionalOfficeAddress: "",
+    regionalOfficeDistrict: "",
+    regionalOfficeCity: "",
+    regionalOfficeState: "",
+    regionalOfficePIN: "",
+    regionalOfficeTelephone: "",
+    regionalOfficeMobile: "",
+    regionalOfficeFax: "",
+    regionalOfficeEmail: "",
+    regionalOfficeGST: "",
+    // Head Owner Details
+    headOwnerName: "",
+    headOwnerDOB: "",
+    headOwnerCity: "",
+    headOwnerResidenceAddress: "",
+    headOwnerPermanentAddress: "",
+    headOwnerMobile: "",
+    headOwnerAlternateMobile: "",
+    headOwnerEmail: "",
+    headOwnerQualification: "",
+    headOwnerWorkExperience: "",
+    headOwnerPANNo: "",
+    headOwnerAadharNo: "",
+    headOwnerPromoter1: "",
+    headOwnerPromoter2: "",
+    headOwnerPromoter3: "",
+    // Project Contact Person Details
+    projectContactPersonName: "",
+    projectContactPersonDesignation: "",
+    projectContactPersonCity: "",
+    projectContactPersonMobile: "",
+    projectContactPersonAlternateMobile: "",
+    projectContactPersonResidenceAddress: "",
+    projectContactPersonPermanentAddress: "",
+    projectContactPersonEmail: "",
+    projectContactPersonAlternateEmail: "",
+  });
   const indianStates = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
-    "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
-    "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
-    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
-    "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
-    "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", 
-    "Lakshadweep", "Puducherry"
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
   ];
   const navigate = useNavigate();
-
-  // State variables
-  const [currentPage, setCurrentPage] = useState(0);
-  const [inputs, setInputs] = useState({});
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 789);
-  const [onSubmit, setOnSubmit] = useState(false);
-  const [errors, setErrors] = useState({});
   const [courses, setCourses] = useRecoilState(coursesData);
   const [sectors, setSectors] = useRecoilState(sectorData);
   const [selectedSector, setSelectedSector] = useState("");
+  const [currentStep, setCurrentStep] = useState(1);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Constants for pagination
-  const inputsPerPage = 20;
-  const totalPages = Math.ceil(inputLabels.length / inputsPerPage);
+  // function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
-  // Effect to update onSubmit state based on current page
-  useEffect(() => {
-    setOnSubmit(currentPage === totalPages - 1);
-  }, [currentPage, totalPages]);
-
-  // Effect to handle window resize for mobile/desktop view
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 786);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // Function to fetch sectors from API
+  //function for fetch all sector present in the potal
   const fetchSectors = async () => {
     try {
       const response = await fetch(`${server}/sector/all`, {
@@ -178,315 +153,1507 @@ const Signup = () => {
         },
       });
       const data = await response.json();
+      // console.log(data.data);
       setSectors(data.data);
     } catch (error) {
       console.log(error.message);
     }
   };
-
-  // Effect to fetch sectors on component mount
   useEffect(() => {
     fetchSectors();
   }, []);
 
-  // Calculate current inputs to display based on pagination
-  const currentInputs = inputLabels.slice(
-    currentPage * inputsPerPage,
-    (currentPage + 1) * inputsPerPage
-  );
-  const firstColumn = currentInputs.slice(0, 10);
-  const secondColumn = currentInputs.slice(10, 20);
+  const steps = [
+    "Basic Info",
+    "Registered Office Details",
+    "Regional Office Details",
+    "Head Owner Details",
+    "Project Contact Person Details",
+  ];
 
-  // Handle input change
-  const handleChange = (name, value) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
     if (name === "sector") {
       setSelectedSector(value);
     }
   };
 
-  // Handle next page
-  const handleNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    } else {
-      handleSubmit();
-    }
-  };
+  //this function is for check the validation  for inputs..
+  const validateStep = (step) => {
+    let stepErrors = {};
 
-  // Handle previous page
-  const handlePreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+    // Helper functions for validation
+    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isValidMobile = (mobile) => /^[6-9]\d{9}$/.test(mobile); // Assuming Indian mobile numbers starting with 6-9 and 10 digits
+    const isValidPIN = (pin) => /^\d{6}$/.test(pin); // Assuming Indian PIN codes with exactly 6 digits
+    const isValidPAN = (pan) => /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan); // PAN format
+    const isValidGST = (gst) =>
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/.test(
+        gst
+      ); // GST format
+    const isValidDate = (date) => !isNaN(Date.parse(date)); // Checks if date is valid
+    const isValidAadhar = (aadhar) => /^\d{12}$/.test(aadhar); // Aadhaar format (12 digits)
+    const isStrongPassword = (password) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        password
+      ); // Strong password
+    const isAtLeast18YearsOld = (dob) => {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
 
-  // Handle form submission
-  const handleSubmit = async () => {
-    try {
-      await validationSchema.validate(inputs, { abortEarly: false });
-      const jsondata = JSON.stringify(inputs);
-      const response = await fetch(`${server}/tp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsondata,
-      });
-  
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Form submitted successfully!");
-        setInputs({});
-        navigate("/trainingPartner/signin");
-      } else {
-        console.log("Server Error: ", data);
-        throw new Error(data.message || "Failed to submit form");
+      // Check if the month or day is earlier than today in the same year
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        return age - 1 >= 18;
       }
-    } catch (error) {
-      console.log("Submission error: ", error); // Debugging line
-      const newError = {};
-      let firstErrorField = null;
-      if (error.inner) {
-        error.inner.forEach((err) => {
-          newError[err.path] = err.message;
-          if (!firstErrorField) {
-            firstErrorField = err.path;
-          }
-        });
-        setErrors(newError);
-        toast.error("Please fill out all required fields correctly.");
-        
-        // Redirect to the page with the first error
-        if (firstErrorField) {
-          const errorFieldIndex = inputLabels.findIndex(
-            (input) => input.name === firstErrorField
-          );
-          const errorPage = Math.floor(errorFieldIndex / inputsPerPage);
-          setCurrentPage(errorPage);
+
+      return age >= 18;
+    };
+
+    switch (step) {
+      case 1:
+        if (!formData.organizationName)
+          stepErrors.organizationName = "Organization Name is required";
+        if (!formData.password || !isStrongPassword(formData.password))
+          stepErrors.password =
+            "Password must be at least 8 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character";
+        if (!formData.organizationCategory)
+          stepErrors.organizationCategory = "Organization Category is required";
+        if (!formData.centerId) stepErrors.centerId = "Center ID is required";
+        if (!formData.tpCode) stepErrors.tpCode = "TP Code is required";
+        if (!formData.scheme) stepErrors.scheme = "Scheme is required";
+        if (!formData.affiliation)
+          stepErrors.affiliation = "Affiliation is required";
+        if (
+          !formData.dateOfIncorporation ||
+          !isValidDate(formData.dateOfIncorporation)
+        )
+          stepErrors.dateOfIncorporation =
+            "Valid Date of Incorporation is required";
+        if (!formData.sector) stepErrors.sector = "Sector is required";
+        if (!formData.website) stepErrors.website = "Website is required";
+        if (!formData.panNumber || !isValidPAN(formData.panNumber))
+          stepErrors.panNumber = "Valid PAN Number is required";
+        if (!formData.prnNo) stepErrors.prnNo = "PRN Number is required";
+        break;
+
+      case 2:
+        if (!formData.registeredOfficeAddress)
+          stepErrors.registeredOfficeAddress =
+            "Registered Office Address is required";
+        if (!formData.registeredOfficeDistrict)
+          stepErrors.registeredOfficeDistrict = "District is required";
+        if (!formData.registeredOfficeCity)
+          stepErrors.registeredOfficeCity = "City is required";
+        if (!formData.registeredOfficeState)
+          stepErrors.registeredOfficeState = "State is required";
+        if (
+          !formData.registeredOfficePIN ||
+          !isValidPIN(formData.registeredOfficePIN)
+        )
+          stepErrors.registeredOfficePIN = "Valid PIN is required";
+        if (
+          !formData.registeredOfficeTelephone ||
+          !isValidMobile(formData.registeredOfficeTelephone)
+        )
+          stepErrors.registeredOfficeTelephone =
+            "Valid Telephone number is required";
+        if (
+          !formData.registeredOfficeMobile ||
+          !isValidMobile(formData.registeredOfficeMobile)
+        )
+          stepErrors.registeredOfficeMobile = "Valid Mobile is required";
+        if (
+          !formData.registeredOfficeEmail ||
+          !isValidEmail(formData.registeredOfficeEmail)
+        )
+          stepErrors.registeredOfficeEmail = "Valid Email is required";
+        if (
+          !formData.registeredOfficeGST ||
+          !isValidGST(formData.registeredOfficeGST)
+        )
+          stepErrors.registeredOfficeGST = "Valid GST Number is required";
+        if (!formData.registeredOfficeFax)
+          stepErrors.registeredOfficeFax = "Valid Fax Number is required";
+        break;
+
+      case 3:
+        if (!formData.regionalOfficeAddress)
+          stepErrors.regionalOfficeAddress =
+            "Regional Office Address is required";
+        if (!formData.regionalOfficeDistrict)
+          stepErrors.regionalOfficeDistrict = "District is required";
+        if (!formData.regionalOfficeCity)
+          stepErrors.regionalOfficeCity = "City is required";
+        if (!formData.regionalOfficeState)
+          stepErrors.regionalOfficeState = "State is required";
+        if (
+          !formData.regionalOfficePIN ||
+          !isValidPIN(formData.regionalOfficePIN)
+        )
+          stepErrors.regionalOfficePIN = "Valid PIN is required";
+        if (
+          !formData.regionalOfficeTelephone ||
+          !isValidMobile(formData.regionalOfficeTelephone)
+        )
+          stepErrors.regionalOfficeTelephone =
+            "Valid Telephone number is required";
+        if (
+          !formData.regionalOfficeMobile ||
+          !isValidMobile(formData.regionalOfficeMobile)
+        )
+          stepErrors.regionalOfficeMobile = "Valid Mobile is required";
+        if (
+          !formData.regionalOfficeEmail ||
+          !isValidEmail(formData.regionalOfficeEmail)
+        )
+          stepErrors.regionalOfficeEmail = "Valid Email is required";
+        if (
+          !formData.regionalOfficeGST ||
+          !isValidGST(formData.regionalOfficeGST)
+        )
+          stepErrors.regionalOfficeGST = "Valid GST Number is required";
+        if (!formData.regionalOfficeFax)
+          stepErrors.regionalOfficeFax = "Valid Fax  is required";
+        break;
+
+      case 4:
+        if (!formData.headOwnerName)
+          stepErrors.headOwnerName = "Head Owner Name is required";
+        if (!formData.headOwnerDOB || !isValidDate(formData.headOwnerDOB)) {
+          stepErrors.headOwnerDOB = "Valid Head Owner DOB is required";
+        } else if (!isAtLeast18YearsOld(formData.headOwnerDOB)) {
+          stepErrors.headOwnerDOB = "Head Owner must be at least 18 years old";
         }
-      } else {
-        toast.error(error.message);
+        if (!formData.headOwnerCity)
+          stepErrors.headOwnerCity = "City is required";
+        if (!formData.headOwnerResidenceAddress)
+          stepErrors.headOwnerResidenceAddress =
+            "Residence Address is required";
+        if (!formData.headOwnerPermanentAddress)
+          stepErrors.headOwnerPermanentAddress =
+            "Permanent Address is required";
+        if (
+          !formData.headOwnerMobile ||
+          !isValidMobile(formData.headOwnerMobile)
+        )
+          stepErrors.headOwnerMobile = "Valid Mobile is required";
+        if (
+          !formData.headOwnerAlternateMobile ||
+          !isValidMobile(formData.headOwnerAlternateMobile)
+        )
+          stepErrors.headOwnerAlternateMobile =
+            "Valid Alternate Mobile is required";
+        if (!formData.headOwnerEmail || !isValidEmail(formData.headOwnerEmail))
+          stepErrors.headOwnerEmail = "Valid Email is required";
+        if (!formData.headOwnerQualification)
+          stepErrors.headOwnerQualification = "Qualification is required";
+        if (!formData.headOwnerWorkExperience)
+          stepErrors.headOwnerWorkExperience = "Work Experience is required";
+        if (!formData.headOwnerPANNo || !isValidPAN(formData.headOwnerPANNo))
+          stepErrors.headOwnerPANNo = "Valid PAN Number is required";
+        if (
+          !formData.headOwnerAadharNo ||
+          !isValidAadhar(formData.headOwnerAadharNo)
+        )
+          stepErrors.headOwnerAadharNo = "Valid Aadhaar Number is required";
+        if (!formData.headOwnerPromoter1)
+          stepErrors.headOwnerPromoter1 = "Promoter 1 is required";
+        if (!formData.headOwnerPromoter2)
+          stepErrors.headOwnerPromoter2 = "Promoter 2 is required";
+        if (!formData.headOwnerPromoter3)
+          stepErrors.headOwnerPromoter3 = "Promoter 3 is required";
+        break;
+
+      case 5:
+        if (!formData.projectContactPersonName)
+          stepErrors.projectContactPersonName =
+            "Project Contact Person Name is required";
+        if (!formData.projectContactPersonDesignation)
+          stepErrors.projectContactPersonDesignation =
+            "Designation is required";
+        if (!formData.projectContactPersonCity)
+          stepErrors.projectContactPersonCity = "City is required";
+        if (
+          !formData.projectContactPersonMobile ||
+          !isValidMobile(formData.projectContactPersonMobile)
+        )
+          stepErrors.projectContactPersonMobile = "Valid Mobile is required";
+        if (
+          !formData.projectContactPersonAlternateMobile ||
+          !isValidMobile(formData.projectContactPersonAlternateMobile)
+        )
+          stepErrors.projectContactPersonAlternateMobile =
+            "Valid Alternate Mobile is required";
+        if (!formData.projectContactPersonResidenceAddress)
+          stepErrors.projectContactPersonResidenceAddress =
+            "Residence Address is required";
+        if (!formData.projectContactPersonPermanentAddress)
+          stepErrors.projectContactPersonPermanentAddress =
+            "Permanent Address is required";
+        if (
+          !formData.projectContactPersonEmail ||
+          !isValidEmail(formData.projectContactPersonEmail)
+        )
+          stepErrors.projectContactPersonEmail = "Valid Email is required";
+        if (
+          !formData.projectContactPersonAlternateEmail ||
+          !isValidEmail(formData.projectContactPersonAlternateEmail)
+        )
+          stepErrors.projectContactPersonAlternateEmail =
+            "Valid Alternate Email is required";
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors(stepErrors);
+    return Object.keys(stepErrors).length === 0;
+  };
+
+  const nextStep = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length));
+    }
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
+  };
+
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateStep(currentStep)) {
+      setLoading(true);
+      try {
+        const jsondata = JSON.stringify(formData);
+        const response = await fetch(`${server}/tp`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsondata,
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          toast.success("Form submitted successfully!");
+          navigate("/trainingPartner/signin");
+        } else {
+          console.log("Server Error: ", data);
+          throw new Error(data.message || "Failed to submit form");
+        }
+      } catch (error) {
+        toast.error(error.response.data, {
+          position: "top-center",
+          closeOnClick: true,
+          draggable: true,
+          theme: "colored",
+        });
+      } finally {
+        setLoading(false);
       }
     }
   };
-  
 
-  // Render input based on input type
-  const renderInput = (labelObj) => {
-    const { name, label } = labelObj;
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Basic Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {/* Organization Name */}
+              <div>
+                <Label htmlFor="organizationName">Organization Name</Label>
+                <Input
+                  type="text"
+                  id="organizationName"
+                  name="organizationName"
+                  value={formData.organizationName}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.organizationName && (
+                  <p className="text-red-500">{errors.organizationName}</p>
+                )}
+              </div>
 
-    if (TimeLabel.includes(name)) {
-      return (
-        <div className="relative">
-          <DatePicker
-            selected={inputs[name] || null}
-            onChange={(date) => handleChange(name, date)}
-            className="w-full p-2 pl-10 border rounded text-left font-normal"
-            placeholderText="Pick a date"
-            dateFormat="PPP"
-            showYearDropdown
-           showMonthDropdown
-            dropdownMode="select" 
-            yearDropdownItemNumber={5} 
-            scrollableYearDropdown 
-            scrollableMonthYearDropdown 
-          />
-          <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        </div>
-      );
-    } else if (name === "scheme") {
-      return (
-        <Select
-          onValueChange={(value) => handleChange(name, value)}
-          value={inputs[name] || ""}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select scheme" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Central Governmnet">
-              Central Government
-            </SelectItem>
-            <SelectItem value="State Governmnet">State Goverment</SelectItem>
-            <SelectItem value="Corporate">Corporate</SelectItem>
-          </SelectContent>
-        </Select>
-      );
-    }
-    else if (name === "organizationCategory") {
-      return (
-        <Select
-          onValueChange={(value) => handleChange(name, value)}
-          value={inputs[name] || ""}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select Organization Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="•	Institute set up by Govt">
-            Institute set up by Govt
-            </SelectItem>
-            <SelectItem value="Institute set up by Corporate">Institute set up by Corporate</SelectItem>
-            <SelectItem value="Institute set up by Trust / NGO / Society">Institute set up by Trust / NGO / Society</SelectItem>
-            <SelectItem value="Institute set up by Govt.">Institute set up by Govt.</SelectItem>
-            <SelectItem value="Corporate">Corporate</SelectItem>
-            <SelectItem value="Standalone Training Institute">Standalone Training Institute</SelectItem>
-            <SelectItem value="Others">Others</SelectItem>
-          </SelectContent>
-        </Select>
-      );
-    }
-    else if (name === "sector") {
-      return (
-        <Select
-          onValueChange={(value) => handleChange(name, value)}
-          value={inputs[name] || ""}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select sector" />
-          </SelectTrigger>
-          <SelectContent>
-            {sectors.map((sector) => (
-              <SelectItem key={sector._id} value={sector.name}>
-                {sector.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      );
-    }
-    else if (name === "registeredOfficeState") {
-      return (
-        <Select
-          onValueChange={(value) => handleChange(name, value)}
-          value={inputs[name] || ""}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select state" />
-          </SelectTrigger>
-          <SelectContent>
-            {indianStates.map((state) => (
-              <SelectItem key={state} value={state}>
-                {state}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      );
-    }
-    else if (name === "regionalStateOfficeState") {
-      return (
-        <Select
-          onValueChange={(value) => handleChange(name, value)}
-          value={inputs[name] || ""}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select state" />
-          </SelectTrigger>
-          <SelectContent>
-            {indianStates.map((state) => (
-              <SelectItem key={state} value={state}>
-                {state}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      );
-    }
-    else {
-      return (
-        <Input
-          className="w-full bg-transparent text-black"
-          onChange={(e) => handleChange(name, e.target.value)}
-          value={inputs[name] || ""}
-        />
-      );
+              {/* Password */}
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"} // Conditionally change type
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-3 text-gray-600"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}{" "}
+                    {/* Change icon */}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500">{errors.password}</p>
+                )}
+              </div>
+
+              {/* Organization Category */}
+              <div>
+                <Label htmlFor="organizationCategory">
+                  Organization Category
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "organizationCategory", value },
+                    })
+                  }
+                  value={formData.organizationCategory}
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.organizationCategory
+                      ? formData.organizationCategory
+                      : "Select Category"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Institute set up by Corporate">
+                      Institute set up by Corporate
+                    </SelectItem>
+                    <SelectItem value="Institute set up by Trust / NGO / Society">
+                      Institute set up by Trust / NGO / Society
+                    </SelectItem>
+                    <SelectItem value="Institute set up by Govt.">
+                      Institute set up by Govt.
+                    </SelectItem>
+                    <SelectItem value="Corporate">Corporate</SelectItem>
+                    <SelectItem value="Standalone Training Institute">
+                      Standalone Training Institute
+                    </SelectItem>
+                    <SelectItem value="Others">Others</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.organizationCategory && (
+                  <p className="text-red-500">{errors.organizationCategory}</p>
+                )}
+              </div>
+
+              {/* Center ID */}
+              <div>
+                <Label htmlFor="centerId">Center ID</Label>
+                <Input
+                  type="text"
+                  id="centerId"
+                  name="centerId"
+                  value={formData.centerId}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.centerId && (
+                  <p className="text-red-500">{errors.centerId}</p>
+                )}
+              </div>
+
+              {/* TP Code */}
+              <div>
+                <Label htmlFor="tpCode">TP Code</Label>
+                <Input
+                  type="text"
+                  id="tpCode"
+                  name="tpCode"
+                  value={formData.tpCode}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.tpCode && (
+                  <p className="text-red-500">{errors.tpCode}</p>
+                )}
+              </div>
+
+              {/* Scheme */}
+              <div>
+                <Label htmlFor="scheme">Scheme</Label>
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "scheme", value } })
+                  }
+                  value={formData.scheme}
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.scheme ? formData.scheme : "Select Scheme"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Central Government">
+                      Central Government
+                    </SelectItem>
+                    <SelectItem value="State Government">
+                      State Government
+                    </SelectItem>
+                    <SelectItem value="Corporate">Corporate</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.scheme && (
+                  <p className="text-red-500">{errors.scheme}</p>
+                )}
+              </div>
+
+              {/* Affiliation */}
+              <div>
+                <Label htmlFor="affiliation">Affiliation</Label>
+                <Input
+                  type="text"
+                  id="affiliation"
+                  name="affiliation"
+                  value={formData.affiliation}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.affiliation && (
+                  <p className="text-red-500">{errors.affiliation}</p>
+                )}
+              </div>
+
+              {/* Date of Incorporation */}
+              <div>
+                <Label htmlFor="dateOfIncorporation">
+                  Date of Incorporation
+                </Label>
+                <Input
+                  type="date"
+                  id="dateOfIncorporation"
+                  name="dateOfIncorporation"
+                  value={formData.dateOfIncorporation}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.dateOfIncorporation && (
+                  <p className="text-red-500">{errors.dateOfIncorporation}</p>
+                )}
+              </div>
+
+              {/* Sector */}
+              <div>
+                <Label htmlFor="sector">Sector</Label>
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({ target: { name: "sector", value } })
+                  }
+                  value={formData.sector}
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.sector ? formData.sector : "Select Sector"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sectors.map((sector) => (
+                      <SelectItem key={sector._id} value={sector.name}>
+                        {sector.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.sector && (
+                  <p className="text-red-500">{errors.sector}</p>
+                )}
+              </div>
+
+              {/* Website */}
+              <div>
+                <Label htmlFor="website">Website</Label>
+                <Input
+                  type="url"
+                  id="website"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.website && (
+                  <p className="text-red-500">{errors.website}</p>
+                )}
+              </div>
+
+              {/* PAN Number */}
+              <div>
+                <Label htmlFor="panNumber">PAN Number</Label>
+                <Input
+                  type="text"
+                  id="panNumber"
+                  name="panNumber"
+                  value={formData.panNumber}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.panNumber && (
+                  <p className="text-red-500">{errors.panNumber}</p>
+                )}
+              </div>
+
+              {/* PRN Number */}
+              <div>
+                <Label htmlFor="prnNo">PRN Number</Label>
+                <Input
+                  type="text"
+                  id="prnNo"
+                  name="prnNo"
+                  value={formData.prnNo}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.prnNo && <p className="text-red-500">{errors.prnNo}</p>}
+              </div>
+            </div>
+          </>
+        );
+
+      case 2:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">
+              Registered Office Details
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Address */}
+              <div>
+                <Label htmlFor="registeredOfficeAddress">
+                  Registered Office Address
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeAddress"
+                  name="registeredOfficeAddress"
+                  value={formData.registeredOfficeAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeAddress && (
+                  <p className="text-red-500">
+                    {errors.registeredOfficeAddress}
+                  </p>
+                )}
+              </div>
+              {/* State */}
+              <div>
+                <Label htmlFor="registeredOfficeState">
+                  Registered Office State
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "registeredOfficeState", value },
+                    })
+                  }
+                  value={formData.registeredOfficeState}
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.registeredOfficeState
+                      ? formData.registeredOfficeState
+                      : "Select State"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    {indianStates.map((state, index) => (
+                      <SelectItem key={index} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.registeredOfficeState && (
+                  <p className="text-red-500">{errors.registeredOfficeState}</p>
+                )}
+              </div>
+
+              {/* District */}
+              <div>
+                <Label htmlFor="registeredOfficeDistrict">
+                  Registered Office District
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeDistrict"
+                  name="registeredOfficeDistrict"
+                  value={formData.registeredOfficeDistrict}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeDistrict && (
+                  <p className="text-red-500">
+                    {errors.registeredOfficeDistrict}
+                  </p>
+                )}
+              </div>
+
+              {/* City */}
+              <div>
+                <Label htmlFor="registeredOfficeCity">
+                  Registered Office City
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeCity"
+                  name="registeredOfficeCity"
+                  value={formData.registeredOfficeCity}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeCity && (
+                  <p className="text-red-500">{errors.registeredOfficeCity}</p>
+                )}
+              </div>
+
+              {/* PIN */}
+              <div>
+                <Label htmlFor="registeredOfficePIN">
+                  Registered Office PIN
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficePIN"
+                  name="registeredOfficePIN"
+                  value={formData.registeredOfficePIN}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficePIN && (
+                  <p className="text-red-500">{errors.registeredOfficePIN}</p>
+                )}
+              </div>
+
+              {/* Telephone */}
+              <div>
+                <Label htmlFor="registeredOfficeTelephone">
+                  Registered Office Telephone
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeTelephone"
+                  name="registeredOfficeTelephone"
+                  value={formData.registeredOfficeTelephone}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeTelephone && (
+                  <p className="text-red-500">
+                    {errors.registeredOfficeTelephone}
+                  </p>
+                )}
+              </div>
+
+              {/* Mobile */}
+              <div>
+                <Label htmlFor="registeredOfficeMobile">
+                  Registered Office Mobile
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeMobile"
+                  name="registeredOfficeMobile"
+                  value={formData.registeredOfficeMobile}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeMobile && (
+                  <p className="text-red-500">
+                    {errors.registeredOfficeMobile}
+                  </p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <Label htmlFor="registeredOfficeEmail">
+                  Registered Office Email
+                </Label>
+                <Input
+                  type="email"
+                  id="registeredOfficeEmail"
+                  name="registeredOfficeEmail"
+                  value={formData.registeredOfficeEmail}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeEmail && (
+                  <p className="text-red-500">{errors.registeredOfficeEmail}</p>
+                )}
+              </div>
+
+              {/* GST */}
+              <div>
+                <Label htmlFor="registeredOfficeGST">
+                  Registered Office GST Number
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeGST"
+                  name="registeredOfficeGST"
+                  value={formData.registeredOfficeGST}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeGST && (
+                  <p className="text-red-500">{errors.registeredOfficeGST}</p>
+                )}
+              </div>
+              {/* fax*/}
+              <div>
+                <Label htmlFor="registeredOfficeGST">
+                  Registered Office Fax
+                </Label>
+                <Input
+                  type="text"
+                  id="registeredOfficeFax"
+                  name="registeredOfficeFax"
+                  value={formData.registeredOfficeFax}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.registeredOfficeFax && (
+                  <p className="text-red-500">{errors.registeredOfficeFax}</p>
+                )}
+              </div>
+            </div>
+          </>
+        );
+
+      case 3:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Regional Office Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Address */}
+              <div>
+                <Label htmlFor="regionalOfficeAddress">
+                  Regional Office Address
+                </Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeAddress"
+                  name="regionalOfficeAddress"
+                  value={formData.regionalOfficeAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeAddress && (
+                  <p className="text-red-500">{errors.regionalOfficeAddress}</p>
+                )}
+              </div>
+
+              {/* State */}
+              <div>
+                <Label htmlFor="regionalOfficeState">
+                  Regional Office State
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "regionalOfficeState", value },
+                    })
+                  }
+                  value={formData.regionalOfficeState}
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.regionalOfficeState
+                      ? formData.regionalOfficeState
+                      : "Select State"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    {indianStates.map((state, index) => (
+                      <SelectItem key={index} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.regionalOfficeState && (
+                  <p className="text-red-500">{errors.regionalOfficeState}</p>
+                )}
+              </div>
+
+              {/* District */}
+              <div>
+                <Label htmlFor="regionalOfficeDistrict">
+                  Regional Office District
+                </Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeDistrict"
+                  name="regionalOfficeDistrict"
+                  value={formData.regionalOfficeDistrict}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeDistrict && (
+                  <p className="text-red-500">
+                    {errors.regionalOfficeDistrict}
+                  </p>
+                )}
+              </div>
+
+              {/* City */}
+              <div>
+                <Label htmlFor="regionalOfficeCity">Regional Office City</Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeCity"
+                  name="regionalOfficeCity"
+                  value={formData.regionalOfficeCity}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeCity && (
+                  <p className="text-red-500">{errors.regionalOfficeCity}</p>
+                )}
+              </div>
+
+              {/* PIN */}
+              <div>
+                <Label htmlFor="regionalOfficePIN">Regional Office PIN</Label>
+                <Input
+                  type="text"
+                  id="regionalOfficePIN"
+                  name="regionalOfficePIN"
+                  value={formData.regionalOfficePIN}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficePIN && (
+                  <p className="text-red-500">{errors.regionalOfficePIN}</p>
+                )}
+              </div>
+
+              {/* Telephone */}
+              <div>
+                <Label htmlFor="regionalOfficeTelephone">
+                  Regional Office Telephone
+                </Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeTelephone"
+                  name="regionalOfficeTelephone"
+                  value={formData.regionalOfficeTelephone}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeTelephone && (
+                  <p className="text-red-500">
+                    {errors.regionalOfficeTelephone}
+                  </p>
+                )}
+              </div>
+
+              {/* Mobile */}
+              <div>
+                <Label htmlFor="regionalOfficeMobile">
+                  Regional Office Mobile
+                </Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeMobile"
+                  name="regionalOfficeMobile"
+                  value={formData.regionalOfficeMobile}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeMobile && (
+                  <p className="text-red-500">{errors.regionalOfficeMobile}</p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <Label htmlFor="regionalOfficeEmail">
+                  Regional Office Email
+                </Label>
+                <Input
+                  type="email"
+                  id="regionalOfficeEmail"
+                  name="regionalOfficeEmail"
+                  value={formData.regionalOfficeEmail}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeEmail && (
+                  <p className="text-red-500">{errors.regionalOfficeEmail}</p>
+                )}
+              </div>
+
+              {/* GST */}
+              <div>
+                <Label htmlFor="regionalOfficeGST">
+                  Regional Office GST Number
+                </Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeGST"
+                  name="regionalOfficeGST"
+                  value={formData.regionalOfficeGST}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeGST && (
+                  <p className="text-red-500">{errors.regionalOfficeGST}</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="regionalOfficeGST">Regional Office Fax</Label>
+                <Input
+                  type="text"
+                  id="regionalOfficeFax"
+                  name="regionalOfficeFax"
+                  value={formData.regionalOfficeFax}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.regionalOfficeFax && (
+                  <p className="text-red-500">{errors.regionalOfficeFax}</p>
+                )}
+              </div>
+            </div>
+          </>
+        );
+
+      case 4:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Head Owner Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Head Owner Name */}
+              <div>
+                <Label htmlFor="headOwnerName">Head Owner Name</Label>
+                <Input
+                  type="text"
+                  id="headOwnerName"
+                  name="headOwnerName"
+                  value={formData.headOwnerName}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerName && (
+                  <p className="text-red-500">{errors.headOwnerName}</p>
+                )}
+              </div>
+
+              {/* Head Owner DOB */}
+              <div>
+                <Label htmlFor="headOwnerDOB">Head Owner DOB</Label>
+                <Input
+                  type="date"
+                  id="headOwnerDOB"
+                  name="headOwnerDOB"
+                  value={formData.headOwnerDOB}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerDOB && (
+                  <p className="text-red-500">{errors.headOwnerDOB}</p>
+                )}
+              </div>
+
+              {/* Head Owner City */}
+              <div>
+                <Label htmlFor="headOwnerCity">Head Owner City</Label>
+                <Input
+                  type="text"
+                  id="headOwnerCity"
+                  name="headOwnerCity"
+                  value={formData.headOwnerCity}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerCity && (
+                  <p className="text-red-500">{errors.headOwnerCity}</p>
+                )}
+              </div>
+
+              {/* Head Owner Residence Address */}
+              <div>
+                <Label htmlFor="headOwnerResidenceAddress">
+                  Head Owner Residence Address
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerResidenceAddress"
+                  name="headOwnerResidenceAddress"
+                  value={formData.headOwnerResidenceAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerResidenceAddress && (
+                  <p className="text-red-500">
+                    {errors.headOwnerResidenceAddress}
+                  </p>
+                )}
+              </div>
+
+              {/* Head Owner Permanent Address */}
+              <div>
+                <Label htmlFor="headOwnerPermanentAddress">
+                  Head Owner Permanent Address
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerPermanentAddress"
+                  name="headOwnerPermanentAddress"
+                  value={formData.headOwnerPermanentAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerPermanentAddress && (
+                  <p className="text-red-500">
+                    {errors.headOwnerPermanentAddress}
+                  </p>
+                )}
+              </div>
+
+              {/* Head Owner Mobile */}
+              <div>
+                <Label htmlFor="headOwnerMobile">Head Owner Mobile</Label>
+                <Input
+                  type="text"
+                  id="headOwnerMobile"
+                  name="headOwnerMobile"
+                  value={formData.headOwnerMobile}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerMobile && (
+                  <p className="text-red-500">{errors.headOwnerMobile}</p>
+                )}
+              </div>
+
+              {/* Head Owner Alternate Mobile */}
+              <div>
+                <Label htmlFor="headOwnerAlternateMobile">
+                  Head Owner Alternate Mobile
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerAlternateMobile"
+                  name="headOwnerAlternateMobile"
+                  value={formData.headOwnerAlternateMobile}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerAlternateMobile && (
+                  <p className="text-red-500">
+                    {errors.headOwnerAlternateMobile}
+                  </p>
+                )}
+              </div>
+
+              {/* Head Owner Email */}
+              <div>
+                <Label htmlFor="headOwnerEmail">Head Owner Email</Label>
+                <Input
+                  type="email"
+                  id="headOwnerEmail"
+                  name="headOwnerEmail"
+                  value={formData.headOwnerEmail}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerEmail && (
+                  <p className="text-red-500">{errors.headOwnerEmail}</p>
+                )}
+              </div>
+
+              {/* Head Owner Qualification */}
+              <div>
+                <Label htmlFor="headOwnerQualification">
+                  Head Owner Qualification
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerQualification"
+                  name="headOwnerQualification"
+                  value={formData.headOwnerQualification}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerQualification && (
+                  <p className="text-red-500">
+                    {errors.headOwnerQualification}
+                  </p>
+                )}
+              </div>
+
+              {/* Head Owner Work Experience */}
+              <div>
+                <Label htmlFor="headOwnerWorkExperience">
+                  Head Owner Work Experience
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerWorkExperience"
+                  name="headOwnerWorkExperience"
+                  value={formData.headOwnerWorkExperience}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerWorkExperience && (
+                  <p className="text-red-500">
+                    {errors.headOwnerWorkExperience}
+                  </p>
+                )}
+              </div>
+
+              {/* Head Owner PAN No */}
+              <div>
+                <Label htmlFor="headOwnerPANNo">Head Owner PAN No</Label>
+                <Input
+                  type="text"
+                  id="headOwnerPANNo"
+                  name="headOwnerPANNo"
+                  value={formData.headOwnerPANNo}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerPANNo && (
+                  <p className="text-red-500">{errors.headOwnerPANNo}</p>
+                )}
+              </div>
+
+              {/* Head Owner Aadhar No */}
+              <div>
+                <Label htmlFor="headOwnerAadharNo">Head Owner Aadhar No</Label>
+                <Input
+                  type="text"
+                  id="headOwnerAadharNo"
+                  name="headOwnerAadharNo"
+                  value={formData.headOwnerAadharNo}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerAadharNo && (
+                  <p className="text-red-500">{errors.headOwnerAadharNo}</p>
+                )}
+              </div>
+
+              {/* Head Owner Promoter 1 */}
+              <div>
+                <Label htmlFor="headOwnerPromoter1">
+                  Head Owner Promoter 1
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerPromoter1"
+                  name="headOwnerPromoter1"
+                  value={formData.headOwnerPromoter1}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerPromoter1 && (
+                  <p className="text-red-500">{errors.headOwnerPromoter1}</p>
+                )}
+              </div>
+
+              {/* Head Owner Promoter 2 */}
+              <div>
+                <Label htmlFor="headOwnerPromoter2">
+                  Head Owner Promoter 2
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerPromoter2"
+                  name="headOwnerPromoter2"
+                  value={formData.headOwnerPromoter2}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerPromoter2 && (
+                  <p className="text-red-500">{errors.headOwnerPromoter2}</p>
+                )}
+              </div>
+
+              {/* Head Owner Promoter 3 */}
+              <div>
+                <Label htmlFor="headOwnerPromoter3">
+                  Head Owner Promoter 3
+                </Label>
+                <Input
+                  type="text"
+                  id="headOwnerPromoter3"
+                  name="headOwnerPromoter3"
+                  value={formData.headOwnerPromoter3}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.headOwnerPromoter3 && (
+                  <p className="text-red-500">{errors.headOwnerPromoter3}</p>
+                )}
+              </div>
+            </div>
+          </>
+        );
+
+      case 5:
+        return (
+          <>
+            <h2 className="text-2xl font-bold mb-4">
+              Project Contact Person Details
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Project Contact Person Name */}
+              <div>
+                <Label htmlFor="projectContactPersonName">
+                  Project Contact Person Name
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonName"
+                  name="projectContactPersonName"
+                  value={formData.projectContactPersonName}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonName && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonName}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Designation */}
+              <div>
+                <Label htmlFor="projectContactPersonDesignation">
+                  Project Contact Person Designation
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonDesignation"
+                  name="projectContactPersonDesignation"
+                  value={formData.projectContactPersonDesignation}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonDesignation && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonDesignation}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person City */}
+              <div>
+                <Label htmlFor="projectContactPersonCity">
+                  Project Contact Person City
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonCity"
+                  name="projectContactPersonCity"
+                  value={formData.projectContactPersonCity}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonCity && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonCity}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Mobile */}
+              <div>
+                <Label htmlFor="projectContactPersonMobile">
+                  Project Contact Person Mobile
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonMobile"
+                  name="projectContactPersonMobile"
+                  value={formData.projectContactPersonMobile}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonMobile && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonMobile}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Alternate Mobile */}
+              <div>
+                <Label htmlFor="projectContactPersonAlternateMobile">
+                  Project Contact Person Alternate Mobile
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonAlternateMobile"
+                  name="projectContactPersonAlternateMobile"
+                  value={formData.projectContactPersonAlternateMobile}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonAlternateMobile && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonAlternateMobile}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Residence Address */}
+              <div>
+                <Label htmlFor="projectContactPersonResidenceAddress">
+                  Project Contact Person Residence Address
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonResidenceAddress"
+                  name="projectContactPersonResidenceAddress"
+                  value={formData.projectContactPersonResidenceAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonResidenceAddress && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonResidenceAddress}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Permanent Address */}
+              <div>
+                <Label htmlFor="projectContactPersonPermanentAddress">
+                  Project Contact Person Permanent Address
+                </Label>
+                <Input
+                  type="text"
+                  id="projectContactPersonPermanentAddress"
+                  name="projectContactPersonPermanentAddress"
+                  value={formData.projectContactPersonPermanentAddress}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonPermanentAddress && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonPermanentAddress}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Email */}
+              <div>
+                <Label htmlFor="projectContactPersonEmail">
+                  Project Contact Person Email
+                </Label>
+                <Input
+                  type="email"
+                  id="projectContactPersonEmail"
+                  name="projectContactPersonEmail"
+                  value={formData.projectContactPersonEmail}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonEmail && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonEmail}
+                  </p>
+                )}
+              </div>
+
+              {/* Project Contact Person Alternate Email */}
+              <div>
+                <Label htmlFor="projectContactPersonAlternateEmail">
+                  Project Contact Person Alternate Email
+                </Label>
+                <Input
+                  type="email"
+                  id="projectContactPersonAlternateEmail"
+                  name="projectContactPersonAlternateEmail"
+                  value={formData.projectContactPersonAlternateEmail}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.projectContactPersonAlternateEmail && (
+                  <p className="text-red-500">
+                    {errors.projectContactPersonAlternateEmail}
+                  </p>
+                )}
+              </div>
+            </div>
+          </>
+        );
+
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen p-6 md:p-10">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white text-center">
-          <h1 className="text-3xl font-bold">Training Partner Sign Up</h1>
-        </div>
-        <div className="p-6 md:p-10">
-          {isMobile ? (
-            <div className="space-y-6">
-              {/* Mobile layout */}
-              {[...firstColumn, ...secondColumn].map((labelObj, index) => (
-                <div key={index} className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700">
-                    {labelObj.label}
-                  </Label>
-                  {renderInput(labelObj)}
-                  {errors[labelObj.name] && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors[labelObj.name]}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Desktop layout */}
-              <div className="space-y-6">
-                {firstColumn.map((labelObj, index) => (
-                  <div key={index} className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">
-                      {labelObj.label}
-                    </Label>
-                    {renderInput(labelObj)}
-                    {errors[labelObj.name] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[labelObj.name]}
-                      </p>
-                    )}
-                  </div>
-                ))}
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Training Partner Signup</h1>
+      <div className="mb-8">
+        <div className="flex justify-between">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className={`text-center ${
+                currentStep > index + 1
+                  ? "text-green-500"
+                  : currentStep === index + 1
+                  ? "text-blue-500"
+                  : "text-gray-500"
+              }`}
+            >
+              <div
+                className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center border-2 ${
+                  currentStep > index + 1
+                    ? "border-green-500 bg-green-500 text-white"
+                    : currentStep === index + 1
+                    ? "border-blue-500"
+                    : "border-gray-500"
+                }`}
+              >
+                {currentStep > index + 1 ? "✓" : index + 1}
               </div>
-              <div className="space-y-6">
-                {secondColumn.map((labelObj, index) => (
-                  <div key={index} className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">
-                      {labelObj.label}
-                    </Label>
-                    {renderInput(labelObj)}
-                    {errors[labelObj.name] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[labelObj.name]}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <div className="mt-2">{step}</div>
             </div>
-          )}
+          ))}
         </div>
-        <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
-          <Button
-            onClick={handlePreviousPage}
-            className="bg-gray-300 text-gray-800 hover:bg-gray-400"
-            disabled={currentPage === 0}
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={handleNextPage}
-            className="bg-blue-600 text-white hover:bg-blue-700"
-          >
-            {onSubmit ? "Submit" : "Next"}
-          </Button>
+        <div className="mt-4 h-2 bg-gray-200 rounded-full">
+          <div
+            className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-in-out"
+            style={{
+              width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
+            }}
+          ></div>
         </div>
       </div>
+      <form onSubmit={handleSubmit}>
+        {renderStep()}
+        <div className="mt-6 flex justify-between">
+          {currentStep > 1 && (
+            <Button type="button" onClick={prevStep}>
+              Previous
+            </Button>
+          )}
+          {currentStep < steps.length ? (
+            <Button type="button" onClick={nextStep}>
+              Next
+            </Button>
+          ) : (
+            <Button type="submit">{loading ? "Submitting.." : "Submit"}</Button>
+          )}
+        </div>
+      </form>
     </div>
   );
 };
 
 export default Signup;
-

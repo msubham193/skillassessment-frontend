@@ -189,7 +189,7 @@ const UpdateBatchBox = () => {
                   {loading
                     ? "Loading..."
                     : data?.paymentStatus === true
-                    ? "Payment successfull"
+                    ? "Payment successful"
                     : "Approve Batch"}
                 </Button>
               </div>

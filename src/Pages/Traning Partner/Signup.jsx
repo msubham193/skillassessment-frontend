@@ -1626,7 +1626,7 @@ const Signup = () => {
             className="h-full bg-green-500 rounded-full transition-all duration-300 ease-in-out"
             style={{
               width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-            }}
+            }} 
           ></div>
         </div>
       </div>

@@ -34,7 +34,7 @@ const CreateCertificate = ({children}) => {
           </div>
           <div className="flex items-center space-x-2">
             {/* add the functionality like search and filter */}
-            {/* For now  there is nothing to add in fecture if there some data  thenn we will put there */}
+            {/* For now  there is nothing to add in facture if there some data  then we will put there */}
           </div>
         </div>
           <Tabs defaultValue="AaMarkSheet" className="space-y-4">

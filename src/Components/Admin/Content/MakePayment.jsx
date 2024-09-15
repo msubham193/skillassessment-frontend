@@ -89,7 +89,7 @@ const MakePayment = ({ children, invoice_id, amountToPaid }) => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-left w-56">
-                  Enter Trangection ID
+                  Enter Transaction ID
                 </Label>
                 <Input
                   id="batch"
@@ -101,7 +101,7 @@ const MakePayment = ({ children, invoice_id, amountToPaid }) => {
               <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-left w-36">
-                    Amount Pade
+                    Amount Paid
                   </Label>
                   <Input
                     id="name"

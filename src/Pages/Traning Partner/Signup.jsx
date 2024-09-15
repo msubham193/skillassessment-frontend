@@ -1,13 +1,8 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { toast } from "react-toastify";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CalendarIcon } from "lucide-react";
-
-// shadcn components
 import { Button } from "@/components(shadcn)/ui/button";
 import { Input } from "@/components(shadcn)/ui/input";
 import { Label } from "@/components(shadcn)/ui/label";
@@ -16,17 +11,15 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components(shadcn)/ui/select";
 
 // Custom imports
 import "react-toastify/dist/ReactToastify.css";
-import { coursesData } from "@/Components/Traning Partner/Atoms/courseAtom";
-import { sectorData } from "@/Components/Traning Partner/Atoms/sectorAtom";
-import { validationSchema } from "@/Components/Traning Partner/utils/validation";
+// import { coursesData } from "@/Components/Traning Partner/Atoms/courseAtom";
+// import { sectorData } from "@/Components/Traning Partner/Atoms/sectorAtom";
 import { server } from "@/main";
-import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -130,8 +123,7 @@ const Signup = () => {
     "Puducherry",
   ];
   const navigate = useNavigate();
-  const [courses, setCourses] = useRecoilState(coursesData);
-  const [sectors, setSectors] = useRecoilState(sectorData);
+  const [sectors, setSectors] = useState([]);
   const [selectedSector, setSelectedSector] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState({});
@@ -144,23 +136,25 @@ const Signup = () => {
   };
 
   //function for fetch all sector present in the potal
-  const fetchSectors = async () => {
-    try {
-      const response = await fetch(`${server}/sector/all`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      // console.log(data.data);
-      setSectors(data.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+
   useEffect(() => {
-    fetchSectors();
+    try {
+      axios
+        .get(`${server}/sector/all`, {
+          withCredentials: true,
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        })
+        .then((response) => {
+          setSectors(response.data.data);
+        });
+    } catch (error) {
+      console.error("Error fetching training partner:", error);
+      throw error;
+    }
   }, []);
 
   const steps = [
@@ -427,8 +421,6 @@ const Signup = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateStep(currentStep)) {
@@ -469,7 +461,7 @@ const Signup = () => {
       case 1:
         return (
           <>
-            <h2 className="text-2xl font-bold mb-4">Basic Information</h2>
+            <h2 className="text-2xl font-bold mb-2">Basic Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {/* Organization Name */}
               <div>
@@ -659,11 +651,12 @@ const Signup = () => {
                     {formData.sector ? formData.sector : "Select Sector"}
                   </SelectTrigger>
                   <SelectContent>
-                    {sectors.map((sector) => (
-                      <SelectItem key={sector._id} value={sector.name}>
-                        {sector.name}
-                      </SelectItem>
-                    ))}
+                    {sectors &&
+                      sectors.map((sector) => (
+                        <SelectItem key={sector?._id} value={sector?.name}>
+                          {sector?.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
                 {errors.sector && (
@@ -723,7 +716,7 @@ const Signup = () => {
       case 2:
         return (
           <>
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-bold mb-2">
               Registered Office Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -933,7 +926,7 @@ const Signup = () => {
         return (
           <>
             <h2 className="text-2xl font-bold mb-4">Regional Office Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {/* Address */}
               <div>
                 <Label htmlFor="regionalOfficeAddress">
@@ -1130,7 +1123,7 @@ const Signup = () => {
         return (
           <>
             <h2 className="text-2xl font-bold mb-4">Head Owner Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {/* Head Owner Name */}
               <div>
                 <Label htmlFor="headOwnerName">Head Owner Name</Label>
@@ -1403,7 +1396,7 @@ const Signup = () => {
       case 5:
         return (
           <>
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-bold mb-2">
               Project Contact Person Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1597,8 +1590,10 @@ const Signup = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Training Partner Signup</h1>
-      <div className="mb-8">
+      <h1 className="text-3xl font-bold mb-6 flex justify-center">
+        Training Partner Signup
+      </h1>
+      <div className="mb-4">
         <div className="flex justify-between">
           {steps.map((step, index) => (
             <div
@@ -1612,26 +1607,26 @@ const Signup = () => {
               }`}
             >
               <div
-                className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center border-2 ${
+                className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center border-2 ${
                   currentStep > index + 1
                     ? "border-green-500 bg-green-500 text-white"
                     : currentStep === index + 1
-                    ? "border-blue-500"
+                    ? "border-blue-700"
                     : "border-gray-500"
                 }`}
               >
                 {currentStep > index + 1 ? "✓" : index + 1}
               </div>
-              <div className="mt-2">{step}</div>
+              <div className="mt-1">{step}</div>
             </div>
           ))}
         </div>
-        <div className="mt-4 h-2 bg-gray-200 rounded-full">
+        <div className="mt-2 h-[6px] bg-gray-300 rounded-full">
           <div
-            className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-in-out"
+            className="h-full bg-green-500 rounded-full transition-all duration-300 ease-in-out"
             style={{
               width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-            }}
+            }} 
           ></div>
         </div>
       </div>

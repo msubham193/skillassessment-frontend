@@ -47,11 +47,11 @@ const ExamDetailsBox = ({id}) => {
       <div className="w-full mt-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Traning Partner Name*</h3>
+            <h3 className="text-lg font-medium mb-2">Training Partner Name*</h3>
             <p className="text-lg ">{data?.TrainingOrganization}</p>
           </div>
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">AssesmentAgency Name*</h3>
+            <h3 className="text-lg font-medium mb-2">AssessmentAgency Name*</h3>
             <p className="text-lg ">{data?.assesmentAgency}</p>
           </div>
           <div className="p-3">
@@ -71,7 +71,7 @@ const ExamDetailsBox = ({id}) => {
             <p className="text-lg ">{data?.date?.split("T")[0]}</p>
           </div>
           <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Date of Uplode*</h3>
+            <h3 className="text-lg font-medium mb-2">Date of Upload*</h3>
             <p className="text-lg ">{data?.updatedAt?.split("T")[0]}</p>
           </div>
           <div className="p-3">

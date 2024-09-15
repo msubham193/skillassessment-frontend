@@ -147,7 +147,7 @@ const TpNotificationBoxContent = () => {
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
             <p className="text-muted-foreground">
-              Here&apos;s a list of Traning Partner's for you!
+              Here&apos;s a list of Training Partner's for you!
             </p>
           </div>
 
@@ -258,7 +258,7 @@ const columns = [
   },
   {
     accessorKey: "organizationName",
-    header: "Traning Partner Name",
+    header: "Training Partner Name",
   },
   {
     accessorKey: "registeredOfficeEmail",

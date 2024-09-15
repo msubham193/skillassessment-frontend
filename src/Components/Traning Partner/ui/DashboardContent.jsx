@@ -3,19 +3,49 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import { Button } from "@/components(shadcn)/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components(shadcn)/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components(shadcn)/ui/pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components(shadcn)/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components(shadcn)/ui/pagination";
 import { Tabs } from "@/components(shadcn)/ui/tabs";
 import { Skeleton } from "@/components(shadcn)/ui/skeleton";
 import DataTabs from "@/Components/Admin/ui/DataTabs";
-import { CandlestickChart, GraduationCap, Presentation, SquareActivity, Eye } from "lucide-react";
+import {
+  CandlestickChart,
+  GraduationCap,
+  Presentation,
+  SquareActivity,
+  Eye,
+} from "lucide-react";
 import { batchDataAtoms } from "../Atoms/batchatom";
 import { centerAtom } from "../Atoms/centerAtom";
 import { batchIdAtoms } from "../Atoms/BatchId";
 import TopBar from "../TopBar";
 import { server } from "@/main";
 import { AnimatedPagination } from "./Pagination/Animatedpagination";
- 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components(shadcn)/ui/alert-dialog"
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
@@ -46,7 +76,7 @@ const Content = () => {
       if (response.ok) {
         const data = await response.json();
         setBatchData(data.data);
-        navigate(`/trainingPartner/dashboard/${batchId}`);
+        navigate(`/trainingPartner/viewBatch/${batchId}`);
       } else {
         console.error("Failed to fetch batches");
       }
@@ -278,13 +308,40 @@ const Content = () => {
                             >
                               Add Student
                             </Button>
-                            <Button
-                              className="text-xs text-white px-4 py-1 bg-purple-600 hover:bg-purple-700"
-                              onClick={() => handelBatchReady(batch._id)}
-                              disabled={batch.batchActivePermission === true || submitLoading === batch._id}
-                            >
-                              {submitLoading === batch._id ? "Submitting..." : "Submit Batch"}
-                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  className="text-xs text-white px-4 py-1 bg-purple-600 hover:bg-purple-700"
+                                  disabled={
+                                    batch.batchActivePermission === true ||
+                                    submitLoading === batch._id
+                                  }
+                                >
+                                  {submitLoading === batch._id
+                                    ? "Submitting..."
+                                    : "Submit Batch"}
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action will submit the batch and this can't be undo . Are you
+                                    sure you want to proceed?
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handelBatchReady(batch._id)}
+                                  >
+                                    Confirm Submit
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -292,12 +349,12 @@ const Content = () => {
                   </TableBody>
                 </Table>
                 <div className="mt-auto py-4">
-              <AnimatedPagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={paginate}
-              />
-              </div>
+                  <AnimatedPagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={paginate}
+                  />
+                </div>
               </div>
             ) : (
               <div className="text-center mt-8 text-gray-500">

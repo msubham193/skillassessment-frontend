@@ -58,7 +58,7 @@ const TrainerDetails = () => {
   // Render the trainer details using the fetched data
   return (
     <div className="container mx-auto p-4">
-        <Button onClick={()=>navigate(`/trainingPartner/dashboard/${batchId}`)}>Back to trainers</Button>
+        <Button onClick={()=>navigate(`/trainingPartner/viewBatch/${batchId}`)}>Back to trainers</Button>
       <Card className="w-full max-w-3xl mx-auto">
         <CardHeader className="flex flex-row items-center space-x-4 pb-2">
           <Avatar className="w-20 h-20">

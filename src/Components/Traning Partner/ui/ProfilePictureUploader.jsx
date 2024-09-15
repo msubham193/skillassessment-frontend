@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button } from '@/components(shadcn)/ui/button';
 import { Input } from '@/components(shadcn)/ui/input';
@@ -10,9 +10,17 @@ const ProfilePictureUploader = ({ studentId }) => {
     const [isUploading, setIsUploading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
 
+    useEffect(() => {
+        const uploadStatus = localStorage.getItem(`profilePictureUploaded_${studentId}`);
+        if (uploadStatus === 'true') {
+            setIsUploaded(true);
+        }
+    }, [studentId]);
+
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
         setIsUploaded(false);
+        localStorage.setItem(`profilePictureUploaded_${studentId}`, 'false');
     };
 
     const handleUpload = async () => {
@@ -37,6 +45,7 @@ const ProfilePictureUploader = ({ studentId }) => {
             toast.success(response.data.message);
             setFile(null);
             setIsUploaded(true);
+            localStorage.setItem(`profilePictureUploaded_${studentId}`, 'true');
         } catch (error) {
             console.error('Error uploading file:', error);
             toast.error('Failed to upload profile picture');

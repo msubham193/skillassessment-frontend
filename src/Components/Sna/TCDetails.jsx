@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "../Admin/ui/notiification/DataTable";
 
 const TCDetails = () => {
-  const [centerDetails, setCenterDetails] = useState([]);
+  const [centerDetails, setCenterDetails] = useState([]);   
   const [loading, setLoading] = useState(false);
   const state = localStorage.getItem("state"); 
   const scheme = localStorage.getItem("scheme");
@@ -39,6 +39,7 @@ const TCDetails = () => {
         View and manage the training batches submitted by the Training Agency.
       </p>
       <DataTable
+      path={"/sna/centerDetails"}
       filter1={"name"}
       columns={batchColumns}
       data={centerDetails}

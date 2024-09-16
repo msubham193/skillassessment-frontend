@@ -8,7 +8,7 @@ import { DataTable } from "../Admin/ui/notiification/DataTable";
 const TrainingBatches = () => {
   const [batchData, setBatchData] = useState([]);
   const [loading, setLoading] = useState(false);
-  //in this ppage we can only see the details not able to manage the data 
+  //in this page we can only see the details not able to manage the data   
 
   useEffect(() => {
     const fetchData = async () => {

@@ -37,15 +37,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components(shadcn)/ui/dialog";
-import StudentTable from "@/Components/Sna/StudentTable";
 import TrainerTable from "@/Components/Sna/TrainerTable";
 
 const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();
-  const [showStudentsModal, setShowStudentsModal] = useState(false); 
-  const [showTrainersModal, setShowTrainersModal] = useState(false);
+  const navigate=useNavigate();
+  const [showTrainersModal, setShowTrainersModal] = useState(false);    
   const [batchDetails, setBatchDetails] = useState([]);
-  const [studentData, setStudentData] = useState([]);
   const [trainerData, setTrainerData] = useState([]);
   const [isApproaved, setIsApproaved] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,7 +57,7 @@ const BatchDetailsOfSNA = () => {
         console.log(response.data.data.trainers);
         console.log(response.data.data.students);
         const data = response.data.data;
-        setStudentData(data?.students);
+        // setStudentData(data?.students);
         setTrainerData(data?.trainers);
         setBatchDetails(data);
         if (data.approvedByGovernmentBody === true) {
@@ -335,7 +333,7 @@ const BatchDetailsOfSNA = () => {
                 Students: {batchDetails.students?.length ?? 0}
               </p>
               <Button
-                onClick={() => setShowStudentsModal(true)}
+                onClick={() => navigate(`/sna/batchdetails/student/${batchId}`)}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 See Students
@@ -395,32 +393,6 @@ const BatchDetailsOfSNA = () => {
             )}
           </button>
         </div>
-
-        {/* Students Modal */}
-        <Dialog
-          open={showStudentsModal}
-          onOpenChange={setShowStudentsModal}
-          className="w-full"
-        >
-          <DialogContent className="max-w-6xl">
-            {" "}
-            {/* Increased width */}
-            <DialogHeader>
-              <DialogTitle>Students List</DialogTitle>
-              <DialogDescription>
-                Below is the list of students enrolled in this batch.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="mt-4 overflow-x-auto">
-              {" "}
-              {/* Ensure the table scrolls if it overflows */}
-              <StudentTable data={studentData} />
-            </div>
-            <DialogFooter>
-              <Button onClick={() => setShowStudentsModal(false)}>Close</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
 
         {/* Trainers Modal */}
         <Dialog

@@ -30,7 +30,7 @@ import { toast } from "react-toastify";
 const CenterDetailsofSNA = () => {
   const { centerId } = useParams();
   const [data, setData] = useState({});
-  const [isApproaved, setIsApproaved] = useState(false); 
+  const [isApproaved, setIsApproaved] = useState(false);    
   const [loading, setLoading] = useState(false);
   const state = localStorage.getItem("state");
   const schemeName = localStorage.getItem("scheme");

@@ -40,15 +40,45 @@ const CreateBatch = () => {
     centerName: "",
   });
   const indianStates = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
-    "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
-    "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
-    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", 
-    "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", 
-    "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Jammu and Kashmir", "Ladakh", 
-    "Lakshadweep", "Puducherry"
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
   ];
   const [selectedCenter, setSelectedCenter] = useState(null);
+  const [selectedSchemeType, setSelectedSchemeType] = useState(null);
   const [centers, setCenters] = useState([]);
   const [batchData, setBatchData] = useRecoilState(batchDataAtoms);
   const [courses, setCourses] = useState([]);
@@ -64,32 +94,33 @@ const CreateBatch = () => {
       console.log("Missing required data for fetching centers");
       return;
     }
-  
+
     setIsLoading(true);
     setError(null); // Clear any previous errors
-  
+
     try {
-      const response = await fetch(
-        `${server}/sna/centers/tp/query?trainingPartnerId=${tpid}&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`,
-        { method: "GET" }
-      );
-  
+      const url =
+        selectedSchemeType === "Corporate"
+          ? `${server}/center/tp/${tpid }`
+          : `${server}/sna/centers/tp/query?trainingPartnerId=${tpid }&schemeName=${batchInputs.scheme}&state=${batchInputs.state}`;
+      const response = await fetch(url, { method: "GET" });
+
       if (!response.ok) {
         throw new Error("Failed to fetch centers");
       }
-  
+
       const data = await response.json();
-  
+
       if (data.data && data.data.length > 0) {
         setCenters(data.data);
       } else {
-        setCenters([]); 
+        setCenters([]);
         setError("No centers found for the selected criteria.");
       }
     } catch (error) {
       console.error("Error fetching centers:", error);
       setError("Failed to fetch centers. Please try again.");
-      setCenters([]); 
+      setCenters([]);
     } finally {
       setIsLoading(false);
     }
@@ -119,9 +150,7 @@ const CreateBatch = () => {
     if (!batchInputs.schemeType) return;
     try {
       const response = await fetch(
-
         `${server}/scheme/query?schemeType=${batchInputs.schemeType}`
-
       );
       if (!response.ok) {
         throw new Error("Failed to fetch schemes");
@@ -158,7 +187,11 @@ const CreateBatch = () => {
     ];
     for (let field of requiredFields) {
       if (!batchInputs[field]) {
-        setError(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
+        setError(
+          `Please fill in the ${field
+            .replace(/([A-Z])/g, " $1")
+            .toLowerCase()} field`
+        );
         return false;
       }
     }
@@ -167,6 +200,9 @@ const CreateBatch = () => {
   };
 
   const handleSelectChange = (name, value) => {
+    if (name == "schemeType") {
+      setSelectedSchemeType(value);
+    }
     setBatchInputs((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -184,26 +220,23 @@ const CreateBatch = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${server}/batch/create`,
-        {
-          method: "POST",
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...batchInputs,
-            startDate: batchInputs.startDate
-              ? batchInputs.startDate.toISOString()
-              : null,
-            endDate: batchInputs.endDate
-              ? batchInputs.endDate.toISOString()
-              : null,
-            tpcode: tpcode,
-          }),
-        }
-      );
+      const response = await fetch(`${server}/batch/create`, {
+        method: "POST",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...batchInputs,
+          startDate: batchInputs.startDate
+            ? batchInputs.startDate.toISOString()
+            : null,
+          endDate: batchInputs.endDate
+            ? batchInputs.endDate.toISOString()
+            : null,
+          tpcode: tpcode,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -223,7 +256,7 @@ const CreateBatch = () => {
       setIsLoading(false);
     }
   };
-
+  console.log();
   const handleCenterSelect = (value) => {
     const center = centers.find((c) => c.name === value);
     setSelectedCenter(center);
@@ -258,15 +291,17 @@ const CreateBatch = () => {
         Back to Dashboard
       </Button>
       <div className="space-y-2 text-center">
-      
         <h1 className="text-3xl font-bold text-blue-800">Create New Batch</h1>
-        
+
         <p className="text-blue-600">
           Fill out the form below to create a new training batch.
         </p>
       </div>
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded" role="alert">
+        <div
+          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded"
+          role="alert"
+        >
           <p className="font-bold">Error</p>
           <p>{error}</p>
         </div>
@@ -285,8 +320,12 @@ const CreateBatch = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Scheme Types</SelectLabel>
-                  <SelectItem value="Central Government">Central Government</SelectItem>
-                  <SelectItem value="State Government">State Government</SelectItem>
+                  <SelectItem value="Central Government">
+                    Central Government
+                  </SelectItem>
+                  <SelectItem value="State Government">
+                    State Government
+                  </SelectItem>
                   <SelectItem value="Corporate">Corporate</SelectItem>
                 </SelectGroup>
               </SelectContent>
@@ -314,26 +353,26 @@ const CreateBatch = () => {
             </Select>
           </div>
           <div className="space-y-2">
-        <Label htmlFor="state">State</Label>
-        <Select
-          value={batchInputs.state}
-          onValueChange={(value) => handleSelectChange("state", value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a state" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>States</SelectLabel>
-              {indianStates.map((state) => (
-                <SelectItem key={state} value={state}>
-                  {state}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+            <Label htmlFor="state">State</Label>
+            <Select
+              value={batchInputs.state}
+              onValueChange={(value) => handleSelectChange("state", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a state" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>States</SelectLabel>
+                  {indianStates.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="center-name">Center Name</Label>
             <Select
@@ -459,7 +498,7 @@ const CreateBatch = () => {
               placeholder="Enter Training Organization"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4"> */}
             <div className="space-y-2">
               <Label htmlFor="start-date">Start Date</Label>
               <Popover>
@@ -506,7 +545,7 @@ const CreateBatch = () => {
                 </PopoverContent>
               </Popover>
             </div>
-          </div>
+          {/* </div> */}
         </div>
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? "Creating Batch..." : "Create Batch"}

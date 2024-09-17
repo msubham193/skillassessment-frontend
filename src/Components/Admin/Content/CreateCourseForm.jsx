@@ -25,6 +25,7 @@ const CreateCourseForm = () => {
       vivaMarks: "",
       totalMarks: "",
       nosWisePassPercentage: "",
+      nosType:"",
     },
   ]);
 
@@ -45,6 +46,7 @@ const CreateCourseForm = () => {
       {
         description: "",
         code: "",
+        nosType:"",
         credit: "",
         theoryMarks: "",
         practicalMarks: "",
@@ -103,7 +105,7 @@ const CreateCourseForm = () => {
 
     for (let i = 0; i < nos.length; i++) {
       const field = nos[i];
-      if (!field.description || !field.code || !field.credit || !field.theoryMarks || !field.practicalMarks || !field.vivaMarks || !field.totalMarks || !field.nosWisePassPercentage) {
+      if (!field.description || !field.code || !field.nosType || !field.credit || !field.theoryMarks || !field.practicalMarks || !field.vivaMarks || !field.totalMarks || !field.nosWisePassPercentage) {
         toast.error(`Please fill out all NOS fields for entry ${i + 1}.`, {
           position: "top-center",
           closeOnClick: true,
@@ -143,7 +145,8 @@ const CreateCourseForm = () => {
       });
       setShowButton(false);
     } catch (error) {
-      toast.error(error.response.data, {
+      // console.log(error.response.data.error);
+      toast.error(error.response.data.error, {
         position: "top-center",
         closeOnClick: true,
         draggable: true,
@@ -262,7 +265,7 @@ const CreateCourseForm = () => {
             >
               <div className="p-3">
                 <Label htmlFor={`description-${index}`} className="text-left w-40">
-                  Add NOS
+                   NOS NAME
                 </Label>
                 <Input
                   id={`description-${index}`}
@@ -286,6 +289,20 @@ const CreateCourseForm = () => {
                       onChange={(e) => handleFieldChange(index, e)}
                       className="flex-1 py-5"
                       placeholder="Add Subject Code"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`code-${index}`} className="text-left w-40">
+                      NOS TYPE
+                    </Label>
+                    <Input
+                      id={`nosType-${index}`}
+                      type="text"
+                      name="nosType"
+                      value={field.nosType}
+                      onChange={(e) => handleFieldChange(index, e)}
+                      className="flex-1 py-5"
+                      placeholder="Add Type of nos"
                     />
                   </div>
                   <div>

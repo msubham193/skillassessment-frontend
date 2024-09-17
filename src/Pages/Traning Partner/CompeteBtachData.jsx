@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 
 const CompeteBatchData = () => {
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
-  const marksheetRef = useRef(); 
+  const marksheetRef = useRef();
   const certificateRef = useRef();
   const [loadingStates, setLoadingStates] = useState({});
   const [studentData, setStudentData] = useState(null);
@@ -48,7 +48,7 @@ const CompeteBatchData = () => {
         },
       }));
       setCurrentStudentId(null);
-      setDocumentType(null); 
+      setDocumentType(null);
     },
   });
   const fetchStudentData = useCallback(async (studentId, type) => {
@@ -88,7 +88,7 @@ const CompeteBatchData = () => {
       }));
     }
   }, []);
- console.log("data comes",studentData)
+  console.log("data comes", studentData);
   useEffect(() => {
     if (currentStudentId && studentData && documentType) {
       handlePrint();
@@ -118,13 +118,13 @@ const CompeteBatchData = () => {
       nosMarks: student?.marks.Nos.map((nos, index) => ({
         code: nos?.code,
         name: nos?.name,
-        type: "Theory & Practical",
+        type: nos?.nosType,
         maxMarks: nos?.passMark,
         marksObtained: nos?.MarksObtained,
       })),
       totalMarks: student?.marks?.total,
       grade: student?.marks?.Grade,
-      result: student?.marks?.Result, 
+      result: student?.marks?.Result,
       dateOfIssue: new Date().toISOString().split("T")[0],
       certificateNo: `CERT${student.redg_No}`,
       studentId: student._id,
@@ -151,6 +151,7 @@ const CompeteBatchData = () => {
       dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
+      schemeLogo:data.schemeLogo
     };
   }, []);
 
@@ -159,7 +160,6 @@ const CompeteBatchData = () => {
   };
 
   // New function to download all marksheets sequentially
- 
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -171,7 +171,7 @@ const CompeteBatchData = () => {
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
               Students
             </h1>
-           
+
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
               {batchData &&
               batchData.students &&
@@ -240,9 +240,11 @@ const CompeteBatchData = () => {
                 disabled={isDownloadingAll || !batchData.students.length}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
-                {isDownloadingAll ? "Downloading..." : "Download All MarkSheets"}
+                {isDownloadingAll
+                  ? "Downloading..."
+                  : "Download All MarkSheets"}
               </Button>
-            </div> 
+            </div>
           </div>
         </main>
       </div>

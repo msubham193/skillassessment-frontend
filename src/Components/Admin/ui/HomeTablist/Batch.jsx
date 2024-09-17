@@ -15,7 +15,7 @@ import {
 } from "@/components(shadcn)/ui/select"; 
 import { RotateCcw, X } from "lucide-react";
 
-const Batch = () => {
+const Batch = () => { 
   const [batch, setBatch] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);

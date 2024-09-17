@@ -33,7 +33,7 @@ const GenerateInvoice = () => {
         const response = await axios.post(
           `${server}/invoice/${assessmentAgencyId[0]}`
         );
-        console.log(response.data.data.totalAmountToBePaid);
+        console.log(response.data.data);
         const data = response.data.data;
         setDate(data.invoiceGenerateDate);
         setName(data.AssesmentAgencyDetails.name);

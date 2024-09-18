@@ -84,9 +84,9 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
-          <div className="mt-[25px] ml-[28%] flex">
+          <div className="mt-[25px] ml-[30%] flex">
             <p className=" text-[12px] font-semibold">{fatherName || "N/A"}</p>
-            <p className=" ml-[250px] text-[12px] font-semibold">
+            <p className=" ml-[280px] text-[12px] font-semibold">
               {formattedDateOfBirth || "N/A"}
             </p>
             <p className=" ml-[130px] text-[12px] font-semibold">
@@ -112,7 +112,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className=" text-xs font-semibold mb-2 sm:mb-0">
               {trainingCenter || "N/A"}
             </p>
-            <p className=" ml-[350px] text-xs font-semibold mb-2 sm:mb-0">
+            <p className=" ml-[390px] text-xs font-semibold mb-2 sm:mb-0">
               {district || "N/A"}
             </p>
             <p className=" ml-[140px] text-xs font-semibold">

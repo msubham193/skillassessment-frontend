@@ -69,7 +69,7 @@ const AddSector = ({ children }) => {
           <DialogHeader>
             <DialogTitle>Create Sector</DialogTitle>
             <DialogDescription>
-              Create Sector for Course or select from dropedown
+              Create Sector for Course or select from dropdown
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={createSector}>
@@ -101,7 +101,7 @@ const AddSector = ({ children }) => {
           </form>
           <DialogFooter>
             <Button onClick={createSector} type="submit" disabled={showbuttion}>
-              {showbuttion ? "Loding...." : "Generate Sector"}
+              {showbuttion ? "Lading...." : "Generate Sector"}
             </Button>
           </DialogFooter>
         </DialogContent>

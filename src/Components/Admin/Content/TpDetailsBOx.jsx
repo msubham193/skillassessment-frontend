@@ -443,7 +443,7 @@ const TpDetailsBOx = ({ id }) => {
         <div className="p-8 w-[500px] relative left-44">
           <form onSubmit={applicationApproved}>
             <Label htmlFor="name" className="text-left w-40 text-lg">
-              Add cost per Student for this Traning Partner..
+              Add cost per Student for this Training Partner..
             </Label>
             <Input
               id="scheme-name"
@@ -468,7 +468,7 @@ const TpDetailsBOx = ({ id }) => {
         >
           {" "}
           {loding
-            ? "Loding..."
+            ? "Loading..."
             : data.applicationStatus === "Rejected"
             ? "Rejected"
             : "Reject"}

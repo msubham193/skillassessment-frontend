@@ -49,7 +49,7 @@ export default TraningPartner;
 const columns = [
   {
     accessorKey: "organizationName",
-    header: "Traning Partner Name",
+    header: "Training Partner Name",
   },
   {
     accessorKey: "registeredOfficeEmail",

@@ -106,7 +106,10 @@ import TCDetails from "./Components/Sna/TCDetails";
 import TBDetails from "./Components/Sna/TBDetails";
 import AddBulkTrainer from "./Pages/Traning Partner/BulkTrainerAdd";
 import AddTrainer from "./Pages/Traning Partner/AddTrainer";
+
 import DownloadAllMarksheet from "./Pages/Traning Partner/DownloadAllMarksheet";
+
+import StudentTable from "./Components/Sna/StudentTable";
 
 
 
@@ -400,6 +403,14 @@ const App = () => {
             <Route
               path="batchdetails/:batchId"
               element={<BatchDetailsOfSNA />}
+              />
+            <Route
+              path="batchdetails/student/:batchId"
+              element={<StudentTable />}
+              />
+            <Route
+              path="batch/student/:studentId"
+              element={<StudentDetails />}
               />
               <Route
               path="centerDetails/:centerId"

@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import HomeTable from '../ui/HomeTablist/HomeTable';
 import { Button } from '@/components(shadcn)/ui/button';
 import { toast } from 'react-toastify';
-const ResultContent = ({ batchId }) => { 
+const ResultContent = ({ batchId }) => {  
   const [students, setSutdents] = useState([]);  
   const [loading, setLoading] = useState(false);
   const [examId, setExamId] = useState("");
@@ -14,6 +14,8 @@ const ResultContent = ({ batchId }) => {
   const [resultSheet, setResultSheet] = useState("");
   const [images, setImages] = useState([]);
   const [showPhotos, setShowPhotos] = useState(false);  
+  const [isApproved, setIsApproved] = useState(false);
+
 
   // Fetch the student from batch by using batchID data
   useEffect(() => {
@@ -34,7 +36,7 @@ const ResultContent = ({ batchId }) => {
       }
     };
     fetchResultData();
-  }, [batchId]);
+  }, [batchId,isApproved]);
 
   // Fetch the exam data using the examId
   useEffect(() => {
@@ -96,6 +98,7 @@ const ResultContent = ({ batchId }) => {
           withCredentials: true,
         }
       );
+      setIsApproved(true);
       toast.success(response.data.message, {
         position: "top-center",
         closeOnClick: true,
@@ -145,9 +148,9 @@ const ResultContent = ({ batchId }) => {
         <Button
         className="mr-2 bg-green-600"
         onClick={approveAndPublish}
-        disabled={exam?.certificateIssued}
-      >
-        {loading ? "Loading..." : exam?.certificateIssued ? "Approved" : "Approve & Publish"}
+        disabled={exam?.certificateIssued || isApproved}
+      > 
+        {loading ? "Loading..." : exam?.certificateIssued || isApproved ? "Approved" : "Approve & Publish"}
       </Button>
       </div>
       {showPhotos && (

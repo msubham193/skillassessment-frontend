@@ -22,7 +22,14 @@ const CreateSchemeForm = () => {
   const [state, setState] = useState("");
   const [image, setImage] = useState(null); // State for image
   const [showButton, setShowButton] = useState(false);
-
+  const indianStates = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", 
+    "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", 
+    "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", 
+    "West Bengal"
+  ];
   // Handle image change
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -77,15 +84,8 @@ const CreateSchemeForm = () => {
   };
 
   return (
-    <div className="h-full flex-1 flex-col space-y-2 px-8 pt-2 md:flex">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Create Course!</h2>
-          <p className="text-muted-foreground">
-            Here&apos;you can create Scheme for Training Partner !!!
-          </p>
-        </div>
-      </div>
+    <div className="h-full flex-1 flex-col space-y-2 px-8 md:flex">
+
       <form onSubmit={submitHandler} encType="multipart/form-data">
         <div className="mx-72 mt-8">
           <Label htmlFor="schemeType" className="text-left w-40">
@@ -117,12 +117,10 @@ const CreateSchemeForm = () => {
               <SelectValue placeholder="Select State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Odisha">Odisha</SelectItem>
-              <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
-              <SelectItem value="West Bengal">West Bengal</SelectItem>
-              <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
-              <SelectItem value="Jharkhand">Jharkhand</SelectItem>
-            </SelectContent>
+            {indianStates.map((state, index) => (
+              <SelectItem key={index} value={state}>{state}</SelectItem>
+            ))}
+          </SelectContent>
           </Select>
           <Label htmlFor="name" className="text-left w-40">
             Project Type

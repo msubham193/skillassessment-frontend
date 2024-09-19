@@ -115,7 +115,7 @@ const AdminContent = () => {
                 logo: CandlestickChart,
               },
               {
-                titel: "Total Batchs",
+                titel: "Total Batches",
                 total: +totalBatch,
                 fromLast: "+0 from last Month",
                 logo: GraduationCap,

@@ -92,7 +92,7 @@ export const examcolumns = [
     },
     {
         accessorKey: "TrainingOrganization",
-        header: "Traning Partner Name", 
+        header: "Training Partner Name", 
       },
       {
         accessorKey: "markUploadAndExamCompleteStatus",
@@ -106,7 +106,7 @@ export const examcolumns = [
                 "bg-green-100 text-green-400": paymentStatus === true,
               })}
             >
-              {paymentStatus ? "Complited" : "On Going"}
+              {paymentStatus ? "Completed" : "On Going"}
             </div>
           );
         },

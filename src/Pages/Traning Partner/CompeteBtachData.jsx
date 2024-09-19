@@ -24,9 +24,12 @@ const CompleteBatchData = () => {
   const [documentType, setDocumentType] = useState(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
-  const handleDownloadAll = useCallback((batchId) => {
-    navigate(`/downloadAllMarksheet/${batchId}`);
-  }, [navigate]);
+  const handleDownloadAll = useCallback(
+    (batchId) => {
+      navigate(`/downloadAllMarksheet/${batchId}`);
+    },
+    [navigate]
+  );
 
   const handlePrint = useReactToPrint({
     content: () =>
@@ -34,9 +37,10 @@ const CompleteBatchData = () => {
         ? marksheetRef.current
         : certificateRef.current,
     documentTitle: documentType === "marksheet" ? "MarkSheet" : "Certificate",
-    pageStyle: documentType === "marksheet"
-      ? `@page { size: portrait; }`
-      : `@page { size: landscape; }`,
+    pageStyle:
+      documentType === "marksheet"
+        ? `@page { size: portrait; }`
+        : `@page { size: landscape; }`,
     onBeforeGetContent: () => {
       dateRef.current = new Date(); // Update the date ref just before printing
     },
@@ -64,9 +68,10 @@ const CompleteBatchData = () => {
     setCurrentStudentId(studentId);
     setDocumentType(type);
     try {
-      const endpoint = type === "certificate"
-        ? `${server}/certificate/student/${studentId}`
-        : `${server}/student/${studentId}`;
+      const endpoint =
+        type === "certificate"
+          ? `${server}/certificate/student/${studentId}`
+          : `${server}/student/${studentId}`;
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error(`Failed to fetch ${type} data`);
@@ -104,20 +109,25 @@ const CompleteBatchData = () => {
         : "N/A",
       nsqfLevel: "5",
       sector: student?.sector_name,
-      duration: `${student.totaldays} days`,
+      duration: `${student?.totaldays} days`,
       assessorRegNo: "AR123456",
-      dob: new Date(student.dob).toISOString().split("T")[0],
+      dob: student?.dob
+        ? new Date(student.dob).toISOString().split("T")[0]
+        : "N/A",
       assessmentBatchNo: student.marks?.batchABN,
       assessmentDate: student.marks?.examDate
         ? new Date(student.marks.examDate).toISOString().split("T")[0]
         : "N/A",
-      nosMarks: student?.marks.Nos.map((nos) => ({
-        code: nos?.code,
-        name: nos?.name,
-        type: nos?.nosType,
-        maxMarks: nos?.passMark,
-        marksObtained: nos?.MarksObtained,
-      })),
+      nosMarks: Array.isArray(student?.marks?.Nos)
+        ? student.marks.Nos.map((nos) => ({
+            code: nos?.code || "N/A",
+            name: nos?.name || "N/A",
+            type: nos?.nosType || "N/A",
+            maxMarks: nos?.passMark || 0,
+            marksObtained: nos?.MarksObtained || 0,
+          }))
+        : [],
+
       totalMarks: student?.marks?.total,
       grade: student?.marks?.Grade,
       result: student?.marks?.Result,
@@ -133,7 +143,9 @@ const CompleteBatchData = () => {
     return {
       name: data.studentName,
       fatherName: data.fatherName,
-      dateOfBirth: new Date(data.DOB).toISOString().split("T")[0],
+      dateOfBirth: data?.DOB
+        ? new Date(data.DOB).toISOString().split("T")[0]
+        : "N/A",
       enrollmentNumber: data.Enrolment_number,
       subject: data.qualification,
       duration: `${data.duration} days`,
@@ -144,18 +156,21 @@ const CompleteBatchData = () => {
       state: data.state,
       grade: data.grade,
       placeOfIssue: data.placeOfIssue,
-      dateOfIssue: dateRef.current.toISOString().split("T")[0],
+      dateOfIssue: dateRef?.current.toISOString().split("T")[0] || "NA",
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
       schemeLogo: data.schemeLogo,
     };
   }, []);
 
-  const handleButtonClick = useCallback((studentId, type) => {
-    fetchStudentData(studentId, type);
-    setCurrentStudentId(studentId);
-    setDocumentType(type);
-  }, [fetchStudentData]);
+  const handleButtonClick = useCallback(
+    (studentId, type) => {
+      fetchStudentData(studentId, type);
+      setCurrentStudentId(studentId);
+      setDocumentType(type);
+    },
+    [fetchStudentData]
+  );
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -243,7 +258,7 @@ const CompleteBatchData = () => {
         </main>
       </div>
       <div style={{ display: "none" }}>
-        <GenerateMarksheetFrom 
+        <GenerateMarksheetFrom
           ref={marksheetRef}
           data={
             currentStudentId && studentData && documentType === "marksheet"

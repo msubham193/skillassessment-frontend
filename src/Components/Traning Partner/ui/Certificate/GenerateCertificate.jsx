@@ -135,7 +135,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               {formattedDateOfIssue || "N/A"}
             </p>
           </div>
-          <div className="absolute bottom-[90px] left-[749px] w-[54px] h-[54px] bg-white">
+          <div className="absolute bottom-[90px] left-[737px] w-[54px] h-[54px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/logoround.png"
@@ -144,7 +144,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[550px] w-[54px] h-[54px] bg-white">
+          <div className="absolute bottom-[90px] left-[540px] w-[54px] h-[54px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/logoround.png"
@@ -153,7 +153,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[475px] w-[54px] h-[54px] bg-white">
+          <div className="absolute bottom-[90px] left-[465px] w-[54px] h-[54px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src={schemeLogo}
@@ -163,10 +163,10 @@ const GenerateCertificate = forwardRef((props, ref) => {
             </div>
           </div>
           {/* QR Code */}
-          <div className="absolute bottom-[45px] left-[75px] bg-white">
+          <div className="absolute bottom-[45px] left-[70px] bg-white">
             <div className=" w-[45px] h-[45px]"></div>
           </div>
-          <div className="absolute bottom-[45px] left-[77px]">
+          <div className="absolute bottom-[45px] left-[72px]">
             <QRCode
               value={`https://student-details-by-qr-scan.vercel.app/${
                 studentId || ""

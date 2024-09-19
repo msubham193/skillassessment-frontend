@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { useReactToPrint } from "react-to-print";
+import { useNavigate } from "react-router-dom";
 import TopBar from "@/Components/Traning Partner/TopBar";
 import SideNav from "@/Components/Traning Partner/SideNav";
 import { Button } from "@/components(shadcn)/ui/button";
@@ -9,29 +10,26 @@ import { CompeltebatchDataAtoms } from "@/Components/Traning Partner/Atoms/compl
 import GenerateMarksheetFrom from "@/Components/Traning Partner/ui/Marksheet/generateMarkFrom";
 import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 import { server } from "@/main";
-import { useParams } from "react-router-dom";
 
-const CompeteBatchData = () => {
+const CompleteBatchData = () => {
+  const navigate = useNavigate();
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
-  const marksheetRef = useRef(); 
+  const batchId = batchData?._id;
+  const marksheetRef = useRef();
   const certificateRef = useRef();
+  const dateRef = useRef(new Date());
   const [loadingStates, setLoadingStates] = useState({});
   const [studentData, setStudentData] = useState(null);
-  // const [batchData,setBatchData]=useState({})
   const [currentStudentId, setCurrentStudentId] = useState(null);
   const [documentType, setDocumentType] = useState(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
-  const handleDownloadAll = async () => {
-    setIsDownloadingAll(true);
-    for (const student of batchData.students) {
-      if (student.markUploadStatus) {
-        await fetchStudentData(student._id, "marksheet");
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Adding a small delay to avoid issues
-      }
-    }
-    setIsDownloadingAll(false);
-  };
+  const handleDownloadAll = useCallback(
+    (batchId) => {
+      navigate(`/downloadAllMarksheet/${batchId}`);
+    },
+    [navigate]
+  );
 
   const handlePrint = useReactToPrint({
     content: () =>
@@ -39,6 +37,13 @@ const CompeteBatchData = () => {
         ? marksheetRef.current
         : certificateRef.current,
     documentTitle: documentType === "marksheet" ? "MarkSheet" : "Certificate",
+    pageStyle:
+      documentType === "marksheet"
+        ? `@page { size: portrait; }`
+        : `@page { size: landscape; }`,
+    onBeforeGetContent: () => {
+      dateRef.current = new Date(); // Update the date ref just before printing
+    },
     onAfterPrint: () => {
       setLoadingStates((prev) => ({
         ...prev,
@@ -48,9 +53,10 @@ const CompeteBatchData = () => {
         },
       }));
       setCurrentStudentId(null);
-      setDocumentType(null); 
+      setDocumentType(null);
     },
   });
+
   const fetchStudentData = useCallback(async (studentId, type) => {
     setLoadingStates((prev) => ({
       ...prev,
@@ -62,20 +68,15 @@ const CompeteBatchData = () => {
     setCurrentStudentId(studentId);
     setDocumentType(type);
     try {
-      let endpoint;
-      if (type === "certificate") {
-        endpoint = `${server}/certificate/student/${studentId}`;
-      } else {
-        endpoint = `${server}/student/${studentId}`;
-      }
-      const response = await fetch(endpoint, {
-        method: "GET",
-      });
+      const endpoint =
+        type === "certificate"
+          ? `${server}/certificate/student/${studentId}`
+          : `${server}/student/${studentId}`;
+      const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error(`Failed to fetch ${type} data`);
       }
       const data = await response.json();
-      console.log("data", data);
       setStudentData(data.data);
     } catch (error) {
       console.error(`Error fetching ${type} data:`, error);
@@ -88,7 +89,7 @@ const CompeteBatchData = () => {
       }));
     }
   }, []);
- console.log("data comes",studentData)
+
   useEffect(() => {
     if (currentStudentId && studentData && documentType) {
       handlePrint();
@@ -108,24 +109,29 @@ const CompeteBatchData = () => {
         : "N/A",
       nsqfLevel: "5",
       sector: student?.sector_name,
-      duration: `${student.totaldays} days`,
+      duration: `${student?.totaldays} days`,
       assessorRegNo: "AR123456",
-      dob: new Date(student.dob).toISOString().split("T")[0],
+      dob: student?.dob
+        ? new Date(student.dob).toISOString().split("T")[0]
+        : "N/A",
       assessmentBatchNo: student.marks?.batchABN,
       assessmentDate: student.marks?.examDate
         ? new Date(student.marks.examDate).toISOString().split("T")[0]
         : "N/A",
-      nosMarks: student?.marks.Nos.map((nos, index) => ({
-        code: nos?.code,
-        name: nos?.name,
-        type: "Theory & Practical",
-        maxMarks: nos?.passMark,
-        marksObtained: nos?.MarksObtained,
-      })),
+      nosMarks: Array.isArray(student?.marks?.Nos)
+        ? student.marks.Nos.map((nos) => ({
+            code: nos?.code || "N/A",
+            name: nos?.name || "N/A",
+            type: nos?.nosType || "N/A",
+            maxMarks: nos?.passMark || 0,
+            marksObtained: nos?.MarksObtained || 0,
+          }))
+        : [],
+
       totalMarks: student?.marks?.total,
       grade: student?.marks?.Grade,
-      result: student?.marks?.Result, 
-      dateOfIssue: new Date().toISOString().split("T")[0],
+      result: student?.marks?.Result,
+      dateOfIssue: dateRef.current.toISOString().split("T")[0],
       certificateNo: `CERT${student.redg_No}`,
       studentId: student._id,
     };
@@ -137,7 +143,9 @@ const CompeteBatchData = () => {
     return {
       name: data.studentName,
       fatherName: data.fatherName,
-      dateOfBirth: new Date(data.DOB).toISOString().split("T")[0],
+      dateOfBirth: data?.DOB
+        ? new Date(data.DOB).toISOString().split("T")[0]
+        : "N/A",
       enrollmentNumber: data.Enrolment_number,
       subject: data.qualification,
       duration: `${data.duration} days`,
@@ -148,18 +156,21 @@ const CompeteBatchData = () => {
       state: data.state,
       grade: data.grade,
       placeOfIssue: data.placeOfIssue,
-      dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
+      dateOfIssue: dateRef?.current.toISOString().split("T")[0] || "NA",
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
+      schemeLogo: data.schemeLogo,
     };
   }, []);
 
-  const handleButtonClick = (studentId, type) => {
-    fetchStudentData(studentId, type);
-  };
-
-  // New function to download all marksheets sequentially
- 
+  const handleButtonClick = useCallback(
+    (studentId, type) => {
+      fetchStudentData(studentId, type);
+      setCurrentStudentId(studentId);
+      setDocumentType(type);
+    },
+    [fetchStudentData]
+  );
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -171,11 +182,9 @@ const CompeteBatchData = () => {
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
               Students
             </h1>
-           
+
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
-              {batchData &&
-              batchData.students &&
-              batchData.students.length > 0 ? (
+              {batchData?.students?.length > 0 ? (
                 batchData.students.map((student) => (
                   <div
                     key={student._id}
@@ -236,13 +245,15 @@ const CompeteBatchData = () => {
             </div>
             <div className="flex justify-end mb-4 mt-4">
               <Button
-                onClick={handleDownloadAll}
-                disabled={isDownloadingAll || !batchData.students.length}
+                onClick={() => handleDownloadAll(batchId)}
+                disabled={isDownloadingAll || !batchData?.students?.length}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
-                {isDownloadingAll ? "Downloading..." : "Download All MarkSheets"}
+                {isDownloadingAll
+                  ? "Downloading..."
+                  : "Download All MarkSheets"}
               </Button>
-            </div> 
+            </div>
           </div>
         </main>
       </div>
@@ -268,4 +279,4 @@ const CompeteBatchData = () => {
   );
 };
 
-export default CompeteBatchData;
+export default CompleteBatchData;

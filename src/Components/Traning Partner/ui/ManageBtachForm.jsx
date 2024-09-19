@@ -74,8 +74,8 @@ const ManageBatchForm = () => {
     }
   
     try {
-      const canvas = await html2canvas(input, { scale: 2 }); // Increased scale for better quality
-      const imgData = canvas.toDataURL("image/jpeg", 1.0); // Increased quality to 1.0
+      const canvas = await html2canvas(input, { scale: 3 }); 
+      const imgData = canvas.toDataURL("image/jpeg", 1.0); 
   
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -200,8 +200,8 @@ const ManageBatchForm = () => {
                   key={batch._id}
                   className={`
                     ${batch.paymentStatus 
-                      ? 'bg-green-200 hover:bg-green-100' 
-                      : 'hover:bg-gray-50'}
+                      ? 'bg-gray-200 hover:bg-gray-200' 
+                      : 'bg-white'}
                     ${index !== filteredBatches.length - 1 ? 'border-b' : ''}
                     transition-colors
                   `}

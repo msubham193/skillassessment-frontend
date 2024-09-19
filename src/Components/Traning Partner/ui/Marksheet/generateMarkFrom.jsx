@@ -30,7 +30,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
   return (
     <div
       ref={ref}
-      className="w-[210mm] h-[275mm] mx-auto p-8 border border-green-600 font-cambria text-sm"
+      className="w-[210mm] h-[275mm] flex flex-col justify-between mx-auto p-8 border border-green-600 font-cambria text-sm"
     >
       <div className="flex justify-between items-start mb-1">
         <img src="/cutm.jpg" alt="Centurion University Logo" className="w-20 h-28" />
@@ -129,24 +129,24 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
       </table>
 
       <table className="w-full mb-2 border-collapse">
-        <tbody>
-          <tr>
-            <td className="w-1/2 border px-1 py-1 text-center font-medium">Total Marks Obtained</td>
-            <td className="w-1/2 border px-1 py-1 text-center">{totalMarks}</td>
-          </tr>
-          <tr>
-            <td className="w-1/2 border px-1 py-1 text-center font-medium">Grade</td>
-            <td className="w-1/2 border px-1 py-1 text-center">{grade}</td>
-          </tr>
-          <tr>
-            <td className="w-1/2 border px-1 py-1 text-center font-medium">Result</td>
-            <td className="w-1/2 border px-1 py-1 text-center">{result}</td>
-          </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr>
+              <td className="w-1/2 border px-1 py-1 text-center font-medium">Total Marks Obtained</td>
+              <td className="w-1/2 border px-1 py-1 text-center">{totalMarks}</td>
+            </tr>
+            <tr>
+              <td className="w-1/2 border px-1 py-1 text-center font-medium">Grade</td>
+              <td className="w-1/2 border px-1 py-1 text-center">{grade}</td>
+            </tr>
+            <tr>
+              <td className="w-1/2 border px-1 py-1 text-center font-medium">Result</td>
+              <td className="w-1/2 border px-1 py-1 text-center">{result}</td>
+            </tr>
+          </tbody>
+        </table>
 
-      <div className="flex justify-between items-end mt-4">
-        <div>
+      <div className="flex justify-between items-end mt-1">
+        <div >
         <div className='mb-6'>
         <QRCode value={`https://student-details-by-qr-scan.vercel.app/${studentId}`} size={60} />
         </div>

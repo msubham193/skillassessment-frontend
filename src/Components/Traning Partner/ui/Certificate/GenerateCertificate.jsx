@@ -4,10 +4,10 @@ import QRCode from "qrcode.react";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   try {
-    // First, try parsing as ISO string
+    
     let date = new Date(dateString);
     
-    // If invalid, try parsing as DD/MM/YYYY
+  
     if (isNaN(date.getTime())) {
       const parts = dateString.split('/');
       if (parts.length === 3) {
@@ -84,9 +84,9 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
-          <div className="mt-[25px] ml-[30%] flex">
-            <p className=" text-[12px] font-semibold">{fatherName || "N/A"}</p>
-            <p className=" ml-[280px] text-[12px] font-semibold">
+          <div className="mt-[25px] ml-[23%] flex items-center ">
+            <p className=" w-[300px] text-[12px] font-semibold ">{fatherName || "N/A"}</p>
+            <p className=" ml-[80px]  text-[12px] font-semibold">
               {formattedDateOfBirth || "N/A"}
             </p>
             <p className=" ml-[130px] text-[12px] font-semibold">
@@ -98,7 +98,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className="text-[12px] font-semibold">{subject || "N/A"}</p>
           </div>
           {/* Duration, Credit, Level */}
-          <div className="mt-[22px] ml-[25%] flex items-center">
+          <div className="mt-[22px] ml-[25%] flex items-center ">
             <p className=" text-[12px] font-semibold">{duration || "N/A"}</p>
             <p className=" ml-[305px] text-[12px] font-semibold">
               {credit || "N/A"}
@@ -108,11 +108,11 @@ const GenerateCertificate = forwardRef((props, ref) => {
             </p>
           </div>
           {/* Training Center, District, State */}
-          <div className="mt-[18px] ml-[20%] flex items-center">
-            <p className=" text-xs font-semibold mb-2 sm:mb-0">
+          <div className="mt-[18px] ml-[20%] flex items-center ">
+            <p className="  w-[400px] text-xs font-semibold mb-2 sm:mb-0">
               {trainingCenter || "N/A"}
             </p>
-            <p className=" ml-[390px] text-xs font-semibold mb-2 sm:mb-0">
+            <p className=" ml-[80px] text-xs font-semibold mb-2 sm:mb-0">
               {district || "N/A"}
             </p>
             <p className=" ml-[140px] text-xs font-semibold">

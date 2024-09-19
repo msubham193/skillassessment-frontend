@@ -106,6 +106,7 @@ import TCDetails from "./Components/Sna/TCDetails";
 import TBDetails from "./Components/Sna/TBDetails";
 import AddBulkTrainer from "./Pages/Traning Partner/BulkTrainerAdd";
 import AddTrainer from "./Pages/Traning Partner/AddTrainer";
+import DownloadAllMarksheet from "./Pages/Traning Partner/DownloadAllMarksheet";
 
 
 
@@ -322,6 +323,7 @@ const App = () => {
           <Route path="/transcript" exact element={<Transcript />} />
           <Route path="/trainers" exact element={<AllTrainers />} />
           <Route path="/centers" exact element={<Centers />} />
+          <Route path="/downloadAllMarksheet/:batchId" exact element={<DownloadAllMarksheet />} />
           <Route
             path="/completeBatchData/:completebatchId"
             exact

@@ -80,7 +80,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
             />
           </div>
           {/* Student Name */}
-          <div className="mt-[115px] ml-[40%]">
+          <div className="mt-[107px] ml-[40%]">
             <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}

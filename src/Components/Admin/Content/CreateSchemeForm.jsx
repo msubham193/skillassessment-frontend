@@ -153,22 +153,18 @@ const CreateSchemeForm = () => {
             onChange={(e) => setCode(e.target.value)}
           />
 
-          {projectType !== "corporate" && (
-            <>
-              <Label htmlFor="cost" className="text-left w-40">
-                Student Fee
-              </Label>
-              <Input
-                id="scheme-cost"
-                className="col-span-4 py-6"
-                placeholder="Cost Per Student"
-                value={pricePerStudent}
-                onChange={(e) => setPricePerStudent(e.target.value)}
-              />
-            </>
-          )}
+          <Label htmlFor="cost" className="text-left w-40">
+            Student Fee
+          </Label>
+          <Input
+          id="scheme-cost"
+          className={`col-span-4 py-6 ${schemeType === "Corporate" ? "bg-gray-200" : ""}`} // Combine class names
+          placeholder="Cost Per Student"
+          value={pricePerStudent}
+          onChange={(e) => setPricePerStudent(e.target.value)}
+          disabled={schemeType === "Corporate"} // Disable when Corporate
+        />
 
-         
           <Label htmlFor="image" className="text-left w-40">
             Upload Logo
           </Label>

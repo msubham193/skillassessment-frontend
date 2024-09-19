@@ -439,11 +439,11 @@ const TpDetailsBOx = ({ id }) => {
         </div>
       </div>
       {/* field for add amount for tp according to scheme */}
-      {data?.applicationStatus === "Pending" && data?.scheme === "corporate" ? (
+      {data?.applicationStatus === "Pending" && data?.scheme === "Corporate" ? (
         <div className="p-8 w-[500px] relative left-44">
           <form onSubmit={applicationApproved}>
             <Label htmlFor="name" className="text-left w-40 text-lg">
-              Add cost per Student for this Training Partner..
+              Add cost per Student for this Training Partner...
             </Label>
             <Input
               id="scheme-name"
@@ -479,7 +479,7 @@ const TpDetailsBOx = ({ id }) => {
           disabled={
             data?.applicationStatus === "Rejected" ||
             data?.applicationStatus === "Approved" ||
-            (data?.scheme === "corporate" && amount === null)
+            (data?.scheme === "Corporate" && amount === null)
           }
         >
           {loding

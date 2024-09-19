@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../invoice/logo.png";
 import { useRecoilValue } from "recoil";
 import { tpDataAtoms } from "../../Atoms/trainingPartnerData";
 
@@ -18,7 +17,7 @@ const Preinvoice = ({ batch }) => {
       boxSizing: 'border-box'
     }}>
       <div className="text-center mb-8">
-        <img src={logo} alt="Logo" className="w-24 mx-auto mb-4" />
+        <img src='/logo.png' alt="Logo" className="w-24 mx-auto mb-4" />
         <h1 className="text-2xl font-bold">INVOICE</h1>
       </div>
 
@@ -110,8 +109,22 @@ const Preinvoice = ({ batch }) => {
         </tbody>
       </table>
 
-      <p className="text-right mb-16">For Centurion University of Technology and Management</p>
-      <p className="text-right mt-5">Authorized Signature</p>
+      <div className="text-right mb-20">
+  <p>For Centurion University of Technology and Management</p>
+  
+  <div className="inline-block mr-[50px]">
+    <img
+      src='/Partha_sir_signature.png' 
+      alt="parth" 
+      width={100} 
+      height={20} 
+      className="inline-block mt-[30px]"
+    />
+  </div>
+
+  <p >Authorized Signature</p>
+</div>
+
     </div>
   );
 };

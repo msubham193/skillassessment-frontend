@@ -145,7 +145,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
         </tbody>
       </table>
 
-      <div className="flex justify-between items-end mt-4">
+      <div className="flex justify-between  items-end mt-4">
         <div>
         <div className='mb-6'>
         <QRCode value={`https://student-details-by-qr-scan.vercel.app/${studentId}`} size={60} />

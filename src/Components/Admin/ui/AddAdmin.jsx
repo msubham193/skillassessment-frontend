@@ -111,7 +111,7 @@ const AddAdmin = ({ children }) => {
           </form>
           <DialogFooter>
             <Button disabled={showbuttion} type="submit" onClick={submitHandler}>
-              {showbuttion ? "Loding...." : "Create Admin"}
+              {showbuttion ? "Loading...." : "Create Admin"}
             </Button>
           </DialogFooter>
         </DialogContent>

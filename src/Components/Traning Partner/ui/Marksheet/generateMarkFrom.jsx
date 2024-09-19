@@ -46,7 +46,6 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
         </div>
         <img src="/ncevt.jpg" alt="NCVET Logo" className="w-28 h-28" />
       </div>
-
       <table className="w-full mb-2 border-collapse">
         <tbody>
           <tr className="border">

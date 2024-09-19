@@ -135,7 +135,7 @@ const AddfeeInCorporetbatch = () => {
                   {data?.clientPaymentStatus ? "Paid" : "Not Fixed"}
                 </p>
               </div>
-              {/* createe a form for add mony*/}
+              {/* create a form for add mony*/}
               <div className="p-3">
                 <form onSubmit={submitHandler}>
                   <Label htmlFor="name" className="text-left w-40 text-lg">

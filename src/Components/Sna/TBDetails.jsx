@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const TBDetails = () => {
   const [batchData, setBatchData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);    
 
   const navigate = useNavigate();
 
@@ -51,6 +51,7 @@ const TBDetails = () => {
         View and manage the training batches submitted by the Training Agency.
       </p>
       <DataTable
+      path={"/sna/batchdetails"}
       filter1={"ABN_Number"}
       columns={batchColumns}
       data={batchData}

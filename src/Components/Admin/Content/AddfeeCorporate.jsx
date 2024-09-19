@@ -13,7 +13,7 @@ const AddfeeCorporate = () => {
           fetchBatches(); 
         
       }, []);
-    
+     
       const fetchBatches = async () => {
         setLoading(true);
         try {

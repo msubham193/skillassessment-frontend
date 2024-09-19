@@ -15,8 +15,8 @@ import {
 } from "@/components(shadcn)/ui/select"; 
 import { RotateCcw, X } from "lucide-react";
 
-const Batch = () => {
-  const [batch, setBatch] = useState([]);
+const Batch = () => { 
+  const [batch, setBatch] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -54,7 +54,12 @@ const Batch = () => {
             'Expires': "0",
           },
       });
-      setBatch(response.data.data.reverse());
+      console.log(response.data.data)
+      const filteredBatches = response.data.data.filter(
+        (batch) => batch?.approvedByGovernmentBody === true || batch?.schemeType === "Corporate"
+      );
+      console.log(filteredBatches)
+      setBatch(filteredBatches.reverse());
       setIsDataFetched(true);
     } catch (error) {
       console.error(error);

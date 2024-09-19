@@ -5,11 +5,11 @@ import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { DataTable } from "../Admin/ui/notiification/DataTable";
 
-//this page handel all the center approval
+//this page handel all the center approval 
 
 const TrainingCenters = () => {
   const [centerDetails, setCenterDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const state = localStorage.getItem("state");
   const schemeName = localStorage.getItem("scheme");
 

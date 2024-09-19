@@ -5,7 +5,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom';
 
 const StudentResultDetails = () => { 
-    const { id } = useParams();   
+    const { id } = useParams();    
     return (
       <>
         <div className="min-h-screen bg-white text-black flex flex-col">
@@ -23,7 +23,7 @@ const StudentResultDetails = () => {
                   {/* For now  there is nothing to add in fecture if there some data  thenn we will put there */}
                 </div>
               </div>
-              {/* Derails of Traning Partner */}
+              {/* Derails of Training Partner */}
               <StudentResultDetailsBox id={id}/>
             </div>
           </div>

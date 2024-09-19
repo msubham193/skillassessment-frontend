@@ -37,18 +37,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components(shadcn)/ui/dialog";
-import StudentTable from "@/Components/Sna/StudentTable";
 import TrainerTable from "@/Components/Sna/TrainerTable";
 
 const BatchDetailsOfSNA = () => {
   const { batchId } = useParams();
-  const [showStudentsModal, setShowStudentsModal] = useState(false);
-  const [showTrainersModal, setShowTrainersModal] = useState(false);
+  const navigate=useNavigate();
+  const [showTrainersModal, setShowTrainersModal] = useState(false);    
   const [batchDetails, setBatchDetails] = useState([]);
-  const [studentData, setStudentData] = useState([]);
   const [trainerData, setTrainerData] = useState([]);
   const [isApproaved, setIsApproaved] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isBatchApproved, setIsBatchApproved] = useState(false);
+
 
   useEffect(() => {
     const fetchBatchDetails = async () => {
@@ -57,7 +57,7 @@ const BatchDetailsOfSNA = () => {
         console.log(response.data.data.trainers);
         console.log(response.data.data.students);
         const data = response.data.data;
-        setStudentData(data?.students);
+        // setStudentData(data?.students);
         setTrainerData(data?.trainers);
         setBatchDetails(data);
         if (data.approvedByGovernmentBody === true) {
@@ -69,7 +69,7 @@ const BatchDetailsOfSNA = () => {
       }
     };
     fetchBatchDetails();
-  }, [batchId]);
+  }, [batchId,isBatchApproved]);
 
   const handleApproval = async (e) => {
     setLoading(true);
@@ -79,6 +79,7 @@ const BatchDetailsOfSNA = () => {
         `${server}/sna/batch/approve/${batchId}`
       );
       // console.log(response);
+      setIsBatchApproved(true)
       toast.success("Batch Approved Successfully");
       // navigate("/trainingbatches");
     } catch (error) {
@@ -95,6 +96,7 @@ const BatchDetailsOfSNA = () => {
       const response = await axios.put(
         `${server}/sna/batch/approve/${batchId}`
       );
+      setIsBatchApproved(true);
       toast.error("Batch Rejected");
       // console.log(response);
       // navigate("/trainingbatches");
@@ -331,7 +333,7 @@ const BatchDetailsOfSNA = () => {
                 Students: {batchDetails.students?.length ?? 0}
               </p>
               <Button
-                onClick={() => setShowStudentsModal(true)}
+                onClick={() => navigate(`/sna/batchdetails/student/${batchId}`)}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 See Students
@@ -366,20 +368,20 @@ const BatchDetailsOfSNA = () => {
         <div className="flex justify-end mt-8">
           <button
             onClick={handleApproval}
-            disabled={isApproaved}
+            disabled={isApproaved || isBatchApproved}
             className={`px-6 py-2 text-white rounded-lg transition duration-300 mr-4 ${
               isApproaved ? "bg-green-300" : "bg-green-600 hover:bg-green-700"
             }`}
           >
             {loading ? (
               <Loader2 size={20} className="animate-spin" />
-            ) : (
+            ) : isApproaved?"Approved": (
               "Approve"
             )}
           </button>
           <button
             onClick={handleRejection}
-            disabled={isApproaved}
+            disabled={isApproaved || isBatchApproved}
             className={`px-6 py-2 text-white rounded-lg transition duration-300 ${
               isApproaved ? "bg-red-300" : "bg-red-600 hover:bg-red-700"
             }`}
@@ -391,32 +393,6 @@ const BatchDetailsOfSNA = () => {
             )}
           </button>
         </div>
-
-        {/* Students Modal */}
-        <Dialog
-          open={showStudentsModal}
-          onOpenChange={setShowStudentsModal}
-          className="w-full"
-        >
-          <DialogContent className="max-w-6xl">
-            {" "}
-            {/* Increased width */}
-            <DialogHeader>
-              <DialogTitle>Students List</DialogTitle>
-              <DialogDescription>
-                Below is the list of students enrolled in this batch.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="mt-4 overflow-x-auto">
-              {" "}
-              {/* Ensure the table scrolls if it overflows */}
-              <StudentTable data={studentData} />
-            </div>
-            <DialogFooter>
-              <Button onClick={() => setShowStudentsModal(false)}>Close</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
 
         {/* Trainers Modal */}
         <Dialog

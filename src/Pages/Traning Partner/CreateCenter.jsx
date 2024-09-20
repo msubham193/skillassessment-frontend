@@ -105,7 +105,6 @@ export default function CreateCenter() {
   }, []);
 
   useEffect(() => {
-    // This is a mock list of Indian states. Replace with actual API call if needed.
     setStates([
       "Andhra Pradesh",
       "Arunachal Pradesh",
@@ -137,8 +136,7 @@ export default function CreateCenter() {
       "West Bengal",
     ]);
   }, []);
-  console.log("Schemes:", formData.schemes);
-  console.log("Sectors:", formData.sectors);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);

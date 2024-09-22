@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components(shadcn)/u
 import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 
 const StudentResultDetailsBox = ({ id }) => {  
-  const [currentStudentId, setCurrentStudentId] = useState(null);
+  const [currentStudentId, setCurrentStudentId] = useState(null); 
   const [documentType, setDocumentType] = useState(null);
   const query = new URLSearchParams(location.search); 
   const defaultTab = query.get("tab") || "overview"; 
@@ -25,7 +25,7 @@ const StudentResultDetailsBox = ({ id }) => {
   const [batchdata, setBatchdata] = useState({});
   const [loding, setLoding] = useState(false);
 //make the change in this component ony...........
-  //need to get student details usinfstudent id....
+  //need to get student details using student id....
   useEffect(() => {
     setSelectedTab(defaultTab); 
   }, [defaultTab]);
@@ -144,7 +144,7 @@ const generateDummyData = useCallback((student) => {
     nosMarks: student?.marks?.Nos?.map((nos, index) => ({
       code: `NOS${index + 1}`,
       name: nos?.name || 'Loading...',
-      type: 'Theory', 
+      type: nos?.nosType ||"N/A", 
       maxMarks: nos?.passMark || 0,
       marksObtained: nos?.MarksObtained || 0
     })) || [],

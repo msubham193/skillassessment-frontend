@@ -11,7 +11,7 @@ import { server } from "@/main";
 import { toast } from "react-toastify";
 import { Button } from "@/components(shadcn)/ui/button";
 
-const MarksheetForm = () => {
+const MarksheetForm = () => { 
   const navigate = useNavigate();
   const { studentId } = useParams();
   const [batchId, setBatchId] = useState("");
@@ -47,13 +47,14 @@ const MarksheetForm = () => {
         console.log(course.Nos);
         setCourseName(course.courseName);
         if (course) {
-          const initialNosData = course.Nos.map((nos) => ({
+          const initialNosData = course?.Nos.map((nos) => ({
             description: nos.description,
             code: nos.code,
             credit: nos.credit,
             fullTheoryMark:nos.theoryMarks,
             fullPracticalMark:nos.practicalMarks,
             fullVivaMark:nos.vivaMarks,
+            nosType:nos?.nosType ||"N/A",
             theoryMarks: "", // User will input this manually
             practicalMarks: "", // User will input this manually
             vivaMarks: "", // User will input this manually
@@ -223,7 +224,7 @@ const MarksheetForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateFields();
-  
+  console.log("nosDtta",nosData);
     // Check if there are validation errors
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -259,6 +260,7 @@ const MarksheetForm = () => {
         name: nos.description,
         Theory: nos.theoryMarks,
         Practical: nos.practicalMarks,
+        nosType:nos?.nosType,
         Viva: nos.vivaMarks,
         Total: nos.marksObtained,
         passMark: nos.passMarks,

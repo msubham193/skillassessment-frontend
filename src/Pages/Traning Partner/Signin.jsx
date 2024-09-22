@@ -124,6 +124,13 @@ const Signin = () => {
             >
               create a new Account{" "}
             </span>
+            <span>
+            OR{" "}
+            </span>
+            <span className="cursor-pointer text-blue-700"
+            onClick={() => navigate("/")}>
+            GoToHome
+            </span>
           </p>
         </div>
       </div>

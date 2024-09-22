@@ -33,7 +33,7 @@ const RegistrationForm = () => {
     useState("");
   const [total_no_of_certified_Assessor, setTotal_no_of_certified_Assessor] =
     useState("");
-  const [LETTER_OF_NCVET, setLETTER_OF_NCVET] = useState("");
+  const [LETTER_OF_NCVET, setLETTER_OF_NCVET] = useState(null);
   const [logo, setLogo] = useState(null);
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -703,10 +703,11 @@ const RegistrationForm = () => {
               </select>
             </div>
           </div>
-          <div className="pt-5">
+          <div className="pt-5 flex justify-center items-center">
             <Button
               type="submit"
-              className="px-4 py-2  text-white font-medium rounded-md shadow-md hover:bg-[#11874e]"
+              className="px-4 py-2  text-white font-medium rounded-md shadow-md hover:bg-[#11874e] "
+              disabled={!LETTER_OF_NCVET || !logo}
             >
             {
               loading?"Submiting....":"Submit"

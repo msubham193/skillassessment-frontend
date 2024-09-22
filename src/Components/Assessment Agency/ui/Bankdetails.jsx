@@ -62,7 +62,7 @@ const BankDetailsForm = () => {
       "HDFC Bank": /^[0-9]{14}$/,                 // HDFC account numbers are 14 digits
       "ICICI Bank": /^[0-9]{12}$/,                // ICICI account numbers are 12 digits
       "Axis Bank": /^[0-9]{15}$/,                 // Axis Bank account numbers are 15 digits
-      "Punjab National Bank": /^[0-9]{16}$/,      // PNB account numbers are usually 16 digits
+      "Punjab National Bank": /^[0-9]{13,16}$/,      // PNB account numbers are usually 16 digits
       "Bank of Baroda": /^[0-9]{14}$/,            // Bank of Baroda account numbers are typically 14 digits
       "Canara Bank": /^[0-9]{13}$/,               // Canara Bank account numbers are 13 digits
       "Union Bank of India": /^[0-9]{12}$/,       // Union Bank account numbers are 12 digits
@@ -126,12 +126,12 @@ const BankDetailsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     if (!validateForm()) {
       return;
     }
 
-    setIsSubmitting(true);
+   
 
     try { 
       const response = await axios.put(

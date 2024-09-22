@@ -9,7 +9,7 @@ const ShowAccessmentAgency = ({ setAssesmentAgency, course, sector, state, setas
 
     useEffect(() => {
       const fetchAssessmentAgency = async () => { 
-          setLoading(true);
+          setLoading(true); 
           try {
               const response = await axios.get(`${server}/aa/all/query`, {
                   params: {

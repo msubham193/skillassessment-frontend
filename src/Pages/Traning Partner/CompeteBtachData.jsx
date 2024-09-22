@@ -104,9 +104,7 @@ const CompleteBatchData = () => {
       name: student?.name,
       ward: student?.fathername,
       qualificationName: student?.course,
-      qualificationCode: student?.marks?.batchABN
-        ? student.marks.batchABN.split("/")[1]
-        : "N/A",
+      qualificationCode: "ECL338",
       nsqfLevel: "5",
       sector: student?.sector_name,
       duration: `${student?.totaldays} days`,
@@ -180,7 +178,7 @@ const CompleteBatchData = () => {
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <div className="container mx-auto px-6 py-8">
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
-              Download Marksheet and Cerificate
+              Download Marksheet and Certificate
             </h1>
 
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -194,7 +192,7 @@ const CompleteBatchData = () => {
                     <img
                       src={student.profilepic || "/placeholder.svg?height=100&width=100"}
                       alt={student.name}
-                      className="w-20 h-20 rounded-full object-cover mr-6 border-4 border-indigo-200"
+                      className={`w-20 h-20 rounded-full object-cover mr-6 border-4 ${student.absent?'border-red-500':'border-indigo-500'}`}
                     />
                     <div className="flex-grow">
                       <h2 className="text-2xl font-semibold text-indigo-900 mb-1">

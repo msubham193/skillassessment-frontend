@@ -45,7 +45,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components(shadcn)/ui/alert-dialog"
+} from "@/components(shadcn)/ui/alert-dialog";
 const Content = () => {
   const navigate = useNavigate();
   const [allBatch, setAllBatch] = useState([]);
@@ -186,6 +186,18 @@ const Content = () => {
         return "";
     }
   };
+  const getApprovedClass = (status) => {
+    switch (status) {
+      case "Approved":
+        return "text-green-700";
+      case "Corporate":
+        return "text-yellow-700 ";
+      case "Not-Approved":
+        return "text-red-700 ";
+      default:
+        return "";
+    }
+  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -246,9 +258,8 @@ const Content = () => {
                       <TableHead className="font-bold">Index</TableHead>
                       <TableHead className="font-bold">Course Name</TableHead>
                       <TableHead className="font-bold">ABN Number</TableHead>
-                      <TableHead className="font-bold">
-                        Number of Students
-                      </TableHead>
+                      <TableHead className="font-bold">SNA Approval</TableHead>
+                      <TableHead className="font-bold">Students</TableHead>
                       <TableHead className="font-bold">Status</TableHead>
                       <TableHead className="font-bold">Actions</TableHead>
                     </TableRow>
@@ -261,7 +272,23 @@ const Content = () => {
                           {batch.courseName}
                         </TableCell>
                         <TableCell>{batch.ABN_Number}</TableCell>
-                        <TableCell className="text-center">
+                        <TableCell
+                          className={`text-center font-bold text-md  ${getApprovedClass(
+                            batch.batchActivePermission
+                              ? "Approved"
+                              : batch.schemeType === "Corporate"
+                              ? "Corporate"
+                              : "Not-Approved"
+                          )}`}
+                        >
+                          {batch.schemeType === "State Government" ||
+                          batch.schemeType === "Central Government"
+                            ? batch.batchActivePermission
+                              ? "Approved"
+                              : "Not-Approved"
+                            : "Corporate"}
+                        </TableCell>
+                        <TableCell className="text-center ml-[20px]">
                           {batch.students.length}
                         </TableCell>
                         <TableCell>
@@ -328,8 +355,9 @@ const Content = () => {
                                     Are you sure?
                                   </AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    This action will submit the batch and this can't be undo . Are you
-                                    sure you want to proceed?
+                                    This action will submit the batch and this
+                                    can't be undo . Are you sure you want to
+                                    proceed?
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>

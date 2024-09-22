@@ -115,7 +115,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
             <th className="border px-1 py-1 font-medium">Marks Obtained</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='text-center'>
           {nosMarks && nosMarks.map((nos, index) => (
             <tr key={index}>
               <td className="border px-1 py-1">{nos.code}</td>

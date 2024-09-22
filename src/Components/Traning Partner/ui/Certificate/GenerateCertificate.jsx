@@ -4,20 +4,18 @@ import QRCode from "qrcode.react";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   try {
-    
     let date = new Date(dateString);
-    
-  
+
     if (isNaN(date.getTime())) {
-      const parts = dateString.split('/');
+      const parts = dateString.split("/");
       if (parts.length === 3) {
         date = new Date(parts[2], parts[1] - 1, parts[0]);
       }
     }
-    
+
     // If still invalid, throw an error
     if (isNaN(date.getTime())) throw new Error("Invalid date");
-    
+
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "numeric",
@@ -52,6 +50,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
     studentId,
     studentImageUrl,
     schemeLogo,
+    certificateCode,
   } = props.data;
 
   const formattedDateOfBirth = formatDate(dateOfBirth);
@@ -65,27 +64,34 @@ const GenerateCertificate = forwardRef((props, ref) => {
       >
         <div className="w-full h-full absolute">
           <img
-            src="/Certificate.png"
+            src="/certificate.jpg"
             alt="Certificate Background"
             className="w-full h-full object-cover"
           />
         </div>
         <div className="absolute w-full h-full">
           {/* Student Image */}
-          <div className="w-[103px] border ml-[82.4%] mt-[59px]">
+          <div className="w-[103px] border ml-[82.6%] mt-[49px] ">
             <img
               className="h-28 w-24 object-cover"
               src={studentImageUrl}
               alt="Student"
             />
           </div>
+          <div className="ml-[80%] mt-[42px] max-w-[148px] overflow-hidden">
+            <p className="text-[12px] font-bold whitespace-nowrap">
+              {certificateCode || "N/A"}
+            </p>
+          </div>
           {/* Student Name */}
-          <div className="mt-[107px] ml-[40%]">
+          <div className="mt-[47px] ml-[40%]">
             <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
-          <div className="mt-[25px] ml-[23%] flex items-center ">
-            <p className=" w-[300px] text-[12px] font-semibold ">{fatherName || "N/A"}</p>
+          <div className="mt-[27px] ml-[23%] flex items-center ">
+            <p className=" w-[300px] text-[12px] font-semibold ">
+              {fatherName || "N/A"}
+            </p>
             <p className=" ml-[80px]  text-[12px] font-semibold">
               {formattedDateOfBirth || "N/A"}
             </p>
@@ -95,20 +101,20 @@ const GenerateCertificate = forwardRef((props, ref) => {
           </div>
           {/* Subject Name */}
           <div className="mt-[22px] ml-[50%]">
-            <p className="text-[12px] font-semibold">{subject || "N/A"}</p>
+            <p className="text-[12px]  font-semibold">{subject || "N/A"}</p>
           </div>
           {/* Duration, Credit, Level */}
-          <div className="mt-[22px] ml-[25%] flex items-center ">
+          <div className="mt-[24px] ml-[25%] flex items-center ">
             <p className=" text-[12px] font-semibold">{duration || "N/A"}</p>
             <p className=" ml-[305px] text-[12px] font-semibold">
               {credit || "N/A"}
             </p>
-            <p className=" ml-[240px] text-[12px] mt-2 font-semibold">
+            <p className=" ml-[240px] text-[12px] mt-1 font-semibold">
               {level || "N/A"}
             </p>
           </div>
           {/* Training Center, District, State */}
-          <div className="mt-[18px] ml-[20%] flex items-center ">
+          <div className="mt-[23px] ml-[20%] flex items-center ">
             <p className="  w-[400px] text-xs font-semibold mb-2 sm:mb-0">
               {trainingCenter || "N/A"}
             </p>
@@ -163,10 +169,10 @@ const GenerateCertificate = forwardRef((props, ref) => {
             </div>
           </div>
           {/* QR Code */}
-          <div className="absolute bottom-[45px] left-[70px] bg-white">
+          <div className="absolute bottom-[48px] left-[68px] bg-white">
             <div className=" w-[45px] h-[45px]"></div>
           </div>
-          <div className="absolute bottom-[45px] left-[72px]">
+          <div className="absolute bottom-[48px] left-[68px]">
             <QRCode
               value={`https://student-details-by-qr-scan.vercel.app/${
                 studentId || ""

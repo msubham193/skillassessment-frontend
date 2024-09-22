@@ -132,7 +132,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                     onChange={(e) => setAssesmentAgencyName(e.target.value)}
                     placeholder="Select an assessment agency"
                     required
-                  />
+                  /> 
                   <Select>
                     <SelectTrigger className="w-24">
                       <SelectValue placeholder="Show" />

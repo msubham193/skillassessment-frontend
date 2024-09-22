@@ -149,6 +149,7 @@ const CompleteBatchData = () => {
       enrollmentNumber: data.Enrolment_number,
       subject: data.qualification,
       duration: `${data.duration} days`,
+      certificateCode:data?.certificateCode,
       credit: data.credit,
       level: data.level,
       trainingCenter: data.TrainingCenter,
@@ -171,7 +172,6 @@ const CompleteBatchData = () => {
     },
     [fetchStudentData]
   );
-
   return (
     <div className="flex h-screen bg-gray-100">
       <SideNav />
@@ -180,62 +180,48 @@ const CompleteBatchData = () => {
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <div className="container mx-auto px-6 py-8">
             <h1 className="text-3xl font-semibold text-gray-800 mb-6">
-              Students
+              Download Marksheet and Cerificate
             </h1>
 
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
               {batchData?.students?.length > 0 ? (
                 batchData.students.map((student) => (
                   <div
-                    key={student._id}
-                    className="p-6 border-b border-gray-200 hover:bg-gray-50 transition duration-150 ease-in-out"
-                  >
-                    <div className="flex items-center">
-                      <img
-                        src={student.profilepic || "/placeholder-image.jpg"}
-                        alt={student.name}
-                        className="w-16 h-16 rounded-full object-cover mr-4"
-                      />
-                      <div className="flex-grow">
-                        <h2 className="text-xl font-semibold text-gray-800">
-                          {student.name}
-                        </h2>
-                        <p className="text-gray-600">{student.course}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() =>
-                            handleButtonClick(student._id, "marksheet")
-                          }
-                          disabled={
-                            loadingStates[student._id]?.marksheet ||
-                            !student.markUploadStatus
-                          }
-                          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                        >
-                          <Download className="mr-2 h-4 w-4" />
-                          {loadingStates[student._id]?.marksheet
-                            ? "Generating..."
-                            : "MarkSheet"}
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            handleButtonClick(student._id, "certificate")
-                          }
-                          disabled={
-                            loadingStates[student._id]?.certificate ||
-                            !student.markUploadStatus
-                          }
-                          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-                        >
-                          <Download className="mr-2 h-4 w-4" />
-                          {loadingStates[student._id]?.certificate
-                            ? "Generating..."
-                            : "Certificate"}
-                        </Button>
-                      </div>
+                  key={student._id}
+                  className="p-6 border-b border-indigo-100 hover:bg-indigo-50 transition duration-300 ease-in-out"
+                >
+                  <div className="flex items-center">
+                    <img
+                      src={student.profilepic || "/placeholder.svg?height=100&width=100"}
+                      alt={student.name}
+                      className="w-20 h-20 rounded-full object-cover mr-6 border-4 border-indigo-200"
+                    />
+                    <div className="flex-grow">
+                      <h2 className="text-2xl font-semibold text-indigo-900 mb-1">
+                        {student.name}
+                      </h2>
+                      <p className="text-indigo-600 font-medium">{student.course}</p>
+                    </div>
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => handleButtonClick(student._id, "marksheet")}
+                        disabled={loadingStates[student._id]?.marksheet || !student.markUploadStatus}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Download className="mr-2 h-5 w-5" />
+                        {loadingStates[student._id]?.marksheet ? "Generating..." : "MarkSheet"}
+                      </Button>
+                      <Button
+                        onClick={() => handleButtonClick(student._id, "certificate")}
+                        disabled={loadingStates[student._id]?.certificate || !student.markUploadStatus || student.Grade === "F"}
+                        className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Download className="mr-2 h-5 w-5" />
+                        {loadingStates[student._id]?.certificate ? "Generating..." : "Certificate"}
+                      </Button>
                     </div>
                   </div>
+                </div>
                 ))
               ) : (
                 <div className="p-6 text-center text-gray-500">

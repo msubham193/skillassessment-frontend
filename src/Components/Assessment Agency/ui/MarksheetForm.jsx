@@ -270,7 +270,7 @@ const MarksheetForm = () => {
       totalTheorymark: nosData.reduce(
         (sum, nos) => sum + parseInt(nos.theoryMarks || 0, 10),
         0
-      ),
+      ), 
       totalPracticalMark: nosData.reduce(
         (sum, nos) => sum + parseInt(nos.practicalMarks || 0, 10),
         0

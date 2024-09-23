@@ -199,10 +199,10 @@ const generateDummyData = useCallback((student) => {
         {selectedTab === "overview" && <GenerateMarksheetFrom
                     ref={componentRef} 
                     data={id && studentData ? generateDummyData(studentData) : null} 
-                />}
+             />}
       </TabsContent>
       <TabsContent value="updateBatchgov">
-        {selectedTab === "updateBatchgov" &&  <GenerateCertificate
+        {selectedTab === "updateBatchgov" && <GenerateCertificate
           ref={certificateRef}
           data={
             id && studentData ? generateCertificateData(certificatedata): null

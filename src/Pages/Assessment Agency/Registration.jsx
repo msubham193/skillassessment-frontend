@@ -7,6 +7,36 @@ import { toast } from "react-toastify";
 import { Button } from "@/components(shadcn)/ui/button";
 
 const RegistrationForm = () => { 
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal"
+  ];
   const navigate = useNavigate();
   const [agencyName, setAgencyName] = useState("");
   const [loading, setLoading] = useState(false); 
@@ -602,17 +632,23 @@ const RegistrationForm = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                State Under Geographical Region
-              </label>
-              <input
-                type="text"
-                name="state_Under_geographicalRegion"
-                value={state_Under_geographicalRegion}
-                onChange={handleChange}
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
-            </div>
+            <label className="block text-sm font-medium text-gray-700">
+              State Under Geographical Region
+            </label>
+            <select
+              name="state_Under_geographicalRegion"
+              value={state_Under_geographicalRegion}
+              onChange={handleChange}
+              className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+            >
+              <option value="">Select a State</option>
+              {indianStates.map((state, index) => (
+                <option key={index} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
+          </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Total Number of Certified Assessors

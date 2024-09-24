@@ -72,7 +72,7 @@ const StudentResultDetailsBox = ({ id }) => {
           setLoding(false);
           setCertificatedatadata(response.data.data);
           // setBatchId(response.data.data)
-          // console.log(batchId)
+          // console.log(response.data.data);
           console.log(response.data.data)
         });
     } catch (error) {
@@ -158,7 +158,7 @@ const generateDummyData = useCallback((student) => {
   };
 }, []);
 
-
+//function for generate data for certificate
   const generateCertificateData = useCallback((data) => {
     if (!data) return null;
     return {
@@ -178,6 +178,8 @@ const generateDummyData = useCallback((student) => {
       dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
+      schemeLogo:data?.schemeLogo,
+      certificateCode:data?.certificateCode,
     };
   }, []);
 

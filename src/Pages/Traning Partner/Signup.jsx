@@ -437,14 +437,15 @@ const Signup = () => {
 
         const data = await response.json();
         if (response.ok) {
-          toast.success("Form submitted successfully!");
+          toast.success(response.message);
           navigate("/trainingPartner/signin");
         } else {
           console.log("Server Error: ", data);
           throw new Error(data.message || "Failed to submit form");
         }
       } catch (error) {
-        toast.error(error.response.data, {
+        console.log(error);
+        toast.error(error.message || "An error occurred", {
           position: "top-center",
           closeOnClick: true,
           draggable: true,

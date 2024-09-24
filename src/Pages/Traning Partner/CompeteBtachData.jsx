@@ -23,7 +23,7 @@ const CompleteBatchData = () => {
   const [currentStudentId, setCurrentStudentId] = useState(null);
   const [documentType, setDocumentType] = useState(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
-
+  
   const handleDownloadAll = useCallback(
     (batchId) => {
       navigate(`/downloadAllMarksheet/${batchId}`);
@@ -39,10 +39,10 @@ const CompleteBatchData = () => {
     documentTitle: documentType === "marksheet" ? "MarkSheet" : "Certificate",
     pageStyle:
       documentType === "marksheet"
-        ? `@page { size: portrait; }`
-        : `@page { size: landscape; }`,
+        ? `@page { size: A4 portrait; } &&`
+        : `@page { size: A4 landscape; }`,
     onBeforeGetContent: () => {
-      dateRef.current = new Date(); // Update the date ref just before printing
+      dateRef.current = new Date();
     },
     onAfterPrint: () => {
       setLoadingStates((prev) => ({

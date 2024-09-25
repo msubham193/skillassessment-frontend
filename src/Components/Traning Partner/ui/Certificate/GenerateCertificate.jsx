@@ -144,27 +144,27 @@ const GenerateCertificate = forwardRef((props, ref) => {
           <div className="absolute bottom-[90px] left-[750px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
-                src="/logoround.png"
+                src="/cutm2.jpg"
                 alt="logo Background"
-                className="w-full h-full object-fit"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[550px] w-[56px] h-[56px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[552px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
-                src="/logoround.png"
+                src="/cutm2.jpg"
                 alt="logo Background"
-                className="w-full h-full object-fit"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[470px] w-[54px] h-[54px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[466px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src={schemeLogo}
                 alt="schemeLogo"
-                className="w-full h-full object-fit"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
@@ -172,7 +172,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
           <div className="absolute bottom-[48px] left-[70px] bg-white">
             <div className=" w-[45px] h-[45px]"></div>
           </div>
-          <div className="absolute bottom-[48px] left-[68px]">
+          <div className="absolute bottom-[48px] left-[70px]">
             <QRCode
               value={`https://student-details-by-qr-scan.vercel.app/${
                 studentId || ""

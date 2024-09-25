@@ -30,7 +30,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
   return (
     <div
       ref={ref}
-      className="w-[210mm] h-[275mm] flex flex-col justify-between mx-auto p-8 border border-green-600 font-cambria text-sm"
+      className="w-[212mm] h-[304.23mm] flex flex-col justify-between mx-auto p-6 border border-green-600 rounded-xl font-cambria text-sm"
     >
       <div className="flex justify-between items-start mb-1">
         <img src="/cutm.jpg" alt="Centurion University Logo" className="w-20 h-28" />
@@ -44,7 +44,7 @@ const GenerateMarksheetFrom = forwardRef((props, ref) => {
             M A R K S H E E T
           </h2>
         </div>
-        <img src="/ncevt.jpg" alt="NCVET Logo" className="w-28 h-28" />
+        <img src="/ncevt.jpg" alt="NCVET Logo" className="w-[130px] h-[140px] mt-[-10px]" />
       </div>
       <table className="w-full mb-2 border-collapse">
         <tbody>

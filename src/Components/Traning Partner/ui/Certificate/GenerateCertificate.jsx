@@ -71,7 +71,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
         </div>
         <div className="absolute w-full h-full">
           {/* Student Image */}
-          <div className="w-[103px] border ml-[82.6%] mt-[49px] ">
+          <div className="w-[103px] border ml-[82.7%] mt-[52px] ">
             <img
               className="h-28 w-24 object-cover"
               src={studentImageUrl}
@@ -84,7 +84,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
             </p>
           </div>
           {/* Student Name */}
-          <div className="mt-[47px] ml-[40%]">
+          <div className="mt-[54px] ml-[40%]">
             <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
@@ -141,7 +141,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               {formattedDateOfIssue || "N/A"}
             </p>
           </div>
-          <div className="absolute bottom-[90px] left-[737px] w-[54px] h-[54px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[750px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/logoround.png"
@@ -150,7 +150,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[540px] w-[54px] h-[54px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[550px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/logoround.png"
@@ -159,7 +159,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[465px] w-[54px] h-[54px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[470px] w-[54px] h-[54px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src={schemeLogo}
@@ -169,7 +169,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
             </div>
           </div>
           {/* QR Code */}
-          <div className="absolute bottom-[48px] left-[68px] bg-white">
+          <div className="absolute bottom-[48px] left-[70px] bg-white">
             <div className=" w-[45px] h-[45px]"></div>
           </div>
           <div className="absolute bottom-[48px] left-[68px]">

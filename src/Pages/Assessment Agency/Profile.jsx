@@ -28,19 +28,19 @@ import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { useNavigate } from "react-router-dom";
 import { server } from "@/main";
+import { Banknote, Building2, CreditCard, Hash, MapPin } from "lucide-react";
+import { Button } from "@/components(shadcn)/ui/button";
 
 const Profile = () => {
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
-  const [profileData, setProfileData] = useState(null); 
+  const [profileData, setProfileData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${server}/aa/${assessmentAgencyId}`
-        );
-        // console.log(response.data.data)logo
+        const response = await axios.get(`${server}/aa/${assessmentAgencyId}`);
+        console.log(response.data.data);
         setProfileData(response.data.data);
       } catch (error) {
         console.log(error);
@@ -142,15 +142,53 @@ const Profile = () => {
                 </p>
                 <p>{profileData.availability ? "True" : "False"}</p>
               </div>
+            </div>
+          </section>
+          {/* section for bank  details */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Bank Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <button
-                  className={
-                    "bg-blue-700 ml-4 p-2 w-40 rounded-md text-white font-semibold"
-                  }
-                  onClick={handleClick}
-                >
-                  Fillup Bank Details
-                </button>
+                <p className="font-medium">
+                  <Banknote className="inline-block mr-2" />
+                  Bank Name
+                </p>
+                <p>{profileData?.BankName || "N/A"}</p>
+              </div>
+              <div>
+                <p className="font-medium">
+                  <Building2 className="inline-block mr-2" />
+                  Branch Name
+                </p>
+                <p>{profileData?.BranchName || "N/A"}</p>
+              </div>
+              <div>
+                <p className="font-medium">
+                  <CreditCard className="inline-block mr-2" />
+                  Account Number
+                </p>
+                <p>{profileData?.AccountNumber || "N/A"}</p>
+              </div>
+              <div>
+                <p className="font-medium">
+                  <Hash className="inline-block mr-2" />
+                  IFSC Code
+                </p>
+                <p>{profileData?.IFSC_Code || "N/A"}</p>
+              </div>
+              <div>
+                <p className="font-medium">
+                  <MapPin className="inline-block mr-2" />
+                  Branch Address
+                </p>
+                <p>{profileData?.BRANCH_ADDRESS || "N/A"}</p>
+              </div>
+              <div>
+                <Button onClick={handleClick}>
+                  {profileData?.AccountNumber
+                    ? "Update Bank Details"
+                    : "Fillup Bank Details"}
+                </Button>
               </div>
             </div>
           </section>
@@ -224,7 +262,19 @@ const Profile = () => {
                   <FaFileAlt className="inline-block mr-2" />
                   Letter of NCVET
                 </p>
-                <p>{profileData.LETTER_OF_NCVET}</p>
+
+                {profileData.LETTER_OF_NCVET ? (
+                  <a
+                    href={profileData.LETTER_OF_NCVET}
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-blue-500 hover:underline" 
+                  >
+                    Letter Of NCVET
+                  </a>
+                ) : (
+                  <p>No letter available</p>
+                )}
               </div>
               <div>
                 <p className="font-medium">

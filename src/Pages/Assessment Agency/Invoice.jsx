@@ -1,4 +1,8 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components(shadcn)/ui/card";
+import { Separator } from "@/components(shadcn)/ui/separator";
 import { assessmentAgencyIdState } from "@/Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
+import { server } from "@/main";
+import { Pen } from "lucide-react";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -51,7 +55,7 @@ const Invoice = () => {
 
     try {
       const response = await fetch(
-        `https://d31os5ub6ca4xs.cloudfront.net/api/v1/invoice/monthly/query?month=${month}&year=${year}`,
+        `${server}/invoice/monthly/query?month=${month}&year=${year}`,
         {
           method: "POST",
           headers: {
@@ -95,27 +99,53 @@ const Invoice = () => {
 
   function numberToWords(num) {
     if (num === 0) return "zero rupees";
-  
+
     const units = [
-      "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-      "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
-      "seventeen", "eighteen", "nineteen"
+      "",
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine",
+      "ten",
+      "eleven",
+      "twelve",
+      "thirteen",
+      "fourteen",
+      "fifteen",
+      "sixteen",
+      "seventeen",
+      "eighteen",
+      "nineteen",
     ];
-  
+
     const tens = [
-      "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"
+      "",
+      "",
+      "twenty",
+      "thirty",
+      "forty",
+      "fifty",
+      "sixty",
+      "seventy",
+      "eighty",
+      "ninety",
     ];
-  
-    const scales = ["", "thousand", "lakh", "crore"];  // Indian number scales
-  
+
+    const scales = ["", "thousand", "lakh", "crore"]; // Indian number scales
+
     function convertHundred(num) {
       let str = "";
-  
+
       if (num > 99) {
         str += units[Math.floor(num / 100)] + " hundred ";
         num %= 100;
       }
-  
+
       if (num > 0) {
         if (num < 20) {
           str += units[num] + " ";
@@ -128,38 +158,38 @@ const Invoice = () => {
       }
       return str.trim();
     }
-  
+
     function convertNumberToWords(num) {
       let result = "";
       let scaleIndex = 0;
-  
+
       while (num > 0) {
         const chunk = num % 1000; // Process in chunks of thousands
         if (chunk > 0) {
-          result = convertHundred(chunk) + " " + scales[scaleIndex] + " " + result;
+          result =
+            convertHundred(chunk) + " " + scales[scaleIndex] + " " + result;
         }
         num = Math.floor(num / 1000);
         scaleIndex++;
       }
-  
+
       return result.trim();
     }
-  
+
     // Split integer and fractional parts
     const [integerPart, fractionalPart] = num.toString().split(".");
-  
+
     let rupees = parseInt(integerPart, 10);
     let paise = fractionalPart ? parseInt(fractionalPart.slice(0, 2), 10) : 0; // Consider only two decimal places for paise
-  
+
     let result = convertNumberToWords(rupees) + " rupees";
-  
+
     if (paise > 0) {
       result += " and " + convertNumberToWords(paise) + " paise";
     }
-  
+
     return result.trim();
   }
-  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -429,51 +459,29 @@ const Invoice = () => {
               </div>
             </div>
             <div className="border-2 border-black p-4">
-              <h2 className="text-center font-bold mb-4">OFFICIAL USE</h2>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="border p-2">
-                  <p className="text-center mt-14">
-                    Signature of Operation Manager
-                  </p>
-                </div>
-                <div className="border p-2">
-                  <p className="text-center mt-14">Signature of Accountant</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="border p-2">
-                  <p className="text-center mt-14">
-                    Head- Center for Skill Certification
-                  </p>
-                </div>
-                <div className="border p-2">
-                  <p className="text-center mt-14">
-                    Signature of Finance controller
-                  </p>
-                </div>
-                <div className="border p-2">
-                  <p className="text-center mt-14">
-                    Signature of Comptroller of Finance
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="border p-2">
-                  <p>Remark of Concerned Dept.:</p>
-                </div>
-                <div className="border p-2">
-                  <p>Remarks of Account Dept.:</p>
-                </div>
-              </div>
-            </div>
-            <div className="mt-4">
-              <p className="font-bold">Note:</p>
-              <ol className="list-decimal list-inside">
-                <li className="bg-yellow-200 mt-4">
-                  Invoice code – Assessment Agency Abbreviation/Fiscal
-                  year/month code/00001
-                </li>
-              </ol>
+              <Card className="w-full max-w-6xl mx-auto">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-center text-lg font-semibold text-primary">
+                    Official Use
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-6">
+                    <SignatureField label="Operation Manager" />
+                    <SignatureField label="Accountant" />
+                  </div>
+                  <div className="grid grid-cols-3 gap-6">
+                    <SignatureField label="Head of Skill Certification" />
+                    <SignatureField label="Finance Controller" />
+                    <SignatureField label="Comptroller of Finance" />
+                  </div>
+                  <Separator className="my-4" />
+                  <div className="grid grid-cols-2 gap-6">
+                    <RemarksField label="Remarks of Concerned Dept." />
+                    <RemarksField label="Remarks of Account Dept." />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -483,3 +491,29 @@ const Invoice = () => {
 };
 
 export default Invoice;
+
+
+
+function SignatureField({ label }) {
+  return (
+    <div className="flex flex-col space-y-2">
+      <div className="flex items-center space-x-2 text-sm font-medium text-gray-600">
+        <Pen className="w-4 h-4" />
+        <span>{label}</span>
+      </div>
+      <div className="h-12 border-b-2 border-dashed border-gray-300 hover:border-primary transition-colors duration-200" />
+    </div>
+  )
+}
+
+function RemarksField({ label }) {
+  return (
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-gray-600">{label}</label>
+      <textarea 
+        className="w-full h-20 p-2 text-sm border rounded-md border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" 
+        placeholder="Enter remarks here..."
+      />
+    </div>
+  )
+}

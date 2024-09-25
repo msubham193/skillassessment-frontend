@@ -99,6 +99,12 @@ const BankDetailsForm = () => {
     // Validate account number format based on the bank name
     const accountNumberError = validateAccountNumber(bankName, accountNumber);
     if (accountNumberError) {
+      toast.error(accountNumberError, {
+        position: "bottom-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
       setFormError(accountNumberError);
       return false;
     }
@@ -128,11 +134,9 @@ const BankDetailsForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     if (!validateForm()) {
+      setIsSubmitting(false);
       return;
     }
-
-   
-
     try { 
       const response = await axios.put(
         `${server}/aa/bdt/${assessmentAgencyId[0]}`,
@@ -250,7 +254,15 @@ const BankDetailsForm = () => {
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-center"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <Loader /> : "Submit"}
+          {isSubmitting ?  <Loader 
+            style={{
+              animation: "spin 2s linear infinite",
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+              }
+            }} 
+          /> : "Submit"}
         </button>
 
         {isSubmitted && (

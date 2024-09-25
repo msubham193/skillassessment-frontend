@@ -151,7 +151,7 @@ const Invoice = () => {
     let rupees = parseInt(integerPart, 10);
     let paise = fractionalPart ? parseInt(fractionalPart.slice(0, 2), 10) : 0; // Consider only two decimal places for paise
   
-    let result = convertNumberToWords(rupees) + " rupees";
+    let result = convertNumberToWords(rupees) + " rupees only";
   
     if (paise > 0) {
       result += " and " + convertNumberToWords(paise) + " paise";

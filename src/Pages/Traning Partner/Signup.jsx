@@ -38,29 +38,29 @@ const Signup = () => {
     prnNo: "",
     // Registered Office Details
     registeredOfficeAddress: "",
-    registeredOfficeDistrict: "",
+    registeredOfficeDist: "",
     registeredOfficeCity: "",
     registeredOfficeState: "",
-    registeredOfficePIN: "",
+    registeredOfficePin: "",
     registeredOfficeTelephone: "",
-    registeredOfficeMobile: "",
+    registeredOfficeMobile: "", 
     registeredOfficeFax: "",
     registeredOfficeEmail: "",
-    registeredOfficeGST: "",
+    registeredOfficeGst: "",
     // Regional Office Details
-    regionalOfficeAddress: "",
-    regionalOfficeDistrict: "",
-    regionalOfficeCity: "",
-    regionalOfficeState: "",
-    regionalOfficePIN: "",
-    regionalOfficeTelephone: "",
-    regionalOfficeMobile: "",
-    regionalOfficeFax: "",
-    regionalOfficeEmail: "",
-    regionalOfficeGST: "",
+    regionalStateOfficeAddress: "",
+    regionalStateOfficeDist: "",
+    regionalStateOfficeCity: "",
+    regionalStateOfficeState: "",
+    regionalStateOfficePin: "",
+    regionalStateOfficeTelephone: "",
+    regionalStateOfficeMobile: "",
+    regionalStateOfficeFax: "",
+    regionalStateOfficeEmail: "",
+    regionalStateOfficeGst: "",
     // Head Owner Details
     headOwnerName: "",
-    headOwnerDOB: "",
+    headOwnerDob: "",
     headOwnerCity: "",
     headOwnerResidenceAddress: "",
     headOwnerPermanentAddress: "",
@@ -69,7 +69,7 @@ const Signup = () => {
     headOwnerEmail: "",
     headOwnerQualification: "",
     headOwnerWorkExperience: "",
-    headOwnerPANNo: "",
+    headOwnerPanNo: "",
     headOwnerAadharNo: "",
     headOwnerPromoter1: "",
     headOwnerPromoter2: "",
@@ -130,7 +130,7 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [selectedRegionalOfficeState ,setSelectedRegionalOfficeState]=useState("")
+  const [selectedregionalStateOfficeState ,setSelectedregionalStateOfficeState]=useState("")
   const [selectedRegisteredOfficeState ,setSelectedRegisteredOfficeState]=useState("")
 
   // function to toggle password visibility
@@ -174,14 +174,14 @@ const Signup = () => {
     if (name === "sector") {
       setSelectedSector(value);
     }
-    if(name==="regionalOfficeState"){
-      setSelectedRegionalOfficeState(value)
+    if(name==="regionalStateOfficeState"){
+      setSelectedregionalStateOfficeState(value)
     }
     if(name==="registeredOfficeState"){
       setSelectedRegisteredOfficeState(value)
     }
   };
-  console.log(selectedRegionalOfficeState)
+  console.log(selectedregionalStateOfficeState)
   //this function is for check the validation  for inputs..
   const validateStep = (step) => {
     let stepErrors = {};
@@ -249,17 +249,17 @@ const Signup = () => {
         if (!formData.registeredOfficeAddress)
           stepErrors.registeredOfficeAddress =
             "Registered Office Address is required";
-        if (!formData.registeredOfficeDistrict)
-          stepErrors.registeredOfficeDistrict = "District is required";
+        if (!formData.registeredOfficeDist)
+          stepErrors.registeredOfficeDist = "District is required";
         if (!formData.registeredOfficeCity)
           stepErrors.registeredOfficeCity = "City is required";
         if (!formData.registeredOfficeState)
           stepErrors.registeredOfficeState = "State is required";
         if (
-          !formData.registeredOfficePIN ||
-          !isValidPIN(formData.registeredOfficePIN)
+          !formData.registeredOfficePin ||
+          !isValidPIN(formData.registeredOfficePin)
         )
-          stepErrors.registeredOfficePIN = "Valid PIN is required";
+          stepErrors.registeredOfficePin = "Valid PIN is required";
         if (
           !formData.registeredOfficeTelephone ||
           !isValidMobile(formData.registeredOfficeTelephone)
@@ -277,61 +277,61 @@ const Signup = () => {
         )
           stepErrors.registeredOfficeEmail = "Valid Email is required";
         if (
-          !formData.registeredOfficeGST ||
-          !isValidGST(formData.registeredOfficeGST)
+          !formData.registeredOfficeGst ||
+          !isValidGST(formData.registeredOfficeGst)
         )
-          stepErrors.registeredOfficeGST = "Valid GST Number is required";
+          stepErrors.registeredOfficeGst = "Valid GST Number is required";
         if (!formData.registeredOfficeFax)
           stepErrors.registeredOfficeFax = "Valid Fax Number is required";
         break;
 
       case 3:
-        if (!formData.regionalOfficeAddress)
-          stepErrors.regionalOfficeAddress =
+        if (!formData.regionalStateOfficeAddress)
+          stepErrors.regionalStateOfficeAddress =
             "Regional Office Address is required";
-        if (!formData.regionalOfficeDistrict)
-          stepErrors.regionalOfficeDistrict = "District is required";
-        if (!formData.regionalOfficeCity)
-          stepErrors.regionalOfficeCity = "City is required";
-        if (!formData.regionalOfficeState)
-          stepErrors.regionalOfficeState = "State is required";
+        if (!formData.regionalStateOfficeDist)
+          stepErrors.regionalStateOfficeDist = "District is required";
+        if (!formData.regionalStateOfficeCity)
+          stepErrors.regionalStateOfficeCity = "City is required";
+        if (!formData.regionalStateOfficeState)
+          stepErrors.regionalStateOfficeState = "State is required";
         if (
-          !formData.regionalOfficePIN ||
-          !isValidPIN(formData.regionalOfficePIN)
+          !formData.regionalStateOfficePin ||
+          !isValidPIN(formData.regionalStateOfficePin)
         )
-          stepErrors.regionalOfficePIN = "Valid PIN is required";
+          stepErrors.regionalStateOfficePin = "Valid PIN is required";
         if (
-          !formData.regionalOfficeTelephone ||
-          !isValidMobile(formData.regionalOfficeTelephone)
+          !formData.regionalStateOfficeTelephone ||
+          !isValidMobile(formData.regionalStateOfficeTelephone)
         )
-          stepErrors.regionalOfficeTelephone =
+          stepErrors.regionalStateOfficeTelephone =
             "Valid Telephone number is required";
         if (
-          !formData.regionalOfficeMobile ||
-          !isValidMobile(formData.regionalOfficeMobile)
+          !formData.regionalStateOfficeMobile ||
+          !isValidMobile(formData.regionalStateOfficeMobile)
         )
-          stepErrors.regionalOfficeMobile = "Valid Mobile is required";
+          stepErrors.regionalStateOfficeMobile = "Valid Mobile is required";
         if (
-          !formData.regionalOfficeEmail ||
-          !isValidEmail(formData.regionalOfficeEmail)
+          !formData.regionalStateOfficeEmail ||
+          !isValidEmail(formData.regionalStateOfficeEmail)
         )
-          stepErrors.regionalOfficeEmail = "Valid Email is required";
+          stepErrors.regionalStateOfficeEmail = "Valid Email is required";
         if (
-          !formData.regionalOfficeGST ||
-          !isValidGST(formData.regionalOfficeGST)
+          !formData.regionalStateOfficeGst ||
+          !isValidGST(formData.regionalStateOfficeGst)
         )
-          stepErrors.regionalOfficeGST = "Valid GST Number is required";
-        if (!formData.regionalOfficeFax)
-          stepErrors.regionalOfficeFax = "Valid Fax  is required";
+          stepErrors.regionalStateOfficeGst = "Valid GST Number is required";
+        if (!formData.regionalStateOfficeFax)
+          stepErrors.regionalStateOfficeFax = "Valid Fax  is required";
         break;
 
       case 4:
         if (!formData.headOwnerName)
           stepErrors.headOwnerName = "Head Owner Name is required";
-        if (!formData.headOwnerDOB || !isValidDate(formData.headOwnerDOB)) {
-          stepErrors.headOwnerDOB = "Valid Head Owner DOB is required";
-        } else if (!isAtLeast18YearsOld(formData.headOwnerDOB)) {
-          stepErrors.headOwnerDOB = "Head Owner must be at least 18 years old";
+        if (!formData.headOwnerDob || !isValidDate(formData.headOwnerDob)) {
+          stepErrors.headOwnerDob = "Valid Head Owner DOB is required";
+        } else if (!isAtLeast18YearsOld(formData.headOwnerDob)) {
+          stepErrors.headOwnerDob = "Head Owner must be at least 18 years old";
         }
         if (!formData.headOwnerCity)
           stepErrors.headOwnerCity = "City is required";
@@ -358,8 +358,8 @@ const Signup = () => {
           stepErrors.headOwnerQualification = "Qualification is required";
         if (!formData.headOwnerWorkExperience)
           stepErrors.headOwnerWorkExperience = "Work Experience is required";
-        if (!formData.headOwnerPANNo || !isValidPAN(formData.headOwnerPANNo))
-          stepErrors.headOwnerPANNo = "Valid PAN Number is required";
+        if (!formData.headOwnerPanNo || !isValidPAN(formData.headOwnerPanNo))
+          stepErrors.headOwnerPanNo = "Valid PAN Number is required";
         if (
           !formData.headOwnerAadharNo ||
           !isValidAadhar(formData.headOwnerAadharNo)
@@ -781,21 +781,21 @@ const Signup = () => {
 
               {/* District */}
               <div>
-                <Label htmlFor="registeredOfficeDistrict">
+                <Label htmlFor="registeredOfficeDist">
                   Registered Office District
                 </Label>
                 <div>
                 <Select
                   onValueChange={(value) =>
                     handleChange({
-                      target: { name: "registeredOfficeDistrict", value },
+                      target: { name: "registeredOfficeDist", value },
                     })
                   }
-                  value={formData.registeredOfficeDistrict}
+                  value={formData.registeredOfficeDist}
                 >
                   <SelectTrigger className="border rounded-md p-2 w-full">
-                    {formData.registeredOfficeDistrict
-                      ? formData.registeredOfficeDistrict
+                    {formData.registeredOfficeDist
+                      ? formData.registeredOfficeDist
                       : "Select District"}
                   </SelectTrigger>
                   <SelectContent>
@@ -806,15 +806,15 @@ const Signup = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.regionalOfficeDistrict && (
+                {errors.regionalStateOfficeDist && (
                   <p className="text-red-500">
-                    {errors.regionalOfficeDistrict}
+                    {errors.regionalStateOfficeDist}
                   </p>
                 )}
               </div>
-                {errors.registeredOfficeDistrict && (
+                {errors.registeredOfficeDist && (
                   <p className="text-red-500">
-                    {errors.registeredOfficeDistrict}
+                    {errors.registeredOfficeDist}
                   </p>
                 )}
               </div>
@@ -839,19 +839,19 @@ const Signup = () => {
 
               {/* PIN */}
               <div>
-                <Label htmlFor="registeredOfficePIN">
+                <Label htmlFor="registeredOfficePin">
                   Registered Office PIN
                 </Label>
                 <Input
                   type="text"
-                  id="registeredOfficePIN"
-                  name="registeredOfficePIN"
-                  value={formData.registeredOfficePIN}
+                  id="registeredOfficePin"
+                  name="registeredOfficePin"
+                  value={formData.registeredOfficePin}
                   onChange={handleChange}
                   required
                 />
-                {errors.registeredOfficePIN && (
-                  <p className="text-red-500">{errors.registeredOfficePIN}</p>
+                {errors.registeredOfficePin && (
+                  <p className="text-red-500">{errors.registeredOfficePin}</p>
                 )}
               </div>
 
@@ -915,24 +915,24 @@ const Signup = () => {
 
               {/* GST */}
               <div>
-                <Label htmlFor="registeredOfficeGST">
+                <Label htmlFor="registeredOfficeGst">
                   Registered Office GST Number
                 </Label>
                 <Input
                   type="text"
-                  id="registeredOfficeGST"
-                  name="registeredOfficeGST"
-                  value={formData.registeredOfficeGST}
+                  id="registeredOfficeGst"
+                  name="registeredOfficeGst"
+                  value={formData.registeredOfficeGst}
                   onChange={handleChange}
                   required
                 />
-                {errors.registeredOfficeGST && (
-                  <p className="text-red-500">{errors.registeredOfficeGST}</p>
+                {errors.registeredOfficeGst && (
+                  <p className="text-red-500">{errors.registeredOfficeGst}</p>
                 )}
               </div>
               {/* fax*/}
               <div>
-                <Label htmlFor="registeredOfficeGST">
+                <Label htmlFor="registeredOfficeGst">
                   Registered Office Fax
                 </Label>
                 <Input
@@ -958,38 +958,38 @@ const Signup = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {/* Address */}
               <div>
-                <Label htmlFor="regionalOfficeAddress">
+                <Label htmlFor="regionalStateOfficeAddress">
                   Regional Office Address
                 </Label>
                 <Input
                   type="text"
-                  id="regionalOfficeAddress"
-                  name="regionalOfficeAddress"
-                  value={formData.regionalOfficeAddress}
+                  id="regionalStateOfficeAddress"
+                  name="regionalStateOfficeAddress"
+                  value={formData.regionalStateOfficeAddress}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeAddress && (
-                  <p className="text-red-500">{errors.regionalOfficeAddress}</p>
+                {errors.regionalStateOfficeAddress && (
+                  <p className="text-red-500">{errors.regionalStateOfficeAddress}</p>
                 )}
               </div>
 
               {/* State */}
               <div>
-                <Label htmlFor="regionalOfficeState">
+                <Label htmlFor="regionalStateOfficeState">
                   Regional Office State
                 </Label>
                 <Select
                   onValueChange={(value) =>
                     handleChange({
-                      target: { name: "regionalOfficeState", value },
+                      target: { name: "regionalStateOfficeState", value },
                     })
                   }
-                  value={formData.regionalOfficeState}
+                  value={formData.regionalStateOfficeState}
                 >
                   <SelectTrigger className="border rounded-md p-2 w-full">
-                    {formData.regionalOfficeState
-                      ? formData.regionalOfficeState
+                    {formData.regionalStateOfficeState
+                      ? formData.regionalStateOfficeState
                       : "Select State"}
                   </SelectTrigger>
                   <SelectContent>
@@ -1000,161 +1000,161 @@ const Signup = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.regionalOfficeState && (
-                  <p className="text-red-500">{errors.regionalOfficeState}</p>
+                {errors.regionalStateOfficeState && (
+                  <p className="text-red-500">{errors.regionalStateOfficeState}</p>
                 )}
               </div>
 
               {/* District */}
               <div>
-                <Label htmlFor="regionalOfficeDistrict">
+                <Label htmlFor="regionalStateOfficeDist">
                   Regional Office District
                 </Label>
                 <Select
                   onValueChange={(value) =>
                     handleChange({
-                      target: { name: "regionalOfficeDistrict", value },
+                      target: { name: "regionalStateOfficeDist", value },
                     })
                   }
-                  value={formData.regionalOfficeDistrict}
+                  value={formData.regionalStateOfficeDist}
                 >
                   <SelectTrigger className="border rounded-md p-2 w-full">
-                    {formData.regionalOfficeDistrict
-                      ? formData.regionalOfficeDistrict
+                    {formData.regionalStateOfficeDist
+                      ? formData.regionalStateOfficeDist
                       : "Select District"}
                   </SelectTrigger>
                   <SelectContent>
-                    { stateDistrictMapping[selectedRegionalOfficeState]?.map((district, index) => (
+                    { stateDistrictMapping[selectedregionalStateOfficeState]?.map((district, index) => (
                       <SelectItem key={index} value={district}>
                         {district}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.regionalOfficeDistrict && (
+                {errors.regionalStateOfficeDist && (
                   <p className="text-red-500">
-                    {errors.regionalOfficeDistrict}
+                    {errors.regionalStateOfficeDist}
                   </p>
                 )}
               </div>
 
               {/* City */}
               <div>
-                <Label htmlFor="regionalOfficeCity">Regional Office City</Label>
+                <Label htmlFor="regionalStateOfficeCity">Regional Office City</Label>
                 <Input
                   type="text"
-                  id="regionalOfficeCity"
-                  name="regionalOfficeCity"
-                  value={formData.regionalOfficeCity}
+                  id="regionalStateOfficeCity"
+                  name="regionalStateOfficeCity"
+                  value={formData.regionalStateOfficeCity}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeCity && (
-                  <p className="text-red-500">{errors.regionalOfficeCity}</p>
+                {errors.regionalStateOfficeCity && (
+                  <p className="text-red-500">{errors.regionalStateOfficeCity}</p>
                 )}
               </div>
 
               {/* PIN */}
               <div>
-                <Label htmlFor="regionalOfficePIN">Regional Office PIN</Label>
+                <Label htmlFor="regionalStateOfficePin">Regional Office PIN</Label>
                 <Input
                   type="text"
-                  id="regionalOfficePIN"
-                  name="regionalOfficePIN"
-                  value={formData.regionalOfficePIN}
+                  id="regionalStateOfficePin"
+                  name="regionalStateOfficePin"
+                  value={formData.regionalStateOfficePin}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficePIN && (
-                  <p className="text-red-500">{errors.regionalOfficePIN}</p>
+                {errors.regionalStateOfficePin && (
+                  <p className="text-red-500">{errors.regionalStateOfficePin}</p>
                 )}
               </div>
 
               {/* Telephone */}
               <div>
-                <Label htmlFor="regionalOfficeTelephone">
+                <Label htmlFor="regionalStateOfficeTelephone">
                   Regional Office Telephone
                 </Label>
                 <Input
                   type="text"
-                  id="regionalOfficeTelephone"
-                  name="regionalOfficeTelephone"
-                  value={formData.regionalOfficeTelephone}
+                  id="regionalStateOfficeTelephone"
+                  name="regionalStateOfficeTelephone"
+                  value={formData.regionalStateOfficeTelephone}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeTelephone && (
+                {errors.regionalStateOfficeTelephone && (
                   <p className="text-red-500">
-                    {errors.regionalOfficeTelephone}
+                    {errors.regionalStateOfficeTelephone}
                   </p>
                 )}
               </div>
 
               {/* Mobile */}
               <div>
-                <Label htmlFor="regionalOfficeMobile">
+                <Label htmlFor="regionalStateOfficeMobile">
                   Regional Office Mobile
                 </Label>
                 <Input
                   type="text"
-                  id="regionalOfficeMobile"
-                  name="regionalOfficeMobile"
-                  value={formData.regionalOfficeMobile}
+                  id="regionalStateOfficeMobile"
+                  name="regionalStateOfficeMobile"
+                  value={formData.regionalStateOfficeMobile}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeMobile && (
-                  <p className="text-red-500">{errors.regionalOfficeMobile}</p>
+                {errors.regionalStateOfficeMobile && (
+                  <p className="text-red-500">{errors.regionalStateOfficeMobile}</p>
                 )}
               </div>
 
               {/* Email */}
               <div>
-                <Label htmlFor="regionalOfficeEmail">
+                <Label htmlFor="regionalStateOfficeEmail">
                   Regional Office Email
                 </Label>
                 <Input
                   type="email"
-                  id="regionalOfficeEmail"
-                  name="regionalOfficeEmail"
-                  value={formData.regionalOfficeEmail}
+                  id="regionalStateOfficeEmail"
+                  name="regionalStateOfficeEmail"
+                  value={formData.regionalStateOfficeEmail}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeEmail && (
-                  <p className="text-red-500">{errors.regionalOfficeEmail}</p>
+                {errors.regionalStateOfficeEmail && (
+                  <p className="text-red-500">{errors.regionalStateOfficeEmail}</p>
                 )}
               </div>
 
               {/* GST */}
               <div>
-                <Label htmlFor="regionalOfficeGST">
+                <Label htmlFor="regionalStateOfficeGst">
                   Regional Office GST Number
                 </Label>
                 <Input
                   type="text"
-                  id="regionalOfficeGST"
-                  name="regionalOfficeGST"
-                  value={formData.regionalOfficeGST}
+                  id="regionalStateOfficeGst"
+                  name="regionalStateOfficeGst"
+                  value={formData.regionalStateOfficeGst}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeGST && (
-                  <p className="text-red-500">{errors.regionalOfficeGST}</p>
+                {errors.regionalStateOfficeGst && (
+                  <p className="text-red-500">{errors.regionalStateOfficeGst}</p>
                 )}
               </div>
               <div>
-                <Label htmlFor="regionalOfficeGST">Regional Office Fax</Label>
+                <Label htmlFor="regionalStateOfficeGst">Regional Office Fax</Label>
                 <Input
                   type="text"
-                  id="regionalOfficeFax"
-                  name="regionalOfficeFax"
-                  value={formData.regionalOfficeFax}
+                  id="regionalStateOfficeFax"
+                  name="regionalStateOfficeFax"
+                  value={formData.regionalStateOfficeFax}
                   onChange={handleChange}
                   required
                 />
-                {errors.regionalOfficeFax && (
-                  <p className="text-red-500">{errors.regionalOfficeFax}</p>
+                {errors.regionalStateOfficeFax && (
+                  <p className="text-red-500">{errors.regionalStateOfficeFax}</p>
                 )}
               </div>
             </div>
@@ -1184,17 +1184,17 @@ const Signup = () => {
 
               {/* Head Owner DOB */}
               <div>
-                <Label htmlFor="headOwnerDOB">Head Owner DOB</Label>
+                <Label htmlFor="headOwnerDob">Head Owner DOB</Label>
                 <Input
                   type="date"
-                  id="headOwnerDOB"
-                  name="headOwnerDOB"
-                  value={formData.headOwnerDOB}
+                  id="headOwnerDob"
+                  name="headOwnerDob"
+                  value={formData.headOwnerDob}
                   onChange={handleChange}
                   required
                 />
-                {errors.headOwnerDOB && (
-                  <p className="text-red-500">{errors.headOwnerDOB}</p>
+                {errors.headOwnerDob && (
+                  <p className="text-red-500">{errors.headOwnerDob}</p>
                 )}
               </div>
 
@@ -1348,17 +1348,17 @@ const Signup = () => {
 
               {/* Head Owner PAN No */}
               <div>
-                <Label htmlFor="headOwnerPANNo">Head Owner PAN No</Label>
+                <Label htmlFor="headOwnerPanNo">Head Owner PAN No</Label>
                 <Input
                   type="text"
-                  id="headOwnerPANNo"
-                  name="headOwnerPANNo"
-                  value={formData.headOwnerPANNo}
+                  id="headOwnerPanNo"
+                  name="headOwnerPanNo"
+                  value={formData.headOwnerPanNo}
                   onChange={handleChange}
                   required
                 />
-                {errors.headOwnerPANNo && (
-                  <p className="text-red-500">{errors.headOwnerPANNo}</p>
+                {errors.headOwnerPanNo && (
+                  <p className="text-red-500">{errors.headOwnerPanNo}</p>
                 )}
               </div>
 
@@ -1668,7 +1668,7 @@ const Signup = () => {
             className="h-full bg-green-500 rounded-full transition-all duration-300 ease-in-out"
             style={{
               width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-            }} 
+            }}
           ></div>
         </div>
       </div>

@@ -98,7 +98,44 @@ const CompleteBatchData = () => {
 
   const generateMarksheetData = useCallback((student) => {
     if (!student) return null;
+    if(student.absent===true){
+      return{
+        schemCode: student.marks?.TrainingPartner || "N/A",
+        name: student?.name,
+        ward: student?.fathername,
+        qualificationName: student?.course,
+        qualificationCode: "ECL338",
+        nsqfLevel: "5",
+        sector: student?.sector_name,
+        duration: `${student?.totaldays} days`,
+        assessorRegNo: "AR123456",
+        dob: student?.dob
+          ? new Date(student.dob).toISOString().split("T")[0]
+          : "N/A",
+        assessmentBatchNo: student.marks?.batchABN,
+        assessmentDate: student.marks?.examDate
+          ? new Date(student.marks.examDate).toISOString().split("T")[0]
+          : "N/A",
+        nosMarks: Array.isArray(student?.marks?.Nos)
+          ? student.marks.Nos.map((nos) => ({
+              code: nos?.code || "N/A",
+              name: nos?.name || "N/A",
+              type: nos?.nosType || "N/A",
+              maxMarks: nos?.passMark || 0,
+              marksObtained: nos?.MarksObtained || 0,
+            }))
+          : [],
+  
+        totalMarks: student?.marks?.total,
+        grade: student?.marks?.Grade || "Absent",
+        result: student?.marks?.Result || "Absent",
+        dateOfIssue: dateRef.current.toISOString().split("T")[0],
+        certificateNo: `CERT${student.redg_No}`,
+        studentId: student._id,
+          }
 
+      
+    }
     return {
       schemCode: student.marks?.TrainingPartner || "N/A",
       name: student?.name,
@@ -203,7 +240,7 @@ const CompleteBatchData = () => {
                     <div className="flex gap-3">
                       <Button
                         onClick={() => handleButtonClick(student._id, "marksheet")}
-                        disabled={loadingStates[student._id]?.marksheet || !student.markUploadStatus}
+                        disabled={loadingStates[student._id]?.marksheet }
                         className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Download className="mr-2 h-5 w-5" />

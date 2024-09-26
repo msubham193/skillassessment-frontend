@@ -1,22 +1,23 @@
-import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { tpDataAtoms } from '@/Components/Traning Partner/Atoms/trainingPartnerData';
-import { Button } from '@/components(shadcn)/ui/button';
-import { Separator } from '@/components(shadcn)/ui/separator';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useRecoilValue } from "recoil";
+import { tpDataAtoms } from "@/Components/Traning Partner/Atoms/trainingPartnerData";
+import { Button } from "@/components(shadcn)/ui/button";
+import { Separator } from "@/components(shadcn)/ui/separator";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const ProfilePopup = () => {
   const trainingPartner = useRecoilValue(tpDataAtoms);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
-  const displayValue = (value) => value && value !== "0" ? value : "Not provided";
+  const displayValue = (value) =>
+    value && value !== "0" ? value : "Not provided";
 
   return (
     <div className="fixed inset-0 overflow-y-auto bg-white">
@@ -34,14 +35,35 @@ const ProfilePopup = () => {
               <h1 className="text-2xl font-bold">Training Partner Profile</h1>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
-              <InfoItem label="Organization Name" value={trainingPartner.organizationName} />
-              <InfoItem label="Category" value={trainingPartner.organizationCategory} />
-              <InfoItem label="Center ID" value={displayValue(trainingPartner.centerId)} />
-              <InfoItem label="Training Partner Code" value={trainingPartner.tpCode} />
+              <InfoItem
+                label="Organization Name"
+                value={trainingPartner.organizationName}
+              />
+              <InfoItem
+                label="Category"
+                value={trainingPartner.organizationCategory}
+              />
+              <InfoItem
+                label="Center ID"
+                value={displayValue(trainingPartner.centerId)}
+              />
+              <InfoItem
+                label="Training Partner Code"
+                value={trainingPartner.tpCode}
+              />
               <InfoItem label="Scheme" value={trainingPartner.scheme} />
-              <InfoItem label="Affiliation" value={displayValue(trainingPartner.affiliation)} />
-              <InfoItem label="Date of Incorporation" value={formatDate(trainingPartner.dateOfIncorporation)} />
-              <InfoItem label="Application Status" value={trainingPartner.applicationStatus} />
+              <InfoItem
+                label="Affiliation"
+                value={displayValue(trainingPartner.affiliation)}
+              />
+              <InfoItem
+                label="Date of Incorporation"
+                value={formatDate(trainingPartner.dateOfIncorporation)}
+              />
+              <InfoItem
+                label="Application Status"
+                value={trainingPartner.applicationStatus}
+              />
             </div>
           </div>
           <Separator />
@@ -52,12 +74,23 @@ const ProfilePopup = () => {
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="grid gap-1">
-                <div className="text-sm font-medium text-muted-foreground">Registered Office</div>
-                <div>{trainingPartner.registeredOfficeAddress}, {trainingPartner.registeredOfficeState}, {trainingPartner.registeredOfficeCity}, {trainingPartner.registeredOfficePin}</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Registered Office
+                </div>
+                <div>
+                  {trainingPartner.registeredOfficeAddress},{" "}
+                  {trainingPartner.registeredOfficeState},{" "}
+                  {trainingPartner.registeredOfficeCity},{" "}
+                  {trainingPartner.registeredOfficePin}
+                </div>
               </div>
               <div className="grid gap-1">
-                <div className="text-sm font-medium text-muted-foreground">Regional State Office</div>
-                <div>{displayValue(trainingPartner.regionalStateOfficeAddress)}</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Regional State Office
+                </div>
+                <div>
+                  {displayValue(trainingPartner.regionalStateOfficeAddress)}
+                </div>
               </div>
             </div>
           </div>
@@ -68,12 +101,25 @@ const ProfilePopup = () => {
               <h2 className="text-xl font-bold">Contact Information</h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
-              <InfoItem label="Website" value={trainingPartner.website} isLink />
-              <InfoItem label="PAN" value={trainingPartner.pan} />
+              <InfoItem
+                label="Website"
+                value={trainingPartner.website}
+                isLink
+              />
+              <InfoItem label="PAN" value={trainingPartner.headOwnerPanNo} />
               <InfoItem label="PRN" value={trainingPartner.prnNo} />
-              <InfoItem label="Email" value={trainingPartner.registeredOfficeEmail} />
-              <InfoItem label="Mobile" value={trainingPartner.registeredOfficeMobile} />
-              <InfoItem label="Telephone" value={trainingPartner.registeredOfficeTelephone} />
+              <InfoItem
+                label="Email"
+                value={trainingPartner.registeredOfficeEmail}
+              />
+              <InfoItem
+                label="Mobile"
+                value={trainingPartner.registeredOfficeMobile}
+              />
+              <InfoItem
+                label="Telephone"
+                value={trainingPartner.registeredOfficeTelephone}
+              />
             </div>
           </div>
           <Separator />
@@ -85,10 +131,22 @@ const ProfilePopup = () => {
             <div className="grid sm:grid-cols-2 gap-4">
               <InfoItem label="Name" value={trainingPartner.headOwnerName} />
               <InfoItem label="Email" value={trainingPartner.headOwnerEmail} />
-              <InfoItem label="Mobile" value={trainingPartner.headOwnerMobile} />
-              <InfoItem label="Date of Birth" value={formatDate(trainingPartner.headOwnerDob)} />
-              <InfoItem label="Qualification" value={trainingPartner.headOwnerQualification} />
-              <InfoItem label="Work Experience" value={`${trainingPartner.headOwnerWorkExperience} years`} />
+              <InfoItem
+                label="Mobile"
+                value={trainingPartner.headOwnerMobile}
+              />
+              <InfoItem
+                label="Date of Birth"
+                value={formatDate(trainingPartner.headOwnerDob)}
+              />
+              <InfoItem
+                label="Qualification"
+                value={trainingPartner.headOwnerQualification}
+              />
+              <InfoItem
+                label="Work Experience"
+                value={`${trainingPartner.headOwnerWorkExperience} years`}
+              />
             </div>
           </div>
         </div>
@@ -101,7 +159,12 @@ const InfoItem = ({ label, value, isLink = false }) => (
   <div className="grid gap-1">
     <div className="text-sm font-medium text-muted-foreground">{label}</div>
     {isLink ? (
-      <a href={value.startsWith('http') ? value : `https://${value}`} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
+      <a
+        href={value.startsWith("http") ? value : `https://${value}`}
+        className="text-blue-600 underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {value}
       </a>
     ) : (

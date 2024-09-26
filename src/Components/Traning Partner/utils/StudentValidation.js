@@ -27,7 +27,6 @@ export const StudentvalidationSchema = Yup.object({
   totalhours: Yup.number().required('Total hours are required').typeError('Total hours must be a number'),
   totaldays: Yup.number().required('Total days are required').typeError('Total days must be a number'),
   cenid: Yup.string().required('Center ID is required'),
-  redg_No: Yup.string().required('Registration number is required'),
   MPR_Id: Yup.string().required('MPR ID is required'),
   SNA_Id: Yup.string().required('SNA ID is required'),
 })

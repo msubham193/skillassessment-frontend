@@ -110,6 +110,7 @@ import AddTrainer from "./Pages/Traning Partner/AddTrainer";
 import DownloadAllMarksheet from "./Pages/Traning Partner/DownloadAllMarksheet";
 
 import StudentTable from "./Components/Sna/StudentTable";
+import TrackPayment from "./Pages/Traning Partner/TrackPayment";
 
 
 
@@ -325,6 +326,7 @@ const App = () => {
           <Route path="/updateCenter" exact element={<UpdateCenter />} />
           <Route path="/transcript" exact element={<Transcript />} />
           <Route path="/trainers" exact element={<AllTrainers />} />
+          <Route path="/trackpayment" exact element={<TrackPayment />} />
           <Route path="/centers" exact element={<Centers />} />
           <Route path="/downloadAllMarksheet/:batchId" exact element={<DownloadAllMarksheet />} />
           <Route

@@ -64,7 +64,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
       >
         <div className="w-full h-full absolute">
           <img
-            src="/certificate.jpg"
+            src="/certificate2.jpg"
             alt="Certificate Background"
             className="w-full h-full object-cover"
           />

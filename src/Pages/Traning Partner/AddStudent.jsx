@@ -51,7 +51,6 @@ const AddStudent = () => {
     "totalhours",
     "totaldays",
     "cenid",
-    "redg_No",
     "MPR_Id",
     "SNA_Id",
   ];
@@ -112,7 +111,6 @@ const AddStudent = () => {
     totalhours: "Total Hours",
     totaldays: "Total Days",
     cenid: "Center ID",
-    redg_No: "Registration Number",
     MPR_Id: "MPR ID",
     SNA_Id: "SNA ID",
   };

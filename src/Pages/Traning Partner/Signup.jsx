@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { server } from "@/main";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { stateDistrictMapping } from "@/Components/Traning Partner/utils/stateDistrictMapping";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -129,6 +130,8 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedRegionalOfficeState ,setSelectedRegionalOfficeState]=useState("")
+  const [selectedRegisteredOfficeState ,setSelectedRegisteredOfficeState]=useState("")
 
   // function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -171,8 +174,14 @@ const Signup = () => {
     if (name === "sector") {
       setSelectedSector(value);
     }
+    if(name==="regionalOfficeState"){
+      setSelectedRegionalOfficeState(value)
+    }
+    if(name==="registeredOfficeState"){
+      setSelectedRegisteredOfficeState(value)
+    }
   };
-
+  console.log(selectedRegionalOfficeState)
   //this function is for check the validation  for inputs..
   const validateStep = (step) => {
     let stepErrors = {};
@@ -208,7 +217,7 @@ const Signup = () => {
 
       return age >= 18;
     };
-
+  
     switch (step) {
       case 1:
         if (!formData.organizationName)
@@ -434,14 +443,14 @@ const Signup = () => {
           },
           body: jsondata,
         });
-
+        
         const data = await response.json();
         if (response.ok) {
-          toast.success(response.message);
+          toast.success(data.message || "Form submitted successfully");
           navigate("/trainingPartner/signin");
         } else {
           console.log("Server Error: ", data);
-          throw new Error(data.message || "Failed to submit form");
+          toast.error(data.error || "Failed to submit form");
         }
       } catch (error) {
         console.log(error);
@@ -456,7 +465,6 @@ const Signup = () => {
       }
     }
   };
-
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -776,14 +784,34 @@ const Signup = () => {
                 <Label htmlFor="registeredOfficeDistrict">
                   Registered Office District
                 </Label>
-                <Input
-                  type="text"
-                  id="registeredOfficeDistrict"
-                  name="registeredOfficeDistrict"
+                <div>
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "registeredOfficeDistrict", value },
+                    })
+                  }
                   value={formData.registeredOfficeDistrict}
-                  onChange={handleChange}
-                  required
-                />
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.registeredOfficeDistrict
+                      ? formData.registeredOfficeDistrict
+                      : "Select District"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    { stateDistrictMapping[selectedRegisteredOfficeState]?.map((district, index) => (
+                      <SelectItem key={index} value={district}>
+                        {district}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.regionalOfficeDistrict && (
+                  <p className="text-red-500">
+                    {errors.regionalOfficeDistrict}
+                  </p>
+                )}
+              </div>
                 {errors.registeredOfficeDistrict && (
                   <p className="text-red-500">
                     {errors.registeredOfficeDistrict}
@@ -982,14 +1010,27 @@ const Signup = () => {
                 <Label htmlFor="regionalOfficeDistrict">
                   Regional Office District
                 </Label>
-                <Input
-                  type="text"
-                  id="regionalOfficeDistrict"
-                  name="regionalOfficeDistrict"
+                <Select
+                  onValueChange={(value) =>
+                    handleChange({
+                      target: { name: "regionalOfficeDistrict", value },
+                    })
+                  }
                   value={formData.regionalOfficeDistrict}
-                  onChange={handleChange}
-                  required
-                />
+                >
+                  <SelectTrigger className="border rounded-md p-2 w-full">
+                    {formData.regionalOfficeDistrict
+                      ? formData.regionalOfficeDistrict
+                      : "Select District"}
+                  </SelectTrigger>
+                  <SelectContent>
+                    { stateDistrictMapping[selectedRegionalOfficeState]?.map((district, index) => (
+                      <SelectItem key={index} value={district}>
+                        {district}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {errors.regionalOfficeDistrict && (
                   <p className="text-red-500">
                     {errors.regionalOfficeDistrict}

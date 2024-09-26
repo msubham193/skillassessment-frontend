@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, ChevronRight, ChevronLeft, BotMessageSquare, PackagePlus, CirclePlus, SquareGanttChart, Users,Disc2,Repeat2 } from "lucide-react";
+import { LayoutDashboard, BotMessageSquare, PackagePlus, CirclePlus, SquareGanttChart, Users,Disc2,Repeat2,AudioWaveform } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
 import { Nav } from "./ui/Nav";
@@ -45,6 +45,13 @@ const SideNav = () => {
             icon: SquareGanttChart,
             variant: "ghost",
             href: "/manageBatch",
+          },
+          {
+            title: "Track Payment",
+            label: "",
+            icon: AudioWaveform,
+            variant: "ghost",
+            href: "/trackpayment",
           },
           {
             title:"Centers",

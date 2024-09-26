@@ -59,7 +59,7 @@ const Signup = () => {
     regionalOfficeGST: "",
     // Head Owner Details
     headOwnerName: "",
-    headOwnerDOB: "",
+    headOwnerDob: "",
     headOwnerCity: "",
     headOwnerResidenceAddress: "",
     headOwnerPermanentAddress: "",
@@ -68,7 +68,7 @@ const Signup = () => {
     headOwnerEmail: "",
     headOwnerQualification: "",
     headOwnerWorkExperience: "",
-    headOwnerPANNo: "",
+    headOwnerPanNo: "",
     headOwnerAadharNo: "",
     headOwnerPromoter1: "",
     headOwnerPromoter2: "",
@@ -319,10 +319,10 @@ const Signup = () => {
       case 4:
         if (!formData.headOwnerName)
           stepErrors.headOwnerName = "Head Owner Name is required";
-        if (!formData.headOwnerDOB || !isValidDate(formData.headOwnerDOB)) {
-          stepErrors.headOwnerDOB = "Valid Head Owner DOB is required";
-        } else if (!isAtLeast18YearsOld(formData.headOwnerDOB)) {
-          stepErrors.headOwnerDOB = "Head Owner must be at least 18 years old";
+        if (!formData.headOwnerDob || !isValidDate(formData.headOwnerDob)) {
+          stepErrors.headOwnerDob = "Valid Head Owner DOB is required";
+        } else if (!isAtLeast18YearsOld(formData.headOwnerDob)) {
+          stepErrors.headOwnerDob = "Head Owner must be at least 18 years old";
         }
         if (!formData.headOwnerCity)
           stepErrors.headOwnerCity = "City is required";
@@ -349,8 +349,8 @@ const Signup = () => {
           stepErrors.headOwnerQualification = "Qualification is required";
         if (!formData.headOwnerWorkExperience)
           stepErrors.headOwnerWorkExperience = "Work Experience is required";
-        if (!formData.headOwnerPANNo || !isValidPAN(formData.headOwnerPANNo))
-          stepErrors.headOwnerPANNo = "Valid PAN Number is required";
+        if (!formData.headOwnerPanNo || !isValidPAN(formData.headOwnerPanNo))
+          stepErrors.headOwnerPanNo = "Valid PAN Number is required";
         if (
           !formData.headOwnerAadharNo ||
           !isValidAadhar(formData.headOwnerAadharNo)
@@ -434,7 +434,7 @@ const Signup = () => {
           },
           body: jsondata,
         });
-
+        console.log(formData);
         const data = await response.json();
         if (response.ok) {
           toast.success(response.message);
@@ -1143,17 +1143,17 @@ const Signup = () => {
 
               {/* Head Owner DOB */}
               <div>
-                <Label htmlFor="headOwnerDOB">Head Owner DOB</Label>
+                <Label htmlFor="headOwnerDob">Head Owner DOB</Label>
                 <Input
                   type="date"
-                  id="headOwnerDOB"
-                  name="headOwnerDOB"
-                  value={formData.headOwnerDOB}
+                  id="headOwnerDob"
+                  name="headOwnerDob"
+                  value={formData.headOwnerDob}
                   onChange={handleChange}
                   required
                 />
-                {errors.headOwnerDOB && (
-                  <p className="text-red-500">{errors.headOwnerDOB}</p>
+                {errors.headOwnerDob && (
+                  <p className="text-red-500">{errors.headOwnerDob}</p>
                 )}
               </div>
 
@@ -1307,17 +1307,17 @@ const Signup = () => {
 
               {/* Head Owner PAN No */}
               <div>
-                <Label htmlFor="headOwnerPANNo">Head Owner PAN No</Label>
+                <Label htmlFor="headOwnerPanNo">Head Owner PAN No</Label>
                 <Input
                   type="text"
-                  id="headOwnerPANNo"
-                  name="headOwnerPANNo"
-                  value={formData.headOwnerPANNo}
+                  id="headOwnerPanNo"
+                  name="headOwnerPanNo"
+                  value={formData.headOwnerPanNo}
                   onChange={handleChange}
                   required
                 />
-                {errors.headOwnerPANNo && (
-                  <p className="text-red-500">{errors.headOwnerPANNo}</p>
+                {errors.headOwnerPanNo && (
+                  <p className="text-red-500">{errors.headOwnerPanNo}</p>
                 )}
               </div>
 
@@ -1627,7 +1627,7 @@ const Signup = () => {
             className="h-full bg-green-500 rounded-full transition-all duration-300 ease-in-out"
             style={{
               width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-            }} 
+            }}
           ></div>
         </div>
       </div>

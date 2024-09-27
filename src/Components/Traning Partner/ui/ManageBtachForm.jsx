@@ -12,7 +12,7 @@ import { server } from "@/main";
 import { useNavigate } from "react-router-dom";
 
 const ManageBatchForm = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [batches, setBatches] = useState([]);
   const [batchStatuses, setBatchStatuses] = useState({});
   const [batchTransactionIds, setBatchTransactionIds] = useState({});
@@ -22,6 +22,8 @@ const ManageBatchForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatingInvoices, setGeneratingInvoices] = useState({});
   const [uploading, setUploading] = useState({});
+  const [paymentModes, setPaymentModes] = useState({});
+  const [paymentPublishedBy, setPaymentPublishedBy] = useState({});
   const invoiceRef = useRef(null);
 
   const handleStatusChange = (newStatus, batchId) => {
@@ -29,6 +31,14 @@ const ManageBatchForm = () => {
     if (newStatus === "Online") {
       window.open("https://razorpay.com/payment-link", "_blank");
     }
+  };
+
+  const handlePaymentModeChange = (mode, batchId) => {
+    setPaymentModes((prev) => ({ ...prev, [batchId]: mode }));
+  };
+
+  const handlePaymentPublishedByChange = (method, batchId) => {
+    setPaymentPublishedBy((prev) => ({ ...prev, [batchId]: method }));
   };
 
   const fetchBatches = async () => {
@@ -112,6 +122,8 @@ const ManageBatchForm = () => {
     formData.append("preInvoice", batchFiles[batchId]?.preInvoice);
     formData.append("postInvoice", batchFiles[batchId]?.postInvoice);
     formData.append("transactionId", batchTransactionIds[batchId]);
+    formData.append("paymentMode", paymentModes[batchId]);
+    formData.append("paymentPublishedBy", paymentPublishedBy[batchId]);
 
     try {
       const response = await fetch(`${server}/batch/paymentdetails/${batchId}`, {
@@ -159,7 +171,7 @@ const ManageBatchForm = () => {
   );
 
   return (
-    <Card className="w-full mx-auto mt-8">
+    <Card className="w-full mx-auto mt-8 ">
       <div className="mt-3 ml-3">
         <Button
           onClick={() => navigate("/trainingPartner/dashboard")}
@@ -167,7 +179,7 @@ const ManageBatchForm = () => {
         >
           Back to Dashboard
         </Button>
-        </div>
+      </div>
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Manage Batches</CardTitle>
       </CardHeader>
@@ -188,7 +200,8 @@ const ManageBatchForm = () => {
                 <TableHead className="font-semibold">ABN</TableHead>
                 <TableHead className="font-semibold">Generate PreInvoice</TableHead>
                 <TableHead className="font-semibold">Payment Mode</TableHead>
-                <TableHead className="font-semibold">Transaction ID</TableHead>
+                <TableHead className="font-semibold">Payment Published By</TableHead>
+                <TableHead className="font-semibold">Transaction/UTR ID</TableHead>
                 <TableHead className="font-semibold">PreInvoice</TableHead>
                 <TableHead className="font-semibold">PostInvoice</TableHead>
                 <TableHead className="font-semibold">Actions</TableHead>
@@ -219,22 +232,39 @@ const ManageBatchForm = () => {
                   </TableCell>
                   <TableCell className="py-4">
                     <Select
-                      defaultValue="offline"
-                      onValueChange={(value) => handleStatusChange(value, batch._id)}
+                      value={paymentModes[batch._id] || ""}
+                      onValueChange={(value) => handlePaymentModeChange(value, batch._id)}
                       disabled={batch.paymentStatus}
                     >
                       <SelectTrigger className="w-[120px]">
                         <SelectValue placeholder="Select mode" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="offline">Offline</SelectItem>
-                        <SelectItem value="online">Online</SelectItem>
+                        <SelectItem value="Offline">Offline</SelectItem>
+                        <SelectItem value="Online">Online</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <Select
+                      value={paymentPublishedBy[batch._id] || ""}
+                      onValueChange={(value) => handlePaymentPublishedByChange(value, batch._id)}
+                      disabled={batch.paymentStatus}
+                    >
+                      <SelectTrigger className="w-[120px]">
+                        <SelectValue placeholder="Select method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="DD">DD</SelectItem>
+                        <SelectItem value="NEFT">NEFT</SelectItem>
+                        <SelectItem value="RTGS">RTGS</SelectItem>
+                        <SelectItem value="IMPS">IMPS</SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
                   <TableCell className="py-4">
                     <Input
-                      placeholder="Transaction ID"
+                      placeholder={paymentModes[batch._id] === "Online" ? "UTR ID" : "Transaction ID"}
                       value={batchTransactionIds[batch._id] || ""}
                       onChange={(e) => setBatchTransactionIds((prev) => ({
                         ...prev,

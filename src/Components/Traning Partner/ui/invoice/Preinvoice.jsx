@@ -7,45 +7,63 @@ const Preinvoice = ({ batch }) => {
   if (!batch) return null;
 
   const currentDate = new Date().toLocaleDateString("en-GB");
-  const invoiceNo = `CUTM/INV/${currentDate.replace(/\//g, "")}/${batch.ABN_Number}/ID`;
+  const invoiceNo = `CUTM/INV/${currentDate.replace(/\//g, "")}/${
+    batch.ABN_Number
+  }/ID`;
 
   return (
-    <div className="bg-white text-black" style={{ 
-      fontFamily: 'Arial, sans-serif', 
-      width: '100%', 
-      padding: '10mm', 
-      boxSizing: 'border-box'
-    }}>
+    <div
+      className="bg-white text-black"
+      style={{
+        fontFamily: "Arial, sans-serif",
+        width: "100%",
+        padding: "10mm",
+        boxSizing: "border-box",
+      }}
+    >
       <div className="text-center mb-8">
-        <img src='/logo.png' alt="Logo" className="w-24 mx-auto mb-4" />
+        <img src="/logo.png" alt="Logo" className="w-24 mx-auto mb-4" />
         <h1 className="text-2xl font-bold">INVOICE</h1>
       </div>
 
       <table className="w-full border-collapse mb-8">
         <tbody>
           <tr>
-            <td className="border border-gray-400 p-2 w-1/2">Invoice No: {invoiceNo}</td>
-            <td className="border border-gray-400 p-2 w-1/2">Date: {currentDate}</td>
+            <td className="border border-gray-400 p-2 w-1/2">
+              Invoice No: {invoiceNo}
+            </td>
+            <td className="border border-gray-400 p-2 w-1/2">
+              Date: {currentDate}
+            </td>
           </tr>
           <tr>
             <td className="border border-gray-400 p-2 w-1/2">
-              <strong>To</strong><br />
-              Organization Name: {tpdata.organizationName}<br />
-              City: {tpdata.registeredOfficeCity}<br />
-              State: {tpdata.registeredOfficeState}<br />
+              <strong>To</strong>
+              <br />
+              Organization Name: {tpdata.organizationName}
+              <br />
+              City: {tpdata.registeredOfficeCity}
+              <br />
+              State: {tpdata.registeredOfficeState}
+              <br />
               Pin: {tpdata.registeredOfficePin}
             </td>
             <td className="border border-gray-400 p-2 w-1/2">
-              <strong>From</strong><br />
-              CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT<br />
-              CT Campus, Paralakhemundi<br />
-              Pin: 761211, Dist: Gajapati<br />
+              <strong>From</strong>
+              <br />
+              CENTURION UNIVERSITY OF TECHNOLOGY AND MANAGEMENT
+              <br />
+              CT Campus, Paralakhemundi
+              <br />
+              Pin: 761211, Dist: Gajapati
+              <br />
               State: Odisha
             </td>
           </tr>
           <tr>
             <td colSpan="2" className="border border-gray-400 p-2 text-center">
-              Dear Sir, Kindly arrange to pay the below amount towards assessment fee.
+              Dear Sir, Kindly arrange to pay the below amount towards
+              assessment fee.
             </td>
           </tr>
         </tbody>
@@ -65,34 +83,55 @@ const Preinvoice = ({ batch }) => {
           <tr>
             <td className="border border-gray-400 p-2 text-center">01</td>
             <td className="border border-gray-400 p-2">
-              Center name: {batch.centerName}<br />
+              Center name: {batch.centerName}
+              <br />
               Assessment of Batch No: {batch.ABN_Number}
             </td>
-            <td className="border border-gray-400 p-2 text-center">{batch.students.length}</td>
+            <td className="border border-gray-400 p-2 text-center">
+              {batch.students.length}
+            </td>
             <td className="border border-gray-400 p-2 text-right">
               {(batch.amountToPaid / batch.students.length).toFixed(2)}
             </td>
-            <td className="border border-gray-400 p-2 text-right">{batch.amountToPaid.toFixed(2)}</td>
+            <td className="border border-gray-400 p-2 text-right">
+              {batch.amountToPaid.toFixed(2)}
+            </td>
           </tr>
           <tr>
-            <td colSpan="4" className="border border-gray-400 p-2 text-right font-bold">Total</td>
-            <td className="border border-gray-400 p-2 text-right font-bold">{batch.amountToPaid.toFixed(2)}</td>
+            <td
+              colSpan="4"
+              className="border border-gray-400 p-2 text-right font-bold"
+            >
+              Total
+            </td>
+            <td className="border border-gray-400 p-2 text-right font-bold">
+              {batch.amountToPaid.toFixed(2)}
+            </td>
           </tr>
           <tr>
             <td colSpan="5" className="border border-gray-400 p-2">
-              <strong>Total Amount in Words:</strong> {numberToWords(batch.amountToPaid)} Rupees Only
+              <strong>Amount in Words:</strong>
+              {numberToWords(batch.amountToPaid)} Rupees Only 
+              {batch.schemeType === "Corporate"
+                ? "(Including 18% GST)"
+                : ""}
             </td>
           </tr>
         </tbody>
       </table>
 
-      <p className="mb-4"><strong>Please note following details for transfer of funds</strong></p>
+      <p className="mb-4">
+        <strong>Please note following details for transfer of funds</strong>
+      </p>
 
       <table className="w-full border-collapse mb-8">
         <tbody>
           {[
             ["Bank", "Punjab National Bank"],
-            ["In Favour Of", "Centurion University of Technology and Management"],
+            [
+              "In Favour Of",
+              "Centurion University of Technology and Management",
+            ],
             ["Branch Address", "Argul, Jatani"],
             ["Account Type", "Current Account"],
             ["Account No", "1426113001448"],
@@ -110,21 +149,20 @@ const Preinvoice = ({ batch }) => {
       </table>
 
       <div className="text-right mb-20">
-  <p>For Centurion University of Technology and Management</p>
-  
-  <div className="inline-block mr-[50px]">
-    <img
-      src='/Partha_sir_signature.png' 
-      alt="parth" 
-      width={100} 
-      height={20} 
-      className="inline-block mt-[30px]"
-    />
-  </div>
+        <p>For Centurion University of Technology and Management</p>
 
-  <p >Authorized Signature</p>
-</div>
+        <div className="inline-block mr-[50px]">
+          <img
+            src="/Partha_sir_signature.png"
+            alt="parth"
+            width={100}
+            height={20}
+            className="inline-block mt-[30px]"
+          />
+        </div>
 
+        <p>Authorized Signature</p>
+      </div>
     </div>
   );
 };

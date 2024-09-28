@@ -11,6 +11,15 @@ import GenerateMarksheetFrom from "@/Components/Traning Partner/ui/Marksheet/gen
 import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 import { server } from "@/main";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components(shadcn)/ui/table";
+
 const CompleteBatchData = () => {
   const navigate = useNavigate();
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
@@ -199,6 +208,7 @@ const CompleteBatchData = () => {
     };
   }, []);
 
+
   const handleButtonClick = useCallback(
     (studentId, type) => {
       fetchStudentData(studentId, type);
@@ -207,6 +217,7 @@ const CompleteBatchData = () => {
     },
     [fetchStudentData]
   );
+
   return (
     <div className="flex h-screen bg-gray-100">
       <SideNav />
@@ -219,60 +230,92 @@ const CompleteBatchData = () => {
             </h1>
 
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
-              {batchData?.students?.length > 0 ? (
-                batchData.students.map((student) => (
-                  <div
-                  key={student._id}
-                  className="p-6 border-b border-indigo-100 hover:bg-indigo-50 transition duration-300 ease-in-out"
-                >
-                  <div className="flex items-center">
-                    <img
-                      src={student.profilepic || "/placeholder.svg?height=100&width=100"}
-                      alt={student.name}
-                      className={`w-20 h-20 rounded-full object-cover mr-6 border-4 ${student.absent?'border-red-500':'border-indigo-500'}`}
-                    />
-                    <div className="flex-grow">
-                      <h2 className="text-2xl font-semibold text-indigo-900 mb-1">
-                        {student.name}
-                      </h2>
-                      <p className="text-indigo-600 font-medium">{student.course}</p>
-                    </div>
-                    <div className="flex gap-3">
-                      <Button
-                        onClick={() => handleButtonClick(student._id, "marksheet")}
-                        disabled={loadingStates[student._id]?.marksheet }
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Download className="mr-2 h-5 w-5" />
-                        {loadingStates[student._id]?.marksheet ? "Generating..." : "MarkSheet"}
-                      </Button>
-                      <Button
-                        onClick={() => handleButtonClick(student._id, "certificate")}
-                        disabled={loadingStates[student._id]?.certificate || !student.markUploadStatus || student.Grade === "F"}
-                        className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Download className="mr-2 h-5 w-5" />
-                        {loadingStates[student._id]?.certificate ? "Generating..." : "Certificate"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                ))
-              ) : (
-                <div className="p-6 text-center text-gray-500">
-                  No students found
-                </div>
-              )}
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">Index</TableHead>
+                    <TableHead>Student</TableHead>
+                    <TableHead>Course</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {batchData?.students?.length > 0 ? (
+                    batchData.students.map((student, index) => (
+                      <TableRow key={student._id}>
+                        <TableCell className="font-medium">{index + 1}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-3">
+                            <img
+                              src={student.profilepic || "/placeholder.svg?height=40&width=40"}
+                              alt={student.name}
+                              className={`w-10 h-10 rounded-full object-cover border-2 ${
+                                student.absent ? 'border-red-500' : 'border-indigo-500'
+                              }`}
+                            />
+                            <span>{student.name}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>{student.course}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              student.absent
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-green-100 text-green-800'
+                            }`}
+                          >
+                            {student.absent ? 'Absent' : 'Present'}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end space-x-2">
+                            <Button
+                             className="bg-[#1D4ED8] text-white"
+                              onClick={() => handleButtonClick(student._id, "marksheet")}
+                              disabled={loadingStates[student._id]?.marksheet}
+                              size="sm"
+                              
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              {loadingStates[student._id]?.marksheet ? "Generating..." : "MarkSheet"}
+                            </Button>
+                            <Button
+                            className="bg-[#7E22CE] text-white"
+                              onClick={() => handleButtonClick(student._id, "certificate")}
+                              disabled={
+                                loadingStates[student._id]?.certificate ||
+                                !student.markUploadStatus ||
+                                student.Grade === "F" ||
+                                student.absent
+                              }
+                              size="sm"
+                    
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              {loadingStates[student._id]?.certificate ? "Generating..." : "Certificate"}
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center text-gray-500">
+                        No students found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </div>
             <div className="flex justify-end mb-4 mt-4">
               <Button
                 onClick={() => handleDownloadAll(batchId)}
                 disabled={isDownloadingAll || !batchData?.students?.length}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
-                {isDownloadingAll
-                  ? "Downloading..."
-                  : "Download All MarkSheets"}
+                {isDownloadingAll ? "Downloading..." : "Download All MarkSheets"}
               </Button>
             </div>
           </div>

@@ -64,7 +64,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
       >
         <div className="w-full h-full absolute">
           <img
-            src="/certificate2.jpg"
+            src="/certificate4.jpg"
             alt="Certificate Background"
             className="w-full h-full object-cover"
           />
@@ -95,7 +95,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
             <p className=" ml-[60px]  text-[12px] font-semibold">
               {formattedDateOfBirth || "N/A"}
             </p>
-            <p className=" ml-[135px] text-[12px] font-semibold">
+            <p className=" ml-[145px] text-[12px] font-semibold">
               {enrollmentNumber || "N/A"}
             </p>
           </div>
@@ -141,7 +141,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               {formattedDateOfIssue || "N/A"}
             </p>
           </div>
-          <div className="absolute bottom-[90px] left-[750px] w-[56px] h-[56px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[650px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/cutm2.jpg"
@@ -150,7 +150,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[552px] w-[56px] h-[56px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[452px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/cutm2.jpg"
@@ -159,7 +159,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[466px] w-[56px] h-[56px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[90px] left-[366px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src={schemeLogo}

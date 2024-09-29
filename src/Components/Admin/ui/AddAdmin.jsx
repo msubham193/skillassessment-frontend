@@ -8,13 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../components(shadcn)/ui/dialog";
+} from "@/components(shadcn)/ui/dialog";
 import { Input } from "../../../components(shadcn)/ui/input";
 import { Label } from "../../../components(shadcn)/ui/label";
 import axios from "axios";
 import { server } from "@/main";
 import { toast } from "react-toastify";
-const AddAdmin = ({ children }) => {
+const AddAdmin = ({ children }) => { 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");

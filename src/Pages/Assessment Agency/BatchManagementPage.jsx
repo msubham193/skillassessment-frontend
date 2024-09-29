@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
@@ -8,13 +8,26 @@ import {
 } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { server } from "@/main";
+import { Input } from "@/components(shadcn)/ui/input";
+import { Button } from "@/components(shadcn)/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components(shadcn)/ui/table";
+import { Badge } from "@/components(shadcn)/ui/badge";
+import SetExamModal from "@/Components/Assessment Agency/ui/SetExamModal";
 
 const BatchManagementPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [batchData, setBatchData] = useState([]); // Initialize as an empty array
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
   const setExamId = useSetRecoilState(examIdState);
@@ -63,77 +76,105 @@ const BatchManagementPage = () => {
     } catch (error) {
       console.error("Error", error);
       toast.error(error.message);
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
 
+  const filteredBatchData = batchData.filter((batch) =>
+    Object.values(batch).some(
+      (value) =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   return (
-    <div>
-      <div className="overflow-x-auto mt-1 border rounded-lg shadow-lg">
-        <div className="p-2">
-          <h1 className="text-2xl font-bold">Batches</h1>
-          <p className="text-gray-600 mb-4">Manage and Track Batch Results</p>
-        </div>
-        <table className="w-full border-collapse text-sm">
-          <thead className="">
-            <tr className="bg-gray-500 text-white uppercase text-sm leading-normal">
-              <th className="px-4 py-3 text-left font-medium">ABN id</th>
-              <th className="px-4 py-3 text-left font-medium">Course</th>
-              <th className="px-4 py-3 text-left font-medium">Scheme</th>
-              <th className="px-4 py-3 text-center font-medium">
-                Number of Students
-              </th>
-              <th className="px-4 py-3 text-left font-medium">Status</th>
-              <th className="px-4 py-3 text-left font-medium">TP</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-800 text-sm">
-            {batchData.map((batch) => (
-              <tr
-                key={batch._id}
+    <div className="container mx-auto py-10">
+      <div>
+        <h1 className="text-2xl font-bold">Batches</h1>
+        <p className="text-gray-600">Manage and Track Batch Results</p>
+      </div>
+      <div className="flex justify-between gap-4 mt-3">
+        <Input
+          placeholder="Search batches..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        <Button onClick={handleInvoiceGenerate}>
+          Generate Monthly Invoice
+        </Button>
+      </div>
+
+      {loading ? (
+        <div className="text-center">Loading...</div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>SL NO</TableHead>
+              <TableHead>ABN ID</TableHead>
+              <TableHead>Course</TableHead>
+              <TableHead>Scheme</TableHead>
+              <TableHead className="text-center">Number of Students</TableHead>
+              <TableHead>TP</TableHead>
+              <TableHead>Status</TableHead>
+              
+             {/*  <TableHead>Action</TableHead>  Action column for the button */}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredBatchData.map((batch, index) => (
+              <TableRow
+                key={batch.id}
+                className="cursor-pointer hover:bg-gray-100"
                 onClick={() =>
-                  handleRowClick(batch.batchId._id, batch.status, batch._id)
+                  handleRowClick(batch?.batchId?._id, batch?.status, batch?._id)
                 }
-                className="cursor-pointer hover:bg-gray-200"
               >
-                <td className="px-4 py-3">{batch.batchABN}</td>
-                <td className="px-4 py-3">{batch.course}</td>
-                <td className="px-4 py-3">{batch.scheme}</td>
-                <td className="px-4 py-3 text-center">
-                  {batch.batchId.students ? batch.batchId.students.length : 0}
-                </td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
-                      batch.markUploadAndExamCompleteStatus === false
-                        ? "bg-red-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {batch.markUploadAndExamCompleteStatus
-                      ? "Completed"
-                      : "On-Going"}
-                  </span>
-                </td>
-                <td className="px-4 py-3">{batch.TrainingOrganization}</td>
-              </tr>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{batch.batchABN}</TableCell>
+                <TableCell>{batch.course}</TableCell>
+                <TableCell>{batch.scheme}</TableCell>
+                <TableCell className="text-center">
+                  {batch.totalStudents}
+                </TableCell>
+            
+                <TableCell>{batch.TrainingOrganization}</TableCell>
+                <TableCell>
+                <Badge
+                  className={`px-4 py-2 rounded-lg ${
+                    batch.markUploadAndExamCompleteStatus
+                      ? "bg-green-100 text-green-700" // Green background and text for true
+                      : "bg-yellow-100 text-yellow-700" // Yellow background and text for false
+                  }`}
+                >
+                  {batch.markUploadAndExamCompleteStatus
+                    ? "Completed"
+                    : "Not Completed"}
+                </Badge>
+              </TableCell>
+               {/*
+                 <TableCell>
+                  <SetExamModal batchId={batch?.batchId?._id} examId={batch?._id}>
+                    <Button
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent row click when the button is clicked
+                        console.log("open Modal");
+                      }}
+                    >
+                      Exam Setup
+                    </Button>
+                  </SetExamModal>
+                </TableCell>
+                */}
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-10 flex justify-end">
-        <button
-          className={"bg-blue-700 ml-4 p-2 rounded-md text-white font-semibold"}
-          onClick={handleInvoiceGenerate}
-        >
-        {
-          loading?"Generating..":"Generate Monthly Invoice"
-        }   
-        </button>
-        <ToastContainer />
-      </div>
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };

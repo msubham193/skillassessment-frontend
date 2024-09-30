@@ -6,7 +6,7 @@ import { Checkbox } from "@/components(shadcn)/ui/checkbox";
 import { toast } from "react-toastify";
 import { server } from "@/main";
 
-const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
+const UpdateCenterForm = ({ center, onClose, onUpdate }) => { 
   const [formData, setFormData] = useState(center);
   const [isLoading, setIsLoading] = useState(false);
   const [availableSectors, setAvailableSectors] = useState([]);
@@ -152,7 +152,7 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
             />
           </div>
 
-          <div className="space-y-2">
+         {/*  <div className="space-y-2">
             <Label>Schemes</Label>
             <div className="space-y-2 max-h-40 overflow-y-auto">
               {allSchemes.map((scheme) => (
@@ -173,6 +173,7 @@ const UpdateCenterForm = ({ center, onClose, onUpdate }) => {
               ))}
             </div>
           </div>
+          */}
 
           <div className="space-y-2">
             <Label>Sectors</Label>

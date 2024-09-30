@@ -58,7 +58,7 @@ const Card = () => {
 
     // Call the function
     makeApiCallWithToken();
-  });
+  },[]);
 
   const stats = [
     {

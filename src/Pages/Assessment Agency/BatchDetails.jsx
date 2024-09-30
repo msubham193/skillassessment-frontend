@@ -248,6 +248,7 @@ const BatchDetails = () => {
               </div>
             </div> */}
           </div>
+          {/* have to copy from this and make some changes  */}
           <div className="flex gap-4 mt-10">
             <div className="flex flex-col">
               <h2 className="text-2xl font-bold">Set Examination Date</h2>
@@ -294,7 +295,7 @@ const BatchDetails = () => {
                 className={
                   "bg-blue-700 ml-4 p-2 w-40 rounded-md text-white font-semibold"
                 }
-                onClick={handleClickResultSheet}
+                onClick={handleClickResultSheet} 
               >
                 Result Sheet
               </button>

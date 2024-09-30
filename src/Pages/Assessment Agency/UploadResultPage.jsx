@@ -90,6 +90,7 @@ const UploadResult = () => {
       <table className="w-full border-collapse text-sm">
         <thead className="">
           <tr className="bg-gray-500 text-white uppercase text-sm leading-normal">
+            <th className="px-4 py-3 text-left font-medium">SL. NO.</th>
             <th className="px-4 py-3 text-left font-medium">ABN id</th>
             <th className="px-4 py-3 text-left font-medium">Course</th>
             <th className="px-4 py-3 text-left font-medium">Scheme</th>
@@ -101,7 +102,7 @@ const UploadResult = () => {
           </tr>
         </thead>
         <tbody>
-          {batchData.map((batch) => (
+          {batchData.map((batch,index) => (
             <tr
               key={batch._id}
               onClick={() =>
@@ -117,6 +118,7 @@ const UploadResult = () => {
               }
               className="cursor-pointer hover:bg-gray-200"
             >
+              <td className="px-4 py-3">{index+1}</td>
               <td className="px-4 py-3">{batch.batchABN}</td>
               <td className="px-4 py-3">{batch.course}</td>
               <td className="px-4 py-3">{batch.scheme}</td>

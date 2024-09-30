@@ -4,29 +4,31 @@ import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import axios from "axios";
 import { server } from "@/main";
+import { DataTable } from "@/Components/Admin/ui/notiification/DataTable";
+import { cn } from "@/lib/utils";
 
 const ScheduleBox = () => {
-  const [batchData, setBatchData] = useState([]); // Initialize as an empty array
+  const [batchData, setBatchData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        console.log(assessmentAgencyId);
+        // console.log(assessmentAgencyId);
         const response = await axios.get(
           `${server}/exam/aa/${assessmentAgencyId}`
         );
 
         const data = response.data.data;
-        console.log(data);
-        // Wrap the response in an array if it is an object
-        if (data && !Array.isArray(data)) {
-          setBatchData([data]);
-        } else {
-          setBatchData(data);
-        }
+        setBatchData(data);
       } catch (error) {
         console.error("Error fetching batch data:", error);
+      }
+      finally
+      {
+        setLoading(false);
       }
     };
 
@@ -42,54 +44,12 @@ const ScheduleBox = () => {
   return (
     <div className="mt-5 bg-gray-100">
       <h1 className="text-xl font-semibold text-black mb-2">Scheduled</h1>
-      <table className="w-full">
-        <thead className="bg-gray-800 text-white">
-          <tr className="bg-gray-500 text-white uppercase text-sm leading-normal">
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Training Institute
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Course
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Project
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Number of Students
-            </th>
-            <th className="p-3 text-sm font-semibold tracking-wide text-left">
-              Status
-            </th>
-          </tr>
-        </thead>
-        <tbody className="text-white text-sm">
-          {batchData.map((batch) => (
-            <tr key={batch._id} className="cursor-pointer hover:bg-gray-200">
-              <td className="p-3 text-md text-gray-700">
-                {batch.TrainingOrganization}
-              </td>
-              <td className="p-3 text-md text-gray-700">{batch.course}</td>
-              <td className="p-3 text-md text-gray-700">{batch.scheme}</td>
-              <td className="pl-20 text-md text-gray-700">
-                {batch.batchId.students ? batch.batchId.students.length : 0}
-              </td>
-              <td className="p-3 text-sm">
-                <span
-                  className={`p-1.5 text-xs font-medium uppercase tracking-wider rounded-lg bg-opacity-50 ${
-                    batch.markUploadAndExamCompleteStatus === true
-                      ? "text-blue-800 bg-blue-200"
-                      : "text-green-800 bg-green-200"
-                  }`}
-                >
-                  {batch.markUploadAndExamCompleteStatus
-                    ? "Completed"
-                    : "On-Going"}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable
+        filter1={"TrainingOrganization"}
+        columns={columns}
+        data={batchData}
+        isLoding={loading}
+      />
       <div className="mt-4">
         <h2 className="text-lg mb-2">Status Counts</h2>
         <ul className="flex gap-6">
@@ -115,3 +75,49 @@ const ScheduleBox = () => {
 };
 
 export default ScheduleBox;
+
+const columns = [
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
+  },
+  {
+    accessorKey: "TrainingOrganization",
+    header: "Training Institute",
+  },
+  {
+    accessorKey: "course",
+    header: "Course",
+  },
+  {
+    accessorKey: "totalStudents",
+    header: "Number of Students",
+  },
+  {
+    accessorKey: "markUploadAndExamCompleteStatus",
+    header: "Status",
+    cell: ({ row }) => {
+      const getStatusLabel = (status) => {
+        return status ? "Completed" : "Not Completed";
+      };
+
+      return (
+        <div
+          className={cn("font-medium w-fit px-4 py-2 rounded-lg", {
+            "bg-green-100 text-green-400": row.getValue(
+              "markUploadAndExamCompleteStatus"
+            ),
+            "bg-red-100 text-red-500": !row.getValue(
+              "markUploadAndExamCompleteStatus"
+            ),
+          })}
+        >
+          {getStatusLabel(row.getValue("markUploadAndExamCompleteStatus"))}
+        </div>
+      );
+    },
+  },
+];

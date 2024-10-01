@@ -181,7 +181,7 @@ const Signup = () => {
       setSelectedRegisteredOfficeState(value)
     }
   };
-  console.log(selectedregionalStateOfficeState)
+  // console.log(selectedregionalStateOfficeState)
   //this function is for check the validation  for inputs..
   const validateStep = (step) => {
     let stepErrors = {};
@@ -436,6 +436,12 @@ const Signup = () => {
       setLoading(true);
       try {
         const jsondata = JSON.stringify(formData);
+        
+        setTimeout(() => {
+          console.log(jsondata)
+        }, 2000);
+
+
         const response = await fetch(`${server}/tp`, {
           method: "POST",
           headers: {

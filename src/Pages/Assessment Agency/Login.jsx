@@ -68,6 +68,7 @@ function SkillPortal() {
       localStorage.setItem("tokenExpiration", expirationTime);
       localStorage.setItem("assessmentAgencyId", id);
 
+      // console.log(localStorage.getItem("aaAuthToken"))
       navigate("/dashboard/assessmentschedule");
     } catch (error) {
       console.log(error);

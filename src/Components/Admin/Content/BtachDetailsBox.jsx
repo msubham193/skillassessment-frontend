@@ -30,7 +30,8 @@ import {
 
 const BtachDetailsBox = ({ id }) => {
   const [data, setData] = useState({});
-  const [loding, setLoding] = useState(false);
+  const [loding, setLoding] = useState(false); 
+  const [isRefresh, setIsRefresh] = useState(false); 
 
   const navigate = useNavigate();
   //function for  fetch battch data by id.
@@ -56,7 +57,7 @@ const BtachDetailsBox = ({ id }) => {
       console.error("Error fetching training partner:", error);
       throw error;
     }
-  }, []);
+  }, [isRefresh]);
   // console.log(data)
   //function for handel the navigation for resultPage..
 
@@ -88,7 +89,7 @@ const BtachDetailsBox = ({ id }) => {
     <div>
       <div className="w-full mt-5">
         <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-3">
-          {/* Buttion For assin a batch */}
+          {/* Button For assign a batch */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <div>
@@ -313,6 +314,7 @@ const BtachDetailsBox = ({ id }) => {
             course={data?.courseName}
             sector={data?.sectorName}
             state={data?.state}
+            setRefresh={setIsRefresh}
           >
             <Button
               disabled={

@@ -24,26 +24,27 @@ import { useRecoilValue } from "recoil";
 import { authenticationState } from "@/Pages/Admin/Atoms/atoms"; 
 import { toast } from "react-toastify";
 
-const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
-  const [courseName, setCourseName] = useState("");
+const CreateExam = ({ children, abn_id, course, tp_id, sector, state,setRefresh }) => {
+  const [courseName, setCourseName] = useState(""); 
   const [trainingPartnerId, setTrainingPartnerId] = useState("");
   const [batchId, setBatchId] = useState("");
   const [assesmentAgencyId, setAssesmentAgencyId] = useState("");
   const [assesmentAgencyName, setAssesmentAgencyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const authState = useRecoilValue(authenticationState);
-
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   useEffect(() => {
     setBatchId(abn_id);
     setCourseName(course);
     setTrainingPartnerId(tp_id);
   }, [abn_id, course, tp_id]);
 
-  // Function to create batch
+  // Function to create Exam for this batch
   const createExam = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(authState.token)
+    // console.log(authState.token)
 
     if (!authState.token) {
       toast.error("Admin not authenticated!", {
@@ -78,6 +79,8 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
         draggable: true,
         theme: "colored",
       });
+      setIsDialogOpen(false);
+      setRefresh(true);
     } catch (error) {
       toast.error("Error: Unable to assign exam. Please check your inputs or try again later.", {
         position: "top-center",
@@ -85,14 +88,19 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
         draggable: true,
         theme: "colored",
       });
+    
     } finally {
       setIsLoading(false);
     }
   };
 
+//function for auto close the show assessment agency modal
+  const handleOpenChange = (open) => {
+    setIsSelectOpen(open);
+  };
   return (
     <div>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="bg-gray-100 max-w-lg mx-auto">
           <DialogHeader>
@@ -133,7 +141,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                     placeholder="Select an assessment agency"
                     required
                   /> 
-                  <Select>
+                  <Select open={isSelectOpen} onOpenChange={handleOpenChange}>
                     <SelectTrigger className="w-24">
                       <SelectValue placeholder="Show" />
                     </SelectTrigger>
@@ -144,6 +152,7 @@ const CreateExam = ({ children, abn_id, course, tp_id, sector, state }) => {
                     course={courseName}
                     sector={sector}
                     state={state}
+                    closeModal={() => setIsSelectOpen(false)}
                   />
                     </SelectContent>
                   </Select>

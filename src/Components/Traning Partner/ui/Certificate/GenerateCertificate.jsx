@@ -51,13 +51,14 @@ const GenerateCertificate = forwardRef((props, ref) => {
     studentImageUrl,
     schemeLogo,
     certificateCode,
+    schemeType
   } = props.data;
 
   const formattedDateOfBirth = formatDate(dateOfBirth);
   const formattedDateOfIssue = formatDate(dateOfIssue);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto ">
       <div
         className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto "
         ref={ref}
@@ -71,7 +72,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
         </div>
         <div className="absolute w-full h-full">
           {/* Student Image */}
-          <div className="w-[103px] border ml-[82.7%] mt-[52px] ">
+          <div className="w-[103px] border ml-[82.8%] mt-[52px] ">
             <img
               className="h-28 w-24 object-cover"
               src={studentImageUrl}
@@ -141,7 +142,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
               {formattedDateOfIssue || "N/A"}
             </p>
           </div>
-          <div className="absolute bottom-[90px] left-[650px] w-[56px] h-[56px] bg-[#FFFFFF]">
+          <div className="absolute bottom-[120px] left-[810px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/cutm2.jpg"
@@ -150,16 +151,8 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-          <div className="absolute bottom-[90px] left-[452px] w-[56px] h-[56px] bg-[#FFFFFF]">
-            <div className="w-full h-full">
-              <img
-                src="/cutm2.jpg"
-                alt="logo Background"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
-          <div className="absolute bottom-[90px] left-[366px] w-[56px] h-[56px] bg-[#FFFFFF]">
+         
+          <div className={`absolute bottom-[90px] ${schemeType==="Corporate" ?"left:[452px]" :"left-[366px]"}  w-[56px] h-[56px] bg-[#FFFFFF`}>
             <div className="w-full h-full">
               <img
                 src={schemeLogo}

@@ -20,7 +20,7 @@ import {
 } from "@/components(shadcn)/ui/table";
 import TableToolBar from "./TableToolBar";
 import TablePagination from "./TablePagination";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loder from "../Loder";
 import { Download, FileDown } from "lucide-react";
@@ -50,7 +50,14 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
   const analysisRef = useRef(null); // Create a ref for the analysis section
 
   // Function for navigate to analysis
+  // useEffect(() => {
+  //   console.log(pageUrl)
+  
+   
+  // }, [])
+  
   const handleRedirect = () => {
+    
     switch (pageUrl && pageUrl) {
       case "accessmentagency":
         setAnylisis("accessmentagency");
@@ -201,7 +208,7 @@ export function DataTable({ columns, path, data, isLoding, filter1, pageUrl }) {
           </Tooltip>
           <div className="ml-4">
           {
-          anylisis===null?"":<Button onClick={handleRedirect}>view statistic</Button>
+          pageUrl===null?"no statistic found":<Button onClick={handleRedirect}>view statistic</Button>
           }
           </div>
         </div>

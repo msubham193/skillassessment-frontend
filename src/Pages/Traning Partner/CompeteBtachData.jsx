@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components(shadcn)/ui/table";
 
-const CompleteBatchData = () => {
+const CompleteBatchData = () => { 
   const navigate = useNavigate();
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
   const batchId = batchData?._id;
@@ -302,7 +302,7 @@ const CompleteBatchData = () => {
                               onClick={() =>
                                 handleButtonClick(student._id, "marksheet")
                               }
-                              disabled={loadingStates[student._id]?.marksheet}
+                              disabled={loadingStates[student._id]?.marksheet || student.absent}
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.marksheet

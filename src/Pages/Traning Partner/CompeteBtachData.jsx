@@ -51,10 +51,25 @@ const CompleteBatchData = () => {
         ? marksheetRef.current
         : certificateRef.current,
     documentTitle: documentType === "marksheet" ? "MarkSheet" : "Certificate",
-    pageStyle:
-      documentType === "marksheet"
-        ? `@page { size: A4 portrait; } &&`
-        : `@page { size: A4 landscape; }`,
+    pageStyle: `
+      @page {
+        size: ${documentType === "marksheet" ? "A4 portrait" : "A4 landscape"};
+      }
+      @media print {
+        ${documentType === "certificate" 
+          ? `
+            body {
+              padding: 0;
+              margin: 0;
+            }
+            * {
+              border: none !important;
+              box-shadow: none !important;
+            }
+          ` 
+          : ""}
+      }
+    `,
     onBeforeGetContent: () => {
       dateRef.current = new Date();
     },
@@ -70,7 +85,6 @@ const CompleteBatchData = () => {
       setDocumentType(null);
     },
   });
-
   const fetchStudentData = useCallback(async (studentId, type) => {
     setLoadingStates((prev) => ({
       ...prev,
@@ -208,6 +222,7 @@ const CompleteBatchData = () => {
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
       schemeLogo: data.schemeLogo,
+      schemeType: data.schemeType,
     };
   }, []);
 
@@ -298,11 +313,20 @@ const CompleteBatchData = () => {
                         <TableCell className="text-right">
                           <div className="flex justify-end space-x-2">
                             <Button
+
+                              className="bg-[#1D4ED8] text-white"
+                              onClick={() =>
+                                handleButtonClick(student._id, "marksheet")
+                              }
+                              disabled={loadingStates[student._id]?.marksheet}
+                              size="sm"
+
                               className="bg-[#1D4ED8] text-white px-2 py-1 text-xs rounded-md"
                               onClick={() =>
                                 handleButtonClick(student._id, "marksheet")
                               }
                               disabled={loadingStates[student._id]?.marksheet || student.absent}
+
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.marksheet
@@ -310,7 +334,11 @@ const CompleteBatchData = () => {
                                 : "MarkSheet"}
                             </Button>
                             <Button
+
+            
+
                               className="bg-[#7E22CE] text-white px-2 py-1 text-xs rounded-md"
+
                               onClick={() =>
                                 handleButtonClick(student._id, "certificate")
                               }
@@ -320,6 +348,10 @@ const CompleteBatchData = () => {
                                 student.Grade === "F" ||
                                 student.absent
                               }
+
+                              size="sm"
+
+
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.certificate

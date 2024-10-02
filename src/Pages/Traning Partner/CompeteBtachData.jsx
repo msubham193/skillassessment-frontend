@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components(shadcn)/ui/table";
 
-const CompleteBatchData = () => {
+const CompleteBatchData = () => { 
   const navigate = useNavigate();
   const batchData = useRecoilValue(CompeltebatchDataAtoms);
   const batchId = batchData?._id;
@@ -39,6 +39,11 @@ const CompleteBatchData = () => {
     },
     [navigate]
   );
+
+  //function for check all the data come from complete batch
+  // setTimeout(() => {
+  //   console.log(batchData);
+  // }, 2000);
 
   const handlePrint = useReactToPrint({
     content: () =>
@@ -245,10 +250,13 @@ const CompleteBatchData = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-12">Index</TableHead>
+                    <TableHead className="w-12">Sl_No.</TableHead>
                     <TableHead>Student</TableHead>
+                    <TableHead>Redg No.</TableHead>
                     <TableHead>Course</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Result</TableHead>
+                    <TableHead>Grade</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -276,6 +284,7 @@ const CompleteBatchData = () => {
                             <span>{student.name}</span>
                           </div>
                         </TableCell>
+                        <TableCell>{student.redg_No}</TableCell>
                         <TableCell>{student.course}</TableCell>
                         <TableCell>
                           <span
@@ -288,15 +297,36 @@ const CompleteBatchData = () => {
                             {student.absent ? "Absent" : "Present"}
                           </span>
                         </TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              student.Grade === "F"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {student.Grade === "F" ? "Fail" : "Pass"}
+                          </span>
+                        </TableCell>
+                        <TableCell>{student.Grade}</TableCell>
+
                         <TableCell className="text-right">
                           <div className="flex justify-end space-x-2">
                             <Button
+
                               className="bg-[#1D4ED8] text-white"
                               onClick={() =>
                                 handleButtonClick(student._id, "marksheet")
                               }
                               disabled={loadingStates[student._id]?.marksheet}
                               size="sm"
+
+                              className="bg-[#1D4ED8] text-white px-2 py-1 text-xs rounded-md"
+                              onClick={() =>
+                                handleButtonClick(student._id, "marksheet")
+                              }
+                              disabled={loadingStates[student._id]?.marksheet || student.absent}
+
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.marksheet
@@ -304,7 +334,11 @@ const CompleteBatchData = () => {
                                 : "MarkSheet"}
                             </Button>
                             <Button
-                              className="bg-[#7E22CE] text-white"
+
+            
+
+                              className="bg-[#7E22CE] text-white px-2 py-1 text-xs rounded-md"
+
                               onClick={() =>
                                 handleButtonClick(student._id, "certificate")
                               }
@@ -314,7 +348,10 @@ const CompleteBatchData = () => {
                                 student.Grade === "F" ||
                                 student.absent
                               }
+
                               size="sm"
+
+
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.certificate

@@ -7,6 +7,36 @@ import { toast } from "react-toastify";
 import { Button } from "@/components(shadcn)/ui/button";
 
 const RegistrationForm = () => { 
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal"
+  ];
   const navigate = useNavigate();
   const [agencyName, setAgencyName] = useState("");
   const [loading, setLoading] = useState(false); 
@@ -33,7 +63,7 @@ const RegistrationForm = () => {
     useState("");
   const [total_no_of_certified_Assessor, setTotal_no_of_certified_Assessor] =
     useState("");
-  const [LETTER_OF_NCVET, setLETTER_OF_NCVET] = useState("");
+  const [LETTER_OF_NCVET, setLETTER_OF_NCVET] = useState(null);
   const [logo, setLogo] = useState(null);
   const [sectors, setSectors] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -602,17 +632,23 @@ const RegistrationForm = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                State Under Geographical Region
-              </label>
-              <input
-                type="text"
-                name="state_Under_geographicalRegion"
-                value={state_Under_geographicalRegion}
-                onChange={handleChange}
-                className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
-              />
-            </div>
+            <label className="block text-sm font-medium text-gray-700">
+              State Under Geographical Region
+            </label>
+            <select
+              name="state_Under_geographicalRegion"
+              value={state_Under_geographicalRegion}
+              onChange={handleChange}
+              className="mt-1 block w-full h-10 p-2 rounded-md border-gray-300 shadow-sm focus:border-[#A41034] focus:ring-[#A41034]"
+            >
+              <option value="">Select a State</option>
+              {indianStates.map((state, index) => (
+                <option key={index} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
+          </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Total Number of Certified Assessors
@@ -703,10 +739,11 @@ const RegistrationForm = () => {
               </select>
             </div>
           </div>
-          <div className="pt-5">
+          <div className="pt-5 flex justify-center items-center">
             <Button
               type="submit"
-              className="px-4 py-2  text-white font-medium rounded-md shadow-md hover:bg-[#11874e]"
+              className="px-4 py-2  text-white font-medium rounded-md shadow-md hover:bg-[#11874e] "
+              disabled={!LETTER_OF_NCVET || !logo}
             >
             {
               loading?"Submiting....":"Submit"

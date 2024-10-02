@@ -27,7 +27,7 @@ const formatDate = (dateString) => {
   }
 };
 
-const GenerateCertificate = forwardRef((props, ref) => {
+const GenerateCertificate = forwardRef((props, ref) => { 
   console.log(props.data);
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
@@ -59,7 +59,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
   return (
     <div className="max-w-7xl mx-auto">
       <div
-        className="w-full max-w-[1000px] aspect-[1000/690] border relative mx-auto "
+        className="w-full max-w-[1000px] aspect-[1000/690] relative mx-auto "
         ref={ref}
       >
         <div className="w-full h-full absolute">

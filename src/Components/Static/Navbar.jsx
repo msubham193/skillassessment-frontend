@@ -101,7 +101,7 @@ function Navigation({ handleNavItemClick, open, setOpen, links }) {
             </ul>
             <Link
               to="/portal"
-              className="hidden xl:block"
+              className=" xl:block"
               onClick={handleNavItemClick}
             >
               <button className="bg-[#0066ff] text-base flex items-center justify-center text-white font-semibold px-3 py-1 rounded duration-500 hover:bg-[#3f37c9]">

@@ -62,7 +62,7 @@ const BankDetailsForm = () => {
       "HDFC Bank": /^[0-9]{14}$/,                 // HDFC account numbers are 14 digits
       "ICICI Bank": /^[0-9]{12}$/,                // ICICI account numbers are 12 digits
       "Axis Bank": /^[0-9]{15}$/,                 // Axis Bank account numbers are 15 digits
-      "Punjab National Bank": /^[0-9]{16}$/,      // PNB account numbers are usually 16 digits
+      "Punjab National Bank": /^[0-9]{13,16}$/,      // PNB account numbers are usually 16 digits
       "Bank of Baroda": /^[0-9]{14}$/,            // Bank of Baroda account numbers are typically 14 digits
       "Canara Bank": /^[0-9]{13}$/,               // Canara Bank account numbers are 13 digits
       "Union Bank of India": /^[0-9]{12}$/,       // Union Bank account numbers are 12 digits
@@ -99,6 +99,12 @@ const BankDetailsForm = () => {
     // Validate account number format based on the bank name
     const accountNumberError = validateAccountNumber(bankName, accountNumber);
     if (accountNumberError) {
+      toast.error(accountNumberError, {
+        position: "bottom-right",
+        closeOnClick: true,
+        draggable: true,
+        theme: "colored",
+      });
       setFormError(accountNumberError);
       return false;
     }
@@ -126,13 +132,11 @@ const BankDetailsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     if (!validateForm()) {
+      setIsSubmitting(false);
       return;
     }
-
-    setIsSubmitting(true);
-
     try { 
       const response = await axios.put(
         `${server}/aa/bdt/${assessmentAgencyId[0]}`,
@@ -250,7 +254,15 @@ const BankDetailsForm = () => {
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-center"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <Loader /> : "Submit"}
+          {isSubmitting ?  <Loader 
+            style={{
+              animation: "spin 2s linear infinite",
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' },
+              }
+            }} 
+          /> : "Submit"}
         </button>
 
         {isSubmitted && (

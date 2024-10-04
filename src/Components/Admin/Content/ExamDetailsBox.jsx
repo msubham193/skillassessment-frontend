@@ -3,7 +3,10 @@ import { server } from '@/main';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { CalendarIcon, GraduationCapIcon, MapPinIcon, BuildingIcon, UserIcon, BookOpenIcon, BriefcaseIcon, LayersIcon } from 'lucide-react'
 import MakePayment from './MakePayment';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components(shadcn)/ui/card';
+import { Badge } from '@/components(shadcn)/ui/badge';
 
 const ExamDetailsBox = ({id}) => {
   // console.log("exam id is",id);
@@ -27,9 +30,9 @@ const ExamDetailsBox = ({id}) => {
             })
             .then((response) => {
               setLoding(false);
-              setData(response.data.data);
-              setBatchId(response.data.data.batchId._id)
-              console.log(response.data.data)
+              setData(response.data?.data);
+              setBatchId(response.data?.data?.batchId._id)
+              console.log(response.data?.data)
             });
         } catch (error) {
           setLoding(false);
@@ -44,87 +47,120 @@ const ExamDetailsBox = ({id}) => {
       };
   return (
     <div>
-      <div className="w-full mt-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Training Partner Name*</h3>
-            <p className="text-lg ">{data?.TrainingOrganization}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">AssessmentAgency Name*</h3>
-            <p className="text-lg ">{data?.assesmentAgency}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Batch ABN No*</h3>
-            <p className="text-lg ">{data?.batchABN}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">No of Student*</h3>
-            <p className="text-lg text-blue-700 ">{data?.batchId?.students?.length}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Center Name*</h3>
-            <p className="text-lg text-blue-700">{data?.batchId?.centerName}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Date of Examination*</h3>
-            <p className="text-lg ">{data?.date?.split("T")[0]}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Date of Upload*</h3>
-            <p className="text-lg ">{data?.updatedAt?.split("T")[0]}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Exam Under Course*</h3>
-            <p className="text-lg ">{data?.course}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Exam Under Scheme*</h3>
-            <p className="text-lg ">{data?.scheme}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Exam Under Sector*</h3>
-            <p className="text-lg ">{data?.sector}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Batch Under State*</h3>
-            <p className="text-lg ">{data?.state}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Status*</h3>
-            <p className="text-xl font-bold ">{data?.status}</p>
-          </div>
-          <div className="p-3">
-            <h3 className="text-lg font-medium mb-2">Payment Status*</h3>
-            <p className="text-lg font-semibold  text-red-400">{data?.paymentStatus===true?"Paid":"Create invoice and make payment"}</p>
-          </div>
-          
-          {/*
-           
-          */}
-          
-        </div>
-        {/* shoow pree invoice */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-          {/* Buttion For assin a batch */}
-
-          {/* here admin can see the result of the  student */}
-          <div>
-          {
-             data?.markUploadAndExamCompleteStatus===true?(
-             <Button
-              className={"bg-red-800"}
-              onClick={handleViewResult}
-              >
-             View Result
-             </Button>
-             ):""
-          }
-          </div>
-        </div>
+    <Card className="w-full mt-5">
+    <CardHeader>
+      <CardTitle className="text-2xl font-bold">Exam Details</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <InfoItem
+          icon={<BuildingIcon className="w-5 h-5" />}
+          label="Training Partner"
+          value={data?.TrainingOrganization}
+        />
+        <InfoItem
+          icon={<UserIcon className="w-5 h-5" />}
+          label="Assessment Agency"
+          value={data?.assesmentAgency}
+        />
+        <InfoItem
+          icon={<LayersIcon className="w-5 h-5" />}
+          label="Batch ABN No"
+          value={data?.batchABN}
+        />
+        <InfoItem
+          icon={<GraduationCapIcon className="w-5 h-5" />}
+          label="No of Students"
+          value={data?.batchId?.students.length}
+          highlight
+        />
+        <InfoItem
+          icon={<BuildingIcon className="w-5 h-5" />}
+          label="Center Name"
+          value={data?.batchId?.centerName}
+          highlight
+        />
+        <InfoItem
+          icon={<CalendarIcon className="w-5 h-5" />}
+          label="Date of Examination"
+          value={formatDate(data?.date)}
+        />
+        <InfoItem
+          icon={<CalendarIcon className="w-5 h-5" />}
+          label="Date of Upload"
+          value={formatDate(data?.updatedAt)}
+        />
+        <InfoItem
+          icon={<BookOpenIcon className="w-5 h-5" />}
+          label="Exam Under Course"
+          value={data?.course}
+        />
+        <InfoItem
+          icon={<BriefcaseIcon className="w-5 h-5" />}
+          label="Exam Under Scheme"
+          value={data?.scheme}
+        />
+        <InfoItem
+          icon={<LayersIcon className="w-5 h-5" />}
+          label="Exam Under Sector"
+          value={data?.sector}
+        />
+        <InfoItem
+          icon={<MapPinIcon className="w-5 h-5" />}
+          label="Batch Under State"
+          value={data?.state}
+        />
+       <InfoItem
+            label="Status"
+            value={
+              <Badge variant={data.status === "completed" ? "success" : "secondary"}>
+                {data?.status === "completed" ? "Completed" : "Not Started"}
+              </Badge>
+            }
+          />
+          <InfoItem
+            label="Payment Status"
+            value={
+              <Badge variant={data.paymentStatus ? "success" : "destructive"}>
+                {data.paymentStatus ? "Paid" : "Unpaid"}
+              </Badge>
+            }
+          />
       </div>
+    </CardContent>
+    <CardFooter className="flex justify-between">
+      {data?.markUploadAndExamCompleteStatus && (
+        <Button onClick={handleViewResult} variant="default">
+          View Result
+        </Button>
+      )}
+    </CardFooter>
+  </Card>
     </div>
   )
 }
 
 export default ExamDetailsBox
+
+
+function InfoItem({ icon, label, value, highlight = false }) {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="text-sm font-medium text-muted-foreground flex items-center">
+        {icon && <span className="mr-2">{icon}</span>}
+        {label}
+      </div>
+      <div className={`text-lg font-semibold ${highlight ? 'text-primary' : ''}`}>
+        {value}
+      </div>
+    </div>
+  )
+}
+
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}

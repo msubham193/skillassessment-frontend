@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components(shadcn)/u
 import GenerateCertificate from "@/Components/Traning Partner/ui/Certificate/GenerateCertificate";
 
 const StudentResultDetailsBox = ({ id }) => {  
-  const [currentStudentId, setCurrentStudentId] = useState(null);
+  const [currentStudentId, setCurrentStudentId] = useState(null); 
   const [documentType, setDocumentType] = useState(null);
   const query = new URLSearchParams(location.search); 
   const defaultTab = query.get("tab") || "overview"; 
@@ -25,7 +25,7 @@ const StudentResultDetailsBox = ({ id }) => {
   const [batchdata, setBatchdata] = useState({});
   const [loding, setLoding] = useState(false);
 //make the change in this component ony...........
-  //need to get student details usinfstudent id....
+  //need to get student details using student id....
   useEffect(() => {
     setSelectedTab(defaultTab); 
   }, [defaultTab]);
@@ -72,7 +72,7 @@ const StudentResultDetailsBox = ({ id }) => {
           setLoding(false);
           setCertificatedatadata(response.data.data);
           // setBatchId(response.data.data)
-          // console.log(batchId)
+          // console.log(response.data.data);
           console.log(response.data.data)
         });
     } catch (error) {
@@ -144,7 +144,7 @@ const generateDummyData = useCallback((student) => {
     nosMarks: student?.marks?.Nos?.map((nos, index) => ({
       code: `NOS${index + 1}`,
       name: nos?.name || 'Loading...',
-      type: 'Theory', 
+      type: nos?.nosType ||"N/A", 
       maxMarks: nos?.passMark || 0,
       marksObtained: nos?.MarksObtained || 0
     })) || [],
@@ -158,7 +158,7 @@ const generateDummyData = useCallback((student) => {
   };
 }, []);
 
-
+//function for generate data for certificate
   const generateCertificateData = useCallback((data) => {
     if (!data) return null;
     return {
@@ -178,6 +178,8 @@ const generateDummyData = useCallback((student) => {
       dateOfIssue: new Date(data.DateOfIssue).toISOString().split("T")[0],
       studentId: data.studentId,
       studentImageUrl: data.stutentProfilePic,
+      schemeLogo:data?.schemeLogo,
+      certificateCode:data?.certificateCode,
     };
   }, []);
 
@@ -199,10 +201,10 @@ const generateDummyData = useCallback((student) => {
         {selectedTab === "overview" && <GenerateMarksheetFrom
                     ref={componentRef} 
                     data={id && studentData ? generateDummyData(studentData) : null} 
-                />}
+             />}
       </TabsContent>
       <TabsContent value="updateBatchgov">
-        {selectedTab === "updateBatchgov" &&  <GenerateCertificate
+        {selectedTab === "updateBatchgov" && <GenerateCertificate
           ref={certificateRef}
           data={
             id && studentData ? generateCertificateData(certificatedata): null

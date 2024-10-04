@@ -71,7 +71,7 @@ const AaPaymentInvoicedetails = () => {
         }
       );
       setPaymentData(response.data.data);
-      // console.log(response.data.data);
+      console.log(response.data.data);
       setIsDataFetched(true);
     } catch (error) {
       console.error(error);
@@ -180,18 +180,30 @@ const AaPaymentInvoicedetails = () => {
                   {paymentData?.totalNoOfAssessedCandidates}
                 </td>
                 <td className="py-2 px-4 border-b text-center">
-                  ${paymentData?.totalAmountToBePaid}
+                  {paymentData?.totalAmountToBePaid}
                 </td>
                 <td className="py-2 px-4 border-b text-center">
-                  <a
-                    href={paymentData?.invoicePdf}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    <Download className="ml-14" />
-                  </a>
+                  {paymentData?.invoicePdf ? (
+                    <a
+                      href={paymentData?.invoicePdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      <Download className="ml-14" />
+                    </a>
+                  ) : (
+                    <div className="relative group">
+                      <span className="text-gray-500 cursor-not-allowed">
+                        <Download className="ml-14" />
+                      </span>
+                      <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 pointer-events-none bg-gray-700 text-white text-xs rounded-lg py-1 px-2 transition-opacity duration-300">
+                        Invoice is not uploaded by the assessment agency.
+                      </div>
+                    </div>
+                  )}
                 </td>
+
                 <td className="py-2 px-4 border-b text-center">
                   <MakePayment
                     invoice_id={paymentData?._id}

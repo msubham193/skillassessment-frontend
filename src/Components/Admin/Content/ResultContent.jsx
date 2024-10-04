@@ -26,10 +26,10 @@ const ResultContent = ({ batchId }) => {
           withCredentials: true,
         });
         setLoading(false);
-        setSutdents(response.data.data.reverse());
+        setSutdents(response.data.data?.marks.reverse());
         // console.log(response.data.data);
         // console.log(response.data.data[0]?.examId );
-        setExamId(response.data.data[0]?.examId || ""); // Handle the case if data is empty
+        setExamId(response.data.data?.marks[0]?.examId || ""); // Handle the case if data is empty
       } catch (error) {
         setLoading(false);
         console.error(error);

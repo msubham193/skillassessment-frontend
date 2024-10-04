@@ -168,7 +168,6 @@ export default function CreateCenter() {
       formData.sectors.forEach((sector, index) => {
         formDataToSend.append(`sectors[${index}]`, sector);
       });
-
       const response = await fetch(`${server}/center`, {
         method: "POST",
         headers: {
@@ -202,20 +201,19 @@ export default function CreateCenter() {
     }
   };
 
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 min-h-screen py-12">
-    
       <div className="container mx-auto max-w-4xl px-6">
         <div className="bg-white shadow-lg rounded-lg p-8">
           <div className="space-y-4 mb-8 border-b pb-4">
-          <Button
-        onClick={() => navigate("/trainingPartner/dashboard")}
-        className="mb-4 ml-[20px] bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
-      >
-        Back to Dashboard
-      </Button>
+            <Button
+              onClick={() => navigate("/trainingPartner/dashboard")}
+              className="mb-4 ml-[20px] bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
+            >
+              Back to Dashboard
+            </Button>
             <h1 className="text-3xl font-bold text-indigo-700">
               Create New Center
             </h1>
@@ -276,17 +274,25 @@ export default function CreateCenter() {
               </div>
               <div className="space-y-2">
                 <Label className="text-indigo-600">Schemes</Label>
-                <CheckboxDropdown
-                  options={allSchemes.map((scheme) => ({
-                    value: scheme.name,
-                    label: scheme.name,
-                  }))}
-                  selectedValues={formData.schemes}
-                  onChange={(values) =>
-                    setFormData((prev) => ({ ...prev, schemes: values }))
+                <Select
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      schemes: [value], // Store the selected value in an array
+                    }))
                   }
-                  placeholder="Select schemes"
-                />
+                >
+                  <SelectTrigger className="border rounded-md p-2">
+                    <SelectValue placeholder="Select scheme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {allSchemes.map((scheme) => (
+                      <SelectItem key={scheme.name} value={scheme.name}>
+                        {scheme.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

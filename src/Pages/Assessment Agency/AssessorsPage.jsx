@@ -50,6 +50,7 @@ const AssessorsPage = () => {
         <table className="w-full border-collapse text-sm">
           <thead className="">
             <tr className="bg-gray-500 text-white uppercase text-sm leading-normal">
+              <th className="px-4 py-3 text-left font-medium">SL NO</th>
               <th className="px-4 py-3 text-left font-medium">Id</th>
               <th className="px-4 py-3 text-left font-medium">Name</th>
               <th className="px-4 py-3 text-left font-medium">
@@ -64,11 +65,12 @@ const AssessorsPage = () => {
             </tr>
           </thead>
           <tbody className="text-gray-800 text-sm">
-            {assessorData.map((assessor) => (
+            {assessorData.map((assessor,index) => (
               <tr
                 key={assessor._id}
                 className="cursor-pointer hover:bg-gray-200"
               >
+                <td className="px-4 py-3">{index+1}</td>
                 <td className="px-4 py-3">{assessor.assesoraId}</td>
                 <td className="px-4 py-3">{assessor.name}</td>
                 <td className="px-4 py-3">

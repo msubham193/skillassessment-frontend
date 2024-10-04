@@ -54,11 +54,11 @@ const Batch = () => {
             'Expires': "0",
           },
       });
-      console.log(response.data.data)
+      // console.log(response.data.data)
       const filteredBatches = response.data.data.filter(
         (batch) => batch?.approvedByGovernmentBody === true || batch?.schemeType === "Corporate"
       );
-      console.log(filteredBatches)
+      // console.log(filteredBatches)
       setBatch(filteredBatches.reverse());
       setIsDataFetched(true);
     } catch (error) {
@@ -134,6 +134,7 @@ const Batch = () => {
         console.log(error);
       });
   }, []);
+  
 
   const hasActiveFilters = Object.values(filters).some((value) => value !== "");
 

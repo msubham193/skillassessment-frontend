@@ -9,7 +9,7 @@ const BatchWiseStudentResult = ({children}) => {
      
   return ( 
     <div>
-    <div className='min-h-screen bg-white text-black flex flex-col'>
+    <div className='min-h-screen bg-white text-black flex flex-col'> 
     {/*top Bar */}
     <TopBar/>
       {/* side bar */}

@@ -17,7 +17,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { server } from "@/main";
 
-const UpdateCenterContent = () => {
+const UpdateCenterContent = () => { 
   const tpid = localStorage.getItem("trainingPartnerId");
   const [loading, setLoading] = useState(true);
   const [centersData, setCentersData] = useRecoilState(centerAtom);

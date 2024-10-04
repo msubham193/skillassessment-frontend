@@ -54,6 +54,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
     schemeType
   } = props.data;
 
+
   const formattedDateOfBirth = formatDate(dateOfBirth);
   const formattedDateOfIssue = formatDate(dateOfIssue);
 
@@ -142,7 +143,8 @@ const GenerateCertificate = forwardRef((props, ref) => {
               {formattedDateOfIssue || "N/A"}
             </p>
           </div>
-          <div className="absolute bottom-[120px] left-[810px] w-[56px] h-[56px] bg-[#FFFFFF]">
+          {/* logo of centurion */}
+          <div className="absolute bottom-[103px] left-[735px] w-[56px] h-[56px] bg-[#FFFFFF]">
             <div className="w-full h-full">
               <img
                 src="/cutm2.jpg"
@@ -154,11 +156,18 @@ const GenerateCertificate = forwardRef((props, ref) => {
          
           <div className={`absolute bottom-[90px] ${schemeType==="Corporate" ?"left:[452px]" :"left-[366px]"}  w-[56px] h-[56px] bg-[#FFFFFF`}>
             <div className="w-full h-full">
-              <img
-                src={schemeLogo}
-                alt="schemeLogo"
-                className="w-full h-full object-contain"
-              />
+            {
+              schemeType==="Corporate"? <img
+              src="/cutm2.jpg"
+              alt="logo Background"
+              className="w-full h-full object-contain"
+            />:<img
+            src={schemeLogo}
+            alt="schemeLogo"
+            className="w-full h-full object-contain"
+          />
+            }
+              
             </div>
           </div>
           {/* QR Code */}

@@ -202,7 +202,7 @@ const CompleteBatchData = () => {
 
   const generateCertificateData = useCallback((data) => {
     if (!data) return null;
-    console.log(data)
+    // console.log(data)
     return {
       name: data.studentName,
       fatherName: data.fatherName,

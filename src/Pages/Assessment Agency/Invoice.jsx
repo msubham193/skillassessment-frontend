@@ -12,7 +12,7 @@ const Invoice = () => {
   const [name, setName] = useState("");
   const [address1, setAddress1] = useState("");
   const [contact, setContact] = useState("");
-  const [pan, setPan] = useState("");
+  const [pan, setPan] = useState(""); 
   const [gst, setGst] = useState("");
   const [bankName, setBankName] = useState("");
   const [branchName, setBranchName] = useState("");
@@ -352,7 +352,7 @@ const Invoice = () => {
                     <th className="border border-black p-2">
                       Assessment cost (per Unit)
                     </th>
-                    <th className="border border-black p-2">Amount claim @ </th>
+                    <th className="border border-black p-2">Amount claim @ 18% GST </th>
                   </tr>
                 </thead>
                 <tbody className="text-center">
@@ -414,13 +414,13 @@ const Invoice = () => {
                   <tr>
                     <td className="text-xs py-2 " colSpan={3}>
                       <div className="flex flex-col">
-                        Amount in words :{" "}
+                       Total Amount in words :{" "}
                         <span className="text-sm font-semibold">
                           {ammountInWord}
                         </span>
                       </div>
                     </td>
-                    <td className="border border-black p-2">Total</td>
+                    <td className="border border-black p-2 text-sm">Total(Including all taxes)</td>
                     <td className="border border-black p-2">
                       {totalNoOfcandidates}
                     </td>

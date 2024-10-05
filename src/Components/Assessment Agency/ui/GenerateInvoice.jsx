@@ -274,7 +274,7 @@ const GenerateInvoice = () => {
                 <th className="border border-black p-2">
                   Assessment cost (per Unit)
                 </th>
-                <th className="border border-black p-2">Amount claim @ </th>
+                <th className="border border-black p-2">Amount claim @18% GST </th>
               </tr>
             </thead>
             <tbody className="text-center">
@@ -332,13 +332,13 @@ const GenerateInvoice = () => {
               <tr>
                 <td className="text-xs py-2 " colSpan={3}>
                   <div className="flex flex-col">
-                    Amount in words :{" "}
+                  Total Amount in words :{" "}
                     <span className="text-lg font-semibold">
                       {ammountInWord}
                     </span>
                   </div>
                 </td>
-                <td className="border border-black p-2">Total</td>
+                <td className="border border-black p-2">Total(Including all Taxes)</td>
                 <td className="border border-black p-2">
                   {totalNoOfcandidates}
                 </td>

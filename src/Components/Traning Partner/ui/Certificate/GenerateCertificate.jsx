@@ -53,7 +53,7 @@ const GenerateCertificate = forwardRef((props, ref) => {
     certificateCode,
     schemeType
   } = props.data;
-
+// console.log(schemeType)
 
   const formattedDateOfBirth = formatDate(dateOfBirth);
   const formattedDateOfIssue = formatDate(dateOfIssue);
@@ -153,21 +153,14 @@ const GenerateCertificate = forwardRef((props, ref) => {
               />
             </div>
           </div>
-         
-          <div className={`absolute bottom-[90px] ${schemeType==="Corporate" ?"left:[452px]" :"left-[366px]"}  w-[56px] h-[56px] bg-[#FFFFFF`}>
+         {/* logo of scheme  and if the scheme type is corporate then cutm logo */}
+          <div className={`absolute bottom-[90px] ${schemeType==="Corporate" ?"left-[452px]" :"left-[366px]"}  w-[56px] h-[56px] bg-[#FFFFFF`}>
             <div className="w-full h-full">
-            {
-              schemeType==="Corporate"? <img
-              src="/cutm2.jpg"
-              alt="logo Background"
-              className="w-full h-full object-contain"
-            />:<img
+            <img
             src={schemeLogo}
             alt="schemeLogo"
             className="w-full h-full object-contain"
-          />
-            }
-              
+          />              
             </div>
           </div>
           {/* QR Code */}

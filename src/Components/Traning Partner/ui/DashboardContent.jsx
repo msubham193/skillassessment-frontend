@@ -114,6 +114,7 @@ const Content = () => {
           const sortedBatches = batchesData.data.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
+          console.log(sortedBatches);
           setAllBatch(sortedBatches);
         } else {
           console.error("Failed to fetch data");
@@ -189,11 +190,11 @@ const Content = () => {
   const getApprovedClass = (status) => {
     switch (status) {
       case "Approved":
-        return "text-green-700";
+        return "text-green-600";
       case "Corporate":
-        return "text-yellow-700 ";
+        return "text-yellow-600 ";
       case "Not-Approved":
-        return "text-red-700 ";
+        return "text-red-600 ";
       default:
         return "";
     }
@@ -252,16 +253,20 @@ const Content = () => {
             </Tabs>
             {allBatch.length > 0 ? (
               <div className="flex flex-col flex-grow">
-                <Table className="mt-8">
-                  <TableHeader>
+                <Table className="mt-8 p-0">
+                  <TableHeader className="bg-emerald-600" >
                     <TableRow>
-                      <TableHead className="font-bold">Index</TableHead>
-                      <TableHead className="font-bold">Course Name</TableHead>
-                      <TableHead className="font-bold">ABN Number</TableHead>
-                      <TableHead className="font-bold">SNA Approval</TableHead>
-                      <TableHead className="font-bold">Students</TableHead>
-                      <TableHead className="font-bold">Status</TableHead>
-                      <TableHead className="font-bold">Actions</TableHead>
+                      <TableHead className="font-bold text-black">Index</TableHead>
+                      <TableHead className="font-bold text-black">Course Name</TableHead>
+                      <TableHead className="font-bold text-black">ABN Number</TableHead>
+                      <TableHead className="font-bold text-black">
+                       Batch Submission Status
+                      </TableHead>
+                      <TableHead className="font-bold text-black">SNA Approval</TableHead>
+                      <TableHead className="font-bold text-black">Students</TableHead>
+                      <TableHead className="font-bold text-black">Status</TableHead>
+                      <TableHead className="font-bold text-black">Details</TableHead>
+                      <TableHead className="font-bold text-black">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -272,21 +277,38 @@ const Content = () => {
                           {batch.courseName}
                         </TableCell>
                         <TableCell>{batch.ABN_Number}</TableCell>
+                        {/* this is for batch submission status */}
+                        <TableCell
+                          className={`font-bold ${
+                            batch?.batchActivePermission === true
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {batch?.batchActivePermission === true
+                            ? "Submitted"
+                            : "Not Submit"}
+                        </TableCell>
+
+
+                        {/* this is for sna approval ###################3*/}
+
+
                         <TableCell
                           className={`text-center font-bold text-md  ${getApprovedClass(
-                            batch.batchActivePermission
+                            batch.approvedByGovernmentBody
                               ? "Approved"
                               : batch.schemeType === "Corporate"
                               ? "Corporate"
                               : "Not-Approved"
                           )}`}
                         >
-                          {batch.schemeType === "State Government" ||
+                          {batch?.batchActivePermission? batch.schemeType === "State Government" ||
                           batch.schemeType === "Central Government"
-                            ? batch.batchActivePermission
+                            ? batch.approvedByGovernmentBody
                               ? "Approved"
                               : "Not-Approved"
-                            : "Corporate"}
+                            : "Corporate":"Batch not submitted yet"}
                         </TableCell>
                         <TableCell className="text-center ml-[20px]">
                           {batch.students.length}
@@ -314,7 +336,7 @@ const Content = () => {
                         <TableCell>
                           <div className="flex flex-row gap-2 mr-2">
                             <Button
-                              className="text-xs text-white px-4 py-1 bg-blue-600 hover:bg-blue-700"
+                              className="text-xs text-white px-2 py-1 bg-blue-600 hover:bg-blue-700"
                               onClick={() =>
                                 navigate(
                                   `/trainingPartner/dashboard/Teachers?batchId=${batch._id}`
@@ -325,7 +347,7 @@ const Content = () => {
                               Add Trainer
                             </Button>
                             <Button
-                              className="text-xs text-white px-4 py-1 bg-green-600 hover:bg-green-700"
+                              className="text-xs text-white px-2 py-1 bg-green-600 hover:bg-green-700"
                               onClick={() =>
                                 navigate(
                                   `/trainingPartner/dashboard/CreateBatch/addstudent/${batch._id}`
@@ -338,7 +360,7 @@ const Content = () => {
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button
-                                  className="text-xs text-white px-4 py-1 bg-purple-600 hover:bg-purple-700"
+                                  className="text-xs text-white px-2 py-1 bg-purple-600 hover:bg-purple-700"
                                   disabled={
                                     batch.batchActivePermission === true ||
                                     submitLoading === batch._id

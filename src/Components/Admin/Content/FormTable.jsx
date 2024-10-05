@@ -12,6 +12,7 @@ import React, { useState } from 'react'
 import TableToolBar from '../ui/notiification/TableToolBar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components(shadcn)/ui/table'
 import Loder from '../ui/Loder';
+import TableLoader from "../ui/TableLoader";
 
 const FormTable = ({ columns, data, isLoding, onRowClick,filter1 }) => {
     const [rowSelection, setRowSelection] = useState({});
@@ -41,7 +42,7 @@ const FormTable = ({ columns, data, isLoding, onRowClick,filter1 }) => {
       });
       if(isLoding){
         return(
-         <Loder/>
+         <TableLoader/>
         )
       }
   return (

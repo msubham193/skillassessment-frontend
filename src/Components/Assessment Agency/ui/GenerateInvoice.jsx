@@ -6,12 +6,17 @@ import jsPDF from "jspdf";
 import { useRecoilState } from "recoil";
 import { assessmentAgencyIdState } from "../Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
-import { Card, CardContent, CardHeader, CardTitle  } from "@/components(shadcn)/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components(shadcn)/ui/card";
 import { Separator } from "@/components(shadcn)/ui/separator";
 import { Pen } from "lucide-react";
 
 const GenerateInvoice = () => {
-  const pdfRef = useRef(); 
+  const pdfRef = useRef();
   const assessmentAgencyId = useRecoilState(assessmentAgencyIdState);
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -58,7 +63,7 @@ const GenerateInvoice = () => {
     };
 
     fetchBatchDetails();
-    setAmmountInWord(numberToWords(totalAmountToBePaid));  //here i have to add the dynamic data
+    setAmmountInWord(numberToWords(totalAmountToBePaid)); //here i have to add the dynamic data
   }, [totalAmountToBePaid]);
 
   function numberToWords(num) {
@@ -154,7 +159,6 @@ const GenerateInvoice = () => {
 
     return result.trim();
   }
-
 
   const generatePDF = () => {
     const input = document.getElementById("pdf-content");
@@ -279,7 +283,37 @@ const GenerateInvoice = () => {
                   <td className="border border-black p-2">1</td>
                   <td className="border border-black p-2">{item.batchAbn}</td>
                   <td className="border border-black p-2">{item.tpname}</td>
-                  <td className="border border-black p-2">{item.date}</td>
+                  <td className="border border-black p-2">
+                    {item?.assesmentDate
+                      ? (() => {
+                          const dateStr = item?.assesmentDate;
+                          const months = {
+                            January: "01",
+                            February: "02",
+                            March: "03",
+                            April: "04",
+                            May: "05",
+                            June: "06",
+                            July: "07",
+                            August: "08",
+                            September: "09",
+                            October: "10",
+                            November: "11",
+                            December: "12",
+                          };
+
+                          const [day, month, year] = dateStr.split("-");
+
+                          const monthNumber = months[month];
+
+                          if (monthNumber) {
+                            return `${day}-${monthNumber}-${year}`;
+                          } else {
+                            return "Invalid date";
+                          }
+                        })()
+                      : "No Date Available"}
+                  </td>
                   <td className="border border-black p-2 text-center">
                     {item.totalNoOfCandidates}
                   </td>
@@ -342,30 +376,30 @@ const GenerateInvoice = () => {
           </div>
         </div>
         <div className="border-2 border-black p-4">
-        <Card className="w-full max-w-full mx-auto">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-center text-lg font-semibold text-primary">
-              Official Use
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="grid grid-cols-2 gap-6">
-              <SignatureField label="Operation Manager" />
-              <SignatureField label="Accountant" />
-            </div>
-            <div className="grid grid-cols-3 gap-6">
-              <SignatureField label="Head of Skill Certification" />
-              <SignatureField label="Finance Controller" />
-              <SignatureField label="Comptroller of Finance" />
-            </div>
-            <Separator className="my-4" />
-            <div className="grid grid-cols-2 gap-6">
-              <RemarksField label="Remarks of Concerned Dept." />
-              <RemarksField label="Remarks of Account Dept." />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          <Card className="w-full max-w-full mx-auto">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-center text-lg font-semibold text-primary">
+                Official Use
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-2 gap-6">
+                <SignatureField label="Operation Manager" />
+                <SignatureField label="Accountant" />
+              </div>
+              <div className="grid grid-cols-3 gap-6">
+                <SignatureField label="Head of Skill Certification" />
+                <SignatureField label="Finance Controller" />
+                <SignatureField label="Comptroller of Finance" />
+              </div>
+              <Separator className="my-4" />
+              <div className="grid grid-cols-2 gap-6">
+                <RemarksField label="Remarks of Concerned Dept." />
+                <RemarksField label="Remarks of Account Dept." />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <div className="flex justify-center mb-4">
         <button
@@ -381,10 +415,6 @@ const GenerateInvoice = () => {
 
 export default GenerateInvoice;
 
-
-
-
-
 function SignatureField({ label }) {
   return (
     <div className="flex flex-col space-y-2">
@@ -394,17 +424,17 @@ function SignatureField({ label }) {
       </div>
       <div className="h-12 border-b-2 border-dashed border-gray-300 hover:border-primary transition-colors duration-200" />
     </div>
-  )
+  );
 }
 
 function RemarksField({ label }) {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium text-gray-600">{label}</label>
-      <textarea 
-        className="w-full h-20 p-2 text-sm border rounded-md border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" 
+      <textarea
+        className="w-full h-20 p-2 text-sm border rounded-md border-gray-300 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
         placeholder="Enter remarks here..."
       />
     </div>
-  )
+  );
 }

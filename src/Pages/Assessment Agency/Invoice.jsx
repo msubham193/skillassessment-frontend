@@ -394,7 +394,7 @@ const Invoice = () => {
                                 return "Invalid date";
                               }
                             })()
-                          : "No Date Available"}
+                          : "No Date Available"} 
                       </td>
                       <td className="border border-black p-2 text-center">
                         {item?.totalNoOfCandidates}

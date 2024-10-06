@@ -132,6 +132,7 @@ const TrackPayment = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead>Index</TableHead>
                       <TableHead>Course Name</TableHead>
                       <TableHead>Batch ABN</TableHead>
                       <TableHead>Payment Status</TableHead>
@@ -152,8 +153,9 @@ const TrackPayment = () => {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      filteredBatches.map((batch) => (
+                      filteredBatches.map((batch,index) => (
                         <TableRow key={batch._id}>
+                          <TableCell>{index+1}</TableCell>
                           <TableCell className="font-medium">
                             {batch.courseName}
                           </TableCell>

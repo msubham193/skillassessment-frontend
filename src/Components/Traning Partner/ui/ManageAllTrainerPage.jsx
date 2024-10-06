@@ -112,6 +112,7 @@ const ManageAllTrainerPage = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead>Index</TableHead>
                         <TableHead
                           className="cursor-pointer"
                           onClick={() => handleSort("name")}
@@ -159,11 +160,12 @@ const ManageAllTrainerPage = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {sortedTeachers.map((teacher) => (
+                      {sortedTeachers.map((teacher,index) => (
                         <TableRow
                           key={teacher._id}
                           className="transition-transform duration-300"
                         >
+                          <TableCell>{index+1}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-4">
                               <Avatar className="h-10 w-10">

@@ -94,6 +94,7 @@ const TranscriptManage = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-100">
+                <TableHead className="font-semibold text-gray-700">Index</TableHead>
                 <TableHead className="font-semibold text-gray-700">Course Name</TableHead>
                 <TableHead className="font-semibold text-gray-700">ABN Number</TableHead>
                 <TableHead className="font-semibold text-gray-700 text-center">Students</TableHead>
@@ -110,6 +111,7 @@ const TranscriptManage = () => {
                     className={`cursor-pointer transition-colors duration-150 ease-in-out hover:bg-blue-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
                     onClick={() => handleClick(batch._id)}
                   >
+                    <TableCell>{index+1}</TableCell>
                     <TableCell className="font-medium text-gray-900">{batch.courseName}</TableCell>
                     <TableCell className="text-gray-700">{batch.ABN_Number}</TableCell>
                     <TableCell className="text-center text-gray-700">{batch.students.length}</TableCell>

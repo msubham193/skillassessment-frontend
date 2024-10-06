@@ -48,7 +48,9 @@ const ManageBatchForm = () => {
       const response = await fetch(`${server}/batch/tp/${tpid}`, { method: "GET" });
       if (response.ok) {
         const data = await response.json();
+       
         setBatches(data.data);
+      
       } else {
         console.error("Failed to fetch batches");
       }
@@ -62,7 +64,7 @@ const ManageBatchForm = () => {
   useEffect(() => {
     fetchBatches();
   }, []);
-
+  
   const handleFileChange = (e, batchId, fileType) => {
     setBatchFiles((prev) => ({
       ...prev,
@@ -171,146 +173,148 @@ const ManageBatchForm = () => {
   );
 
   return (
-    <Card className="w-full mx-auto mt-8 ">
-      <div className="mt-3 ml-3">
-        <Button
-          onClick={() => navigate("/trainingPartner/dashboard")}
-          className="mb-4 bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
-        >
-          Back to Dashboard
-        </Button>
-      </div>
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">Manage Batches</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Input
-          placeholder="Filter batches..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="mb-6 max-w-md"
-        />
-        {isLoading ? (
-          <div className="text-center py-8">Loading...</div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-100">
-                <TableHead className="font-semibold">Course Name</TableHead>
-                <TableHead className="font-semibold">ABN</TableHead>
-                <TableHead className="font-semibold">Generate PreInvoice</TableHead>
-                <TableHead className="font-semibold">Payment Mode</TableHead>
-                <TableHead className="font-semibold">Payment Published By</TableHead>
-                <TableHead className="font-semibold">Transaction/UTR ID</TableHead>
-                <TableHead className="font-semibold">PreInvoice</TableHead>
-                <TableHead className="font-semibold">PostInvoice</TableHead>
-                <TableHead className="font-semibold">Actions</TableHead>
+    <Card className="w-full mx-auto mt-8">
+    <div className="mt-3 ml-3">
+      <Button
+        onClick={() => navigate("/trainingPartner/dashboard")}
+        className="mb-4 bg-gray-200 text-indigo-600 hover:bg-gray-300 py-2 px-4 rounded-md transition duration-300 ease-in-out"
+      >
+        Back to Dashboard
+      </Button>
+    </div>
+    <CardHeader>
+      <CardTitle className="text-2xl font-bold">Manage Batches</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <Input
+        placeholder="Filter batches..."
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        className="mb-6 max-w-md"
+      />
+      {isLoading ? (
+        <div className="text-center py-8">Loading...</div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-gray-100">
+              <TableHead className="font-semibold">Index</TableHead>
+              <TableHead className="font-semibold">Course Name</TableHead>
+              <TableHead className="font-semibold">ABN</TableHead>
+              <TableHead className="font-semibold">Generate PreInvoice</TableHead>
+              <TableHead className="font-semibold">Payment Mode</TableHead>
+              <TableHead className="font-semibold">Payment Published By</TableHead>
+              <TableHead className="font-semibold">Transaction/UTR ID</TableHead>
+              <TableHead className="font-semibold">PreInvoice</TableHead>
+              <TableHead className="font-semibold">PostInvoice</TableHead>
+              <TableHead className="font-semibold">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredBatches.map((batch, index) => (
+              <TableRow 
+                key={batch._id}
+                className={`
+                  ${batch.paymentStatus 
+                    ? 'bg-gray-200 hover:bg-gray-200' 
+                    : 'bg-white'}
+                  ${index !== filteredBatches.length - 1 ? 'border-b' : ''}
+                  transition-colors
+                `}
+              >
+                <TableCell className="py-4">{index + 1}</TableCell>
+                <TableCell className="py-4">{batch.courseName}</TableCell>
+                <TableCell className="py-4">{batch.ABN_Number}</TableCell>
+                <TableCell className="py-4">
+                  <Button 
+                    onClick={() => generatePDF(batch)} 
+                    disabled={generatingInvoices[batch._id] || batch.paymentStatus}
+                    className="w-full max-w-[120px]"
+                  >
+                    {generatingInvoices[batch._id] ? "Generating..." : "Generate"}
+                  </Button>
+                </TableCell>
+                <TableCell className="py-4">
+                  <Select
+                    value={paymentModes[batch._id] || ""}
+                    onValueChange={(value) => handlePaymentModeChange(value, batch._id)}
+                    disabled={batch.paymentStatus}
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Select mode" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Offline">Offline</SelectItem>
+                      <SelectItem value="Online">Online</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+                <TableCell className="py-4">
+                  <Select
+                    value={paymentPublishedBy[batch._id] || ""}
+                    onValueChange={(value) => handlePaymentPublishedByChange(value, batch._id)}
+                    disabled={batch.paymentStatus}
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Select method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="DD">DD</SelectItem>
+                      <SelectItem value="NEFT">NEFT</SelectItem>
+                      <SelectItem value="RTGS">RTGS</SelectItem>
+                      <SelectItem value="IMPS">IMPS</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+                <TableCell className="py-4">
+                  <Input
+                    placeholder={paymentModes[batch._id] === "Online" ? "UTR ID" : "Transaction ID"}
+                    value={batchTransactionIds[batch._id] || ""}
+                    onChange={(e) => setBatchTransactionIds((prev) => ({
+                      ...prev,
+                      [batch._id]: e.target.value,
+                    }))}
+                    className="max-w-[150px]"
+                    disabled={batch.paymentStatus}
+                  />
+                </TableCell>
+                <TableCell className="py-4">
+                  <Input
+                    type="file"
+                    onChange={(e) => handleFileChange(e, batch._id, "preInvoice")}
+                    className="max-w-[200px]"
+                    disabled={batch.paymentStatus}
+                  />
+                </TableCell>
+                <TableCell className="py-4">
+                  <Input
+                    type="file"
+                    onChange={(e) => handleFileChange(e, batch._id, "postInvoice")}
+                    className="max-w-[200px]"
+                    disabled={batch.paymentStatus}
+                  />
+                </TableCell>
+                <TableCell className="py-4">
+                  <Button
+                    onClick={() => handleUploadData(batch._id)}
+                    disabled={uploading[batch._id] || !batchFiles[batch._id]?.preInvoice || !batchFiles[batch._id]?.postInvoice || batch.paymentStatus}
+                    className="w-full max-w-[140px]"
+                  >
+                    {uploading[batch._id] ? "Uploading..." : "Upload Invoices"}
+                  </Button>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredBatches.map((batch, index) => (
-                <TableRow 
-                  key={batch._id}
-                  className={`
-                    ${batch.paymentStatus 
-                      ? 'bg-gray-200 hover:bg-gray-200' 
-                      : 'bg-white'}
-                    ${index !== filteredBatches.length - 1 ? 'border-b' : ''}
-                    transition-colors
-                  `}
-                >
-                  <TableCell className="py-4">{batch.courseName}</TableCell>
-                  <TableCell className="py-4">{batch.ABN_Number}</TableCell>
-                  <TableCell className="py-4">
-                    <Button 
-                      onClick={() => generatePDF(batch)} 
-                      disabled={generatingInvoices[batch._id] || batch.paymentStatus}
-                      className="w-full max-w-[120px]"
-                    >
-                      {generatingInvoices[batch._id] ? "Generating..." : "Generate"}
-                    </Button>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Select
-                      value={paymentModes[batch._id] || ""}
-                      onValueChange={(value) => handlePaymentModeChange(value, batch._id)}
-                      disabled={batch.paymentStatus}
-                    >
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="Select mode" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Offline">Offline</SelectItem>
-                        <SelectItem value="Online">Online</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Select
-                      value={paymentPublishedBy[batch._id] || ""}
-                      onValueChange={(value) => handlePaymentPublishedByChange(value, batch._id)}
-                      disabled={batch.paymentStatus}
-                    >
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="Select method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DD">DD</SelectItem>
-                        <SelectItem value="NEFT">NEFT</SelectItem>
-                        <SelectItem value="RTGS">RTGS</SelectItem>
-                        <SelectItem value="IMPS">IMPS</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Input
-                      placeholder={paymentModes[batch._id] === "Online" ? "UTR ID" : "Transaction ID"}
-                      value={batchTransactionIds[batch._id] || ""}
-                      onChange={(e) => setBatchTransactionIds((prev) => ({
-                        ...prev,
-                        [batch._id]: e.target.value,
-                      }))}
-                      className="max-w-[150px]"
-                      disabled={batch.paymentStatus}
-                    />
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Input
-                      type="file"
-                      onChange={(e) => handleFileChange(e, batch._id, "preInvoice")}
-                      className="max-w-[200px]"
-                      disabled={batch.paymentStatus}
-                    />
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Input
-                      type="file"
-                      onChange={(e) => handleFileChange(e, batch._id, "postInvoice")}
-                      className="max-w-[200px]"
-                      disabled={batch.paymentStatus}
-                    />
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Button
-                      onClick={() => handleUploadData(batch._id)}
-                      disabled={uploading[batch._id] || !batchFiles[batch._id]?.preInvoice || !batchFiles[batch._id]?.postInvoice || batch.paymentStatus}
-                      className="w-full max-w-[140px]"
-                    >
-                      {uploading[batch._id] ? "Uploading..." : "Upload Invoices"}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </CardContent>
-      <div style={{ position: "absolute", left: "-9999px" }}>
-        <div ref={invoiceRef}>
-          <Preinvoice batch={selectedBatch} />
-        </div>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </CardContent>
+    <div style={{ position: "absolute", left: "-9999px" }}>
+      <div ref={invoiceRef}>
+        <Preinvoice batch={selectedBatch} />
       </div>
-    </Card>
+    </div>
+  </Card>
   );
 };
 

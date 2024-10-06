@@ -26,7 +26,7 @@ import SetExamModal from "@/Components/Assessment Agency/ui/SetExamModal";
 
 const BatchManagementPage = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const [searchTerm, setSearchTerm] = useState("");
   const [batchData, setBatchData] = useState([]); // Initialize as an empty array
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);

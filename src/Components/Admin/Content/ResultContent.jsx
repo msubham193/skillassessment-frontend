@@ -150,7 +150,7 @@ const ResultContent = ({ batchId }) => {
         onClick={approveAndPublish}
         disabled={exam?.certificateIssued || isApproved}
       > 
-        {loading ? "Loading..." : exam?.certificateIssued || isApproved ? "Approved" : "Approve & Publish"}
+        {loading ? "Loading..." : exam?.certificateIssued || isApproved ? "Published" : "Publish Result"}
       </Button>
       </div>
       {showPhotos && (

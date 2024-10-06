@@ -73,6 +73,7 @@
     "react-router-dom": "^6.23.1",
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
+    "recharts": "^2.12.7",
     "recoil": "^0.7.7",
     "skillassessment-frontend": "file:",
     "swiper": "^11.1.9",

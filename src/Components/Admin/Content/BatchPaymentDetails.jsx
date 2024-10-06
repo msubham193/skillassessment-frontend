@@ -36,7 +36,7 @@ const BatchPaymentDetails = () => {
   return (
     <div>
     <DataTable
-    filter1={"courseName"}
+    filter1={"ABN_Number"}
     path={"/admin/dasbord/Batch/payment/update"}
     columns={batchColumns}
     data={batch}
@@ -51,6 +51,13 @@ export default BatchPaymentDetails
 
 
 const batchColumns = [
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
   {
     accessorKey: "trainingOrganization",
     header: "Training Partner Name",

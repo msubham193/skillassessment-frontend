@@ -43,8 +43,8 @@ const Card = () => {
         const startedExams = exams.filter(
           (exam) => exam.status !== "not-started"
         );
-        console.log(startedExams);
-        console.log(exams);
+        // console.log(startedExams);
+        // console.log(exams);
         const { data } = response.data;
 
         setExamsAssigned(exams.length);

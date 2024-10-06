@@ -72,7 +72,7 @@ const NotificationContent = () => {
       </TabsContent>
       <TabsContent value="updateBatchcorporet">
         {selectedTab === "updateBatchcorporet" && <UpdateBatchCorporet />}
-      </TabsContent>
+      </TabsContent> 
       </Tabs>
     </div>
   ); 

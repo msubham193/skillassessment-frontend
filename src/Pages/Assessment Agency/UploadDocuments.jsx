@@ -8,7 +8,7 @@ import { Loader } from "lucide-react";
 import { Button } from "@/components(shadcn)/ui/button";
 import { toast } from "react-toastify";
 
-const UploadDocuments = () => {
+const UploadDocuments = () => { 
   const navigate = useNavigate();
   const { examId, batchId } = useParams();
   const [loader, setLoader] = useState(false);

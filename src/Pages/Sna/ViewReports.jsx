@@ -157,7 +157,6 @@ const ViewReports = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     XLSX.writeFile(wb, "center.xlsx");
   };
-
   return (
     <div>
       <h1 className="flex justify-center font-semibold underline text-xl">

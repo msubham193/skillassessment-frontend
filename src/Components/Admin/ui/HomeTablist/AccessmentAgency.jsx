@@ -12,7 +12,7 @@ const AccessmentAgency = () => {
   useEffect(() => {
     if (!isDataFetched) {
       try {
-        setLoading(true);
+        setLoading(true); 
         axios.get(`${server}/aa/status/approved`, {
           withCredentials: true,
           headers: {
@@ -49,6 +49,13 @@ const AccessmentAgency = () => {
 export default AccessmentAgency;
 
 const columns = [
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
   {
     accessorKey: "agencyName",
     header: "Agency Name ",

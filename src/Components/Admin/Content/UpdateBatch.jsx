@@ -56,6 +56,13 @@ const UpdateBatch = () => {
 export default UpdateBatch
 
 const batchColumns = [
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
     {
       accessorKey: "courseName",
       header: "Batch Name",

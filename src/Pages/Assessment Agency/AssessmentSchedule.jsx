@@ -9,7 +9,7 @@ const AssessmentSchedule = () => {
   const aaName = useRecoilValue(assessmentAgencyNameState);
   return (
     <div className="bg-gray-100 p-1">
-      <h2 className="text-xl font-semibold">{aaName}</h2>
+      <h2 className="text-xl font-semibold">{aaName}</h2> 
       <Card />
       <ScheduleBox />
     </div>

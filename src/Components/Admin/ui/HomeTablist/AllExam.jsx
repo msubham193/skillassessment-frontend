@@ -53,7 +53,7 @@ const AllExam = () => {
       {/* here i fetch all the exams present in our potal.... 
         when i click on row it will naviget to details of that exam ......*/}
       <DataTable
-      filter1={"assesmentAgency"}
+      filter1={"batchABN"}
       columns={examcolumns}
       path={"/admin/dasbord/allExam"}
       data={allExam && allExam}
@@ -73,7 +73,14 @@ const AllExam = () => {
 export default AllExam
 
 export const examcolumns = [
-  
+
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
     {
       accessorKey: "assesmentAgency",
       header: "Agency Name",

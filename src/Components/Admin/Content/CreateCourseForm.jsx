@@ -223,12 +223,12 @@ const CreateCourseForm = () => {
             </div>
             <div>
               <Label htmlFor="ncrflevel" className="text-left w-40">
-                NCRF LEVEL
+                NSQF LEVEL
               </Label>
               <Input
                 id="ncrflevel"
                 className="col-span-4 py-6"
-                placeholder="Add NCRF LEVEL"
+                placeholder="Add NSQF LEVEL"
                 value={ncrfLevel}
                 onChange={(e) => setNcrfLevel(e.target.value)}
               />

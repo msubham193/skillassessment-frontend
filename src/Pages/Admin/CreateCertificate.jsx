@@ -39,34 +39,34 @@ const CreateCertificate = ({children}) => {
         </div>
           <Tabs defaultValue="AaMarkSheet" className="space-y-4">
           <TabsList>
-         {/*
+         
              <TabsTrigger
               onClick={() => setSelectedTab("AaCertificate")}
               value="AaCertificate"
             >
               Assessment Agency Certificate
             </TabsTrigger>
-          */}
-            <TabsTrigger
+          
+            {/*<TabsTrigger
               onClick={() => setSelectedTab("AaMarkSheet")}
               value="AaMarkSheet"
             >
             Assessment Agency MarkSheet
-            </TabsTrigger>
-           {/*
+            </TabsTrigger>*/}
+           
              <TabsTrigger
               onClick={() => setSelectedTab("TpCertificate")}
               value="TpCertificate"
             >
               Training Partner Certificate
             </TabsTrigger>
-            */}
-            <TabsTrigger
+            
+            {/*<TabsTrigger
               onClick={() => setSelectedTab("TpMarkSheet")}
               value="TpMarkSheet"
             >
               Training Partner Marksheet
-            </TabsTrigger>
+            </TabsTrigger>*/}
           </TabsList>
 
           <TabsContent value="AaCertificate">

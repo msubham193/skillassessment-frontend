@@ -125,7 +125,7 @@ const CompleteBatchData = () => {
       handlePrint();
     }
   }, [currentStudentId, studentData, documentType, handlePrint]);
-
+  
   const generateMarksheetData = useCallback((student) => {
     if (!student) return null;
     if (student.absent === true) {
@@ -159,7 +159,7 @@ const CompleteBatchData = () => {
         totalMarks: student?.marks?.total,
         grade: student?.marks?.Grade || "Absent",
         result: student?.marks?.Result || "Absent",
-        dateOfIssue: dateRef.current.toISOString().split("T")[0],
+        dateOfIssue: student?.DateOfIssueMarksheet.toISOString().split("T")[0],
         certificateNo: `CERT${student.redg_No}`,
         studentId: student._id,
       };
@@ -315,6 +315,7 @@ const CompleteBatchData = () => {
                         <TableCell className="text-right">
                           <div className="flex justify-end space-x-2">
                             <Button
+
                               className="bg-[#1D4ED8] text-white"
                               onClick={() =>
                                 handleButtonClick(student._id, "marksheet")

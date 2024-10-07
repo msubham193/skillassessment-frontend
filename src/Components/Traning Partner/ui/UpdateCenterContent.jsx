@@ -82,6 +82,7 @@ const UpdateCenterContent = () => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-indigo-100">
+                  <TableHead className="font-semibold text-indigo-800">Index</TableHead>
                   <TableHead className="font-semibold text-indigo-800">PRN NO</TableHead>
                   <TableHead className="font-semibold text-indigo-800">Name</TableHead>
                   <TableHead className="font-semibold text-indigo-800">Center Id</TableHead>
@@ -90,8 +91,9 @@ const UpdateCenterContent = () => {
               </TableHeader>
               <TableBody>
                 {filteredCenters.length > 0 ? (
-                  filteredCenters.map(center => (
+                  filteredCenters.map((center,index) => (
                     <TableRow key={center._id} className="hover:bg-indigo-50 transition-colors duration-200">
+                      <TableCell>{index+1}</TableCell>
                       <TableCell>{center.PRN_NO}</TableCell>
                       <TableCell>{center.name}</TableCell>
                       <TableCell>{center.centerId}</TableCell>

@@ -31,7 +31,7 @@ const CreateSnaForm = () => {
       try {
         const response = await axios.post(
           `${server}/sna`,
-          {email,password,state,schemetype,scheme },
+          {email,password,state,schemetype,scheme }, 
           {
             headers: {
               "Content-Type": "application/json",

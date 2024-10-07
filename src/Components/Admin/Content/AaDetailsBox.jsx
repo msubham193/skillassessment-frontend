@@ -61,7 +61,7 @@ const AaDetailsBox = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setData(response.data.data);
-          console.log(response.data.data);
+          // console.log(response.data.data);
           setReferesh((prev) => !prev);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sectors);
@@ -97,6 +97,7 @@ const AaDetailsBox = ({ id }) => {
         }
       );
       setLoding(false);
+      // console.log(responce)
       toast.success(responce.data.message, {
         position: "bottom-right",
         closeOnClick: true,

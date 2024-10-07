@@ -71,7 +71,7 @@ const TpDetailsBOx = ({ id }) => {
         .then((response) => {
           setLoding(false);
           setBatch(response.data.data.reverse());
-          console.log(response.data.data);
+          // console.log(response.data.data);
           setReferesh((prev) => !prev);
         });
     } catch (error) {
@@ -97,7 +97,7 @@ const TpDetailsBOx = ({ id }) => {
           setLoding(false);
           setData(response.data.data);
           setReferesh((prev) => !prev);
-          console.log(response.data.data);
+          // console.log(response.data.data);
           setCourse(response.data.data.courses);
           setSector(response.data.data.sector);
         });
@@ -129,6 +129,7 @@ const TpDetailsBOx = ({ id }) => {
         }
       );
       setLoding(false);
+      console.log(responce);
       toast.success(responce.data.message, {
         position: "bottom-right",
         closeOnClick: true,

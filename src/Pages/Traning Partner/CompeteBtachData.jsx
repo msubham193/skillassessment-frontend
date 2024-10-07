@@ -22,7 +22,7 @@ import {
 
 const CompleteBatchData = () => {
   const navigate = useNavigate();
-  const batchData = useRecoilValue(CompeltebatchDataAtoms);  
+  const batchData = useRecoilValue(CompeltebatchDataAtoms);
   const batchId = batchData?._id;
   const marksheetRef = useRef();
   const certificateRef = useRef();

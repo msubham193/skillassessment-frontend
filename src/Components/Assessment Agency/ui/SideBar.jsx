@@ -43,7 +43,7 @@ const routes = [
   },
   {
     path: "/dashboard/paymentstatus",
-    name: "Payment Status",
+    name: "Upload monthly invoice",
     icon: <FaCreditCard />,
   },
   {

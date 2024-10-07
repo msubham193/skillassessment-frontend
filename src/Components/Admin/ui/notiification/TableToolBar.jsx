@@ -24,7 +24,7 @@ const TableToolBar = ({table,filter1}) => {
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-        placeholder="filter your request here."
+        placeholder={`filter by ${filter1}`}
         value={filterValue}
         onChange={handleChange}
           className="h-8 w-[150px] lg:w-[250px]"

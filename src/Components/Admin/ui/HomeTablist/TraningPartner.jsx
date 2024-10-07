@@ -48,6 +48,13 @@ export default TraningPartner;
 
 const columns = [
   {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
+  {
     accessorKey: "organizationName",
     header: "Training Partner Name",
   },

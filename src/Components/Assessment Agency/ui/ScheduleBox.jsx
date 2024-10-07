@@ -22,6 +22,7 @@ const ScheduleBox = () => {
         );
 
         const data = response.data.data;
+        console.log(data)
         setBatchData(data);
       } catch (error) {
         console.error("Error fetching batch data:", error);
@@ -45,7 +46,7 @@ const ScheduleBox = () => {
     <div className="mt-5 bg-gray-100">
       <h1 className="text-xl font-semibold text-black mb-2">Scheduled</h1>
       <DataTable
-        filter1={"TrainingOrganization"}
+        filter1={"batchABN"}
         columns={columns}
         data={batchData}
         isLoding={loading}
@@ -87,6 +88,10 @@ const columns = [
   {
     accessorKey: "TrainingOrganization",
     header: "Training Institute",
+  },
+  {
+    accessorKey: "batchABN",
+    header: "ABN.NO",
   },
   {
     accessorKey: "course",

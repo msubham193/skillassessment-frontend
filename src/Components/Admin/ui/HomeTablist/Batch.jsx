@@ -228,7 +228,7 @@ const Batch = () => {
       </div>
 
       <DataTable
-        filter1={"status"}
+        filter1={"ABN_Number"}
         path={"/admin/dasbord"}
         columns={batchColumns}
         data={batch}
@@ -243,13 +243,20 @@ const Batch = () => {
 export default Batch;
 
 export const batchColumns = [
+{
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
   {
     accessorKey: "ABN_Number",
     header: "Abn no",
   },
   {
     accessorKey: "schemeType",
-    header: "Scheme Type",
+    header: "Scheme Name",
   },
   {
     accessorKey: "courseName",
@@ -257,7 +264,7 @@ export const batchColumns = [
   },
   {
     accessorKey: "trainingOrganization",
-    header: "Created By",
+    header: "TP Name",
   },
   {
     accessorKey: "students", 

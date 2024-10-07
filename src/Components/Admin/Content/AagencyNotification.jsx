@@ -48,6 +48,13 @@ export default AagencyNotification;
 
 const columns = [
   {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
+  {
     accessorKey: "agencyName",
     header: "Agency Name ",
   },

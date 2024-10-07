@@ -594,15 +594,17 @@ const MarksheetForm = () => {
             </div>
           </div>
         </div>
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700">
-            Date of Issue
-          </label>
-          <input
-            type="date"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
+     {/*
+     <div className="mb-6">
+     <label className="block text-sm font-medium text-gray-700">
+       Date of Issue
+     </label>
+     <input
+       type="date"
+       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+     />
+   </div>
+     */}
         <div className="text-center">
           <p className="mb-6">Head – Centre for Skill Certification</p>
           <p className="mb-6">

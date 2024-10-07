@@ -20,9 +20,9 @@ import {
   TableRow,
 } from "@/components(shadcn)/ui/table";
 
-const CompleteBatchData = () => { 
+const CompleteBatchData = () => {
   const navigate = useNavigate();
-  const batchData = useRecoilValue(CompeltebatchDataAtoms);
+  const batchData = useRecoilValue(CompeltebatchDataAtoms);  
   const batchId = batchData?._id;
   const marksheetRef = useRef();
   const certificateRef = useRef();
@@ -56,8 +56,9 @@ const CompleteBatchData = () => {
         size: ${documentType === "marksheet" ? "A4 portrait" : "A4 landscape"};
       }
       @media print {
-        ${documentType === "certificate" 
-          ? `
+        ${
+          documentType === "certificate"
+            ? `
             body {
               padding: 0;
               margin: 0;
@@ -66,8 +67,9 @@ const CompleteBatchData = () => {
               border: none !important;
               box-shadow: none !important;
             }
-          ` 
-          : ""}
+          `
+            : ""
+        }
       }
     `,
     onBeforeGetContent: () => {
@@ -200,7 +202,7 @@ const CompleteBatchData = () => {
 
   const generateCertificateData = useCallback((data) => {
     if (!data) return null;
-
+    // console.log(data)
     return {
       name: data.studentName,
       fatherName: data.fatherName,
@@ -314,17 +316,12 @@ const CompleteBatchData = () => {
                           <div className="flex justify-end space-x-2">
                             <Button
 
-  
-                         
-                             
-                              size="sm"
-
-                              className="bg-[#1D4ED8] text-white px-2 py-1 text-xs rounded-md"
+                              className="bg-[#1D4ED8] text-white"
                               onClick={() =>
                                 handleButtonClick(student._id, "marksheet")
                               }
-                              disabled={loadingStates[student._id]?.marksheet || student.absent}
-
+                              disabled={loadingStates[student._id]?.marksheet}
+                              size="sm"
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.marksheet
@@ -332,11 +329,7 @@ const CompleteBatchData = () => {
                                 : "MarkSheet"}
                             </Button>
                             <Button
-
-            
-
                               className="bg-[#7E22CE] text-white px-2 py-1 text-xs rounded-md"
-
                               onClick={() =>
                                 handleButtonClick(student._id, "certificate")
                               }
@@ -346,10 +339,7 @@ const CompleteBatchData = () => {
                                 student.Grade === "F" ||
                                 student.absent
                               }
-
                               size="sm"
-
-
                             >
                               <Download className="mr-2 h-4 w-4" />
                               {loadingStates[student._id]?.certificate

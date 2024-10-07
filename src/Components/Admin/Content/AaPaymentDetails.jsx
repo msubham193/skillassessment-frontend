@@ -14,7 +14,7 @@ const AaPaymentDetails = () => {
     if (!isDataFetched) { 
       try {
         setLoading(true);
-        axios.get(`${server}/aa/status/approved`, {
+        axios.get(`${server}/aa/status/approved`, { 
           withCredentials: true,
           headers: {
             "Cache-Control": "no-cache",
@@ -55,6 +55,13 @@ const AaPaymentDetails = () => {
 export default AaPaymentDetails;
 
 const columns = [
+  {
+    accessorKey: "SL_NO",
+    header: "Sl No",
+    cell: ({ row }) => { 
+      return <div>{row.index + 1}</div>;
+    },
+  },
   {
     accessorKey: "agencyName",
     header: "Agency Name",

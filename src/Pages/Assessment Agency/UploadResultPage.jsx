@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +13,13 @@ import {
   tpNameState,
 } from "../../Components/Assessment Agency/Atoms/AssessmentAgencyAtoms";
 import { server } from "@/main";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogCancel  } from "@/components(shadcn)/ui/alert-dialog";
+
+// Import Shadcn modal component (you need to import this from the library)
 
 const UploadResult = () => {
   const navigate = useNavigate();
-  const [batchData, setBatchData] = useState([]); // Initialize as an empty array 
+  const [batchData, setBatchData] = useState([]);
   const [assessmentAgencyId] = useRecoilState(assessmentAgencyIdState);
   const setBatch_Id = useSetRecoilState(batchIdState);
   const setExamId = useSetRecoilState(examIdState);
@@ -28,17 +29,17 @@ const UploadResult = () => {
   const setExamDate = useSetRecoilState(examDateState);
   const setSector = useSetRecoilState(sectorState);
 
+  // Modal control state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBatch, setSelectedBatch] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         console.log(assessmentAgencyId);
-        const response = await axios.get(
-          `${server}/exam/aa/${assessmentAgencyId}`
-        );
-        console.log(response.data.data); // Ensure the structure matches your needs
+        const response = await axios.get(`${server}/exam/aa/${assessmentAgencyId}`);
+        console.log(response.data.data); 
         const data = response.data.data;
-
-        // Wrap the response in an array if it is an object
         if (data && !Array.isArray(data)) {
           setBatchData([data]);
         } else {
@@ -50,35 +51,25 @@ const UploadResult = () => {
     };
 
     fetchData();
-  }, [assessmentAgencyId]); // Ensure this runs when the ID changes
+  }, [assessmentAgencyId]);
 
-  const handleRowClick = (
-    examId,
-    courseName,
-    batchId,
-    trainingPartner,
-    batchABN,
-    examDate,
-    sector
-  ) => {
+  const handleRowClick = (batch) => {
+    if (batch.markUploadAndExamCompleteStatus) {
+      // Show modal for completed batches
+      setSelectedBatch(batch);
+      setIsModalOpen(true);
+    } else {
+      // Navigate for ongoing batches
+      setBatch_Id(batch.batchId._id);
+      setExamId(batch._id);
+      setBatchAbn(batch.batchABN);
+      setCourseName(batch.course);
+      setTpName(batch.TrainingOrganization);
+      setExamDate(batch.date);
+      setSector(batch.sector);
 
-    alert("After uploading Student Mark you have to update the batch details ")
-    // console.log(examId);
-    // console.log(batchId);
-    // console.log(courseName);
-    // console.log(trainingPartner);
-    // console.log(batchABN);
-    // console.log(examDate);
-    // console.log(sector);
-    setBatch_Id(batchId);
-    setExamId(examId);
-    setBatchAbn(batchABN);
-    setCourseName(courseName);
-    setTpName(trainingPartner);
-    setExamDate(examDate);
-    setSector(sector);
-
-    navigate(`/dashboard/students/${batchId}`);
+      navigate(`/dashboard/students/${batch.batchId._id}`);
+    }
   };
 
   return (
@@ -102,23 +93,13 @@ const UploadResult = () => {
           </tr>
         </thead>
         <tbody>
-          {batchData.map((batch,index) => (
+          {batchData.map((batch, index) => (
             <tr
               key={batch._id}
-              onClick={() =>
-                handleRowClick(
-                  batch._id,
-                  batch.course,
-                  batch.batchId._id,
-                  batch.TrainingOrganization,
-                  batch.batchABN,
-                  batch.date,
-                  batch.sector
-                )
-              }
+              onClick={() => handleRowClick(batch)}
               className="cursor-pointer hover:bg-gray-200"
             >
-              <td className="px-4 py-3">{index+1}</td>
+              <td className="px-4 py-3">{index + 1}</td>
               <td className="px-4 py-3">{batch.batchABN}</td>
               <td className="px-4 py-3">{batch.course}</td>
               <td className="px-4 py-3">{batch.scheme}</td>
@@ -128,7 +109,7 @@ const UploadResult = () => {
               <td className="px-4 py-3">
                 <span
                   className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
-                    batch.markUploadAndExamCompleteStatus === true
+                    batch.markUploadAndExamCompleteStatus
                       ? "bg-green-100 text-green-800"
                       : "bg-red-100 text-yellow-800"
                   }`}
@@ -143,6 +124,23 @@ const UploadResult = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Shadcn Alert Modal */}
+      {selectedBatch && (
+        <AlertDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <h2>Batch Status</h2>
+              <p>You are note able to read or write it because,This batch has already been completed, and the results have been uploaded </p>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setIsModalOpen(false)}>
+                OK
+              </AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 };

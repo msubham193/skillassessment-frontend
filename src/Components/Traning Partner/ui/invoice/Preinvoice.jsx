@@ -61,7 +61,7 @@ const Preinvoice = ({ batch }) => {
             </td>
           </tr>
           <tr>
-            <td colSpan="2" className="border border-gray-400 p-2 text-center">
+            <td colSpan="2" className="border border-gray-400 p-2 text-start">
               Dear Sir, Kindly arrange to pay the below amount towards
               assessment fee.
             </td>
@@ -91,7 +91,9 @@ const Preinvoice = ({ batch }) => {
               {batch.students.length}
             </td>
             <td className="border border-gray-400 p-2 text-right">
-              {(batch.amountToPaid / batch.students.length).toFixed(2)}
+              {(batch.amountToPaid / batch.students.length).toFixed(2)}{batch.schemeType === "Corporate"
+                ? "+18% GST)"
+                : ""}
             </td>
             <td className="border border-gray-400 p-2 text-right">
               {batch.amountToPaid.toFixed(2)}
@@ -102,7 +104,7 @@ const Preinvoice = ({ batch }) => {
               colSpan="4"
               className="border border-gray-400 p-2 text-right font-bold"
             >
-              Total
+              Total(Including All Taxes)
             </td>
             <td className="border border-gray-400 p-2 text-right font-bold">
               {batch.amountToPaid.toFixed(2)}

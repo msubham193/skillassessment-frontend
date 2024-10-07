@@ -9,7 +9,7 @@ const formatDate = (dateString) => {
     if (isNaN(date.getTime())) {
       const parts = dateString.split("/");
       if (parts.length === 3) {
-        date = new Date(parts[2], parts[1] - 1, parts[0]); 
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
       }
     }
 
@@ -27,7 +27,7 @@ const formatDate = (dateString) => {
   }
 };
 
-const GenerateCertificate = forwardRef((props, ref) => { 
+const DownloadCertificate = forwardRef((props, ref) => { 
   console.log(props.data);
   if (!props.data) {
     return <div ref={ref}>Loading...</div>;
@@ -181,4 +181,4 @@ const GenerateCertificate = forwardRef((props, ref) => {
   );
 });
 
-export default GenerateCertificate;
+export default DownloadCertificate;

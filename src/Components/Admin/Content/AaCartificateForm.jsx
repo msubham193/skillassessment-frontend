@@ -7,19 +7,22 @@ import Aacertificate from './Aacertificate';  // Make sure the path to Aacertifi
 const AaCertificateForm = () => {
   const [formData, setFormData] = useState({
     name: "",
-    ward: "",
+    fatherName: "",
+    profilePic: null,
+    state: "",
+    district: "",
     dob: "",
-    assessorID: "",
-    qualificationName: "",
+    enrollmentNo: "",
+    qualification: "",
+    durationFrom: "",
+    durationTo: "",
     earned: "",
     nsqfLevel: "",
-    duration: "",
-    centerplace: "",
-    District: "",
-    State: "",
-    placeOfIssue: "",
+    trainingCenterName: "",
+    certificateNo: "",
+    percentage: "",
     dateOfIssue: "",
-    assessorPic: null,
+    placeOfIssue: ""
   });
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -38,8 +41,8 @@ const AaCertificateForm = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4 bg-white shadow-lg rounded-md">
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-md">
+      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
         <div className="mb-4">
           <Label htmlFor="name">Name</Label>
           <Input
@@ -53,12 +56,48 @@ const AaCertificateForm = () => {
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="ward">Ward</Label>
+          <Label htmlFor="fatherName">Father Name</Label>
           <Input
-            id="ward"
-            name="ward"
+            id="fatherName"
+            name="fatherName"
             type="text"
-            value={formData.ward}
+            value={formData.fatherName}
+            onChange={handleChange}
+            className="mt-1 block w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="profilePic">Profile Picture</Label>
+          <Input
+            id="profilePic"
+            name="profilePic"
+            type="file"
+            accept="image/*"
+            onChange={handleChange}
+            className="mt-1 block w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="state">State</Label>
+          <Input
+            id="state"
+            name="state"
+            type="text"
+            value={formData.state}
+            onChange={handleChange}
+            className="mt-1 block w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="district">District</Label>
+          <Input
+            id="district"
+            name="district"
+            type="text"
+            value={formData.district}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
@@ -77,31 +116,55 @@ const AaCertificateForm = () => {
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="assessorID">Assessor ID</Label>
+          <Label htmlFor="enrollmentNo">Enrollment No</Label>
           <Input
-            id="assessorID"
-            name="assessorID"
+            id="enrollmentNo"
+            name="enrollmentNo"
             type="text"
-            value={formData.assessorID}
+            value={formData.enrollmentNo}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="qualificationName">Qualification Name</Label>
+          <Label htmlFor="qualification">Qualification/Trade/Job role</Label>
           <Input
-            id="qualificationName"
-            name="qualificationName"
+            id="qualification"
+            name="qualification"
             type="text"
-            value={formData.qualificationName}
+            value={formData.qualification}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="earned">Earned</Label>
+          <Label htmlFor="durationFrom">Duration From</Label>
+          <Input
+            id="durationFrom"
+            name="durationFrom"
+            type="date"
+            value={formData.durationFrom}
+            onChange={handleChange}
+            className="mt-1 block w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="durationTo">Duration To</Label>
+          <Input
+            id="durationTo"
+            name="durationTo"
+            type="date"
+            value={formData.durationTo}
+            onChange={handleChange}
+            className="mt-1 block w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <Label htmlFor="earned">Total Mark Earned</Label>
           <Input
             id="earned"
             name="earned"
@@ -125,60 +188,36 @@ const AaCertificateForm = () => {
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="duration">Duration</Label>
+          <Label htmlFor="trainingCenterName">Training Center Name</Label>
           <Input
-            id="duration"
-            name="duration"
+            id="trainingCenterName"
+            name="trainingCenterName"
             type="text"
-            value={formData.duration}
+            value={formData.trainingCenterName}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="centerplace">Center Place</Label>
+          <Label htmlFor="certificateNo">Certificate No</Label>
           <Input
-            id="centerplace"
-            name="centerplace"
+            id="certificateNo"
+            name="certificateNo"
             type="text"
-            value={formData.centerplace}
+            value={formData.certificateNo}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="District">District</Label>
+          <Label htmlFor="percentage">Earned Percentage (%)</Label>
           <Input
-            id="District"
-            name="District"
+            id="percentage"
+            name="percentage"
             type="text"
-            value={formData.District}
-            onChange={handleChange}
-            className="mt-1 block w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <Label htmlFor="State">State</Label>
-          <Input
-            id="State"
-            name="State"
-            type="text"
-            value={formData.State}
-            onChange={handleChange}
-            className="mt-1 block w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <Label htmlFor="placeOfIssue">Place of Issue</Label>
-          <Input
-            id="placeOfIssue"
-            name="placeOfIssue"
-            type="text"
-            value={formData.placeOfIssue}
+            value={formData.percentage}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
@@ -197,24 +236,24 @@ const AaCertificateForm = () => {
           />
         </div>
         <div className="mb-4">
-          <Label htmlFor="assessorPic">Assessor Picture</Label>
+          <Label htmlFor="placeOfIssue">Place of Issue</Label>
           <Input
-            id="assessorPic"
-            name="assessorPic"
-            type="file"
-            accept="image/*"
+            id="placeOfIssue"
+            name="placeOfIssue"
+            type="text"
+            value={formData.placeOfIssue}
             onChange={handleChange}
             className="mt-1 block w-full"
             required
           />
         </div>
       </form>
-      <div className='mt-4'> <Aacertificate data={formData}/></div>
+
       <div className="mt-4 text-center">
-          <Button type="submit">Generate Marksheet</Button>
-        </div>
+        <Button type="submit" onClick={() => console.log(formData)}>Generate Certificate</Button>
+      </div>
     </div>
   );
-}
+};
 
 export default AaCertificateForm;

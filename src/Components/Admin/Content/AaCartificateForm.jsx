@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { Button } from '@/components(shadcn)/ui/button';
 import { Label } from '@/components(shadcn)/ui/label';
 import { Input } from '@/components(shadcn)/ui/input';
-import Aacertificate from './Aacertificate';  // Make sure the path to Aacertificate component is correct
+import Aacertificate from './Aacertificate';
 
 const AaCertificateForm = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,7 @@ const AaCertificateForm = () => {
   });
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const certificateRef = useRef();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -39,6 +41,10 @@ const AaCertificateForm = () => {
     e.preventDefault();
     setIsFormSubmitted(true);
   };
+
+  const handlePrint = useReactToPrint({
+    content: () => certificateRef.current,
+  });
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-md">
@@ -250,8 +256,19 @@ const AaCertificateForm = () => {
       </form>
 
       <div className="mt-4 text-center">
-        <Button type="submit" onClick={() => console.log(formData)}>Generate Certificate</Button>
+        <Button type="submit" onClick={handleSubmit}>Generate Certificate</Button>
       </div>
+
+      {isFormSubmitted && (
+        <div className="mt-8">
+          <div ref={certificateRef}>
+            <Aacertificate data={formData} />
+          </div>
+          <div className="mt-4 text-center">
+            <Button onClick={handlePrint}>Print Certificate</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

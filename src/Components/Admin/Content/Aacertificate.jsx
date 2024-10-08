@@ -18,7 +18,7 @@ const formatDate = (dateString) => {
 
     return date.toLocaleDateString("en-US", {
       year: "numeric",
-      month: "numeric",
+      month: "long",
       day: "numeric",
     });
   } catch (error) {
@@ -51,10 +51,10 @@ const Aacertificate = forwardRef((props, ref) => {
     dateOfIssue,
     placeOfIssue,
   } = props.data;
-// console.log(schemeType)
 
-  const formattedDateOfBirth = formatDate(dateOfBirth);
+  const formattedDateOfBirth = formatDate(dob);
   const formattedDateOfIssue = formatDate(dateOfIssue);
+  const duration = `${formatDate(durationFrom)} to ${formatDate(durationTo)}`;
 
   return (
     <div className="max-w-7xl mx-auto ">
@@ -64,115 +64,89 @@ const Aacertificate = forwardRef((props, ref) => {
       >
         <div className="w-full h-full absolute">
           <img
-            src="/certificate4.jpg"
+            src="/TOATOT.jpg"
             alt="Certificate Background"
             className="w-full h-full object-cover"
           />
         </div>
         <div className="absolute w-full h-full">
           {/* Student Image */}
-          <div className="w-[103px] border ml-[82.8%] mt-[52px] ">
+          <div className="w-[91px] h-[112px] ml-[79.7%] mt-[162px]  ">
             <img
               className="h-28 w-24 object-cover"
-              src={studentImageUrl}
-              alt="Student"
+              src={profilePic ? URL.createObjectURL(profilePic) : '/placeholder-image.jpg'}
+              alt="Profile"
             />
           </div>
-          <div className="ml-[85%] mt-[42px] max-w-[148px] overflow-hidden">
-            <p className="text-[12px] font-bold whitespace-nowrap">
-              {certificateCode || "N/A"}
+          <div className="ml-[73%] mt-[36px] max-w-[158px]  bg-white overflow-hidden">
+            <p className="text-[12px]  font-bold whitespace-nowrap">
+              {certificateNo || "N/A"}
             </p>
           </div>
+      
           {/* Student Name */}
-          <div className="mt-[54px] ml-[40%]">
+          <div className="mt-[-20px] ml-[38%] w-[160px] ">
             <p className="text-[12px] font-semibold">{name || "N/A"}</p>
           </div>
           {/* Father Name, Date of Birth, Enrollment Number */}
-          <div className="mt-[27px] ml-[23%] flex items-center ">
-            <p className=" w-[300px] text-[12px] font-semibold ">
+          <div className="mt-[20px] ml-[25%] flex items-center">
+            <p className=" w-[240px] text-[12px] font-semibold ">
               {fatherName || "N/A"}
             </p>
-            <p className=" ml-[60px]  text-[12px] font-semibold">
-              {formattedDateOfBirth || "N/A"}
+            <p className=" ml-[78px]   text-[12px] font-semibold">
+              {dob || "N/A"}
             </p>
-            <p className=" ml-[145px] text-[12px] font-semibold">
-              {enrollmentNumber || "N/A"}
+            <p className=" ml-[120px]  w-[100px] text-[12px] font-semibold">
+              {enrollmentNo || "N/A"}
             </p>
           </div>
           {/* Subject Name */}
-          <div className="mt-[22px] ml-[50%]">
-            <p className="text-[12px]  font-semibold">{subject || "N/A"}</p>
+          <div className="mt-[20px] ml-[30%]">
+            <p className="text-[12px]  w-[500px]  font-semibold">{qualification || "N/A"}</p>
           </div>
           {/* Duration, Credit, Level */}
-          <div className="mt-[24px] ml-[25%] flex items-center ">
-            <p className=" text-[12px] font-semibold">{duration || "N/A"}</p>
-            <p className=" ml-[305px] text-[12px] font-semibold">
-              {credit || "N/A"}
+          <div className="mt-[20px]  ml-[21%]">
+            <p className="  text-[12px] 
+              font-semibold">{durationFrom || "N/A"}</p>
+            <p className=" ml-[150px]  w-[100px] mt-[-20px] text-[12px] 
+              font-semibold">{durationTo || "N/A"}</p>
+            <p className=" ml-[360px] mt-[-15px] text-[12px] font-semibold">
+              {earned || "N/A"}
             </p>
-            <p className=" ml-[240px] text-[12px] mt-1 font-semibold">
-              {level || "N/A"}
+            <p className=" ml-[600px] text-[12px] mt-[-18px] font-semibold">
+              {nsqfLevel || "N/A"}
             </p>
           </div>
           {/* Training Center, District, State */}
-          <div className="mt-[23px] ml-[20%] flex items-center ">
-            <p className="  w-[400px] text-xs font-semibold mb-2 sm:mb-0">
-              {trainingCenter || "N/A"}
+          <div className="mt-[15px] ml-[38%] flex items-center ">
+            <p className="    text-[12px]  w-[200px] font-semibold mb-2 sm:mb-0">
+              {trainingCenterName || "N/A"}
             </p>
-            <p className=" ml-[80px] text-xs font-semibold mb-2 sm:mb-0">
+            <p className=" ml-[55px] w-[100px] text-[12px] font-semibold mb-2 sm:mb-0">
               {district || "N/A"}
             </p>
-            <p className=" ml-[140px] text-xs font-semibold">
+            <p className=" ml-[50px] text-[12px] font-semibold">
               {state || "N/A"}
             </p>
           </div>
           {/* Grade */}
-          <div className="mt-[30px] ml-[13%] flex items-center">
-            <p className=" text-[12px] font-bold">{grade || "N/A"}</p>
+          <div className="mt-[20px] ml-[53%] flex items-center">
+            <p className=" text-[12px] font-bold">{percentage || "N/A"}%</p>
           </div>
           {/* Place of Issue */}
-          <div className="mt-[18px] ml-[18%] flex items-center">
+          <div className="mt-[15px] ml-[23%] flex items-center">
             <p className=" text-[12px] font-semibold">
               {placeOfIssue || "N/A"}
             </p>
           </div>
           {/* Date of Issue */}
-          <div className="mt-[12px] ml-[18%] flex items-center">
+          <div className="mt-[-13px] ml-[43%] flex items-center">
             <p className=" text-[12px] font-semibold">
               {formattedDateOfIssue || "N/A"}
             </p>
           </div>
-          {/* logo of centurion */}
-          <div className="absolute bottom-[103px] left-[735px] w-[56px] h-[56px] bg-[#FFFFFF]">
-            <div className="w-full h-full">
-              <img
-                src="/cutm2.jpg"
-                alt="logo Background"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
-         {/* logo of scheme  and if the scheme type is corporate then cutm logo */}
-          <div className={`absolute bottom-[90px] ${schemeType==="Corporate" ?"left-[452px]" :"left-[366px]"}  w-[56px] h-[56px] bg-[#FFFFFF`}>
-            <div className="w-full h-full">
-            <img
-            src={schemeLogo}
-            alt="schemeLogo"
-            className="w-full h-full object-contain"
-          />              
-            </div>
-          </div>
-          {/* QR Code */}
-          <div className="absolute bottom-[48px] left-[70px] bg-white">
-            <div className=" w-[45px] h-[45px]"></div>
-          </div>
-          <div className="absolute bottom-[48px] left-[70px]">
-            <QRCode
-              value={`https://student-details-by-qr-scan.vercel.app/${
-                studentId || ""
-              }`}
-              size={44}
-            />
-          </div>
+          
+        
         </div>
       </div>
     </div>

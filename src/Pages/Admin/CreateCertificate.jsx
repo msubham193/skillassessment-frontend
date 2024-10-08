@@ -37,7 +37,7 @@ const CreateCertificate = ({children}) => {
             {/* For now  there is nothing to add in facture if there some data  then we will put there */}
           </div>
         </div>
-          <Tabs defaultValue="AaMarkSheet" className="space-y-4">
+          <Tabs defaultValue="AaCertificate" className="space-y-4">
           <TabsList>
          
              <TabsTrigger

@@ -1,8 +1,9 @@
-import { Input } from '@/components(shadcn)/ui/input';
-import { Label } from '@/components(shadcn)/ui/label';
-import React, { useState } from 'react'
-import TpCertificate from './TpCertificate';
+import React, { useState, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { Button } from '@/components(shadcn)/ui/button';
+import { Label } from '@/components(shadcn)/ui/label';
+import { Input } from '@/components(shadcn)/ui/input';
+import TpCertificate from './TpCertificate';
 
 const TpCertificateForm = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,7 @@ const TpCertificateForm = () => {
   });
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const certificateRef = useRef();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -39,6 +41,10 @@ const TpCertificateForm = () => {
     e.preventDefault();
     setIsFormSubmitted(true);
   };
+
+  const handlePrint = useReactToPrint({
+    content: () => certificateRef.current,
+  });
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-md">
@@ -250,8 +256,19 @@ const TpCertificateForm = () => {
       </form>
 
       <div className="mt-4 text-center">
-        <Button type="submit" onClick={() => console.log(formData)}>Generate Certificate</Button>
+        <Button type="submit" onClick={handleSubmit}>Generate Certificate</Button>
       </div>
+
+      {isFormSubmitted && (
+        <div className="mt-8">
+          <div ref={certificateRef}>
+            <TpCertificate data={formData} />
+          </div>
+          <div className="mt-4 text-center">
+            <Button onClick={handlePrint}>Print Certificate</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
